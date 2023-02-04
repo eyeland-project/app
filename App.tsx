@@ -1,44 +1,53 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
-import {
-	Provider as PaperProvider,
-	MD3LightTheme,
-	MD3Colors,
-} from "react-native-paper";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { useFonts } from "expo-font";
+import { NativeStackNavigationOptions } from "@react-navigation/native-stack";
 
-import HomeScreen from "./src/screens/HomeScreen";
-
-const theme = {
-	...MD3LightTheme,
-	roundness: 2,
-	colors: {
-		...MD3Colors,
-		primary: "#3498db",
-		accent: "#f1c40f",
-	},
-};
+import Login from "./app/screens/Login";
+import Home from "./app/screens/Home";
 
 const Stack = createNativeStackNavigator();
 
-export default function App() {
-	return (
-		<PaperProvider theme={theme}>
-			<NavigationContainer>
-				<Stack.Navigator>
-					<Stack.Screen name="Home" component={HomeScreen} />
-				</Stack.Navigator>
-			</NavigationContainer>
-		</PaperProvider>
-	);
+const optionsPrimary: NativeStackNavigationOptions = {
+	animation: "fade_from_bottom",
+	headerBackVisible: false,
+	headerTitleStyle: {
+		fontFamily: "Poppins-Regular",
+	},
 }
 
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: "#fff",
-		alignItems: "center",
-		justifyContent: "center",
-	},
-});
+export default function App() {
+
+	const [loaded] = useFonts({
+		"Poppins-Regular": require("./assets/fonts/Poppins/Poppins-Regular.ttf"),
+		"Poppins-Medium": require("./assets/fonts/Poppins/Poppins-Medium.ttf"),
+		"Poppins-SemiBold": require("./assets/fonts/Poppins/Poppins-SemiBold.ttf"),
+		"Poppins-Bold": require("./assets/fonts/Poppins/Poppins-Bold.ttf"),
+	});
+
+	if (!loaded) {
+		return null;
+	}
+
+	return (
+		<NavigationContainer>
+			<Stack.Navigator>
+				<Stack.Screen
+					name="Login"
+					component={Login}
+					options={{
+						...optionsPrimary,
+						headerShown: false,
+					}} />
+				<Stack.Screen
+					name="Home"
+					component={Home}
+					options={{
+						...optionsPrimary,
+						headerTitle: "Inicio",
+					}}
+				/>
+			</Stack.Navigator>
+		</NavigationContainer>
+	);
+}
