@@ -1,4 +1,5 @@
-import { Pressable, Text, Image, PressableProps, StyleSheet } from 'react-native'
+import { Text, Image, PressableProps, StyleSheet } from 'react-native'
+import Pressable from '../Pressable'
 import { useState } from 'react'
 
 import useTheme from '../../../core/hooks/useTheme'

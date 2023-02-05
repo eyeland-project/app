@@ -1,13 +1,13 @@
 import {
 	View,
 	StyleSheet,
-	Pressable,
 	ImageBackground,
 	Animated,
 } from "react-native";
 import { useState, useEffect, useRef } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
+import Pressable from "../../../../shared/components/Pressable";
 
 import Title from "./Title";
 import Description from "./Description";
