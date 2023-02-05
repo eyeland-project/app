@@ -2,6 +2,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useFonts } from "expo-font";
 import { NativeStackNavigationOptions } from "@react-navigation/native-stack";
+import { SafeAreaView } from "react-native";
+import { StatusBar } from "expo-status-bar";
 
 import Login from "./app/screens/Login";
 import Home from "./app/screens/Home";
@@ -9,15 +11,17 @@ import Home from "./app/screens/Home";
 import { ThemeProvider } from "./app/core/contexts/ThemeContext";
 
 import Accessibility from "./app/shared/components/AccessibilityMenu";
+import SafeAreaViewAndroid from "./app/shared/components/SafeAreaViewAndroid";
 
 const Stack = createNativeStackNavigator();
 
 const optionsPrimary: NativeStackNavigationOptions = {
 	animation: "fade_from_bottom",
 	headerBackVisible: false,
+	headerShown: false,
 	headerTitleStyle: {
 		fontFamily: "Poppins-Regular",
-	},
+	}
 }
 
 export default function App() {
@@ -39,27 +43,30 @@ export default function App() {
 	}
 
 	return (
-		<ThemeProvider>
-			<NavigationContainer>
-				<Stack.Navigator>
-					<Stack.Screen
-						name="Login"
-						component={Login}
-						options={{
-							...optionsPrimary,
-							headerShown: false,
-						}} />
-					<Stack.Screen
-						name="Home"
-						component={Home}
-						options={{
-							...optionsPrimary,
-							headerTitle: "Inicio",
-						}}
-					/>
-				</Stack.Navigator>
-				<Accessibility />
-			</NavigationContainer>
-		</ThemeProvider>
+		<>
+			<StatusBar />
+			<SafeAreaView style={SafeAreaViewAndroid.AndroidSafeArea}>
+				<ThemeProvider>
+					<NavigationContainer>
+						<Stack.Navigator>
+							<Stack.Screen
+								name="Login"
+								component={Login}
+								options={{
+									...optionsPrimary
+								}} />
+							<Stack.Screen
+								name="Home"
+								component={Home}
+								options={{
+									...optionsPrimary
+								}}
+							/>
+						</Stack.Navigator>
+						<Accessibility />
+					</NavigationContainer>
+				</ThemeProvider>
+			</SafeAreaView>
+		</>
 	);
 }

@@ -18,6 +18,8 @@ const getStyles = (theme: Theme) => StyleSheet.create({
 		fontSize: theme.fontSize.xl,
 		fontFamily: theme.fontWeight.bold,
 		marginBottom: 10,
+		color: theme.colors.black,
+		letterSpacing: theme.spacing.medium,
 	},
 });
 

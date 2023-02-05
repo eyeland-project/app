@@ -1,5 +1,5 @@
-import { View, StyleSheet, Image, Pressable } from 'react-native'
-import { useState } from 'react'
+import { View, StyleSheet, Image, Pressable, Dimensions } from 'react-native'
+import { useState, useEffect } from 'react'
 
 import Options from './Options'
 
@@ -11,21 +11,35 @@ const Accessibility = () => {
 
     const theme = useTheme()
 
+    const unShowOptions = () => {
+        setShowOptions(false)
+    }
+
     return (
-        <View style={getStyles(theme).container}>
-            {
-                showOptions && <Options />
-            }
-            <Pressable
-                onPress={() => setShowOptions(!showOptions)}
-            >
-                <Image style={getStyles(theme).image} source={require('../../../../assets/icons/accessibility.png')} />
-            </Pressable>
-        </View>
+        <>
+            {showOptions && <Pressable style={getStyles(theme).transparent} onPress={unShowOptions} />}
+            <View style={getStyles(theme).container}>
+                {
+                    showOptions && <Options unShowOptions={unShowOptions} />
+                }
+                <Pressable
+                    onPress={() => setShowOptions(!showOptions)}
+                >
+                    <Image style={getStyles(theme).image} source={require('../../../../assets/icons/accessibility.png')} />
+                </Pressable>
+            </View>
+        </>
     )
 }
 
 const getStyles = (theme: Theme) => StyleSheet.create({
+    transparent: {
+        position: 'absolute',
+        height: Dimensions.get('window').height,
+        width: Dimensions.get('window').width,
+        backgroundColor: 'trasparent',
+        bottom: 0,
+    },
     container: {
         flex: 1,
         position: 'absolute',

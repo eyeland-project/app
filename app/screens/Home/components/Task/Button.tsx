@@ -24,10 +24,10 @@ const getStyles = (theme: Theme) => StyleSheet.create({
 		backgroundColor: theme.colors.secondary,
 		borderRadius: theme.borderRadius.full,
 		padding: 10,
+		paddingHorizontal: 20,
 		flexDirection: "row",
 		justifyContent: "center",
 		alignItems: "center",
-		width: "40%",
 		marginLeft: "auto",
 		marginTop: 20,
 		...theme.shadow
@@ -35,6 +35,8 @@ const getStyles = (theme: Theme) => StyleSheet.create({
 	text: {
 		color: theme.colors.white,
 		fontFamily: theme.fontWeight.regular,
+		fontSize: theme.fontSize.small,
+		letterSpacing: theme.spacing.medium
 	},
 });
 

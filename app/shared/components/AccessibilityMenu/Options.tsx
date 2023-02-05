@@ -1,13 +1,20 @@
 import { View, StyleSheet } from 'react-native'
-import { useContext, useState } from 'react'
+import { useContext, useState, useEffect, useRef } from 'react'
 
 import { ThemeContext } from '../../../core/contexts/ThemeContext'
 
 import AccessibilityOption from './AccessibilityOption'
 
 import { Theme } from '../../../theme'
+import setStatusBarBackgroundColor from 'expo-status-bar/build/setStatusBarBackgroundColor'
+import setStatusBarStyle from 'expo-status-bar/build/setStatusBarStyle'
 
-const Options = () => {
+interface OptionsProps {
+    unShowOptions: () => void
+}
+
+// TODO - Refactor this component to make it more readable
+const Options = ({ unShowOptions }: OptionsProps) => {
     const [highContrast, setHighContrast] = useState(false)
     const [largeText, setLargeText] = useState(0)
     const [fontFamily, setFontFamily] = useState(0)
@@ -15,19 +22,34 @@ const Options = () => {
 
     const [theme, modifyTheme] = useContext(ThemeContext)
 
+    const initialRender = useRef(true)
+
     const handleHighContrast = () => {
         setHighContrast(!highContrast)
-        modifyTheme({
-            ...theme,
-            colors: {
-                ...theme.colors,
-                primary: highContrast ? '#000' : '#fff',
-                secondary: highContrast ? '#fff' : '#000',
-                white: highContrast ? '#000' : '#fff',
-                black: highContrast ? '#fff' : '#000'
-            }
-        })
     }
+
+    useEffect(() => {
+        if (initialRender.current) {
+            initialRender.current = false
+        } else {
+            modifyTheme({
+                ...theme,
+                colors: {
+                    ...theme.colors,
+                    primary: highContrast ? '#000' : '#fff',
+                    secondary: highContrast ? '#fff' : '#000',
+                    white: highContrast ? '#000' : '#fff',
+                    black: highContrast ? '#fff' : '#000'
+                },
+                shadow: {
+                    ...theme.shadow,
+                    shadowColor: highContrast ? '#fff' : '#000'
+                }
+            })
+            setStatusBarBackgroundColor(highContrast ? '#000' : '#fff', false)
+            setStatusBarStyle(highContrast ? 'light' : 'dark')
+        }
+    }, [highContrast])
 
     const handleLargeText = () => {
         if (largeText < 3) {
@@ -40,6 +62,10 @@ const Options = () => {
                     small: theme.fontSize.small + 2,
                     medium: theme.fontSize.medium + 2,
                     large: theme.fontSize.large + 2,
+                    xl: theme.fontSize.xl + 2,
+                    xxl: theme.fontSize.xxl + 2,
+                    xxxl: theme.fontSize.xxxl + 2,
+                    xxxxl: theme.fontSize.xxxxl + 2,
                     xxxxxxl: theme.fontSize.xxxxxxl + 2
                 }
             })
@@ -53,7 +79,12 @@ const Options = () => {
                     small: 14,
                     medium: 16,
                     large: 18,
-                    xxxxxxl: 40
+                    xl: 20,
+                    xxl: 24,
+                    xxxl: 28,
+                    xxxxl: 32,
+                    xxxxxl: 36,
+                    xxxxxxl: 40,
                 }
             })
         }
@@ -104,6 +135,7 @@ const Options = () => {
                 spacing: {
                     ...theme.spacing,
                     medium: theme.spacing.medium + 2,
+                    large: theme.spacing.large + 2
                 }
             })
         } else {
@@ -113,11 +145,11 @@ const Options = () => {
                 spacing: {
                     ...theme.spacing,
                     medium: 0,
+                    large: 2
                 }
             })
         }
     }
-
 
     return (
         <View style={getStyles(theme).container}>
