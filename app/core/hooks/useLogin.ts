@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import useAuthStorage from './useAuthStorage';
+import usePlaySound from './usePlaySound';
 import axios from 'axios';
 
 import { environment } from "../../../enviroments/environment";
@@ -7,6 +8,8 @@ import { environment } from "../../../enviroments/environment";
 import { Login } from "../../shared/interfaces/Login.interface";
 
 const useLogin = () => {
+    const playSoundSuccess = usePlaySound(require('../../../assets/sounds/loginSucceeded.wav'));
+    const playSoundError = usePlaySound(require('../../../assets/sounds/loginFailed.wav'));
     const authStorage = useAuthStorage();
 
     const [loading, setLoading] = useState(false);
@@ -26,6 +29,7 @@ const useLogin = () => {
             if (response.status === 200) {
                 setLoading(false);
                 setData(response.data);
+                playSoundSuccess();
                 await authStorage.setAccessToken(response.data.userToken);
                 return response.data;
             } else {
@@ -34,6 +38,7 @@ const useLogin = () => {
         } catch (err) {
             setLoading(false);
             setError((err as any).message || 'An error occurred');
+            playSoundError();
         }
     }, []);
 

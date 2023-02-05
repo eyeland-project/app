@@ -28,6 +28,7 @@ const Login = () => {
 	const onSubmit = async (inputs: LoginInterface) => {
 		try {
 			await login(inputs);
+
 			if (data) {
 				navigation.navigate("Home");
 			} else {
@@ -36,7 +37,6 @@ const Login = () => {
 		} catch (error) {
 			ToastAndroid.show((error as any).message, ToastAndroid.SHORT);
 		}
-		//TODO put sound when login successfully and when not
 	};
 
 	return (
