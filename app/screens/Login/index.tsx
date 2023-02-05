@@ -29,7 +29,6 @@ const Login = () => {
 		try {
 			await login(inputs);
 			if (data) {
-				//TODO save token in async storage
 				navigation.navigate("Home");
 			} else {
 				ToastAndroid.show(error || "Un error inesperado ha ocurrido", ToastAndroid.SHORT);
@@ -37,6 +36,7 @@ const Login = () => {
 		} catch (error) {
 			ToastAndroid.show((error as any).message, ToastAndroid.SHORT);
 		}
+		//TODO put sound when login successfully and when not
 	};
 
 	return (

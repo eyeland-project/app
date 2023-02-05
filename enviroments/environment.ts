@@ -1,3 +1,3 @@
 export const environment = {
-    apiUrl: '',
+    apiUrl: 'https://epics-si-api.onrender.com/api-legacy/api',
 };

@@ -9,6 +9,7 @@ import Login from "./app/screens/Login";
 import Home from "./app/screens/Home";
 
 import { ThemeProvider } from "./app/core/contexts/ThemeContext";
+import { AuthStorageProvider } from "./app/core/contexts/AuthStorageContext";
 
 import Accessibility from "./app/shared/components/AccessibilityMenu";
 import SafeAreaViewAndroid from "./app/shared/components/SafeAreaViewAndroid";
@@ -46,26 +47,28 @@ export default function App() {
 		<>
 			<StatusBar />
 			<SafeAreaView style={SafeAreaViewAndroid.AndroidSafeArea}>
-				<ThemeProvider>
-					<NavigationContainer>
-						<Stack.Navigator>
-							<Stack.Screen
-								name="Login"
-								component={Login}
-								options={{
-									...optionsPrimary
-								}} />
-							<Stack.Screen
-								name="Home"
-								component={Home}
-								options={{
-									...optionsPrimary
-								}}
-							/>
-						</Stack.Navigator>
-						<Accessibility />
-					</NavigationContainer>
-				</ThemeProvider>
+				<AuthStorageProvider>
+					<ThemeProvider>
+						<NavigationContainer>
+							<Stack.Navigator>
+								<Stack.Screen
+									name="Login"
+									component={Login}
+									options={{
+										...optionsPrimary
+									}} />
+								<Stack.Screen
+									name="Home"
+									component={Home}
+									options={{
+										...optionsPrimary
+									}}
+								/>
+							</Stack.Navigator>
+							<Accessibility />
+						</NavigationContainer>
+					</ThemeProvider>
+				</AuthStorageProvider>
 			</SafeAreaView>
 		</>
 	);

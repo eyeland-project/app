@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import useAuthStorage from './useAuthStorage';
 import axios from 'axios';
 
 import { environment } from "../../../enviroments/environment";
@@ -6,6 +7,8 @@ import { environment } from "../../../enviroments/environment";
 import { Login } from "../../shared/interfaces/Login.interface";
 
 const useLogin = () => {
+    const authStorage = useAuthStorage();
+
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [data, setData] = useState<any | null>(null);
@@ -20,13 +23,13 @@ const useLogin = () => {
                 timeout: 10000,
             });
 
-
             if (response.status === 200) {
                 setLoading(false);
                 setData(response.data);
+                await authStorage.setAccessToken(response.data.userToken);
                 return response.data;
             } else {
-                throw new Error(response.statusText);
+                throw new Error(response.data);
             }
         } catch (err) {
             setLoading(false);
