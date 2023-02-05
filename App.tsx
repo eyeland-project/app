@@ -6,6 +6,10 @@ import { NativeStackNavigationOptions } from "@react-navigation/native-stack";
 import Login from "./app/screens/Login";
 import Home from "./app/screens/Home";
 
+import { ThemeProvider } from "./app/core/contexts/ThemeContext";
+
+import Accessibility from "./app/shared/components/AccessibilityMenu";
+
 const Stack = createNativeStackNavigator();
 
 const optionsPrimary: NativeStackNavigationOptions = {
@@ -21,8 +25,13 @@ export default function App() {
 	const [loaded] = useFonts({
 		"Poppins-Regular": require("./assets/fonts/Poppins/Poppins-Regular.ttf"),
 		"Poppins-Medium": require("./assets/fonts/Poppins/Poppins-Medium.ttf"),
-		"Poppins-SemiBold": require("./assets/fonts/Poppins/Poppins-SemiBold.ttf"),
 		"Poppins-Bold": require("./assets/fonts/Poppins/Poppins-Bold.ttf"),
+		"Roboto-Regular": require("./assets/fonts/Roboto/Roboto-Regular.ttf"),
+		"Roboto-Medium": require("./assets/fonts/Roboto/Roboto-Medium.ttf"),
+		"Roboto-Bold": require("./assets/fonts/Roboto/Roboto-Bold.ttf"),
+		"Ubuntu-Regular": require("./assets/fonts/Ubuntu/Ubuntu-Regular.ttf"),
+		"Ubuntu-Medium": require("./assets/fonts/Ubuntu/Ubuntu-Medium.ttf"),
+		"Ubuntu-Bold": require("./assets/fonts/Ubuntu/Ubuntu-Bold.ttf"),
 	});
 
 	if (!loaded) {
@@ -30,24 +39,27 @@ export default function App() {
 	}
 
 	return (
-		<NavigationContainer>
-			<Stack.Navigator>
-				<Stack.Screen
-					name="Login"
-					component={Login}
-					options={{
-						...optionsPrimary,
-						headerShown: false,
-					}} />
-				<Stack.Screen
-					name="Home"
-					component={Home}
-					options={{
-						...optionsPrimary,
-						headerTitle: "Inicio",
-					}}
-				/>
-			</Stack.Navigator>
-		</NavigationContainer>
+		<ThemeProvider>
+			<NavigationContainer>
+				<Stack.Navigator>
+					<Stack.Screen
+						name="Login"
+						component={Login}
+						options={{
+							...optionsPrimary,
+							headerShown: false,
+						}} />
+					<Stack.Screen
+						name="Home"
+						component={Home}
+						options={{
+							...optionsPrimary,
+							headerTitle: "Inicio",
+						}}
+					/>
+				</Stack.Navigator>
+				<Accessibility />
+			</NavigationContainer>
+		</ThemeProvider>
 	);
 }

@@ -34,6 +34,7 @@ const getStyles = (theme: Theme) =>
 			color: theme.colors.white,
 			fontSize: theme.fontSize.small,
 			fontFamily: theme.fontWeight.bold,
+			letterSpacing: theme.spacing.medium,
 		},
 	});
 

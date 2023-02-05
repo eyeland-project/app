@@ -22,6 +22,7 @@ export let theme = {
 		elevation: 5,
     },
     fontSize: {
+        xs: 12,
         small: 14,
         medium: 16,
         large: 18,
@@ -40,6 +41,11 @@ export let theme = {
         medium: 'Poppins-Medium',
         bold: 'Poppins-Bold',
     },
+    spacing: {
+        small: -2,
+        medium: 0,
+        large: 2,
+    }
 };
 
 export interface Theme {
@@ -66,6 +72,7 @@ export interface Theme {
         elevation: number;
     };
     fontSize: {
+        xs: number;
         small: number;
         medium: number;
         large: number;
@@ -83,5 +90,10 @@ export interface Theme {
         regular: string;
         medium: string;
         bold: string;
+    };
+    spacing: {
+        small: number;
+        medium: number;
+        large: number;
     };
 }
