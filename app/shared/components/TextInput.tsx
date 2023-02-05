@@ -1,6 +1,6 @@
 import {
 	TextInput as TextInputNative,
-	TextInputProps,
+	TextInputProps as TextInputPropsNative,
 	View,
 	Text,
 	StyleSheet
@@ -9,15 +9,38 @@ import {
 import useTheme from "../../core/hooks/useTheme";
 
 import { Theme } from "../../theme";
+import { Controller, Control } from "react-hook-form";
+import { Login } from "../interfaces/Login.interface";
 
+export interface TextInputProps extends TextInputPropsNative {
+	name: 'username' | 'password';
+	label: string;
+	control: Control<Login>;
+	error?: string;
+}
 
-const TextInput = (props: TextInputProps) => {
+const TextInput = ({ name, label, control, error, ...props }: TextInputProps) => {
 	const theme = useTheme();
 
 	return (
 		<View style={getStyles(theme).constainer}>
-			<Text style={getStyles(theme).text}>{props.placeholder}</Text>
-			<TextInputNative style={getStyles(theme).input} {...props} placeholder="" />
+			<Text style={getStyles(theme).text}>{label}</Text>
+			<Controller
+				control={control}
+				rules={{ required: true }}
+				render={({ field: { onChange, onBlur, value } }) => (
+					<TextInputNative
+						style={getStyles(theme).input}
+						onBlur={onBlur}
+						onChangeText={onChange}
+						value={value}
+						placeholder={props.placeholder}
+						{...props}
+					/>
+				)}
+				name={name}
+			/>
+			{error && <Text style={getStyles(theme).error}>{error}</Text>}
 		</View>
 	);
 };
@@ -46,6 +69,12 @@ const getStyles = (theme: Theme) =>
 			color: theme.colors.black,
 			letterSpacing: theme.spacing.medium,
 		},
+		error: {
+			fontFamily: theme.fontWeight.regular,
+			fontSize: theme.fontSize.small,
+			color: 'red',
+			letterSpacing: theme.spacing.medium,
+		}
 	});
 
 export default TextInput;
