@@ -17,7 +17,8 @@ const getStyles = (theme: Theme) =>
 		title: {
 			fontSize: theme.fontSize.xxxxxxl,
 			fontFamily: theme.fontWeight.bold,
-			marginBottom: 20,
+			color: theme.colors.black,
+			letterSpacing: theme.spacing.medium,
 		},
 	});
 

@@ -23,20 +23,22 @@ interface TaskProps {
 }
 
 const Task = ({ orden, name, description }: TaskProps) => {
+	const theme = useTheme();
+	const navigation = useNavigation<any>();
+
 	const [showDescription, setShowDescription] = useState(false);
 	const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
-	const animationHeight = useRef(new Animated.Value(70)).current;
+	const animationHeight = useRef(new Animated.Value(theme.fontSize.small * 5)).current;
 
 	useEffect(() => {
 		Animated.timing(animationHeight, {
-			toValue: showDescription ? 230 : 70,
+			toValue: showDescription
+				? (theme.spacing.medium * 17) + (theme.fontSize.small * 17)
+				: (theme.fontSize.small * 5),
 			duration: 300,
 			useNativeDriver: false,
 		}).start();
-	}, [showDescription]);
-
-	const navigation = useNavigation<any>();
-	const theme = useTheme();
+	}, [showDescription, theme]);
 
 	return (
 		<AnimatedPressable
@@ -50,7 +52,9 @@ const Task = ({ orden, name, description }: TaskProps) => {
 				style={getStyles(theme).image}
 			>
 				<LinearGradient
-					colors={["rgba(255,255,255,0.9)", "rgba(255,255,255,0.4)"]}
+					colors={[
+						theme.colors.white === "#fff" ? "rgba(255,255,255,0.9)" : "rgba(0,0,0,0.9)",
+						theme.colors.white === "#fff" ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.4)",]}
 					style={getStyles(theme).gradient}
 					start={[1, 1]}
 					end={[0, 1]}
@@ -77,7 +81,6 @@ const getStyles = (theme: Theme) =>
 		card: {
 			backgroundColor: theme.colors.white,
 			marginVertical: 10,
-			marginHorizontal: 10,
 			borderRadius: theme.borderRadius.medium,
 			position: "relative",
 			...theme.shadow,

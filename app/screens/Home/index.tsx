@@ -1,7 +1,11 @@
-import { FlatList, Text } from "react-native";
-import React from "react";
+import { FlatList, View, StyleSheet } from "react-native";
+
 import Task from "./components/Task";
 import ComingSoon from "./components/ComingSoon";
+import Title from "./components/Title";
+
+import useTheme from "../../core/hooks/useTheme";
+import { Theme } from "../../theme";
 
 const TASKS = [
 	{
@@ -14,8 +18,11 @@ const TASKS = [
 ];
 
 const Home = () => {
+	const theme = useTheme();
+
 	return (
-		<>
+		<View style={getStyles(theme).container}>
+			<Title text="[Inicio]" />
 			<FlatList
 				data={TASKS}
 				renderItem={({ item }) => (
@@ -27,8 +34,19 @@ const Home = () => {
 				)}
 			/>
 			<ComingSoon />
-		</>
+		</View>
 	);
 };
+
+const getStyles = (theme: Theme) =>
+	StyleSheet.create({
+		container: {
+			flex: 1,
+			backgroundColor: theme.colors.primary,
+			paddingHorizontal: 10,
+		},
+	});
+
+
 
 export default Home;

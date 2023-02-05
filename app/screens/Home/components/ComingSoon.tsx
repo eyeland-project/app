@@ -35,6 +35,7 @@ const getStyles = (theme: Theme) =>
 			fontFamily: theme.fontWeight.regular,
 			fontSize: theme.fontSize.xl,
 			textAlign: "center",
+			color: theme.colors.black,
 		},
 	});
 

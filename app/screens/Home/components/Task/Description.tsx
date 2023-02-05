@@ -21,6 +21,9 @@ const getStyles = (theme: Theme) =>
 	StyleSheet.create({
 		description: {
 			fontFamily: theme.fontWeight.regular,
+			color: theme.colors.black,
+			letterSpacing: theme.spacing.medium,
+			fontSize: theme.fontSize.small,
 		},
 	});
 
