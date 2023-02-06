@@ -1,4 +1,4 @@
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, ParamListBase } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useFonts } from "expo-font";
 import { NativeStackNavigationOptions } from "@react-navigation/native-stack";
@@ -7,6 +7,7 @@ import { StatusBar } from "expo-status-bar";
 
 import Login from "./app/screens/Login";
 import Home from "./app/screens/Home";
+import Introduction from "./app/screens/Introduction";
 
 import { ThemeProvider } from "./app/core/contexts/ThemeContext";
 import { AuthStorageProvider } from "./app/core/contexts/AuthStorageContext";
@@ -14,7 +15,8 @@ import { AuthStorageProvider } from "./app/core/contexts/AuthStorageContext";
 import Accessibility from "./app/shared/components/AccessibilityMenu";
 import SafeAreaViewAndroid from "./app/shared/components/SafeAreaViewAndroid";
 
-const Stack = createNativeStackNavigator();
+
+const Stack = createNativeStackNavigator<ParamListBase>();
 
 const optionsPrimary: NativeStackNavigationOptions = {
 	animation: "fade_from_bottom",
@@ -64,6 +66,17 @@ export default function App() {
 										...optionsPrimary
 									}}
 								/>
+								<Stack.Screen
+									name="Introduction"
+									options={{
+										...optionsPrimary
+									}}
+									initialParams={{
+										idTask: 0
+									}}
+								>
+									{({ route }: { route: any }) => <Introduction route={route} />}
+								</Stack.Screen>
 							</Stack.Navigator>
 							<Accessibility />
 						</NavigationContainer>

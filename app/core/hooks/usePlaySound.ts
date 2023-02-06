@@ -8,14 +8,12 @@ const usePlaySound = (soundPath: any) => {
         const { sound } = await Audio.Sound.createAsync(soundPath);
         setSoundObject(soundObject);
 
-        console.log('Playing Sound');
         await sound.playAsync();
     };
 
     useEffect(() => {
         return soundObject
             ? () => {
-                console.log('Unloading Sound');
                 soundObject.unloadAsync();
             }
             : undefined;

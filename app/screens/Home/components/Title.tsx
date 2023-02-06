@@ -22,6 +22,7 @@ const getStyles = (theme: Theme) =>
         container: {
             backgroundColor: theme.colors.primary,
             padding: 8,
+            marginBottom: 8,
         },
         text: {
             color: theme.colors.black,

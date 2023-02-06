@@ -26,17 +26,20 @@ const Login = () => {
 	const { data, error, loading, login } = useLogin();
 
 	const onSubmit = async (inputs: LoginInterface) => {
-		try {
-			await login(inputs);
+		// try {
+		// 	await login(inputs);
 
-			if (data) {
-				navigation.navigate("Home");
-			} else {
-				ToastAndroid.show(error || "Un error inesperado ha ocurrido", ToastAndroid.SHORT);
-			}
-		} catch (error) {
-			ToastAndroid.show((error as any).message, ToastAndroid.SHORT);
-		}
+		// 	if (data) {
+		// 		navigation.navigate("Home");
+		// 	} else {
+		// 		ToastAndroid.show(error || "Un error inesperado ha ocurrido", ToastAndroid.SHORT);
+		// 	}
+		// } catch (error) {
+		// 	ToastAndroid.show((error as any).message, ToastAndroid.SHORT);
+		// }
+
+		// # MOCK CODE 
+		navigation.navigate("Home");
 	};
 
 	return (

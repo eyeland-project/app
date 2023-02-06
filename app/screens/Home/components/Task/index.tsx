@@ -1,13 +1,10 @@
 import {
 	View,
 	StyleSheet,
-	ImageBackground,
-	Animated,
+	ImageBackground
 } from "react-native";
-import { useState, useEffect, useRef } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
-import Pressable from "../../../../shared/components/Pressable";
 
 import Title from "./Title";
 import Description from "./Description";
@@ -17,39 +14,21 @@ import useTheme from "../../../../core/hooks/useTheme";
 import { Theme } from "../../../../theme";
 
 interface TaskProps {
+	id: number;
 	orden: number;
 	description: string;
 	name: string;
+	image?: any;
 }
 
-const Task = ({ orden, name, description }: TaskProps) => {
+const Task = ({ id, orden, name, description, image }: TaskProps) => {
 	const theme = useTheme();
 	const navigation = useNavigation<any>();
 
-	const [showDescription, setShowDescription] = useState(false);
-	const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
-	const animationHeight = useRef(new Animated.Value(theme.fontSize.small * 5)).current;
-
-	useEffect(() => {
-		Animated.timing(animationHeight, {
-			toValue: showDescription
-				? (theme.spacing.medium * 17) + (theme.fontSize.small * 17)
-				: (theme.fontSize.small * 5),
-			duration: 300,
-			useNativeDriver: false,
-		}).start();
-	}, [showDescription, theme]);
-
 	return (
-		<AnimatedPressable
-			style={[getStyles(theme).card, { height: animationHeight }]}
-			onPress={() => setShowDescription(!showDescription)}
-		>
+		<View style={getStyles(theme).card}>
 			<ImageBackground
-				source={{
-					uri: "https://images.unsplash.com/photo-1601296200639-89349ce76a48?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
-				}}
-				style={getStyles(theme).image}
+				source={image}
 			>
 				<LinearGradient
 					colors={[
@@ -61,18 +40,14 @@ const Task = ({ orden, name, description }: TaskProps) => {
 				/>
 				<View style={getStyles(theme).container}>
 					<Title name={orden + ". " + name} />
-					{showDescription ? (
-						<>
-							<Description text={description} />
-							<Button
-								text="Comenzar"
-								onPress={() => navigation.navigate("Introduction")}
-							/>
-						</>
-					) : null}
+					<Description text={description} />
+					<Button
+						text="Comenzar"
+						onPress={() => navigation.navigate("Introduction", { idTask: orden })}
+					/>
 				</View>
 			</ImageBackground>
-		</AnimatedPressable>
+		</View>
 	);
 };
 
@@ -80,20 +55,14 @@ const getStyles = (theme: Theme) =>
 	StyleSheet.create({
 		card: {
 			backgroundColor: theme.colors.white,
-			marginVertical: 10,
 			borderRadius: theme.borderRadius.medium,
-			position: "relative",
+			overflow: "hidden",
+			marginHorizontal: 20,
 			...theme.shadow,
 		},
 		container: {
 			paddingHorizontal: 20,
 			paddingVertical: 15,
-		},
-		image: {
-			width: "100%",
-			height: "100%",
-			borderRadius: theme.borderRadius.medium,
-			overflow: "hidden",
 		},
 		gradient: {
 			position: "absolute",
