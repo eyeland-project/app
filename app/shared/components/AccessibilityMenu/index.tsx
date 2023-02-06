@@ -1,4 +1,5 @@
-import { View, StyleSheet, Image, Pressable, Dimensions } from 'react-native'
+import { View, StyleSheet, Image, Dimensions } from 'react-native'
+import Pressable from '../Pressable'
 import { useState, useEffect } from 'react'
 
 import Options from './Options'

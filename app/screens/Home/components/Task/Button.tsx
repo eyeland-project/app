@@ -1,4 +1,5 @@
-import { Pressable, Text, StyleSheet, PressableProps } from "react-native";
+import { Text, StyleSheet, PressableProps } from "react-native";
+import Pressable from "../../../../shared/components/Pressable";
 
 import useTheme from "../../../../core/hooks/useTheme";
 import { Theme } from "../../../../theme";
