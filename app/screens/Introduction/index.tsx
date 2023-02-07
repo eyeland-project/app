@@ -13,6 +13,8 @@ import Description from './components/Description';
 import ContinueButton from '../../shared/components/ContinueButton';
 import Placeholder from './components/Placeholder';
 
+import * as Progress from 'react-native-progress';
+
 import useTheme from '../../core/hooks/useTheme';
 import { useNavigation } from '@react-navigation/native';
 import useIntroduction from '../../core/hooks/useIntroduction';
@@ -51,6 +53,7 @@ const Introduction = ({ route }: Props) => {
         <View style={getStyles(theme).container}>
             <View style={getStyles(theme).row}>
                 <BackButton />
+                <Progress.Bar progress={0.1} width={null} height={5} color={theme.colors.secondary} style={{ flex: 1, marginHorizontal: 20 }} />
                 <ContinueButton onPress={() => {
                     navigation.navigate('PreTask', { taskOrder, linkOrder: 0 })
                 }} />
