@@ -14,7 +14,7 @@ const useLogin = () => {
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [data, setData] = useState<any | null>(null);
+    const [data, setData] = useState<Login | null>(null);
 
     const login = useCallback(async (inputs: Login) => {
         setLoading(true);

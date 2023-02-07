@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import { View, Text, StyleSheet, Image, ScrollView } from 'react-native'
 import { RouteProp } from '@react-navigation/native';
 import { ParamListBase } from '@react-navigation/native';
@@ -9,14 +11,16 @@ import BackButton from '../../shared/components/BackButton';
 import Keywords from './components/Keywords';
 import Description from './components/Description';
 import ContinueButton from '../../shared/components/ContinueButton';
+import Placeholder from './components/Placeholder';
 
 import useTheme from '../../core/hooks/useTheme';
 import { useNavigation } from '@react-navigation/native';
+import useIntroduction from '../../core/hooks/useIntroduction';
 
 import { INTRODUCTION } from '../../shared/mocks/INTRODUCTION';
 
 interface TaskParams {
-    idTask: string;
+    taskOrder: number;
 }
 
 interface Props {
@@ -26,25 +30,45 @@ interface Props {
 }
 
 const Introduction = ({ route }: Props) => {
-    const { idTask } = route.params;
+    const { taskOrder } = route.params;
 
     const theme = useTheme();
     const navigation = useNavigation<any>();
-    // TODO - Get introduction from API
+    // const { loading, error, data, getIntroduction } = useIntroduction();
+
+    // useEffect(() => {
+    //     getIntroduction({ taskOrder });
+    // }, []);
+
+    const data = INTRODUCTION // MOCK DATA
+    const loading = false; // MOCK DATA
+
+    if (!data) {
+        return null;
+    } // Temporal
 
     return (
         <View style={getStyles(theme).container}>
             <View style={getStyles(theme).row}>
                 <BackButton />
+                <ContinueButton onPress={() => {
+                    navigation.navigate('PreTask', { taskOrder, linkOrder: 0 })
+                }} />
             </View>
             <ScrollView style={getStyles(theme).scrollView}>
-                <Title text={INTRODUCTION.name} />
-                <Keywords keywords={INTRODUCTION.keywords} />
-                <Image source={{ uri: INTRODUCTION.thumbnail }} style={getStyles(theme).image} />
-                <Description text={INTRODUCTION.longDescription} />
-                <ContinueButton onPress={() => {
-                    navigation.navigate('PreTask', { idTask })
-                }} />
+                {
+                    (data && !loading) ? (
+                        <>
+                            <Title text={data.name} />
+                            <Keywords keywords={data.keywords} />
+                            <Image source={{ uri: data.thumbnail }} style={getStyles(theme).image} />
+                            <Description text={data.longDescription} />
+                        </>
+                    ) : (
+                        <Placeholder />
+                    )
+                }
+
             </ScrollView>
         </View>
     )

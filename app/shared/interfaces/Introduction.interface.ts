@@ -7,3 +7,7 @@ export interface Introduction {
     keywords: string[];
     longDescription: string;
 }
+
+export interface getIntroductionParams {
+    taskOrder: number;
+}
