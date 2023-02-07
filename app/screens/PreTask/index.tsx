@@ -1,19 +1,16 @@
-import { View, Text, StyleSheet, Image, ScrollView } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
+import BackButton from '../../shared/components/BackButton';
+import WebView from 'react-native-webview';
+import Pressable from '../../shared/components/Pressable';
+
 import { RouteProp } from '@react-navigation/native';
 import { ParamListBase } from '@react-navigation/native';
-
-import { Theme } from '../../theme';
-
-import Title from './components/Title';
-import BackButton from '../../shared/components/BackButton';
-import Keywords from './components/Keywords';
-import Description from './components/Description';
-import ContinueButton from '../../shared/components/ContinueButton';
 
 import useTheme from '../../core/hooks/useTheme';
 import { useNavigation } from '@react-navigation/native';
 
-import { INTRODUCTION } from '../../shared/mocks/INTRODUCTION';
+import { Theme } from '../../theme';
+
 
 interface TaskParams {
     idTask: string;
@@ -25,27 +22,26 @@ interface Props {
     };
 }
 
-const Introduction = ({ route }: Props) => {
+const PreTask = ({ route }: Props) => {
     const { idTask } = route.params;
 
     const theme = useTheme();
     const navigation = useNavigation<any>();
-    // TODO - Get introduction from API
+    // TODO - Get pretask from API
 
     return (
         <View style={getStyles(theme).container}>
             <View style={getStyles(theme).row}>
                 <BackButton />
+                <Pressable onPress={() => navigation.navigate('PreTask', { idTask })}>
+                    <Text style={getStyles(theme).text}>Siguiente</Text>
+                </Pressable>
             </View>
-            <ScrollView style={getStyles(theme).scrollView}>
-                <Title text={INTRODUCTION.name} />
-                <Keywords keywords={INTRODUCTION.keywords} />
-                <Image source={{ uri: INTRODUCTION.thumbnail }} style={getStyles(theme).image} />
-                <Description text={INTRODUCTION.longDescription} />
-                <ContinueButton onPress={() => {
-                    navigation.navigate('PreTask', { idTask })
-                }} />
-            </ScrollView>
+            {/* HARD CODE */}
+            <WebView
+                source={{ uri: 'https://wordwall.net/resource/36022113/task-1-vocabulary' }}
+                style={{ marginBottom: 90, marginTop: 10 }}
+            />
         </View>
     )
 }
@@ -63,7 +59,7 @@ const getStyles = (theme: Theme) =>
         },
         text: {
             color: theme.colors.black,
-            fontSize: theme.fontSize.xxxl,
+            fontSize: theme.fontSize.large,
             fontFamily: theme.fontWeight.bold,
         },
         image: {
@@ -81,4 +77,4 @@ const getStyles = (theme: Theme) =>
     })
 
 
-export default Introduction
+export default PreTask

@@ -8,6 +8,7 @@ import { StatusBar } from "expo-status-bar";
 import Login from "./app/screens/Login";
 import Home from "./app/screens/Home";
 import Introduction from "./app/screens/Introduction";
+import PreTask from "./app/screens/PreTask";
 
 import { ThemeProvider } from "./app/core/contexts/ThemeContext";
 import { AuthStorageProvider } from "./app/core/contexts/AuthStorageContext";
@@ -76,6 +77,17 @@ export default function App() {
 									}}
 								>
 									{({ route }: { route: any }) => <Introduction route={route} />}
+								</Stack.Screen>
+								<Stack.Screen
+									name="PreTask"
+									options={{
+										...optionsPrimary
+									}}
+									initialParams={{
+										idTask: 0
+									}}
+								>
+									{({ route }: { route: any }) => <PreTask route={route} />}
 								</Stack.Screen>
 							</Stack.Navigator>
 							<Accessibility />
