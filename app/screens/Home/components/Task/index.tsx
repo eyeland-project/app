@@ -15,16 +15,15 @@ import { Theme } from "../../../../theme";
 
 interface TaskProps {
 	id: number;
-	orden: number;
+	order: number;
 	description: string;
 	name: string;
 	image?: any;
 }
 
-const Task = ({ id, orden, name, description, image }: TaskProps) => {
+const Task = ({ id, order, name, description, image }: TaskProps) => {
 	const theme = useTheme();
 	const navigation = useNavigation<any>();
-
 	return (
 		<View style={getStyles(theme).card}>
 			<ImageBackground
@@ -39,11 +38,11 @@ const Task = ({ id, orden, name, description, image }: TaskProps) => {
 					end={[0, 1]}
 				/>
 				<View style={getStyles(theme).container}>
-					<Title name={orden + ". " + name} />
+					<Title name={order + ". " + name} />
 					<Description text={description} />
 					<Button
 						text="Comenzar"
-						onPress={() => navigation.navigate("Introduction", { idTask: orden })}
+						onPress={() => navigation.navigate("Introduction", { taskOrder: order })}
 					/>
 				</View>
 			</ImageBackground>

@@ -36,26 +36,27 @@ const Introduction = ({ route }: Props) => {
 
     const theme = useTheme();
     const navigation = useNavigation<any>();
-    // const { loading, error, data, getIntroduction } = useIntroduction();
+    const { loading, error, data, getIntroduction } = useIntroduction();
 
-    // useEffect(() => {
-    //     getIntroduction({ taskOrder });
-    // }, []);
+    useEffect(() => {
+        getIntroduction({ taskOrder });
+    }, []);
 
-    const data = INTRODUCTION // MOCK DATA
-    const loading = false; // MOCK DATA
+    // const data = INTRODUCTION // MOCK DATA
+    // const loading = false; // MOCK DATA
 
-    if (!data) {
-        return null;
-    } // Temporal
+    // if (!data) {
+    //     return null;
+    // } // Temporal
 
     return (
         <View style={getStyles(theme).container}>
+            {/* Esto de abajo puede convertirse en componente */}
             <View style={getStyles(theme).row}>
                 <BackButton />
                 <Progress.Bar progress={0.1} width={null} height={5} color={theme.colors.secondary} style={{ flex: 1, marginHorizontal: 20 }} />
                 <ContinueButton onPress={() => {
-                    navigation.navigate('PreTask', { taskOrder, linkOrder: 0 })
+                    navigation.navigate('PreTask', { taskOrder, linkOrder: 1 })
                 }} />
             </View>
             <ScrollView style={getStyles(theme).scrollView}>

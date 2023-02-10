@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
-import usePlaySound from './usePlaySound';
+import useAuthStorage from './useAuthStorage';
+
 import axios from 'axios';
 
 import { environment } from "../../../enviroments/environment";
@@ -10,14 +11,17 @@ const useTasks = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [data, setData] = useState<Task[] | null>(null);
+    const authStorage = useAuthStorage();
 
     const getTasks = useCallback(async () => {
         setLoading(true);
         try {
             const response = await axios.get(`${environment.apiUrl}/tasks`, {
+                headers: {
+                    Authorization: `Bearer ${await authStorage.getAccessToken()}`,
+                },
                 timeout: 10000,
             });
-
             if (response.status === 200) {
                 setLoading(false);
                 setData(response.data);
@@ -27,7 +31,23 @@ const useTasks = () => {
             }
         } catch (err) {
             setLoading(false);
-            setError((err as any).message || 'An error occurred');
+            switch ((err as any).response.status) {
+                case 401:
+                    setError('Unauthorized');
+                    break;
+                case 403:
+                    setError('Unauthorized');
+                    break;
+                case 498:
+                    setError('Token expired');
+                    break;
+                case 500:
+                    setError('Internal server error');
+                    break;
+                default:
+                    setError('An error occurred');
+                    break;
+            }
         }
     }, []);
 

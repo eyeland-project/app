@@ -5,6 +5,7 @@ import ComingSoon from "./components/ComingSoon";
 import Title from "./components/Title";
 import Placeholder from "./components/Placeholder";
 
+import { useEffect } from 'react';
 import useTheme from "../../core/hooks/useTheme";
 import useTasks from "../../core/hooks/useTasks";
 
@@ -17,6 +18,10 @@ const Home = () => {
 	const theme = useTheme();
 	const { loading, error, data, getTasks } = useTasks();
 
+	useEffect(() => {
+		getTasks();
+	}, []);
+
 	return (
 		<View>
 			{
@@ -26,12 +31,12 @@ const Home = () => {
 						ListHeaderComponent={<Title text="[Inicio]" />}
 						stickyHeaderIndices={[0]}
 						stickyHeaderHiddenOnScroll={true}
-						data={TASKS} // MOCK DATA
+						data={data} // MOCK DATA
 						renderItem={({ item }) => (
 							<Task
 								id={item.idTask}
 								name={item.name}
-								orden={item.taskOrder}
+								order={item.taskOrder}
 								description={item.description}
 								image={{ uri: item.thumbnail }}
 							/>

@@ -32,13 +32,11 @@ const PreTask = ({ route }: Props) => {
 
     const theme = useTheme();
     const navigation = useNavigation<any>();
-    // const { loading, error, data, getPreTask } = usePreTask();
+    const { loading, error, data, getPreTask } = usePreTask();
 
-    // useEffect(() => {
-    //     getPreTask({ taskOrder, linkOrder });
-    // }, []);
-
-    const data = { url: "https://wordwall.net/resource/36022113/task-1-vocabulary#" } // MOCK DATA
+    useEffect(() => {
+        getPreTask({ taskOrder, linkOrder });
+    }, [linkOrder]);
 
     if (!data) {
         return null;
@@ -50,7 +48,7 @@ const PreTask = ({ route }: Props) => {
         <View style={getStyles(theme).container}>
             <View style={getStyles(theme).row}>
                 <BackButton />
-                <ContinueButton onPress={() => navigation.navigate('DuringTask', { taskOrder, linkOrder: linkOrder + 1 })} />
+                <ContinueButton onPress={() => navigation.navigate('PreTask', { taskOrder, linkOrder: linkOrder + 1 })} />
             </View>
             <WebView
                 source={{ uri: data.url }}
