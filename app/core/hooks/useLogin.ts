@@ -14,7 +14,7 @@ const useLogin = () => {
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [data, setData] = useState<any | null>(null);
+    const [data, setData] = useState<Login | null>(null);
 
     const login = useCallback(async (inputs: Login) => {
         setLoading(true);
@@ -37,7 +37,18 @@ const useLogin = () => {
             }
         } catch (err) {
             setLoading(false);
-            setError((err as any).message || 'An error occurred');
+            // switch ((err as any).response.status) {
+            //     case 400:
+            //         setError('Usuario o contraseña incorrectos');
+            //         break;
+            //     case 403:
+            //         setError('Usuario o contraseña incorrectos');
+            //         break;
+            //     default:
+            //         setError('Un error ha ocurrido');
+            //         break;
+            // }
+            setError((err as any).message || 'Un error ha ocurrido');
             playSoundError();
         }
     }, []);

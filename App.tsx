@@ -73,7 +73,7 @@ export default function App() {
 										...optionsPrimary
 									}}
 									initialParams={{
-										idTask: 0
+										taskOrder: 0,
 									}}
 								>
 									{({ route }: { route: any }) => <Introduction route={route} />}
@@ -84,7 +84,8 @@ export default function App() {
 										...optionsPrimary
 									}}
 									initialParams={{
-										idTask: 0
+										taskOrder: 0,
+										linkOrder: 0,
 									}}
 								>
 									{({ route }: { route: any }) => <PreTask route={route} />}

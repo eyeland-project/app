@@ -1,19 +1,24 @@
+import { useEffect } from 'react';
+
 import { View, Text, StyleSheet } from 'react-native'
 import BackButton from '../../shared/components/BackButton';
 import WebView from 'react-native-webview';
 import Pressable from '../../shared/components/Pressable';
+import ContinueButton from '../../shared/components/ContinueButton';
 
 import { RouteProp } from '@react-navigation/native';
 import { ParamListBase } from '@react-navigation/native';
 
 import useTheme from '../../core/hooks/useTheme';
 import { useNavigation } from '@react-navigation/native';
+import usePreTask from '../../core/hooks/usePreTask';
 
 import { Theme } from '../../theme';
 
 
 interface TaskParams {
-    idTask: string;
+    taskOrder: number;
+    linkOrder: number;
 }
 
 interface Props {
@@ -23,23 +28,30 @@ interface Props {
 }
 
 const PreTask = ({ route }: Props) => {
-    const { idTask } = route.params;
+    const { taskOrder, linkOrder } = route.params;
 
     const theme = useTheme();
     const navigation = useNavigation<any>();
-    // TODO - Get pretask from API
+    const { loading, error, data, getPreTask } = usePreTask();
+
+    useEffect(() => {
+        getPreTask({ taskOrder, linkOrder });
+    }, [linkOrder]);
+
+    if (!data) {
+        return null;
+    }
+
+    //TODO - If not found then navigate to during task
 
     return (
         <View style={getStyles(theme).container}>
             <View style={getStyles(theme).row}>
                 <BackButton />
-                <Pressable onPress={() => navigation.navigate('PreTask', { idTask })}>
-                    <Text style={getStyles(theme).text}>Siguiente</Text>
-                </Pressable>
+                <ContinueButton onPress={() => navigation.navigate('PreTask', { taskOrder, linkOrder: linkOrder + 1 })} />
             </View>
-            {/* HARD CODE */}
             <WebView
-                source={{ uri: 'https://wordwall.net/resource/36022113/task-1-vocabulary' }}
+                source={{ uri: data.url }}
                 style={{ marginBottom: 90, marginTop: 10 }}
             />
         </View>

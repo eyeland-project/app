@@ -1,9 +1,10 @@
 export interface PreTask {
-    message: string;
-    links: [
-        {
-            topic: string;
-            link: string;
-        }
-    ]
+    id: number;
+    topic: string;
+    url: string;
+}
+
+export interface getPreTaskParams {
+    taskOrder: number;
+    linkOrder: number;
 }
