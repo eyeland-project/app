@@ -1,0 +1,70 @@
+import { View, StyleSheet, Animated } from 'react-native'
+import BackButton from '../../../shared/components/BackButton'
+import ContinueButton from '../../../shared/components/ContinueButton'
+import * as Progress from 'react-native-progress';
+
+import { useEffect, useState } from 'react';
+import useTheme from '../../../core/hooks/useTheme'
+
+import { Theme } from '../../../theme';
+
+interface Props {
+    progress: number;
+    showNext: boolean;
+    onPress: () => void;
+}
+
+const Header = ({ progress, showNext, onPress }: Props) => {
+    const theme = useTheme()
+    const [progressWidth, setProgressWidth] = useState(new Animated.Value(1))
+    const [continueOpacity, setContinueOpacity] = useState(new Animated.Value(0))
+    const [continueTranslateX, setContinueTranslateX] = useState(new Animated.Value(50))
+
+    useEffect(() => {
+        if (showNext) {
+            Animated.parallel([
+                Animated.timing(progressWidth, {
+                    toValue: 0,
+                    duration: 500,
+                    useNativeDriver: true,
+                }),
+                Animated.timing(continueOpacity, {
+                    toValue: 1,
+                    duration: 500,
+                    useNativeDriver: true,
+                }),
+                Animated.timing(continueTranslateX, {
+                    toValue: 0,
+                    duration: 500,
+                    useNativeDriver: true,
+                })
+            ]).start()
+        }
+    }, [showNext, progressWidth, continueOpacity, continueTranslateX])
+
+    return (
+        <View style={getStyles(theme).row}>
+            <BackButton />
+            <Progress.Bar progress={progress} width={null} height={5} color={theme.colors.secondary} style={{ flex: 1, marginHorizontal: 20 }} />
+            <Animated.View style={{ opacity: continueOpacity, transform: [{ translateX: continueTranslateX }] }}>
+                {
+                    showNext && <ContinueButton onPress={onPress} />
+                }
+            </Animated.View>
+        </View>
+    )
+}
+
+const getStyles = (theme: Theme) =>
+    StyleSheet.create({
+        row: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            paddingHorizontal: 20,
+            backgroundColor: theme.colors.primary,
+            paddingVertical: 10,
+        },
+    })
+
+export default Header

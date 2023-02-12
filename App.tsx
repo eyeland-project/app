@@ -7,11 +7,11 @@ import { StatusBar } from "expo-status-bar";
 
 import Login from "./app/screens/Login";
 import Home from "./app/screens/Home";
-import Introduction from "./app/screens/Introduction";
-import PreTask from "./app/screens/PreTask";
+import Task from "./app/screens/Task";
 
 import { ThemeProvider } from "./app/core/contexts/ThemeContext";
 import { AuthStorageProvider } from "./app/core/contexts/AuthStorageContext";
+import { TaskProvider } from "./app/core/contexts/TaskContext";
 
 import Accessibility from "./app/shared/components/AccessibilityMenu";
 import SafeAreaViewAndroid from "./app/shared/components/SafeAreaViewAndroid";
@@ -51,49 +51,38 @@ export default function App() {
 			<StatusBar />
 			<SafeAreaView style={SafeAreaViewAndroid.AndroidSafeArea}>
 				<AuthStorageProvider>
-					<ThemeProvider>
-						<NavigationContainer>
-							<Stack.Navigator>
-								<Stack.Screen
-									name="Login"
-									component={Login}
-									options={{
-										...optionsPrimary
-									}} />
-								<Stack.Screen
-									name="Home"
-									component={Home}
-									options={{
-										...optionsPrimary
-									}}
-								/>
-								<Stack.Screen
-									name="Introduction"
-									options={{
-										...optionsPrimary
-									}}
-									initialParams={{
-										taskOrder: 0,
-									}}
-								>
-									{({ route }: { route: any }) => <Introduction route={route} />}
-								</Stack.Screen>
-								<Stack.Screen
-									name="PreTask"
-									options={{
-										...optionsPrimary
-									}}
-									initialParams={{
-										taskOrder: 0,
-										linkOrder: 0,
-									}}
-								>
-									{({ route }: { route: any }) => <PreTask route={route} />}
-								</Stack.Screen>
-							</Stack.Navigator>
-							<Accessibility />
-						</NavigationContainer>
-					</ThemeProvider>
+					<TaskProvider>
+						<ThemeProvider>
+							<NavigationContainer>
+								<Stack.Navigator>
+									<Stack.Screen
+										name="Login"
+										component={Login}
+										options={{
+											...optionsPrimary
+										}} />
+									<Stack.Screen
+										name="Home"
+										component={Home}
+										options={{
+											...optionsPrimary
+										}}
+									/>
+									<Stack.Screen
+										name="Task"
+										component={Task}
+										options={{
+											...optionsPrimary
+										}}
+										initialParams={{
+											taskOrder: 0,
+										}}
+									/>
+								</Stack.Navigator>
+								<Accessibility />
+							</NavigationContainer>
+						</ThemeProvider>
+					</TaskProvider>
 				</AuthStorageProvider>
 			</SafeAreaView>
 		</>

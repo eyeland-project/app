@@ -4,10 +4,12 @@ import TextInput from "../../shared/components/TextInput";
 import Title from "./components/Title";
 import Button from "./components/Button";
 
+import { useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useForm } from "react-hook-form";
 import useTheme from "../../core/hooks/useTheme";
 import useLogin from "../../core/hooks/useLogin";
+import useAuthStorage from "../../core/hooks/useAuthStorage";
 
 import { Theme } from "../../theme";
 import { Login as LoginInterface } from "../../shared/interfaces/Login.interface";
@@ -15,20 +17,27 @@ import { Login as LoginInterface } from "../../shared/interfaces/Login.interface
 const Login = () => {
 	const navigation = useNavigation<any>();
 	const theme = useTheme();
-
 	const { control, handleSubmit, formState: { errors } } = useForm({
 		defaultValues: {
 			username: '',
 			password: ''
 		}
 	});
-
 	const { data, error, loading, login } = useLogin();
+	const authStorage = useAuthStorage();
+
+	useEffect(() => {
+		authStorage.getAccessToken().then(token => {
+			if (token) {
+				navigation.navigate("Home");
+			}
+		});
+	}, []);
+
 
 	const onSubmit = async (inputs: LoginInterface) => {
 		try {
 			await login(inputs);
-
 			if (data) {
 				navigation.navigate("Home");
 			} else {
@@ -37,9 +46,6 @@ const Login = () => {
 		} catch (error) {
 			ToastAndroid.show((error as any).message, ToastAndroid.SHORT);
 		}
-
-		// # MOCK CODE 
-		// navigation.navigate("Home");
 	};
 
 	return (

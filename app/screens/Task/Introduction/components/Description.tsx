@@ -1,14 +1,14 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, ScrollView } from 'react-native'
 
-import useTheme from '../../../core/hooks/useTheme'
+import useTheme from '../../../../core/hooks/useTheme'
 
-import { Theme } from '../../../theme'
+import { Theme } from '../../../../theme'
 
 interface Props {
     text: string
 }
 
-const Title = ({ text }: Props) => {
+const Description = ({ text }: Props) => {
     const theme = useTheme()
 
     return (
@@ -22,17 +22,16 @@ const getStyles = (theme: Theme) =>
     StyleSheet.create({
         container: {
             backgroundColor: theme.colors.primary,
-            marginTop: 10,
+            marginBottom: 80,
         },
         text: {
             color: theme.colors.black,
-            fontSize: theme.fontSize.xxxl,
-            fontFamily: theme.fontWeight.bold,
-            letterSpacing: theme.spacing.medium,
-            marginBottom: -10,
+            fontSize: theme.fontSize.medium,
+            fontFamily: theme.fontWeight.regular,
+            letterSpacing: theme.spacing.medium
         },
     })
 
 
 
-export default Title
+export default Description

@@ -28,27 +28,26 @@ const useLogin = () => {
 
             if (response.status === 200) {
                 setLoading(false);
-                setData(response.data);
                 playSoundSuccess();
-                await authStorage.setAccessToken(response.data.userToken);
+                setData(response.data);
+                await authStorage.setAccessToken(response.data.token);
                 return response.data;
             } else {
                 throw new Error(response.data);
             }
         } catch (err) {
             setLoading(false);
-            // switch ((err as any).response.status) {
-            //     case 400:
-            //         setError('Usuario o contraseña incorrectos');
-            //         break;
-            //     case 403:
-            //         setError('Usuario o contraseña incorrectos');
-            //         break;
-            //     default:
-            //         setError('Un error ha ocurrido');
-            //         break;
-            // }
-            setError((err as any).message || 'Un error ha ocurrido');
+            switch ((err as any).response.status) {
+                case 400:
+                    setError('Usuario o contraseña incorrectos');
+                    break;
+                case 403:
+                    setError('Usuario o contraseña incorrectos');
+                    break;
+                default:
+                    setError('Un error ha ocurrido');
+                    break;
+            }
             playSoundError();
         }
     }, []);

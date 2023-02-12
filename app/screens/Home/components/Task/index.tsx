@@ -42,7 +42,7 @@ const Task = ({ id, order, name, description, image }: TaskProps) => {
 					<Description text={description} />
 					<Button
 						text="Comenzar"
-						onPress={() => navigation.navigate("Introduction", { taskOrder: order })}
+						onPress={() => navigation.navigate("Task", { taskOrder: order })}
 					/>
 				</View>
 			</ImageBackground>

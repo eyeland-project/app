@@ -8,9 +8,9 @@ import { View, StyleSheet } from "react-native";
 
 import Title from "./Title";
 
-import useTheme from "../../../core/hooks/useTheme";
+import useTheme from "../../../../core/hooks/useTheme";
 
-import { Theme } from "../../../theme";
+import { Theme } from "../../../../theme";
 
 const Placeholder = () => {
     const theme = useTheme();

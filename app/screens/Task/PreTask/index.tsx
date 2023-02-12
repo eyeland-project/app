@@ -1,19 +1,16 @@
-import { useEffect } from 'react';
-
 import { View, Text, StyleSheet } from 'react-native'
-import BackButton from '../../shared/components/BackButton';
 import WebView from 'react-native-webview';
-import Pressable from '../../shared/components/Pressable';
-import ContinueButton from '../../shared/components/ContinueButton';
 
 import { RouteProp } from '@react-navigation/native';
 import { ParamListBase } from '@react-navigation/native';
 
-import useTheme from '../../core/hooks/useTheme';
+import useTheme from '../../../core/hooks/useTheme';
 import { useNavigation } from '@react-navigation/native';
-import usePreTask from '../../core/hooks/usePreTask';
+import usePreTask from '../../../core/hooks/usePreTask';
+import { useEffect } from 'react';
+import useTaskContext from '../../../core/hooks/useTaskContext';
 
-import { Theme } from '../../theme';
+import { Theme } from '../../../theme';
 
 
 interface TaskParams {
@@ -32,11 +29,27 @@ const PreTask = ({ route }: Props) => {
 
     const theme = useTheme();
     const navigation = useNavigation<any>();
-    const { loading, error, data, getPreTask } = usePreTask();
+    const { loading, error, data, getPreTask, getTotalNumberOfPreTasks } = usePreTask();
+    const { setPhaseCompleted, setOnPressNext, setProgress, progress } = useTaskContext();
 
     useEffect(() => {
         getPreTask({ taskOrder, linkOrder });
     }, [linkOrder]);
+
+    const onRenderComplete = async () => {
+        const increment = await getTotalNumberOfPreTasks(taskOrder);
+        if (linkOrder <= increment) {
+            setProgress(progress + 0.25 / increment);
+            setOnPressNext(() => () => navigation.navigate('PreTask', { taskOrder, linkOrder: linkOrder + 1 }));
+        } else {
+            setPhaseCompleted(false);
+            setOnPressNext(() => () => navigation.navigate('DuringTask', { taskOrder }));
+        }
+    }
+
+    useEffect(() => {
+        onRenderComplete();
+    }, [])
 
     if (!data) {
         return null;
@@ -46,10 +59,6 @@ const PreTask = ({ route }: Props) => {
 
     return (
         <View style={getStyles(theme).container}>
-            <View style={getStyles(theme).row}>
-                <BackButton />
-                <ContinueButton onPress={() => navigation.navigate('PreTask', { taskOrder, linkOrder: linkOrder + 1 })} />
-            </View>
             <WebView
                 source={{ uri: data.url }}
                 style={{ marginBottom: 90, marginTop: 10 }}

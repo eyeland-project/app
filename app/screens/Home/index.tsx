@@ -11,9 +11,6 @@ import useTasks from "../../core/hooks/useTasks";
 
 import { Theme } from "../../theme";
 
-// MOCK DATA
-import { TASKS } from "../../shared/mocks/TASKS";
-
 const Home = () => {
 	const theme = useTheme();
 	const { loading, error, data, getTasks } = useTasks();
@@ -25,20 +22,20 @@ const Home = () => {
 	return (
 		<View>
 			{
-				true ? ( // MOCK DATA
+				!loading ? (
 					<FlatList
 						style={getStyles(theme).container}
 						ListHeaderComponent={<Title text="[Inicio]" />}
 						stickyHeaderIndices={[0]}
 						stickyHeaderHiddenOnScroll={true}
-						data={data} // MOCK DATA
+						data={data}
 						renderItem={({ item }) => (
 							<Task
 								id={item.idTask}
 								name={item.name}
 								order={item.taskOrder}
 								description={item.description}
-								image={{ uri: item.thumbnail }}
+								image={{ uri: item.thumbnailUrl }}
 							/>
 						)}
 						ItemSeparatorComponent={() => <View style={getStyles(theme).separator} />}
