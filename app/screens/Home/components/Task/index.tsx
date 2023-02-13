@@ -10,8 +10,8 @@ import Title from "./Title";
 import Description from "./Description";
 import Button from "./Button";
 
-import useTheme from "../../../../core/hooks/useTheme";
-import { Theme } from "../../../../theme";
+import useTheme from "@hooks/useTheme";
+import { Theme } from "@theme";
 
 interface TaskProps {
 	id: number;

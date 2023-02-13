@@ -4,19 +4,19 @@ import { View, Text, StyleSheet, Image, ScrollView, Dimensions } from 'react-nat
 import { RouteProp } from '@react-navigation/native';
 import { ParamListBase } from '@react-navigation/native';
 
-import { Theme } from '../../../theme';
+import { Theme } from '@theme';
 
 import Title from './components/Title';
 import Keywords from './components/Keywords';
 import Description from './components/Description';
 import Placeholder from './components/Placeholder';
 
-import useTheme from '../../../core/hooks/useTheme';
+import useTheme from '@hooks/useTheme';
 import { useNavigation } from '@react-navigation/native';
-import useIntroduction from '../../../core/hooks/useIntroduction';
-import useTaskContext from '../../../core/hooks/useTaskContext';
+import useIntroduction from '@hooks/useIntroduction';
+import useTaskContext from '@hooks/useTaskContext';
 
-import { INTRODUCTION } from '../../../shared/mocks/INTRODUCTION';
+import { INTRODUCTION } from '@mocks/INTRODUCTION';
 
 interface TaskParams {
     taskOrder: number;

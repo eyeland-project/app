@@ -1,12 +1,12 @@
 import { View, StyleSheet, Animated } from 'react-native'
-import BackButton from '../../../shared/components/BackButton'
-import ContinueButton from '../../../shared/components/ContinueButton'
+import BackButton from '@components/HomeButton'
+import ContinueButton from '@components/ContinueButton'
 import * as Progress from 'react-native-progress';
 
 import { useEffect, useState } from 'react';
-import useTheme from '../../../core/hooks/useTheme'
+import useTheme from '@hooks/useTheme'
 
-import { Theme } from '../../../theme';
+import { Theme } from '@theme';
 
 interface Props {
     progress: number;

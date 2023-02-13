@@ -3,9 +3,9 @@ import usePlaySound from './usePlaySound';
 import useAuthStorage from './useAuthStorage';
 import axios from 'axios';
 
-import { environment } from "../../../enviroments/environment";
+import { environment } from "@environments/environment";
 
-import { Introduction, getIntroductionParams } from '../../shared/interfaces/Introduction.interface';
+import { Introduction, getIntroductionParams } from '@interfaces/Introduction.interface';
 
 const useIntroduction = () => {
     const [loading, setLoading] = useState(false);

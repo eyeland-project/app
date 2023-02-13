@@ -6,11 +6,11 @@ import {
 	StyleSheet
 } from "react-native";
 
-import useTheme from "../../core/hooks/useTheme";
+import useTheme from "@hooks/useTheme";
 
-import { Theme } from "../../theme";
+import { Theme } from "@theme";
 import { Controller, Control } from "react-hook-form";
-import { Login } from "../interfaces/Login.interface";
+import { Login } from "@interfaces/Login.interface";
 
 export interface TextInputProps extends TextInputPropsNative {
 	name: 'username' | 'password';

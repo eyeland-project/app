@@ -3,9 +3,9 @@ import usePlaySound from './usePlaySound';
 import useAuthStorage from './useAuthStorage';
 import axios from 'axios';
 
-import { environment } from "../../../enviroments/environment";
+import { environment } from "@environments/environment";
 
-import { PreTask, getPreTaskParams } from '../../shared/interfaces/PreTask.interface';
+import { PreTask, getPreTaskParams } from '@interfaces/PreTask.interface';
 
 const usePreTask = () => {
     const [loading, setLoading] = useState(false);

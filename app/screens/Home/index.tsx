@@ -6,10 +6,10 @@ import Title from "./components/Title";
 import Placeholder from "./components/Placeholder";
 
 import { useEffect } from 'react';
-import useTheme from "../../core/hooks/useTheme";
-import useTasks from "../../core/hooks/useTasks";
+import useTheme from "@hooks/useTheme";
+import useTasks from "@hooks/useTasks";
 
-import { Theme } from "../../theme";
+import { Theme } from "@theme";
 
 const Home = () => {
 	const theme = useTheme();
@@ -18,6 +18,7 @@ const Home = () => {
 	useEffect(() => {
 		getTasks();
 	}, []);
+
 
 	return (
 		<View>

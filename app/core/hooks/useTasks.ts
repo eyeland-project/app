@@ -3,9 +3,9 @@ import useAuthStorage from './useAuthStorage';
 
 import axios from 'axios';
 
-import { environment } from "../../../enviroments/environment";
+import { environment } from "@environments/environment";
 
-import { Task } from '../../shared/interfaces/Task.interface';
+import { Task } from '@interfaces/Task.interface';
 
 const useTasks = () => {
     const [loading, setLoading] = useState(false);
@@ -22,6 +22,8 @@ const useTasks = () => {
                 },
                 timeout: 10000,
             });
+
+            console.log(response)
 
             if (response.status === 200) {
                 setLoading(false);

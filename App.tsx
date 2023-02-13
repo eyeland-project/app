@@ -5,16 +5,16 @@ import { NativeStackNavigationOptions } from "@react-navigation/native-stack";
 import { SafeAreaView } from "react-native";
 import { StatusBar } from "expo-status-bar";
 
-import Login from "./app/screens/Login";
-import Home from "./app/screens/Home";
-import Task from "./app/screens/Task";
+import Login from "@screens/Login";
+import Home from "@screens/Home";
+import Task from "@screens/Task";
 
-import { ThemeProvider } from "./app/core/contexts/ThemeContext";
-import { AuthStorageProvider } from "./app/core/contexts/AuthStorageContext";
-import { TaskProvider } from "./app/core/contexts/TaskContext";
+import { ThemeProvider } from "@contexts/ThemeContext";
+import { AuthStorageProvider } from "@contexts/AuthStorageContext";
+import { TaskProvider } from "@contexts/TaskContext";
 
-import Accessibility from "./app/shared/components/AccessibilityMenu";
-import SafeAreaViewAndroid from "./app/shared/components/SafeAreaViewAndroid";
+import Accessibility from "@components/AccessibilityMenu";
+import SafeAreaViewAndroid from "@components/SafeAreaViewAndroid";
 
 
 const Stack = createNativeStackNavigator<ParamListBase>();
@@ -31,15 +31,15 @@ const optionsPrimary: NativeStackNavigationOptions = {
 export default function App() {
 
 	const [loaded] = useFonts({
-		"Poppins-Regular": require("./assets/fonts/Poppins/Poppins-Regular.ttf"),
-		"Poppins-Medium": require("./assets/fonts/Poppins/Poppins-Medium.ttf"),
-		"Poppins-Bold": require("./assets/fonts/Poppins/Poppins-Bold.ttf"),
-		"Roboto-Regular": require("./assets/fonts/Roboto/Roboto-Regular.ttf"),
-		"Roboto-Medium": require("./assets/fonts/Roboto/Roboto-Medium.ttf"),
-		"Roboto-Bold": require("./assets/fonts/Roboto/Roboto-Bold.ttf"),
-		"Ubuntu-Regular": require("./assets/fonts/Ubuntu/Ubuntu-Regular.ttf"),
-		"Ubuntu-Medium": require("./assets/fonts/Ubuntu/Ubuntu-Medium.ttf"),
-		"Ubuntu-Bold": require("./assets/fonts/Ubuntu/Ubuntu-Bold.ttf"),
+		"Poppins-Regular": require("@fonts/Poppins/Poppins-Regular.ttf"),
+		"Poppins-Medium": require("@fonts/Poppins/Poppins-Medium.ttf"),
+		"Poppins-Bold": require("@fonts/Poppins/Poppins-Bold.ttf"),
+		"Roboto-Regular": require("@fonts/Roboto/Roboto-Regular.ttf"),
+		"Roboto-Medium": require("@fonts/Roboto/Roboto-Medium.ttf"),
+		"Roboto-Bold": require("@fonts/Roboto/Roboto-Bold.ttf"),
+		"Ubuntu-Regular": require("@fonts/Ubuntu/Ubuntu-Regular.ttf"),
+		"Ubuntu-Medium": require("@fonts/Ubuntu/Ubuntu-Medium.ttf"),
+		"Ubuntu-Bold": require("@fonts/Ubuntu/Ubuntu-Bold.ttf"),
 	});
 
 	if (!loaded) {

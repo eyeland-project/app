@@ -1,9 +1,9 @@
 import { Text, Image, PressableProps, StyleSheet } from 'react-native'
-import Pressable from '../Pressable'
+import Pressable from '@components/Pressable'
 import { useState } from 'react'
 
-import useTheme from '../../../core/hooks/useTheme'
-import { Theme } from '../../../theme'
+import useTheme from '@hooks/useTheme'
+import { Theme } from '@theme'
 
 interface Props extends PressableProps {
     text: string

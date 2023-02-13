@@ -3,13 +3,13 @@ import useAuthStorage from './useAuthStorage';
 import usePlaySound from './usePlaySound';
 import axios from 'axios';
 
-import { environment } from "../../../enviroments/environment";
+import { environment } from "@environments/environment";
 
-import { Login } from "../../shared/interfaces/Login.interface";
+import { Login } from "@interfaces/Login.interface";
 
 const useLogin = () => {
-    const playSoundSuccess = usePlaySound(require('../../../assets/sounds/loginSucceeded.wav'));
-    const playSoundError = usePlaySound(require('../../../assets/sounds/loginFailed.wav'));
+    const playSoundSuccess = usePlaySound(require('@sounds/loginSucceeded.wav'));
+    const playSoundError = usePlaySound(require('@sounds/loginFailed.wav'));
     const authStorage = useAuthStorage();
 
     const [loading, setLoading] = useState(false);

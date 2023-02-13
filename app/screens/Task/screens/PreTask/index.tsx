@@ -4,13 +4,13 @@ import WebView from 'react-native-webview';
 import { RouteProp } from '@react-navigation/native';
 import { ParamListBase } from '@react-navigation/native';
 
-import useTheme from '../../../core/hooks/useTheme';
+import useTheme from '@hooks/useTheme';
 import { useNavigation } from '@react-navigation/native';
-import usePreTask from '../../../core/hooks/usePreTask';
+import usePreTask from '@hooks/usePreTask';
 import { useEffect } from 'react';
-import useTaskContext from '../../../core/hooks/useTaskContext';
+import useTaskContext from '@hooks/useTaskContext';
 
-import { Theme } from '../../../theme';
+import { Theme } from '@theme';
 
 
 interface TaskParams {
@@ -32,30 +32,25 @@ const PreTask = ({ route }: Props) => {
     const { loading, error, data, getPreTask, getTotalNumberOfPreTasks } = usePreTask();
     const { setPhaseCompleted, setOnPressNext, setProgress, progress } = useTaskContext();
 
-    useEffect(() => {
-        getPreTask({ taskOrder, linkOrder });
-    }, [linkOrder]);
-
     const onRenderComplete = async () => {
+        getPreTask({ taskOrder, linkOrder });
         const increment = await getTotalNumberOfPreTasks(taskOrder);
-        if (linkOrder <= increment) {
+        setPhaseCompleted(true);
+        if (linkOrder < increment) {
             setProgress(progress + 0.25 / increment);
             setOnPressNext(() => () => navigation.navigate('PreTask', { taskOrder, linkOrder: linkOrder + 1 }));
-        } else {
-            setPhaseCompleted(false);
+        } else if (linkOrder === increment) {
             setOnPressNext(() => () => navigation.navigate('DuringTask', { taskOrder }));
         }
     }
 
     useEffect(() => {
         onRenderComplete();
-    }, [])
+    }, [linkOrder]);
 
     if (!data) {
         return null;
     }
-
-    //TODO - If not found then navigate to during task
 
     return (
         <View style={getStyles(theme).container}>
@@ -72,7 +67,6 @@ const getStyles = (theme: Theme) =>
         container: {
             backgroundColor: theme.colors.primary,
             height: '100%',
-            paddingTop: 10,
         },
         scrollView: {
             backgroundColor: theme.colors.primary,

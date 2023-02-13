@@ -1,7 +1,7 @@
 import Pressable from './Pressable'
 import AntDesign from '@expo/vector-icons/AntDesign'
 import { useNavigation } from '@react-navigation/native'
-import useTheme from '../../core/hooks/useTheme'
+import useTheme from '@hooks/useTheme'
 import { Animated, Easing } from 'react-native'
 
 const BackButton = () => {
@@ -33,8 +33,8 @@ const BackButton = () => {
             style={{ padding: 4 }}>
             <Animated.View style={{ transform: [{ scale: scaleValue }] }}>
                 <AntDesign
-                    name="arrowleft"
-                    size={30}
+                    name="fastbackward"
+                    size={25}
                     color={theme.colors.black}
                 />
             </Animated.View>

@@ -1,7 +1,7 @@
 import { View, Text, Image, StyleSheet } from "react-native";
 
-import useTheme from "../../../core/hooks/useTheme";
-import { Theme } from "../../../theme";
+import useTheme from "@hooks/useTheme";
+import { Theme } from "@theme";
 
 const ComingSoon = () => {
 	const theme = useTheme();
@@ -9,7 +9,7 @@ const ComingSoon = () => {
 	return (
 		<View style={getStyles(theme).container}>
 			<Image
-				source={require("../../../../assets/comingSoon.png")}
+				source={require("@images/comingSoon.png")}
 				style={getStyles(theme).image}
 			/>
 			<Text style={getStyles(theme).text}>Coming soon...</Text>

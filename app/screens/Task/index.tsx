@@ -1,12 +1,12 @@
-import * as React from 'react';
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NativeStackNavigationOptions } from "@react-navigation/native-stack";
 
-import Introduction from './Introduction';
-import PreTask from './PreTask';
+import Introduction from './screens/Introduction';
+import PreTask from './screens/PreTask';
+import DuringTask from './screens/DuringTask';
 import Header from './components/Header';
 
-import useTaskContext from '../../core/hooks/useTaskContext';
+import useTaskContext from '@hooks/useTaskContext';
 
 const Stack = createNativeStackNavigator();
 
@@ -21,12 +21,16 @@ const optionsPrimary: NativeStackNavigationOptions = {
 
 const Task = ({ route }: { route: any }) => {
     const { taskOrder } = route.params;
-    const { phaseCompleted, onPressNext, progress } = useTaskContext();
+    const { phaseCompleted, onPressNext, progress, setPhaseCompleted } = useTaskContext();
 
     return (
         <>
-            <Header progress={progress} showNext={phaseCompleted} onPress={onPressNext} />
-            <Stack.Navigator>
+            <Header progress={progress} showNext={phaseCompleted} onPress={() => {
+                setPhaseCompleted(false);
+                onPressNext();
+            }} />
+            {/* TODO - Change this later */}
+            <Stack.Navigator initialRouteName='DuringTask'>
                 <Stack.Screen
                     name="Introduction"
                     options={{
@@ -49,6 +53,17 @@ const Task = ({ route }: { route: any }) => {
                     }}
                 >
                     {({ route }: { route: any }) => <PreTask route={route} />}
+                </Stack.Screen>
+                <Stack.Screen
+                    name="DuringTask"
+                    options={{
+                        ...optionsPrimary
+                    }}
+                    initialParams={{
+                        taskOrder: taskOrder,
+                    }}
+                >
+                    {({ route }: { route: any }) => <DuringTask route={route} />}
                 </Stack.Screen>
             </Stack.Navigator>
         </>

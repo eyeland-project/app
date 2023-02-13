@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet } from "react-native";
 
-import useTheme from "../../../../core/hooks/useTheme";
-import { Theme } from "../../../../theme";
+import useTheme from "@hooks/useTheme";
+import { Theme } from "@theme";
 
 interface DescriptionProps {
 	text: string;

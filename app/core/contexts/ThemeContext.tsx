@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { theme as importedTheme, Theme } from '../../theme';
+import { theme as importedTheme, Theme } from '@theme';
 
 const ThemeContext = React.createContext<[Theme, (newTheme: Theme) => void]>([
     importedTheme,

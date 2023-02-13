@@ -1,5 +1,5 @@
 import React, { createContext, useState } from 'react';
-import AuthStorage from '../utils/authStorage';
+import AuthStorage from '@utils/authStorage';
 
 const AuthStorageContext = createContext<AuthStorage | null>(null);
 
