@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet } from 'react-native'
 import WebView from 'react-native-webview';
+import Placeholder from './components/Placeholder';
 
 import { RouteProp } from '@react-navigation/native';
 import { ParamListBase } from '@react-navigation/native';
@@ -34,30 +35,31 @@ const PreTask = ({ route }: Props) => {
 
     const onRenderComplete = async () => {
         getPreTask({ taskOrder, linkOrder });
-        const increment = await getTotalNumberOfPreTasks(taskOrder);
+        const numberOfPreTasks = await getTotalNumberOfPreTasks(taskOrder);
         setPhaseCompleted(true);
-        if (linkOrder < increment) {
-            setProgress(progress + 0.25 / increment);
-            setOnPressNext(() => () => navigation.navigate('PreTask', { taskOrder, linkOrder: linkOrder + 1 }));
-        } else if (linkOrder === increment) {
-            setOnPressNext(() => () => navigation.navigate('DuringTask', { taskOrder }));
-        }
+        setProgress(linkOrder / numberOfPreTasks);
+        setOnPressNext(() => () => {
+            linkOrder < numberOfPreTasks
+                ? navigation.navigate('PreTask', { taskOrder, linkOrder: linkOrder + 1 })
+                : navigation.navigate('DuringTask', { taskOrder })
+        });
     }
 
     useEffect(() => {
         onRenderComplete();
     }, [linkOrder]);
 
-    if (!data) {
-        return null;
-    }
-
     return (
         <View style={getStyles(theme).container}>
-            <WebView
-                source={{ uri: data.url }}
-                style={{ marginBottom: 90, marginTop: 10 }}
-            />
+            {
+                (data && !loading)
+                    ? <WebView
+                        source={{ uri: data.url }}
+                        style={{ marginBottom: 90, marginTop: 10 }}
+                    />
+                    : <Placeholder />
+            }
+
         </View>
     )
 }

@@ -1,5 +1,5 @@
 import { View, StyleSheet, Animated } from 'react-native'
-import BackButton from '@components/HomeButton'
+import HomeButton from '@components/HomeButton'
 import ContinueButton from '@components/ContinueButton'
 import * as Progress from 'react-native-progress';
 
@@ -9,9 +9,9 @@ import useTheme from '@hooks/useTheme'
 import { Theme } from '@theme';
 
 interface Props {
-    progress: number;
-    showNext: boolean;
-    onPress: () => void;
+    progress?: number;
+    showNext?: boolean;
+    onPress?: () => void;
 }
 
 const Header = ({ progress, showNext, onPress }: Props) => {
@@ -44,13 +44,21 @@ const Header = ({ progress, showNext, onPress }: Props) => {
 
     return (
         <View style={getStyles(theme).row}>
-            <BackButton />
-            <Progress.Bar progress={progress} width={null} height={5} color={theme.colors.secondary} style={{ flex: 1, marginHorizontal: 20 }} />
-            <Animated.View style={{ opacity: continueOpacity, transform: [{ translateX: continueTranslateX }] }}>
-                {
-                    showNext && <ContinueButton onPress={onPress} />
-                }
-            </Animated.View>
+            <HomeButton />
+            {
+                progress && onPress
+                    ? (
+                        <>
+                            <Progress.Bar progress={progress} width={null} height={5} color={theme.colors.secondary} style={{ flex: 1, marginHorizontal: 20 }} />
+                            <Animated.View style={{ opacity: continueOpacity, transform: [{ translateX: continueTranslateX }] }}>
+                                {
+                                    showNext && <ContinueButton onPress={onPress} />
+                                }
+                            </Animated.View>
+                        </>
+                    ) : null
+            }
+
         </View>
     )
 }

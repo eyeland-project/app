@@ -10,6 +10,7 @@ import Title from './components/Title';
 import Keywords from './components/Keywords';
 import Description from './components/Description';
 import Placeholder from './components/Placeholder';
+import Section from './components/Section';
 
 import useTheme from '@hooks/useTheme';
 import { useNavigation } from '@react-navigation/native';
@@ -34,38 +35,45 @@ const Introduction = ({ route }: Props) => {
     const theme = useTheme();
     const navigation = useNavigation<any>();
     const { loading, error, data, getIntroduction } = useIntroduction();
-    const { setPhaseCompleted, setOnPressNext, setProgress } = useTaskContext();
-
-    const [screenHeight, setScreenHeight] = useState(0);
-
-    useEffect(() => {
-        setScreenHeight(Dimensions.get('window').height);
-    }, []);
-
-    const onContentSizeChange = (contentWidth: number, contentHeight: number) => {
-        if ((contentHeight <= screenHeight) && !loading && data) {
-            setPhaseCompleted(true);
-            setOnPressNext(() => () => navigation.navigate('PreTask', { taskOrder, linkOrder: 1 }));
-        } else {
-            setPhaseCompleted(false);
-        }
-    };
+    const { resetContext } = useTaskContext();
 
     useEffect(() => {
         getIntroduction({ taskOrder });
-        setProgress(0.25);
+        resetContext();
     }, []);
 
     return (
         <View style={getStyles(theme).container}>
-            <ScrollView style={getStyles(theme).scrollView} onMomentumScrollEnd={() => setPhaseCompleted(true)} onContentSizeChange={onContentSizeChange}>
+            <ScrollView style={getStyles(theme).scrollView}>
                 {
+
                     (data && !loading) ? (
                         <>
+
                             <Title text={data.name} />
                             <Keywords keywords={data.keywords} />
                             <Image source={{ uri: data.thumbnailUrl }} style={getStyles(theme).image} />
                             <Description text={data.longDescription} />
+                            <Section
+                                title='Pre-Task'
+                                completed={true}
+                                blocked={false}
+                                onPress={() => {
+                                    navigation.navigate('PreTask', { taskOrder, linkOrder: 1 });
+                                }} />
+                            <Section
+                                title='During-Task'
+                                completed={false}
+                                blocked={false}
+                                onPress={() => {
+                                    navigation.navigate('DuringTask', { taskOrder });
+                                }} />
+                            <Section title='Quiz'
+                                completed={false}
+                                blocked={true}
+                                onPress={() => {
+                                    navigation.navigate('Quiz', { taskOrder });
+                                }} />
                         </>
                     ) : (
                         <Placeholder />
@@ -82,11 +90,10 @@ const getStyles = (theme: Theme) =>
         container: {
             backgroundColor: theme.colors.primary,
             height: '100%',
-            paddingTop: 10,
         },
         scrollView: {
             backgroundColor: theme.colors.primary,
-            paddingHorizontal: 20,
+            paddingBottom: 80,
         },
         text: {
             color: theme.colors.black,
@@ -94,10 +101,10 @@ const getStyles = (theme: Theme) =>
             fontFamily: theme.fontWeight.bold,
         },
         image: {
-            width: '100%',
             height: 200,
             borderRadius: theme.borderRadius.medium,
-            marginBottom: 40,
+            marginBottom: 20,
+            marginHorizontal: 20,
         },
         row: {
             flexDirection: 'row',

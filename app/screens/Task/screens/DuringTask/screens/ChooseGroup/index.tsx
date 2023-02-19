@@ -2,13 +2,25 @@ import { View, Text, StyleSheet, FlatList } from 'react-native'
 import GroupCard from './components/GroupCard'
 
 import { Theme } from '@theme'
+
+import { useEffect } from 'react'
 import useTheme from '@hooks/useTheme'
+import useTaskContext from '@app/core/hooks/useTaskContext'
 
 // MOCK DATA
 import { GROUPS } from '@mocks/GROUPS'
 
+//TODO - add socket to params
 const ChooseGroup = () => {
     const theme = useTheme()
+    const { resetContext } = useTaskContext()
+
+    //TODO - connect to socket.io
+
+    useEffect(() => {
+        resetContext()
+    }, [])
+
 
     return (
         <FlatList

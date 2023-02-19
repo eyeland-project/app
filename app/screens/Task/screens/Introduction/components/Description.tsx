@@ -22,7 +22,8 @@ const getStyles = (theme: Theme) =>
     StyleSheet.create({
         container: {
             backgroundColor: theme.colors.primary,
-            marginBottom: 80,
+            marginBottom: 20,
+            marginHorizontal: 20,
         },
         text: {
             color: theme.colors.black,

@@ -35,9 +35,10 @@ const optionsPrimary: NativeStackNavigationOptions = {
 
 const DuringTask = ({ route }: Props) => {
 
+    //TODO - Connect to socket.io
 
     return (
-        <Stack.Navigator initialRouteName='ChoosePower'>
+        <Stack.Navigator initialRouteName='Question'>
             <Stack.Screen
                 name="Waiting"
                 options={{

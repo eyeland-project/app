@@ -10,31 +10,31 @@ import useTaskContext from '@hooks/useTaskContext';
 
 const Stack = createNativeStackNavigator();
 
-const optionsPrimary: NativeStackNavigationOptions = {
-    animation: "slide_from_right",
-    headerBackVisible: false,
-    headerShown: false,
-    headerTitleStyle: {
-        fontFamily: "Poppins-Regular",
-    }
-}
-
 const Task = ({ route }: { route: any }) => {
     const { taskOrder } = route.params;
     const { phaseCompleted, onPressNext, progress, setPhaseCompleted } = useTaskContext();
 
+    const optionsPrimary: NativeStackNavigationOptions = {
+        animation: "slide_from_right",
+        headerBackVisible: false,
+        headerTitleStyle: {
+            fontFamily: "Poppins-Regular",
+        },
+        header: () => <Header progress={progress} showNext={phaseCompleted} onPress={() => {
+            setPhaseCompleted(false);
+            onPressNext();
+        }} />
+    }
+
     return (
         <>
-            <Header progress={progress} showNext={phaseCompleted} onPress={() => {
-                setPhaseCompleted(false);
-                onPressNext();
-            }} />
+
             {/* TODO - Change this later */}
             <Stack.Navigator initialRouteName='DuringTask'>
                 <Stack.Screen
                     name="Introduction"
                     options={{
-                        ...optionsPrimary
+                        ...optionsPrimary,
                     }}
                     initialParams={{
                         taskOrder: taskOrder,

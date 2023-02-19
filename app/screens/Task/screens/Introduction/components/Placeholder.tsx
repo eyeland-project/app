@@ -36,6 +36,7 @@ const getStyles = (theme: Theme) =>
     StyleSheet.create({
         container: {
             backgroundColor: theme.colors.primary,
+            marginHorizontal: 20,
             height: "100%",
         },
     });

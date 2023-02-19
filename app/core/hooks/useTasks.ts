@@ -23,8 +23,6 @@ const useTasks = () => {
                 timeout: 10000,
             });
 
-            console.log(response)
-
             if (response.status === 200) {
                 setLoading(false);
                 setData(response.data);

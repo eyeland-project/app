@@ -1,9 +1,14 @@
-export let theme = {
+export let theme: Theme = {
     colors: {
         primary: '#fff',
         secondary: '#000',
         white: '#fff',
         black: '#000',
+        gray: '#f2f2f2',
+        yellow: '#ffff00',
+        green: '#00ff00',
+        red: '#ff0000',
+        blue: '#53E0FF',
     },
     borderRadius: {
         small: 4,
@@ -13,13 +18,13 @@ export let theme = {
     },
     shadow: {
         shadowColor: "#000",
-		shadowOffset: {
-			width: 2,
-			height: 2,
-		},
-		shadowOpacity: 0.25,
-		shadowRadius: 3.84,
-		elevation: 5,
+        shadowOffset: {
+            width: 2,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
     },
     fontSize: {
         xs: 12,
@@ -54,6 +59,11 @@ export interface Theme {
         secondary: string;
         white: string;
         black: string;
+        gray: string;
+        yellow: string;
+        green: string;
+        red: string;
+        blue: string;
     };
     borderRadius: {
         small: number;

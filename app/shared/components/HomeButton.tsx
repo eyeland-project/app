@@ -33,8 +33,8 @@ const BackButton = () => {
             style={{ padding: 4 }}>
             <Animated.View style={{ transform: [{ scale: scaleValue }] }}>
                 <AntDesign
-                    name="fastbackward"
-                    size={25}
+                    name="back"
+                    size={27}
                     color={theme.colors.black}
                 />
             </Animated.View>

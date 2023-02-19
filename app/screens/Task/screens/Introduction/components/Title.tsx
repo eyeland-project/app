@@ -23,6 +23,7 @@ const getStyles = (theme: Theme) =>
         container: {
             backgroundColor: theme.colors.primary,
             marginTop: 10,
+            marginHorizontal: 20,
         },
         text: {
             color: theme.colors.black,
