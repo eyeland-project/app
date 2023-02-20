@@ -4,18 +4,19 @@ import axios from 'axios';
 
 import { environment } from "@environments/environment";
 
-import { Introduction, getIntroductionParams } from '@interfaces/Introduction.interface';
+import { Progress, getProgressParams } from '@interfaces/Progress.interface';
 
-const useIntroduction = () => {
+const useProgress = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [data, setData] = useState<Introduction | null>(null);
+    const [data, setData] = useState<Progress | null>(null);
     const authStorage = useAuthStorage();
 
-    const getIntroduction = useCallback(async (inputs: getIntroductionParams) => {
+    const getProgress = useCallback(async (inputs: getProgressParams) => {
         setLoading(true);
+
         try {
-            const response = await axios.get(`${environment.apiUrl}/tasks/${inputs.taskOrder}/introduction`, {
+            const response = await axios.get(`${environment.apiUrl}/tasks/${inputs.taskOrder}/progress`, {
                 headers: {
                     Authorization: `Bearer ${await authStorage.getAccessToken()}`,
                 },
@@ -57,9 +58,7 @@ const useIntroduction = () => {
         }
     }, []);
 
-    return { loading, error, data, getIntroduction };
-};
+    return { loading, error, data, getProgress };
+}
 
-export default useIntroduction;
-
-
+export default useProgress

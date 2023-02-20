@@ -4,6 +4,7 @@ import { NativeStackNavigationOptions } from "@react-navigation/native-stack";
 import Introduction from './screens/Introduction';
 import PreTask from './screens/PreTask';
 import DuringTask from './screens/DuringTask';
+import Quiz from "./screens/Quiz";
 import Header from './components/Header';
 
 import useTaskContext from '@hooks/useTaskContext';
@@ -30,7 +31,7 @@ const Task = ({ route }: { route: any }) => {
         <>
 
             {/* TODO - Change this later */}
-            <Stack.Navigator initialRouteName='DuringTask'>
+            <Stack.Navigator>
                 <Stack.Screen
                     name="Introduction"
                     options={{
@@ -39,9 +40,8 @@ const Task = ({ route }: { route: any }) => {
                     initialParams={{
                         taskOrder: taskOrder,
                     }}
-                >
-                    {({ route }: { route: any }) => <Introduction route={route} />}
-                </Stack.Screen>
+                    component={Introduction}
+                />
                 <Stack.Screen
                     name="PreTask"
                     options={{
@@ -51,9 +51,8 @@ const Task = ({ route }: { route: any }) => {
                         taskOrder: taskOrder,
                         linkOrder: 0,
                     }}
-                >
-                    {({ route }: { route: any }) => <PreTask route={route} />}
-                </Stack.Screen>
+                    component={PreTask}
+                />
                 <Stack.Screen
                     name="DuringTask"
                     options={{
@@ -62,9 +61,18 @@ const Task = ({ route }: { route: any }) => {
                     initialParams={{
                         taskOrder: taskOrder,
                     }}
-                >
-                    {({ route }: { route: any }) => <DuringTask route={route} />}
-                </Stack.Screen>
+                    component={DuringTask}
+                />
+                <Stack.Screen
+                    name="Quiz"
+                    options={{
+                        ...optionsPrimary
+                    }}
+                    initialParams={{
+                        taskOrder: taskOrder,
+                    }}
+                    component={Quiz}
+                />
             </Stack.Navigator>
         </>
     )

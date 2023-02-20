@@ -9,6 +9,7 @@ export let theme: Theme = {
         green: '#00ff00',
         red: '#ff0000',
         blue: '#53E0FF',
+        orange: '#FFA500',
     },
     borderRadius: {
         small: 4,
@@ -64,6 +65,7 @@ export interface Theme {
         green: string;
         red: string;
         blue: string;
+        orange: string;
     };
     borderRadius: {
         small: number;

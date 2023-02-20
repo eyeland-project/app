@@ -1,8 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
-import { View, Text, StyleSheet, Image, ScrollView, Dimensions } from 'react-native'
-import { RouteProp } from '@react-navigation/native';
-import { ParamListBase } from '@react-navigation/native';
+import { View, StyleSheet, Image, ScrollView } from 'react-native'
 
 import { Theme } from '@theme';
 
@@ -15,18 +13,11 @@ import Section from './components/Section';
 import useTheme from '@hooks/useTheme';
 import { useNavigation } from '@react-navigation/native';
 import useIntroduction from '@hooks/useIntroduction';
+import useProgress from '@hooks/useProgress';
 import useTaskContext from '@hooks/useTaskContext';
 
-import { INTRODUCTION } from '@mocks/INTRODUCTION';
-
-interface TaskParams {
-    taskOrder: number;
-}
-
 interface Props {
-    route: RouteProp<ParamListBase, 'Introduction'> & {
-        params: TaskParams;
-    };
+    route: any
 }
 
 const Introduction = ({ route }: Props) => {
@@ -34,11 +25,13 @@ const Introduction = ({ route }: Props) => {
 
     const theme = useTheme();
     const navigation = useNavigation<any>();
-    const { loading, error, data, getIntroduction } = useIntroduction();
+    const { loading: loadingIntroduction, error: errorIntroduction, data: dataIntroduction, getIntroduction } = useIntroduction();
+    const { loading: loadingProgress, error: errorProgress, data: dataProgress, getProgress } = useProgress();
     const { resetContext } = useTaskContext();
 
     useEffect(() => {
         getIntroduction({ taskOrder });
+        getProgress({ taskOrder });
         resetContext();
     }, []);
 
@@ -47,30 +40,30 @@ const Introduction = ({ route }: Props) => {
             <ScrollView style={getStyles(theme).scrollView}>
                 {
 
-                    (data && !loading) ? (
+                    (dataIntroduction && !loadingIntroduction && dataProgress && !loadingProgress) ? (
                         <>
 
-                            <Title text={data.name} />
-                            <Keywords keywords={data.keywords} />
-                            <Image source={{ uri: data.thumbnailUrl }} style={getStyles(theme).image} />
-                            <Description text={data.longDescription} />
+                            <Title text={dataIntroduction.name} />
+                            <Keywords keywords={dataIntroduction.keywords} />
+                            <Image source={{ uri: dataIntroduction.thumbnailUrl }} style={getStyles(theme).image} />
+                            <Description text={dataIntroduction.longDescription} />
                             <Section
                                 title='Pre-Task'
-                                completed={true}
-                                blocked={false}
+                                completed={dataProgress.pretask.completed}
+                                blocked={dataProgress.pretask.blocked}
                                 onPress={() => {
                                     navigation.navigate('PreTask', { taskOrder, linkOrder: 1 });
                                 }} />
                             <Section
                                 title='During-Task'
-                                completed={false}
-                                blocked={false}
+                                completed={dataProgress.duringtask.completed}
+                                blocked={dataProgress.duringtask.blocked}
                                 onPress={() => {
                                     navigation.navigate('DuringTask', { taskOrder });
                                 }} />
                             <Section title='Quiz'
-                                completed={false}
-                                blocked={true}
+                                completed={dataProgress.quiz.completed}
+                                blocked={dataProgress.quiz.blocked}
                                 onPress={() => {
                                     navigation.navigate('Quiz', { taskOrder });
                                 }} />

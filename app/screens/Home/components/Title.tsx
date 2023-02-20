@@ -21,8 +21,8 @@ const getStyles = (theme: Theme) =>
     StyleSheet.create({
         container: {
             backgroundColor: theme.colors.primary,
-            padding: 8,
-            marginBottom: 8,
+            paddingHorizontal: 20,
+            paddingVertical: 8,
         },
         text: {
             color: theme.colors.black,

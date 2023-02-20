@@ -1,6 +1,3 @@
-import { ParamListBase } from "@react-navigation/native";
-import { RouteProp } from "@react-navigation/native";
-
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NativeStackNavigationOptions } from "@react-navigation/native-stack";
 
@@ -12,14 +9,8 @@ import Transition from "./screens/Transition";
 import Question from "./screens/Question";
 import FinalScore from "./screens/FinalScore";
 
-interface TaskParams {
-    taskOrder: number;
-}
-
 interface Props {
-    route: RouteProp<ParamListBase, 'Introduction'> & {
-        params: TaskParams;
-    };
+    route: any
 }
 
 const Stack = createNativeStackNavigator();
@@ -38,7 +29,7 @@ const DuringTask = ({ route }: Props) => {
     //TODO - Connect to socket.io
 
     return (
-        <Stack.Navigator initialRouteName='Question'>
+        <Stack.Navigator >
             <Stack.Screen
                 name="Waiting"
                 options={{

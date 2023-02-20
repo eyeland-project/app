@@ -1,9 +1,6 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import WebView from 'react-native-webview';
 import Placeholder from './components/Placeholder';
-
-import { RouteProp } from '@react-navigation/native';
-import { ParamListBase } from '@react-navigation/native';
 
 import useTheme from '@hooks/useTheme';
 import { useNavigation } from '@react-navigation/native';
@@ -13,16 +10,8 @@ import useTaskContext from '@hooks/useTaskContext';
 
 import { Theme } from '@theme';
 
-
-interface TaskParams {
-    taskOrder: number;
-    linkOrder: number;
-}
-
 interface Props {
-    route: RouteProp<ParamListBase, 'Introduction'> & {
-        params: TaskParams;
-    };
+    route: any
 }
 
 const PreTask = ({ route }: Props) => {

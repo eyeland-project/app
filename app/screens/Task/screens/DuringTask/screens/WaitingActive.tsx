@@ -48,7 +48,7 @@ const getStyles = (theme: Theme) =>
         },
         text: {
             color: theme.colors.black,
-            fontSize: 20,
+            fontSize: theme.fontSize.xl,
             textAlign: 'center',
             marginTop: 20,
             letterSpacing: theme.spacing.medium,
