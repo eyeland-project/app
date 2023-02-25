@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet } from 'react-native'
 import Record from './components/Record'
-import { RecordingStatus } from 'expo-av/build/Audio'
+import Question from './components/Question'
+import Title from './components/Title'
 
 import { useEffect, useState } from 'react'
 import useTheme from '@hooks/useTheme'
@@ -12,10 +13,11 @@ interface Props {
     route: any
 }
 
-const Quiz = ({ route }: Props) => {
+const PosTask = ({ route }: Props) => {
     const theme = useTheme()
     const { recording, done, finished, startRecording, stopRecording } = useRecord()
     const [duration, setDuration] = useState<number | null>(null);
+    const [answered, setAnswered] = useState(false);
 
 
     const handleOnPress = () => {
@@ -48,14 +50,26 @@ const Quiz = ({ route }: Props) => {
 
     //MOCK DATA
     const data = {
-        question: 'What do you think is the best way to learn a new language?'
+        question: 'Are you on the bridge?',
+        options: [
+            {
+                id: 1,
+                text: "Yes, I am"
+            },
+            {
+                id: 2,
+                text: "Yes, there is"
+            }
+        ]
     }
 
     return (
         <View style={getStyles(theme).container}>
-            <Text style={getStyles(theme).text}>{data.question}</Text>
+            <Question question={data} />
+            <Title />
             <View style={getStyles(theme).secondaryContainer}>
                 <Record
+                    blocked={!answered}
                     recording={recording}
                     done={done}
                     finished={finished}
@@ -63,9 +77,8 @@ const Quiz = ({ route }: Props) => {
                 />
                 <Text style={getStyles(theme).subtitle}>
                     {
-                        recording
-                            ? `Recording... ${Math.floor((duration as number) / 1000)} seconds`
-                            : 'Recuerda que el audio debe durar más de 20 segundos'}
+                        recording && `Recording... ${Math.floor((duration as number) / 1000)} seconds`
+                    }
                 </Text>
             </View>
             <View></View>
@@ -79,16 +92,6 @@ const getStyles = (theme: Theme) =>
             backgroundColor: theme.colors.primary,
             height: '100%',
             flex: 1,
-            justifyContent: 'space-between',
-            alignItems: 'center',
-        },
-        text: {
-            color: theme.colors.black,
-            fontSize: theme.fontSize.xxl,
-            fontFamily: theme.fontWeight.regular,
-            letterSpacing: theme.spacing.medium,
-            marginHorizontal: 20,
-            marginTop: 20,
         },
         subtitle: {
             color: theme.colors.black,
@@ -107,4 +110,4 @@ const getStyles = (theme: Theme) =>
         }
     })
 
-export default Quiz
+export default PosTask

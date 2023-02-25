@@ -61,11 +61,11 @@ const Introduction = ({ route }: Props) => {
                                 onPress={() => {
                                     navigation.navigate('DuringTask', { taskOrder });
                                 }} />
-                            <Section title='Quiz'
-                                completed={dataProgress.quiz.completed}
-                                blocked={dataProgress.quiz.blocked}
+                            <Section title='PosTask'
+                                completed={dataProgress.postask.completed}
+                                blocked={dataProgress.postask.blocked}
                                 onPress={() => {
-                                    navigation.navigate('Quiz', { taskOrder });
+                                    navigation.navigate('PosTask', { taskOrder });
                                 }} />
                         </>
                     ) : (

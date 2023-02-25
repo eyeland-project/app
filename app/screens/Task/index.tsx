@@ -4,7 +4,7 @@ import { NativeStackNavigationOptions } from "@react-navigation/native-stack";
 import Introduction from './screens/Introduction';
 import PreTask from './screens/PreTask';
 import DuringTask from './screens/DuringTask';
-import Quiz from "./screens/Quiz";
+import PosTask from "./screens/PosTask";
 import Header from './components/Header';
 
 import useTaskContext from '@hooks/useTaskContext';
@@ -31,7 +31,7 @@ const Task = ({ route }: { route: any }) => {
         <>
 
             {/* TODO - Change this later */}
-            <Stack.Navigator>
+            <Stack.Navigator initialRouteName="PosTask">
                 <Stack.Screen
                     name="Introduction"
                     options={{
@@ -64,14 +64,14 @@ const Task = ({ route }: { route: any }) => {
                     component={DuringTask}
                 />
                 <Stack.Screen
-                    name="Quiz"
+                    name="PosTask"
                     options={{
                         ...optionsPrimary
                     }}
                     initialParams={{
                         taskOrder: taskOrder,
                     }}
-                    component={Quiz}
+                    component={PosTask}
                 />
             </Stack.Navigator>
         </>

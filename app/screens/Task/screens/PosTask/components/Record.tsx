@@ -1,4 +1,4 @@
-import { StyleSheet, Animated } from 'react-native'
+import { StyleSheet, Animated, ToastAndroid } from 'react-native'
 import { FontAwesome5 } from '@expo/vector-icons';
 import Pressable from '@components/Pressable';
 import { Audio } from 'expo-av';
@@ -11,6 +11,7 @@ import { Theme } from '@theme'
 import { hexToRgbA } from '@app/core/utils/hexToRgba';
 
 interface Props {
+    blocked: boolean
     recording: Audio.Recording | undefined
     done: boolean
     finished: boolean
@@ -18,7 +19,7 @@ interface Props {
 }
 
 
-const Record = ({ recording, done, finished, onPress }: Props) => {
+const Record = ({ blocked, recording, done, finished, onPress }: Props) => {
     const theme = useTheme()
 
     const scaleValue = useRef(new Animated.Value(1)).current;
@@ -45,21 +46,25 @@ const Record = ({ recording, done, finished, onPress }: Props) => {
     }, [recording, scaleValue]);
 
     return (
-        <Animated.View style={[getStyles(theme).containerPulse, { transform: [{ scale: scaleValue }] }]}>
-            <Pressable style={getStyles(theme).container} onPress={onPress}>
+        <Animated.View style={[getStyles(theme, blocked).containerPulse, { transform: [{ scale: scaleValue }] }]}>
+            <Pressable style={getStyles(theme, blocked).container} onPress={() => {
+                blocked
+                    ? ToastAndroid.show("¡Debes contestar la pregunta primero!", ToastAndroid.SHORT)
+                    : onPress()
+            }}>
                 <FontAwesome5
-                    name={recording ? 'stop' : done ? 'check' : finished ? 'exclamation' : 'microphone'}
+                    name={blocked ? 'microphone-slash' : recording ? 'stop' : done ? 'check' : finished ? 'exclamation' : 'microphone'}
                     size={70}
-                    color="white" />
+                    color={blocked ? 'gray' : 'white'} />
             </Pressable>
         </Animated.View>
     )
 }
 
-const getStyles = (theme: Theme) =>
+const getStyles = (theme: Theme, blocked: boolean) =>
     StyleSheet.create({
         containerPulse: {
-            backgroundColor: hexToRgbA(theme.colors.orange, 0.5),
+            backgroundColor: blocked ? hexToRgbA(theme.colors.gray, 0.8) : hexToRgbA(theme.colors.orange, 0.5),
             width: 180,
             height: 180,
             borderRadius: theme.borderRadius.full,
@@ -68,7 +73,7 @@ const getStyles = (theme: Theme) =>
 
         },
         container: {
-            backgroundColor: theme.colors.orange,
+            backgroundColor: blocked ? theme.colors.gray : theme.colors.orange,
             borderRadius: theme.borderRadius.full,
             width: 150,
             height: 150,

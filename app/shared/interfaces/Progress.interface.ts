@@ -7,7 +7,7 @@ export interface Progress {
         completed: boolean;
         blocked: boolean;
     },
-    quiz: {
+    postask: {
         completed: boolean;
         blocked: boolean;
     }
