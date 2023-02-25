@@ -54,7 +54,7 @@ export default function App() {
 					<TaskProvider>
 						<ThemeProvider>
 							<NavigationContainer>
-								<Stack.Navigator initialRouteName="Task">
+								<Stack.Navigator>
 									<Stack.Screen
 										name="Login"
 										component={Login}

@@ -31,7 +31,7 @@ const Task = ({ route }: { route: any }) => {
         <>
 
             {/* TODO - Change this later */}
-            <Stack.Navigator initialRouteName="PosTask">
+            <Stack.Navigator>
                 <Stack.Screen
                     name="Introduction"
                     options={{
