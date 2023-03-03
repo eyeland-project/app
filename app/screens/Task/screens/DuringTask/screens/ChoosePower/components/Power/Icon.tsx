@@ -3,7 +3,7 @@ import { View, Text, Image, StyleSheet } from 'react-native'
 import useTheme from '@hooks/useTheme'
 
 import { Theme } from '@theme'
-import { PowerStatus } from '@app/shared/enums/PowerStatus.enum'
+import { PowerStatus } from '@enums/PowerStatus.enum'
 
 interface Props {
     image: any

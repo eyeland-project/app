@@ -32,7 +32,7 @@ const Login = () => {
 				navigation.navigate("Home");
 			}
 		});
-	}, []);
+	}, [data]);
 
 
 	const onSubmit = async (inputs: LoginInterface) => {

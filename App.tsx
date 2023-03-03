@@ -9,12 +9,15 @@ import Login from "@screens/Login";
 import Home from "@screens/Home";
 import Task from "@screens/Task";
 
+import { useState, useEffect } from "react";
+
 import { ThemeProvider } from "@contexts/ThemeContext";
-import { AuthStorageProvider } from "@contexts/AuthStorageContext";
+import { AuthStorageContext } from "@contexts/AuthStorageContext";
 import { TaskProvider } from "@contexts/TaskContext";
 
 import Accessibility from "@components/AccessibilityMenu";
 import SafeAreaViewAndroid from "@components/SafeAreaViewAndroid";
+import AuthStorage from '@utils/authStorage';
 
 
 const Stack = createNativeStackNavigator<ParamListBase>();
@@ -42,6 +45,17 @@ export default function App() {
 		"Ubuntu-Bold": require("@fonts/Ubuntu/Ubuntu-Bold.ttf"),
 	});
 
+	const [isLogged, setIsLogged] = useState(false);
+	const authStorage = new AuthStorage();
+
+	useEffect(() => {
+		authStorage.getAccessToken().then((token) => {
+			if (token) {
+				setIsLogged(true);
+			}
+		})
+	}, [])
+
 	if (!loaded) {
 		return null;
 	}
@@ -50,17 +64,20 @@ export default function App() {
 		<>
 			<StatusBar />
 			<SafeAreaView style={SafeAreaViewAndroid.AndroidSafeArea}>
-				<AuthStorageProvider>
+				<AuthStorageContext.Provider value={authStorage}>
 					<TaskProvider>
 						<ThemeProvider>
 							<NavigationContainer>
 								<Stack.Navigator>
-									<Stack.Screen
-										name="Login"
-										component={Login}
-										options={{
-											...optionsPrimary
-										}} />
+									{
+										!isLogged
+										&& <Stack.Screen
+											name="Login"
+											component={Login}
+											options={{
+												...optionsPrimary
+											}} />
+									}
 									<Stack.Screen
 										name="Home"
 										component={Home}
@@ -83,7 +100,7 @@ export default function App() {
 							</NavigationContainer>
 						</ThemeProvider>
 					</TaskProvider>
-				</AuthStorageProvider>
+				</AuthStorageContext.Provider>
 			</SafeAreaView>
 		</>
 	);

@@ -1,21 +1,35 @@
 import { View, Text, StyleSheet } from 'react-native'
-import { User } from '@interfaces/User.interface'
 
 import useTheme from '@hooks/useTheme'
 import { Theme } from '@theme'
 
+import { Student } from '@interfaces/Student.interface'
+import { Power } from '@enums/Power.enum'
+
 interface Props {
-    members: User[]
+    members: Student[]
 }
 
 const Members = ({ members }: Props) => {
     const theme = useTheme()
 
+    const getPower = (power: Power) => {
+        switch (power) {
+            case Power.MemoryPro:
+                return 'Memory Pro'
+            case Power.SuperHearing:
+                return 'Super Hearing'
+            case Power.SuperRadar:
+                return 'Super Radar'
+        }
+    }
+
+
     return (
         <View>
             {
                 members.map(member => (
-                    <Text style={getStyles(theme).text} key={member.id}>{member.name}</Text>
+                    <Text style={getStyles(theme).text} key={member.id}>{member.firstName + ' ' + member.lastName + ' - ' + getPower(member.power)}</Text>
                 ))
             }
         </View>

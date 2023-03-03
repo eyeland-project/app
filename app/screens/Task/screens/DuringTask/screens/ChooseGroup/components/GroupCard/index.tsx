@@ -5,7 +5,7 @@ import JoinButton from './components/JoinButton'
 
 import useTheme from '@hooks/useTheme'
 
-import { User } from '@interfaces/User.interface'
+import { Student } from '@interfaces/Student.interface'
 import { Theme } from '@theme'
 
 
@@ -13,7 +13,7 @@ import { Theme } from '@theme'
 interface Props {
     id: number
     name: string
-    members: User[]
+    members: Student[]
 }
 
 const GroupCard = ({ id, name, members }: Props) => {

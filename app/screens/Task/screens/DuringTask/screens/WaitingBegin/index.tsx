@@ -1,12 +1,14 @@
 import { View, Text, StyleSheet } from 'react-native'
-import Title from '../components/Title'
+import Title from '../../components/Title'
 import LottieView from 'lottie-react-native';
+import Power from './components/Power';
 
 import { useEffect } from 'react';
 import useTheme from '@hooks/useTheme'
 import useTaskContext from '@hooks/useTaskContext';
 
 import { Theme } from '@theme'
+import { Power as PowerEnum } from '@app/shared/enums/Power.enum';
 
 const WaitingBegin = () => {
     const theme = useTheme()
@@ -18,12 +20,15 @@ const WaitingBegin = () => {
 
     // MOCK DATA
     const groupName = 'Grupo 1'
+    const power = PowerEnum.SuperRadar
 
     return (
         <View style={getStyles(theme).container}>
             <Title text={groupName} />
             <Text style={getStyles(theme).title}>Instrucciones</Text>
-            <Text style={getStyles(theme).description}>Siga las instrucciones dadas. Avanza respondiendo a las preguntas que te haga el guía turístico en cada parada obligada.</Text>
+            <Text style={getStyles(theme).description}>Avanza respondiendo a las preguntas que te haga el guía turístico en cada parada obligada.</Text>
+            <Text style={getStyles(theme).title}>Tu super poder es</Text>
+            <Power power={power} />
             <LottieView
                 source={require('@animations/waitingBegin.json')}
                 autoPlay
@@ -61,6 +66,7 @@ const getStyles = (theme: Theme) =>
             fontSize: theme.fontSize.medium,
             fontFamily: theme.fontWeight.regular,
             letterSpacing: theme.spacing.medium,
+            width: '100%',
             paddingHorizontal: 20,
             marginBottom: 20,
         },

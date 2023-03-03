@@ -1,36 +1,60 @@
 import { View, Text, StyleSheet, FlatList } from 'react-native'
 import GroupCard from './components/GroupCard'
+import Placeholder from './components/Placeholder'
 
 import { Theme } from '@theme'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import useTheme from '@hooks/useTheme'
-import useTaskContext from '@app/core/hooks/useTaskContext'
+import useTaskContext from '@hooks/useTaskContext'
+import useTeams from '@hooks/useTeams'
+import { useDuringTaskContext } from '@hooks/useDuringTaskContext'
 
-// MOCK DATA
-import { GROUPS } from '@mocks/GROUPS'
+import { SocketEvents } from '@enums/SocketEvents.enum'
+import { Team } from '@interfaces/Team.interface'
 
-//TODO - add socket to params
+
 const ChooseGroup = () => {
     const theme = useTheme()
     const { resetContext } = useTaskContext()
+    const { error, loading, data, getTeams } = useTeams()
+    const { socket } = useDuringTaskContext()
+    const [groups, setGroups] = useState<Team[]>([])
 
-    //TODO - connect to socket.io
+    const getGroups = async () => {
+        setGroups(await getTeams())
+    }
 
     useEffect(() => {
         resetContext()
+        getGroups()
+
+        socket.on(SocketEvents.TeamsStudentUpdate, (data: Team[]) => {
+            setGroups(data)
+        });
+
+        return () => {
+            socket.off(SocketEvents.TeamsStudentUpdate);
+        };
     }, [])
 
+    if (loading)
+        return (
+            <>
+                <Text style={getStyles(theme).text}>Es momento de que escojas tu grupo:</Text>
+                <Placeholder />
+            </>
+        )
 
     return (
         <FlatList
-            data={GROUPS}
+            data={groups}
             renderItem={({ item }) => (
                 <GroupCard
                     key={item.id}
                     id={item.id}
                     name={item.name}
-                    members={item.members}
+                    members={item.students}
                 />
             )}
             keyExtractor={item => item.id.toString()}

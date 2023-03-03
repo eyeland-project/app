@@ -6,7 +6,7 @@ import { useState } from 'react'
 import useTheme from '@hooks/useTheme'
 
 import { Theme } from '@theme'
-import { PowerStatus } from '@app/shared/enums/PowerStatus.enum'
+import { PowerStatus } from '@enums/PowerStatus.enum'
 
 interface Props {
     title: string
@@ -63,6 +63,7 @@ const getStyles = (theme: Theme) =>
             marginHorizontal: 20,
             marginBottom: 20,
             position: 'relative',
+            justifyContent: 'center',
         },
         textContainer: {
             paddingLeft: 20,

@@ -8,7 +8,7 @@ import useTaskContext from '@hooks/useTaskContext'
 import useTheme from '@hooks/useTheme'
 
 import { Theme } from '@theme'
-import { PowerStatus } from '@app/shared/enums/PowerStatus.enum'
+import { PowerStatus } from '@enums/PowerStatus.enum'
 
 const ChoosePower = () => {
     const theme = useTheme()

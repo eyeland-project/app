@@ -5,16 +5,25 @@ import { Link } from "@react-navigation/native";
 import { useEffect } from "react";
 import useTheme from "@hooks/useTheme";
 import useTaskContext from "@hooks/useTaskContext";
+import { useDuringTaskContext } from "@hooks/useDuringTaskContext";
+import { useNavigation } from "@react-navigation/native";
 
 import { Theme } from "@theme";
+import { SocketEvents } from "@enums/SocketEvents.enum";
 
 const WaitingActive = ({ route }: { route: any }) => {
     const { taskOrder } = route.params;
     const theme = useTheme();
     const { resetContext } = useTaskContext();
+    const { socket } = useDuringTaskContext();
+    const navigation = useNavigation<any>();
 
     useEffect(() => {
         resetContext();
+
+        socket.once(SocketEvents.sessionTeacherCreate, () => {
+            navigation.navigate("ChooseGroup", { taskOrder: taskOrder });
+        });
     }, []);
 
     return (
@@ -40,7 +49,7 @@ const getStyles = (theme: Theme) =>
             backgroundColor: theme.colors.primary,
             height: '100%',
             alignItems: 'center',
-            paddingTop: 100,
+            justifyContent: 'center',
         },
         animation: {
             width: 300,

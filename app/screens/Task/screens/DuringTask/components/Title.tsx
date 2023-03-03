@@ -31,7 +31,7 @@ const getStyles = (theme: Theme) =>
             fontFamily: theme.fontWeight.bold,
             letterSpacing: theme.spacing.medium,
             paddingHorizontal: 20,
-            marginBottom: 20,
+            marginBottom: 10,
             textAlign: 'center',
         }
     })

@@ -17,7 +17,7 @@ const PosTask = ({ route }: Props) => {
     const theme = useTheme()
     const { recording, done, finished, startRecording, stopRecording } = useRecord()
     const [duration, setDuration] = useState<number | null>(null);
-    const [answered, setAnswered] = useState(false);
+    const [answered, setAnswered] = useState(true);
 
 
     const handleOnPress = () => {

@@ -8,7 +8,7 @@ import useTheme from '@hooks/useTheme'
 
 import { Theme } from '@theme'
 
-import { hexToRgbA } from '@app/core/utils/hexToRgba';
+import { hexToRgbA } from '@utils/hexToRgba';
 
 interface Props {
     blocked: boolean

@@ -17,7 +17,7 @@ interface Props {
 const Query = ({ text, power }: Props) => {
     const theme = useTheme()
 
-    switch (+power) {
+    switch (power) {
         case Power.MemoryPro:
             return <MemoryProView text={text} />
 
