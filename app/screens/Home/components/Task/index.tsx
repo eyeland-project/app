@@ -10,8 +10,8 @@ import Title from "./Title";
 import Description from "./Description";
 import Button from "./Button";
 
-import useTheme from "../../../../core/hooks/useTheme";
-import { Theme } from "../../../../theme";
+import useTheme from "@hooks/useTheme";
+import { Theme } from "@theme";
 
 interface TaskProps {
 	id: number;
@@ -42,7 +42,7 @@ const Task = ({ id, order, name, description, image }: TaskProps) => {
 					<Description text={description} />
 					<Button
 						text="Comenzar"
-						onPress={() => navigation.navigate("Introduction", { taskOrder: order })}
+						onPress={() => navigation.navigate("Task", { taskOrder: order })}
 					/>
 				</View>
 			</ImageBackground>

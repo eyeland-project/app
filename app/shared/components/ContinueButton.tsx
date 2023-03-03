@@ -1,7 +1,7 @@
 import { Text, StyleSheet } from 'react-native'
 import Pressable from './Pressable'
-import useTheme from '../../core/hooks/useTheme'
-import { Theme } from '../../theme'
+import useTheme from '@hooks/useTheme'
+import { Theme } from '@theme'
 import { Animated, Easing } from 'react-native'
 
 interface Props {

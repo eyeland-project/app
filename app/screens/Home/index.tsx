@@ -6,13 +6,10 @@ import Title from "./components/Title";
 import Placeholder from "./components/Placeholder";
 
 import { useEffect } from 'react';
-import useTheme from "../../core/hooks/useTheme";
-import useTasks from "../../core/hooks/useTasks";
+import useTheme from "@hooks/useTheme";
+import useTasks from "@hooks/useTasks";
 
-import { Theme } from "../../theme";
-
-// MOCK DATA
-import { TASKS } from "../../shared/mocks/TASKS";
+import { Theme } from "@theme";
 
 const Home = () => {
 	const theme = useTheme();
@@ -22,23 +19,24 @@ const Home = () => {
 		getTasks();
 	}, []);
 
+
 	return (
 		<View>
 			{
-				true ? ( // MOCK DATA
+				!loading ? (
 					<FlatList
 						style={getStyles(theme).container}
 						ListHeaderComponent={<Title text="[Inicio]" />}
 						stickyHeaderIndices={[0]}
 						stickyHeaderHiddenOnScroll={true}
-						data={data} // MOCK DATA
+						data={data}
 						renderItem={({ item }) => (
 							<Task
 								id={item.idTask}
 								name={item.name}
 								order={item.taskOrder}
 								description={item.description}
-								image={{ uri: item.thumbnail }}
+								image={{ uri: item.thumbnailUrl }}
 							/>
 						)}
 						ItemSeparatorComponent={() => <View style={getStyles(theme).separator} />}

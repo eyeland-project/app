@@ -1,11 +1,11 @@
 import { View, StyleSheet } from 'react-native'
 import { useContext, useState, useEffect, useRef } from 'react'
 
-import { ThemeContext } from '../../../core/contexts/ThemeContext'
+import { ThemeContext } from '@contexts/ThemeContext'
 
 import AccessibilityOption from './AccessibilityOption'
 
-import { Theme } from '../../../theme'
+import { Theme } from '@theme'
 import setStatusBarBackgroundColor from 'expo-status-bar/build/setStatusBarBackgroundColor'
 import setStatusBarStyle from 'expo-status-bar/build/setStatusBarStyle'
 
@@ -156,24 +156,24 @@ const Options = ({ unShowOptions }: OptionsProps) => {
             <View style={[getStyles(theme).row, { marginBottom: 8 }]}>
                 <AccessibilityOption
                     text='Alto contraste'
-                    image={require('../../../../assets/icons/contrast.png')}
+                    image={require('@icons/contrast.png')}
                     onPress={handleHighContrast}
                 />
                 <AccessibilityOption
                     text='Agrandar texto'
-                    image={require('../../../../assets/icons/increaseFont.png')}
+                    image={require('@icons/increaseFont.png')}
                     onPress={handleLargeText}
                 />
             </View>
             <View style={[getStyles(theme).row]}>
                 <AccessibilityOption
                     text='Fuentes legibles'
-                    image={require('../../../../assets/icons/fontFamily.png')}
+                    image={require('@icons/fontFamily.png')}
                     onPress={handleFontFamily}
                 />
                 <AccessibilityOption
                     text='Aumentar espaciado'
-                    image={require('../../../../assets/icons/spacing.png')}
+                    image={require('@icons/spacing.png')}
                     onPress={handleSpacing}
                 />
             </View>

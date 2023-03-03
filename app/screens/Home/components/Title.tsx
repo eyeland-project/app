@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet } from 'react-native'
 
-import useTheme from '../../../core/hooks/useTheme'
-import { Theme } from '../../../theme'
+import useTheme from '@hooks/useTheme'
+import { Theme } from '@theme'
 
 interface TitleProps {
     text: string
@@ -21,8 +21,8 @@ const getStyles = (theme: Theme) =>
     StyleSheet.create({
         container: {
             backgroundColor: theme.colors.primary,
-            padding: 8,
-            marginBottom: 8,
+            paddingHorizontal: 20,
+            paddingVertical: 8,
         },
         text: {
             color: theme.colors.black,

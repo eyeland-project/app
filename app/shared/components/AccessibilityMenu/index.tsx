@@ -1,11 +1,11 @@
 import { View, StyleSheet, Image, Dimensions } from 'react-native'
-import Pressable from '../Pressable'
+import Pressable from '@components/Pressable'
 import { useState, useEffect } from 'react'
 
 import Options from './Options'
 
-import useTheme from '../../../core/hooks/useTheme'
-import { Theme } from '../../../theme'
+import useTheme from '@hooks/useTheme'
+import { Theme } from '@theme'
 
 const Accessibility = () => {
     const [showOptions, setShowOptions] = useState(false)
@@ -26,7 +26,7 @@ const Accessibility = () => {
                 <Pressable
                     onPress={() => setShowOptions(!showOptions)}
                 >
-                    <Image style={getStyles(theme).image} source={require('../../../../assets/icons/accessibility.png')} />
+                    <Image style={getStyles(theme).image} source={require('@icons/accessibility.png')} />
                 </Pressable>
             </View>
         </>

@@ -1,6 +1,6 @@
 import { Pressable as PressableNative, PressableProps } from 'react-native'
 import { GestureResponderEvent } from 'react-native';
-import usePlaySound from '../../core/hooks/usePlaySound'
+import usePlaySound from '@hooks/usePlaySound'
 
 
 interface Props extends PressableProps {
@@ -9,7 +9,7 @@ interface Props extends PressableProps {
 
 
 const Pressable = ({ onPress, ...props }: Props) => {
-    const playSound = usePlaySound(require('../../../assets/sounds/tap.wav'))
+    const playSound = usePlaySound(require('@sounds/tap.wav'))
 
     return (
         <PressableNative onPress={

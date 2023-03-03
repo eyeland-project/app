@@ -13,7 +13,7 @@ class AuthStorage {
             `${this.namespace}:accessToken`
         );
 
-        return accessToken ? JSON.parse(accessToken) : [];
+        return accessToken && JSON.parse(accessToken);
     }
 
     async setAccessToken(accessToken: String) {

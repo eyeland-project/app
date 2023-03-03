@@ -5,16 +5,19 @@ import { NativeStackNavigationOptions } from "@react-navigation/native-stack";
 import { SafeAreaView } from "react-native";
 import { StatusBar } from "expo-status-bar";
 
-import Login from "./app/screens/Login";
-import Home from "./app/screens/Home";
-import Introduction from "./app/screens/Introduction";
-import PreTask from "./app/screens/PreTask";
+import Login from "@screens/Login";
+import Home from "@screens/Home";
+import Task from "@screens/Task";
 
-import { ThemeProvider } from "./app/core/contexts/ThemeContext";
-import { AuthStorageProvider } from "./app/core/contexts/AuthStorageContext";
+import { useState, useEffect } from "react";
 
-import Accessibility from "./app/shared/components/AccessibilityMenu";
-import SafeAreaViewAndroid from "./app/shared/components/SafeAreaViewAndroid";
+import { ThemeProvider } from "@contexts/ThemeContext";
+import { AuthStorageContext } from "@contexts/AuthStorageContext";
+import { TaskProvider } from "@contexts/TaskContext";
+
+import Accessibility from "@components/AccessibilityMenu";
+import SafeAreaViewAndroid from "@components/SafeAreaViewAndroid";
+import AuthStorage from '@utils/authStorage';
 
 
 const Stack = createNativeStackNavigator<ParamListBase>();
@@ -31,16 +34,27 @@ const optionsPrimary: NativeStackNavigationOptions = {
 export default function App() {
 
 	const [loaded] = useFonts({
-		"Poppins-Regular": require("./assets/fonts/Poppins/Poppins-Regular.ttf"),
-		"Poppins-Medium": require("./assets/fonts/Poppins/Poppins-Medium.ttf"),
-		"Poppins-Bold": require("./assets/fonts/Poppins/Poppins-Bold.ttf"),
-		"Roboto-Regular": require("./assets/fonts/Roboto/Roboto-Regular.ttf"),
-		"Roboto-Medium": require("./assets/fonts/Roboto/Roboto-Medium.ttf"),
-		"Roboto-Bold": require("./assets/fonts/Roboto/Roboto-Bold.ttf"),
-		"Ubuntu-Regular": require("./assets/fonts/Ubuntu/Ubuntu-Regular.ttf"),
-		"Ubuntu-Medium": require("./assets/fonts/Ubuntu/Ubuntu-Medium.ttf"),
-		"Ubuntu-Bold": require("./assets/fonts/Ubuntu/Ubuntu-Bold.ttf"),
+		"Poppins-Regular": require("@fonts/Poppins/Poppins-Regular.ttf"),
+		"Poppins-Medium": require("@fonts/Poppins/Poppins-Medium.ttf"),
+		"Poppins-Bold": require("@fonts/Poppins/Poppins-Bold.ttf"),
+		"Roboto-Regular": require("@fonts/Roboto/Roboto-Regular.ttf"),
+		"Roboto-Medium": require("@fonts/Roboto/Roboto-Medium.ttf"),
+		"Roboto-Bold": require("@fonts/Roboto/Roboto-Bold.ttf"),
+		"Ubuntu-Regular": require("@fonts/Ubuntu/Ubuntu-Regular.ttf"),
+		"Ubuntu-Medium": require("@fonts/Ubuntu/Ubuntu-Medium.ttf"),
+		"Ubuntu-Bold": require("@fonts/Ubuntu/Ubuntu-Bold.ttf"),
 	});
+
+	const [isLogged, setIsLogged] = useState(false);
+	const authStorage = new AuthStorage();
+
+	useEffect(() => {
+		authStorage.getAccessToken().then((token) => {
+			if (token) {
+				setIsLogged(true);
+			}
+		})
+	}, [])
 
 	if (!loaded) {
 		return null;
@@ -50,51 +64,43 @@ export default function App() {
 		<>
 			<StatusBar />
 			<SafeAreaView style={SafeAreaViewAndroid.AndroidSafeArea}>
-				<AuthStorageProvider>
-					<ThemeProvider>
-						<NavigationContainer>
-							<Stack.Navigator>
-								<Stack.Screen
-									name="Login"
-									component={Login}
-									options={{
-										...optionsPrimary
-									}} />
-								<Stack.Screen
-									name="Home"
-									component={Home}
-									options={{
-										...optionsPrimary
-									}}
-								/>
-								<Stack.Screen
-									name="Introduction"
-									options={{
-										...optionsPrimary
-									}}
-									initialParams={{
-										taskOrder: 0,
-									}}
-								>
-									{({ route }: { route: any }) => <Introduction route={route} />}
-								</Stack.Screen>
-								<Stack.Screen
-									name="PreTask"
-									options={{
-										...optionsPrimary
-									}}
-									initialParams={{
-										taskOrder: 0,
-										linkOrder: 0,
-									}}
-								>
-									{({ route }: { route: any }) => <PreTask route={route} />}
-								</Stack.Screen>
-							</Stack.Navigator>
-							<Accessibility />
-						</NavigationContainer>
-					</ThemeProvider>
-				</AuthStorageProvider>
+				<AuthStorageContext.Provider value={authStorage}>
+					<TaskProvider>
+						<ThemeProvider>
+							<NavigationContainer>
+								<Stack.Navigator>
+									{
+										!isLogged
+										&& <Stack.Screen
+											name="Login"
+											component={Login}
+											options={{
+												...optionsPrimary
+											}} />
+									}
+									<Stack.Screen
+										name="Home"
+										component={Home}
+										options={{
+											...optionsPrimary
+										}}
+									/>
+									<Stack.Screen
+										name="Task"
+										component={Task}
+										options={{
+											...optionsPrimary
+										}}
+										initialParams={{
+											taskOrder: 0,
+										}}
+									/>
+								</Stack.Navigator>
+								<Accessibility />
+							</NavigationContainer>
+						</ThemeProvider>
+					</TaskProvider>
+				</AuthStorageContext.Provider>
 			</SafeAreaView>
 		</>
 	);
