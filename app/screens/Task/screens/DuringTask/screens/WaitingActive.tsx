@@ -20,7 +20,6 @@ const WaitingActive = ({ route }: { route: any }) => {
 
     useEffect(() => {
         resetContext();
-
         socket.once(SocketEvents.sessionTeacherCreate, () => {
             navigation.navigate("ChooseGroup", { taskOrder: taskOrder });
         });

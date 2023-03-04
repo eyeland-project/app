@@ -71,20 +71,38 @@ export default function App() {
 								<Stack.Navigator>
 									{
 										!isLogged
-										&& <Stack.Screen
-											name="Login"
-											component={Login}
-											options={{
-												...optionsPrimary
-											}} />
+											? <>
+												<Stack.Screen
+													name="Login"
+													component={Login}
+													options={{
+														...optionsPrimary
+													}} />
+												<Stack.Screen
+													name="Home"
+													component={Home}
+													options={{
+														...optionsPrimary
+													}}
+												/>
+											</>
+											: <>
+												<Stack.Screen
+													name="Home"
+													component={Home}
+													options={{
+														...optionsPrimary
+													}}
+												/>
+												<Stack.Screen
+													name="Login"
+													component={Login}
+													options={{
+														...optionsPrimary
+													}} />
+											</>
 									}
-									<Stack.Screen
-										name="Home"
-										component={Home}
-										options={{
-											...optionsPrimary
-										}}
-									/>
+
 									<Stack.Screen
 										name="Task"
 										component={Task}

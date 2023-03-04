@@ -1,8 +1,10 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NativeStackNavigationOptions } from "@react-navigation/native-stack";
 import { socket } from "@utils/socket";
+import Header from "../../components/Header";
 
 import { useEffect, useState } from "react";
+import useAuthStorage from "@app/core/hooks/useAuthStorage";
 
 import { DuringTaskContext } from "@contexts/DuringTaskContext";
 import WaitingActive from "./screens/WaitingActive";
@@ -19,28 +21,33 @@ interface Props {
 
 const Stack = createNativeStackNavigator();
 
-const optionsPrimary: NativeStackNavigationOptions = {
-    animation: "slide_from_right",
-    headerBackVisible: false,
-    headerShown: false,
-    headerTitleStyle: {
-        fontFamily: "Poppins-Regular",
-    }
-}
-
 const DuringTask = ({ route }: Props) => {
-
+    const authStorage = useAuthStorage();
     const [isSessionStarted, setIsSessionStarted] = useState(false);
 
-    useEffect(() => {
+    const connectSocket = async () => {
         socket.connect();
-        socket.emit('id', '1', (response: { session: boolean }) => {
+        socket.emit('id', await authStorage.getAccessToken(), (response: { session: boolean }) => {
             setIsSessionStarted(response.session);
         });
+    }
+
+    useEffect(() => {
+        connectSocket();
         return () => {
             socket.disconnect();
         };
     }, [])
+
+    const optionsPrimary: NativeStackNavigationOptions = {
+        animation: "slide_from_right",
+        headerBackVisible: false,
+        headerShown: true,
+        headerTitleStyle: {
+            fontFamily: "Poppins-Regular",
+        },
+        header: () => <Header />
+    }
 
     return (
         <DuringTaskContext.Provider value={{ socket }}>

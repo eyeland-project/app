@@ -6,37 +6,41 @@ import Power from './components/Power';
 import { useEffect } from 'react';
 import useTheme from '@hooks/useTheme'
 import useTaskContext from '@hooks/useTaskContext';
+import useTeams from '@hooks/useTeams';
 
 import { Theme } from '@theme'
-import { Power as PowerEnum } from '@app/shared/enums/Power.enum';
+import Placeholder from './components/Placeholder';
 
 const WaitingBegin = () => {
     const theme = useTheme()
     const { resetContext } = useTaskContext()
+    const { loading, data, getMyTeam } = useTeams()
 
     useEffect(() => {
         resetContext()
+        getMyTeam()
     }, [])
-
-    // MOCK DATA
-    const groupName = 'Grupo 1'
-    const power = PowerEnum.SuperRadar
 
     return (
         <View style={getStyles(theme).container}>
-            <Title text={groupName} />
-            <Text style={getStyles(theme).title}>Instrucciones</Text>
-            <Text style={getStyles(theme).description}>Avanza respondiendo a las preguntas que te haga el guía turístico en cada parada obligada.</Text>
-            <Text style={getStyles(theme).title}>Tu super poder es</Text>
-            <Power power={power} />
-            <LottieView
-                source={require('@animations/waitingBegin.json')}
-                autoPlay
-                loop
-                style={getStyles(theme).animation}
-            />
-            <Text style={getStyles(theme).waitingText}>Espera a que tu profesor de comienzo a la actividad...</Text>
-
+            {
+                !loading && data
+                    ? <>
+                        <Title text={data[0].name} />
+                        <Text style={getStyles(theme).title}>Instrucciones</Text>
+                        <Text style={getStyles(theme).description}>Avanza respondiendo a las preguntas que te haga el guía turístico en cada parada obligada.</Text>
+                        <Text style={getStyles(theme).title}>Tu super poder es</Text>
+                        <Power />
+                        <LottieView
+                            source={require('@animations/waitingBegin.json')}
+                            autoPlay
+                            loop
+                            style={getStyles(theme).animation}
+                        />
+                        <Text style={getStyles(theme).waitingText}>Espera a que tu profesor de comienzo a la actividad...</Text>
+                    </>
+                    : <Placeholder />
+            }
         </View>
     )
 }

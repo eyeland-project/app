@@ -24,14 +24,14 @@ const Task = ({ route }: { route: any }) => {
         header: () => <Header progress={progress} showNext={phaseCompleted} onPress={() => {
             setPhaseCompleted(false);
             onPressNext();
-        }} />
+        }} icon="closecircle" />
     }
 
     return (
         <>
 
             {/* TODO - Change this later */}
-            <Stack.Navigator initialRouteName="DuringTask">
+            <Stack.Navigator>
                 <Stack.Screen
                     name="Introduction"
                     options={{
@@ -56,7 +56,8 @@ const Task = ({ route }: { route: any }) => {
                 <Stack.Screen
                     name="DuringTask"
                     options={{
-                        ...optionsPrimary
+                        ...optionsPrimary,
+                        headerShown: false
                     }}
                     initialParams={{
                         taskOrder: taskOrder,

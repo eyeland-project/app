@@ -1,8 +1,10 @@
 import { Text, StyleSheet } from 'react-native'
 import Pressable from './Pressable'
-import useTheme from '@hooks/useTheme'
 import { Theme } from '@theme'
 import { Animated, Easing } from 'react-native'
+
+import useTheme from '@hooks/useTheme'
+import usePlaySound from '@hooks/usePlaySound'
 
 interface Props {
     onPress: () => void
@@ -11,6 +13,7 @@ interface Props {
 const ContinueButton = ({ onPress }: Props) => {
     const theme = useTheme()
     const scaleValue = new Animated.Value(1)
+    const playSound = usePlaySound(require('@assets/sounds/success.wav'))
 
     const scaleButton = () => {
         Animated.timing(scaleValue, {
@@ -24,7 +27,10 @@ const ContinueButton = ({ onPress }: Props) => {
                 duration: 200,
                 easing: Easing.linear,
                 useNativeDriver: true
-            }).start(() => onPress())
+            }).start(() => {
+                playSound()
+                onPress()
+            })
         })
     }
 

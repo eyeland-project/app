@@ -4,19 +4,30 @@ import Pressable from '@components/Pressable';
 import { Ionicons } from '@expo/vector-icons';
 
 import useTheme from '@hooks/useTheme';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import usePower from '@hooks/usePower';
 
 import { Theme } from '@theme';
+import { ShineOverlay, PlaceholderMedia, Placeholder as PlaceholderRN, } from 'rn-placeholder';
 
-interface Props {
-    power: PowerEnum;
-}
 
-const Power = ({ power }: Props) => {
+const Power = () => {
     const theme = useTheme();
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [image, setImage] = useState<any>(null);
+    const { rollPower, getMyPower, data, loading } = usePower();
+    const [power, setPower] = useState<PowerEnum>(PowerEnum.MemoryPro);
+
+    const callForPower = async () => {
+        const power = await getMyPower();
+        setPower(power);
+    }
+
+    useEffect(() => {
+        callForPower();
+    }, [])
+
 
     useEffect(() => {
         switch (power) {
@@ -36,26 +47,46 @@ const Power = ({ power }: Props) => {
                 setImage(require('@images/superRadar.png'));
                 break;
         }
-    }, [])
+    }, [power])
 
+
+    //TODO - Hacer placeholder mientras se carga el poder
     return (
         <View style={getStyles(theme).container}>
-            <View style={getStyles(theme).imageContainer}>
-                <Image source={image} style={getStyles(theme).image} />
-            </View>
-            <View style={getStyles(theme).textContainer}>
-                <Text style={getStyles(theme).title}>{title}</Text>
-                <Text style={getStyles(theme).description}>{description}</Text>
-            </View>
-            <Pressable>
-                <View style={getStyles(theme).iconContainer}>
-                    <Ionicons
-                        name="reload"
-                        size={26}
-                        color={theme.colors.secondary.includes('#000') ? 'white' : 'black'}
-                    />
-                </View>
-            </Pressable>
+            {
+                !loading && data
+                    ? <>
+                        <View style={getStyles(theme).imageContainer}>
+                            <Image source={image} style={getStyles(theme).image} />
+                        </View>
+                        <View style={getStyles(theme).textContainer}>
+                            <Text style={getStyles(theme).title}>{title}</Text>
+                            <Text style={getStyles(theme).description}>{description}</Text>
+                        </View>
+                        <Pressable onPress={async () => {
+                            setPower(await rollPower());
+                        }}>
+                            <View style={getStyles(theme).iconContainer}>
+                                <Ionicons
+                                    name="reload"
+                                    size={26}
+                                    color={theme.colors.primary}
+                                />
+                            </View>
+                        </Pressable>
+                    </>
+                    : <PlaceholderRN
+                        Animation={ShineOverlay}
+                    >
+                        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                            <PlaceholderMedia style={{ width: 60, height: 60, borderRadius: 8 }} />
+                            <PlaceholderMedia style={{ width: '60%', height: 60, borderRadius: 8 }} />
+
+                            <PlaceholderMedia style={{ width: 50, height: 50, borderRadius: 30 }} />
+                        </View>
+                    </PlaceholderRN>
+            }
+
         </View>
     )
 }

@@ -32,7 +32,32 @@ const usePreTask = () => {
             }
         } catch (err) {
             setLoading(false);
-            setError((err as any).message || 'An error occurred');
+            switch ((err as any).response.status) {
+                case 400:
+                    setError('Invalid taskOrder | Invalid linkOrder');
+                    break;
+                case 401:
+                    setError('Missing authentication');
+                    break;
+                case 403:
+                    setError('Unauthorized to access this resource');
+                    break;
+                case 404:
+                    setError('Task not found');
+                    break;
+                case 410:
+                    setError('Endpoint deprecated');
+                    break;
+                case 498:
+                    setError('Invalid token');
+                    break;
+                case 500:
+                    setError('Internal server error');
+                    break;
+                default:
+                    setError('Un error ha ocurrido');
+                    break;
+            }
         }
     }, []);
 
@@ -54,13 +79,79 @@ const usePreTask = () => {
             }
         } catch (err) {
             setLoading(false);
-            setError((err as any).message || 'An error occurred');
+            switch ((err as any).response.status) {
+                case 400:
+                    setError('Invalid taskOrder | Invalid linkOrder');
+                    break;
+                case 401:
+                    setError('Missing authentication');
+                    break;
+                case 403:
+                    setError('Unauthorized to access this resource');
+                    break;
+                case 404:
+                    setError('Task not found');
+                    break;
+                case 498:
+                    setError('Invalid token');
+                    break;
+                case 500:
+                    setError('Internal server error');
+                    break;
+                default:
+                    setError('Un error ha ocurrido');
+                    break;
+            }
             return 0;
         }
     }, []);
 
+    const setPreTaskFinished = useCallback(async (taskOrder: number) => {
+        setLoading(true);
+        try {
+            const response = await axios.post(`${environment.apiUrl}/tasks/${taskOrder}/pretask/done`, {}, {
+                headers: {
+                    Authorization: `Bearer ${await authStorage.getAccessToken()}`,
+                },
+                timeout: 10000,
+            });
 
-    return { loading, error, data, getPreTask, getTotalNumberOfPreTasks };
+            if (response.status === 200) {
+                setLoading(false);
+                return response.data;
+            } else {
+                throw new Error(response.data);
+            }
+        } catch (err) {
+            setLoading(false);
+            switch ((err as any).response.status) {
+                case 400:
+                    setError('Invalid taskOrder | Invalid linkOrder');
+                    break;
+                case 401:
+                    setError('Missing authentication');
+                    break;
+                case 403:
+                    setError('Unauthorized to access this resource');
+                    break;
+                case 404:
+                    setError('Task not found');
+                    break;
+                case 498:
+                    setError('Invalid token');
+                    break;
+                case 500:
+                    setError('Internal server error');
+                    break;
+                default:
+                    setError('Un error ha ocurrido');
+                    break;
+            }
+        }
+    }, []);
+
+
+    return { loading, error, data, getPreTask, getTotalNumberOfPreTasks, setPreTaskDone: setPreTaskFinished };
 };
 
 export default usePreTask;

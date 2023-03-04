@@ -15,11 +15,11 @@ interface Props {
 }
 
 const PreTask = ({ route }: Props) => {
-    const { taskOrder, linkOrder } = route.params;
+    const { taskOrder, linkOrder } = route.params as { taskOrder: number, linkOrder: number };
 
     const theme = useTheme();
     const navigation = useNavigation<any>();
-    const { loading, error, data, getPreTask, getTotalNumberOfPreTasks } = usePreTask();
+    const { loading, error, data, getPreTask, getTotalNumberOfPreTasks, setPreTaskDone } = usePreTask();
     const { setPhaseCompleted, setOnPressNext, setProgress, progress } = useTaskContext();
 
     const onRenderComplete = async () => {
@@ -28,9 +28,18 @@ const PreTask = ({ route }: Props) => {
         setPhaseCompleted(true);
         setProgress(linkOrder / numberOfPreTasks);
         setOnPressNext(() => () => {
-            linkOrder < numberOfPreTasks
-                ? navigation.navigate('PreTask', { taskOrder, linkOrder: linkOrder + 1 })
-                : navigation.navigate('DuringTask', { taskOrder })
+            if (linkOrder < numberOfPreTasks) {
+                navigation.navigate('PreTask', { taskOrder, linkOrder: linkOrder + 1 });
+            } else {
+                setPreTaskDone(taskOrder);
+                navigation.reset({
+                    index: 0,
+                    routes: [
+                        { name: 'Introduction', params: { taskOrder } },
+                        { name: 'DuringTask', params: { taskOrder } }
+                    ],
+                })
+            }
         });
     }
 

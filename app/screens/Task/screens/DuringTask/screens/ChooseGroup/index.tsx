@@ -14,12 +14,13 @@ import { SocketEvents } from '@enums/SocketEvents.enum'
 import { Team } from '@interfaces/Team.interface'
 
 
-const ChooseGroup = () => {
+const ChooseGroup = ({ route }: any) => {
     const theme = useTheme()
     const { resetContext } = useTaskContext()
-    const { error, loading, data, getTeams } = useTeams()
+    const { error, loading, data, getTeams, leaveTeam } = useTeams()
     const { socket } = useDuringTaskContext()
     const [groups, setGroups] = useState<Team[]>([])
+    const { taskOrder } = route.params
 
     const getGroups = async () => {
         setGroups(await getTeams())
@@ -27,6 +28,7 @@ const ChooseGroup = () => {
 
     useEffect(() => {
         resetContext()
+        leaveTeam()
         getGroups()
 
         socket.on(SocketEvents.TeamsStudentUpdate, (data: Team[]) => {
@@ -55,6 +57,7 @@ const ChooseGroup = () => {
                     id={item.id}
                     name={item.name}
                     members={item.students}
+                    taskOrder={taskOrder}
                 />
             )}
             keyExtractor={item => item.id.toString()}

@@ -41,6 +41,9 @@ const useLogin = () => {
                 case 400:
                     setError('Usuario o contraseña incorrectos');
                     break;
+                case 401:
+                    setError('Usuario o contraseña incorrectos');
+                    break;
                 case 403:
                     setError('Usuario o contraseña incorrectos');
                     break;

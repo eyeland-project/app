@@ -1,18 +1,23 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { Text, StyleSheet } from 'react-native'
 import Pressable from '@components/Pressable'
 
 import useTheme from '@hooks/useTheme'
+
 import { Theme } from '@theme'
 
 interface Props {
     id: number
+    onPress: () => void
 }
 
-const JoinButton = ({ id }: Props) => {
+const JoinButton = ({ id, onPress }: Props) => {
     const theme = useTheme()
 
     return (
-        <Pressable style={getStyles(theme).button}>
+        <Pressable
+            style={getStyles(theme).button}
+            onPress={onPress}
+        >
             <Text style={getStyles(theme).text}>Ingresar</Text>
         </Pressable>
     )

@@ -3,9 +3,10 @@ import PositionBar from './components/PositionBar'
 import Query from './components/Query'
 import Option from '@screens/Task/components/Option'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import useTheme from '@hooks/useTheme'
 import usePlaySound from '@hooks/usePlaySound'
+import useTime from '@hooks/useTime'
 
 import { Theme } from '@theme'
 import { Power } from '@enums/Power.enum'
@@ -16,6 +17,7 @@ const Question = () => {
     const [textStyleOptions, setTextStyleOptions] = useState([{}])
     const playSoundSuccess = usePlaySound(require('@sounds/success.wav'))
     const playSoundWrong = usePlaySound(require('@sounds/wrong.wav'))
+    const { time, startTimer, stopTimer } = useTime()
 
     const onPressOption = async (index: number, correct: boolean) => {
         const newContainerStyleOptions = [...containerStyleOptions]
@@ -23,8 +25,10 @@ const Question = () => {
 
         if (correct) {
             playSoundSuccess()
+            stopTimer()
             newContainerStyleOptions[index] = { backgroundColor: theme.colors.green }
             newTextStyleOptions[index] = { color: theme.colors.white }
+            // SEND TIME TO SERVER
         } else {
             playSoundWrong()
             newContainerStyleOptions[index] = { backgroundColor: theme.colors.red }
@@ -36,6 +40,10 @@ const Question = () => {
 
         // TODO - Navigate to next question
     }
+
+    useEffect(() => {
+        startTimer()
+    }, [])
 
     //MOCK DATA
     const options = [
