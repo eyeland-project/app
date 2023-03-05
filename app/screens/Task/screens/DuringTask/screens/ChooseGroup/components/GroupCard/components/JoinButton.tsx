@@ -6,11 +6,10 @@ import useTheme from '@hooks/useTheme'
 import { Theme } from '@theme'
 
 interface Props {
-    id: number
     onPress: () => void
 }
 
-const JoinButton = ({ id, onPress }: Props) => {
+const JoinButton = ({ onPress }: Props) => {
     const theme = useTheme()
 
     return (

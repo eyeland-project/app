@@ -4,11 +4,13 @@ import Placeholder from './components/Placeholder'
 
 import { Theme } from '@theme'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import useTheme from '@hooks/useTheme'
 import useTaskContext from '@hooks/useTaskContext'
 import useTeams from '@hooks/useTeams'
 import { useDuringTaskContext } from '@hooks/useDuringTaskContext'
+import { useFocusEffect } from '@react-navigation/native'
+import useTeam from '@hooks/useTeam'
 
 import { SocketEvents } from '@enums/SocketEvents.enum'
 import { Team } from '@interfaces/Team.interface'
@@ -17,7 +19,8 @@ import { Team } from '@interfaces/Team.interface'
 const ChooseGroup = ({ route }: any) => {
     const theme = useTheme()
     const { resetContext } = useTaskContext()
-    const { error, loading, data, getTeams, leaveTeam } = useTeams()
+    const { error, loading, data, getTeams } = useTeams()
+    const { leaveTeam } = useTeam()
     const { socket } = useDuringTaskContext()
     const [groups, setGroups] = useState<Team[]>([])
     const { taskOrder } = route.params
@@ -26,10 +29,15 @@ const ChooseGroup = ({ route }: any) => {
         setGroups(await getTeams())
     }
 
+    useFocusEffect(
+        useCallback(() => {
+            leaveTeam()
+        }, [])
+    )
+
     useEffect(() => {
-        resetContext()
-        leaveTeam()
         getGroups()
+        resetContext()
 
         socket.on(SocketEvents.TeamsStudentUpdate, (data: Team[]) => {
             setGroups(data)
@@ -54,7 +62,7 @@ const ChooseGroup = ({ route }: any) => {
             renderItem={({ item }) => (
                 <GroupCard
                     key={item.id}
-                    id={item.id}
+                    id={item.code}
                     name={item.name}
                     members={item.students}
                     taskOrder={taskOrder}

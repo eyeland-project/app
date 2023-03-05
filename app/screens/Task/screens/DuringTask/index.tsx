@@ -27,7 +27,7 @@ const DuringTask = ({ route }: Props) => {
 
     const connectSocket = async () => {
         socket.connect();
-        socket.emit('id', await authStorage.getAccessToken(), (response: { session: boolean }) => {
+        socket.emit('join', await authStorage.getAccessToken(), (response: { session: boolean }) => {
             setIsSessionStarted(response.session);
         });
     }

@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image } from 'react-native'
+import { View, Text, StyleSheet, Image, ActivityIndicator, ToastAndroid } from 'react-native'
 import { Power as PowerEnum } from '@enums/Power.enum';
 import Pressable from '@components/Pressable';
 import { Ionicons } from '@expo/vector-icons';
@@ -8,25 +8,19 @@ import React, { useState, useEffect } from 'react';
 import usePower from '@hooks/usePower';
 
 import { Theme } from '@theme';
-import { ShineOverlay, PlaceholderMedia, Placeholder as PlaceholderRN, } from 'rn-placeholder';
 
+interface Props {
+    powerProp: PowerEnum;
+    blockReRoll: boolean;
+}
 
-const Power = () => {
+const Power = ({ powerProp, blockReRoll }: Props) => {
     const theme = useTheme();
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [image, setImage] = useState<any>(null);
-    const { rollPower, getMyPower, data, loading } = usePower();
-    const [power, setPower] = useState<PowerEnum>(PowerEnum.MemoryPro);
-
-    const callForPower = async () => {
-        const power = await getMyPower();
-        setPower(power);
-    }
-
-    useEffect(() => {
-        callForPower();
-    }, [])
+    const { rollPower, data, error, loading } = usePower();
+    const [power, setPower] = useState<PowerEnum>(powerProp);
 
 
     useEffect(() => {
@@ -49,44 +43,42 @@ const Power = () => {
         }
     }, [power])
 
+    const handleOnPress = async () => {
+        const data = await rollPower()
+        if (!error && data) {
+            setPower(data.power);
+        }
+    }
 
-    //TODO - Hacer placeholder mientras se carga el poder
+    if (error) {
+        ToastAndroid.show('Error al obtener el poder', ToastAndroid.SHORT);
+    }
+
     return (
         <View style={getStyles(theme).container}>
+            <View style={getStyles(theme).imageContainer}>
+                <Image source={image} style={getStyles(theme).image} />
+            </View>
+            <View style={getStyles(theme).textContainer}>
+                <Text style={getStyles(theme).title}>{title}</Text>
+                <Text style={getStyles(theme).description}>{description}</Text>
+            </View>
             {
-                !loading && data
-                    ? <>
-                        <View style={getStyles(theme).imageContainer}>
-                            <Image source={image} style={getStyles(theme).image} />
-                        </View>
-                        <View style={getStyles(theme).textContainer}>
-                            <Text style={getStyles(theme).title}>{title}</Text>
-                            <Text style={getStyles(theme).description}>{description}</Text>
-                        </View>
-                        <Pressable onPress={async () => {
-                            setPower(await rollPower());
-                        }}>
-                            <View style={getStyles(theme).iconContainer}>
-                                <Ionicons
-                                    name="reload"
-                                    size={26}
-                                    color={theme.colors.primary}
-                                />
-                            </View>
-                        </Pressable>
-                    </>
-                    : <PlaceholderRN
-                        Animation={ShineOverlay}
-                    >
-                        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                            <PlaceholderMedia style={{ width: 60, height: 60, borderRadius: 8 }} />
-                            <PlaceholderMedia style={{ width: '60%', height: 60, borderRadius: 8 }} />
-
-                            <PlaceholderMedia style={{ width: 50, height: 50, borderRadius: 30 }} />
-                        </View>
-                    </PlaceholderRN>
+                !blockReRoll &&
+                <Pressable onPress={handleOnPress}>
+                    <View style={getStyles(theme).iconContainer}>
+                        {loading ? (
+                            <ActivityIndicator color={theme.colors.primary} />
+                        ) : (
+                            <Ionicons
+                                name={"reload"}
+                                size={26}
+                                color={theme.colors.primary}
+                            />
+                        )}
+                    </View>
+                </Pressable>
             }
-
         </View>
     )
 }

@@ -6,7 +6,7 @@ import Power from './components/Power';
 import { useEffect } from 'react';
 import useTheme from '@hooks/useTheme'
 import useTaskContext from '@hooks/useTaskContext';
-import useTeams from '@hooks/useTeams';
+import useTeam from '@hooks/useTeam';
 
 import { Theme } from '@theme'
 import Placeholder from './components/Placeholder';
@@ -14,7 +14,7 @@ import Placeholder from './components/Placeholder';
 const WaitingBegin = () => {
     const theme = useTheme()
     const { resetContext } = useTaskContext()
-    const { loading, data, getMyTeam } = useTeams()
+    const { loading, data, getMyTeam } = useTeam()
 
     useEffect(() => {
         resetContext()
@@ -26,11 +26,11 @@ const WaitingBegin = () => {
             {
                 !loading && data
                     ? <>
-                        <Title text={data[0].name} />
+                        <Title text={data.name} />
                         <Text style={getStyles(theme).title}>Instrucciones</Text>
                         <Text style={getStyles(theme).description}>Avanza respondiendo a las preguntas que te haga el guía turístico en cada parada obligada.</Text>
                         <Text style={getStyles(theme).title}>Tu super poder es</Text>
-                        <Power />
+                        <Power powerProp={data.myPower} blockReRoll={data.students.length >= 3} />
                         <LottieView
                             source={require('@animations/waitingBegin.json')}
                             autoPlay

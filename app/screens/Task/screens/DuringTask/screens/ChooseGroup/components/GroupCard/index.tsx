@@ -4,16 +4,14 @@ import Members from './components/Members'
 import JoinButton from './components/JoinButton'
 
 import useTheme from '@hooks/useTheme'
-import useTeams from '@hooks/useTeams'
+import useTeam from '@hooks/useTeam'
 import { useNavigation } from '@react-navigation/native'
 
 import { Student } from '@interfaces/Student.interface'
 import { Theme } from '@theme'
 
-
-
 interface Props {
-    id: number
+    id: string
     name: string
     members: Student[]
     taskOrder: number
@@ -21,7 +19,7 @@ interface Props {
 
 const GroupCard = ({ id, name, members, taskOrder }: Props) => {
     const theme = useTheme()
-    const { joinTeam } = useTeams()
+    const { joinTeam } = useTeam()
     const navigation = useNavigation<any>()
 
     return (
@@ -29,9 +27,9 @@ const GroupCard = ({ id, name, members, taskOrder }: Props) => {
             <Title name={name} />
             <Members members={members} />
             {
-                members.length < 3 && <JoinButton id={id} onPress={
-                    () => {
-                        joinTeam({ code: `${id}`, taskOrder })
+                members.length < 3 && <JoinButton onPress={
+                    async () => {
+                        await joinTeam({ code: id, taskOrder })
                         navigation.navigate("WaitingBegin", { taskOrder })
                     }} />
             }

@@ -56,7 +56,7 @@ const usePower = () => {
     const rollPower = useCallback(async () => {
         setLoading(true);
         try {
-            const response = await axios.post(`${environment.apiUrl}/teams/current/power`, {}, {
+            const response = await axios.put(`${environment.apiUrl}/teams/current/reroll`, {}, {
                 headers: {
                     Authorization: `Bearer ${await authStorage.getAccessToken()}`,
                 },
