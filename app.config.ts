@@ -9,9 +9,15 @@ const config: ExpoConfig = {
 	icon: "./assets/icon.png",
 	backgroundColor: "#FFFFFF",
 	android: {
+		package: "com.eyeland",
 		adaptiveIcon: {
 			backgroundColor: "#FFFFFF",
 			foregroundImage: "./assets/adaptive-icon.png"
+		}
+	},
+	extra: {
+		eas: {
+			projectId: "02601ea0-08c9-4e35-ad4e-9e6778900455"
 		}
 	}
 };
