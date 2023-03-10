@@ -4,8 +4,22 @@ import { ExpoConfig } from "expo/config";
 // import { ExpoConfig } from '@expo/config-types';
 
 const config: ExpoConfig = {
-	name: "my-app",
-	slug: "my-app",
+	name: "Eyeland",
+	slug: "Eyeland",
+	icon: "./assets/icon.png",
+	backgroundColor: "#FFFFFF",
+	android: {
+		package: "com.eyeland",
+		adaptiveIcon: {
+			backgroundColor: "#FFFFFF",
+			foregroundImage: "./assets/adaptive-icon.png"
+		}
+	},
+	extra: {
+		eas: {
+			projectId: "02601ea0-08c9-4e35-ad4e-9e6778900455"
+		}
+	}
 };
 
 export default config;

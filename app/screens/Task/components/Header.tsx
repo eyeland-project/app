@@ -2,6 +2,7 @@ import { View, StyleSheet, Animated } from 'react-native'
 import HomeButton from '@components/HomeButton'
 import ContinueButton from '@components/ContinueButton'
 import * as Progress from 'react-native-progress';
+import AntDesign from '@expo/vector-icons/AntDesign'
 
 import { useEffect, useState } from 'react';
 import useTheme from '@hooks/useTheme'
@@ -11,10 +12,11 @@ import { Theme } from '@theme';
 interface Props {
     progress?: number;
     showNext?: boolean;
+    icon?: keyof typeof AntDesign.glyphMap;
     onPress?: () => void;
 }
 
-const Header = ({ progress, showNext, onPress }: Props) => {
+const Header = ({ progress, showNext, icon, onPress }: Props) => {
     const theme = useTheme()
     const [progressWidth, setProgressWidth] = useState(new Animated.Value(1))
     const [continueOpacity, setContinueOpacity] = useState(new Animated.Value(0))
@@ -44,7 +46,7 @@ const Header = ({ progress, showNext, onPress }: Props) => {
 
     return (
         <View style={getStyles(theme).row}>
-            <HomeButton />
+            <HomeButton icon={icon} />
             {
                 progress && onPress
                     ? (

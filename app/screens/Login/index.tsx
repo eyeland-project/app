@@ -40,8 +40,8 @@ const Login = () => {
 			await login(inputs);
 			if (data) {
 				navigation.navigate("Home");
-			} else {
-				ToastAndroid.show(error || "Un error inesperado ha ocurrido", ToastAndroid.SHORT);
+			} else if (error) {
+				ToastAndroid.show(error, ToastAndroid.SHORT);
 			}
 		} catch (error) {
 			ToastAndroid.show((error as any).message, ToastAndroid.SHORT);

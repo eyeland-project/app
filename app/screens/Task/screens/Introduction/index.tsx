@@ -57,15 +57,17 @@ const Introduction = ({ route }: Props) => {
                             <Section
                                 title='During-Task'
                                 completed={dataProgress.duringtask.completed}
+                                // blocked={dataProgress.duringtask.blocked}
                                 blocked={dataProgress.duringtask.blocked}
                                 onPress={() => {
-                                    navigation.navigate('DuringTask', { taskOrder });
+                                    navigation.navigate('DuringTask', { taskOrder, questionOrder: 1 });
                                 }} />
                             <Section title='PosTask'
                                 completed={dataProgress.postask.completed}
+                                // blocked={dataProgress.postask.blocked}
                                 blocked={dataProgress.postask.blocked}
                                 onPress={() => {
-                                    navigation.navigate('PosTask', { taskOrder });
+                                    navigation.navigate('PosTask', { taskOrder, questionOrder: 1 });
                                 }} />
                         </>
                     ) : (

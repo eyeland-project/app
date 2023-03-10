@@ -12,17 +12,19 @@ import { Power } from '@enums/Power.enum'
 interface Props {
     text: string
     power: Power
+    nounTranslation: string
+    prepositionTranslation: string
 }
 
-const Query = ({ text, power }: Props) => {
+const Query = ({ text, power, nounTranslation, prepositionTranslation }: Props) => {
     const theme = useTheme()
 
     switch (power) {
         case Power.MemoryPro:
-            return <MemoryProView text={text} />
+            return <MemoryProView text={text} nounTranslation={nounTranslation} />
 
         case Power.SuperRadar:
-            return <SuperRadarView />
+            return <SuperRadarView text={text} prepositionTranslation={prepositionTranslation} />
 
         case Power.SuperHearing:
             return <SuperHearing />

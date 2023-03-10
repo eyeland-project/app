@@ -1,8 +1,10 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NativeStackNavigationOptions } from "@react-navigation/native-stack";
 import { socket } from "@utils/socket";
+import Header from "../../components/Header";
 
 import { useEffect, useState } from "react";
+import useAuthStorage from "@app/core/hooks/useAuthStorage";
 
 import { DuringTaskContext } from "@contexts/DuringTaskContext";
 import WaitingActive from "./screens/WaitingActive";
@@ -12,6 +14,7 @@ import WaitingBegin from "./screens/WaitingBegin";
 import Transition from "./screens/Transition";
 import Question from "./screens/Question";
 import FinalScore from "./screens/FinalScore";
+import { Power } from "@enums/Power.enum";
 
 interface Props {
     route: any
@@ -19,31 +22,37 @@ interface Props {
 
 const Stack = createNativeStackNavigator();
 
-const optionsPrimary: NativeStackNavigationOptions = {
-    animation: "slide_from_right",
-    headerBackVisible: false,
-    headerShown: false,
-    headerTitleStyle: {
-        fontFamily: "Poppins-Regular",
-    }
-}
-
 const DuringTask = ({ route }: Props) => {
-
+    const authStorage = useAuthStorage();
     const [isSessionStarted, setIsSessionStarted] = useState(false);
+    const [power, setPower] = useState(Power.SuperRadar);
 
-    useEffect(() => {
+    const connectSocket = async () => {
         socket.connect();
-        socket.emit('id', '1', (response: { session: boolean }) => {
+        socket.emit('join', await authStorage.getAccessToken(), (response: { session: boolean }) => {
             setIsSessionStarted(response.session);
         });
+    }
+
+    useEffect(() => {
+        connectSocket();
         return () => {
             socket.disconnect();
         };
     }, [])
 
+    const optionsPrimary: NativeStackNavigationOptions = {
+        animation: "slide_from_right",
+        headerBackVisible: false,
+        headerShown: true,
+        headerTitleStyle: {
+            fontFamily: "Poppins-Regular",
+        },
+        header: () => <Header />
+    }
+
     return (
-        <DuringTaskContext.Provider value={{ socket }}>
+        <DuringTaskContext.Provider value={{ socket, power, setPower }}>
             <Stack.Navigator>
                 {
                     !isSessionStarted
@@ -88,7 +97,7 @@ const DuringTask = ({ route }: Props) => {
                     }}
                     component={WaitingBegin}
                 />
-                <Stack.Screen
+                {/* <Stack.Screen
                     name="Transition"
                     options={{
                         ...optionsPrimary
@@ -97,7 +106,7 @@ const DuringTask = ({ route }: Props) => {
                         taskOrder: route.params.taskOrder,
                     }}
                     component={Transition}
-                />
+                /> */}
                 <Stack.Screen
                     name="Question"
                     options={{
@@ -105,10 +114,11 @@ const DuringTask = ({ route }: Props) => {
                     }}
                     initialParams={{
                         taskOrder: route.params.taskOrder,
+                        questionOrder: 0,
                     }}
                     component={Question}
                 />
-                <Stack.Screen
+                {/* <Stack.Screen
                     name="FinalScore"
                     options={{
                         ...optionsPrimary
@@ -117,7 +127,7 @@ const DuringTask = ({ route }: Props) => {
                         taskOrder: route.params.taskOrder,
                     }}
                     component={FinalScore}
-                />
+                /> */}
             </Stack.Navigator>
         </DuringTaskContext.Provider>
     )

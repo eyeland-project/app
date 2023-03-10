@@ -30,9 +30,9 @@ const useTasks = () => {
             } else {
                 throw new Error(response.data);
             }
-        } catch (err) {
+        } catch (err: any) {
             setLoading(false);
-            switch ((err as any).response.status) {
+            switch (err.response.status) {
                 case 401:
                     setError('Unauthorized');
                     break;
