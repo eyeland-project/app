@@ -71,6 +71,7 @@ const Task = ({ route }: { route: any }) => {
                     }}
                     initialParams={{
                         taskOrder: taskOrder,
+                        questionOrder: 1,
                     }}
                     component={PosTask}
                 />

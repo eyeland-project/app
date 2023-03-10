@@ -1,4 +1,4 @@
 export const environment = {
-    apiUrl: 'https://epics-si-api.onrender.com/api/students',
-    socketUrl: 'https://epics-si-api.onrender.com/students',
+    apiUrl: 'https://eyeland-api-production.up.railway.app/api/students',
+    socketUrl: 'https://eyeland-api-production.up.railway.app/students',
 };

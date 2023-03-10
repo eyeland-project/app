@@ -6,6 +6,10 @@ import Title from './components/Title'
 import { useEffect, useState } from 'react'
 import useTheme from '@hooks/useTheme'
 import useRecord from '@hooks/useRecord'
+import { useNavigation } from '@react-navigation/native'
+import usePosTask from '@hooks/usePosTask'
+import usePosTaskQuestion from '@hooks/usePosTaskQuestion'
+import useTime from '@hooks/useTime'
 
 import { Theme } from '@theme'
 
@@ -14,10 +18,15 @@ interface Props {
 }
 
 const PosTask = ({ route }: Props) => {
+    const { taskOrder, questionOrder } = route.params
     const theme = useTheme()
     const { recording, done, finished, startRecording, stopRecording } = useRecord()
     const [duration, setDuration] = useState<number | null>(null);
-    const [answered, setAnswered] = useState(true);
+    const [answered, setAnswered] = useState(false);
+    const [idOptionSelected, setIdOptionSelected] = useState<number>(1);
+    const navigation = useNavigation<any>();
+    const { data, loading, error, getPosTaskQuestion, sendPosTaskAnswer } = usePosTaskQuestion();
+    const { startTimer, stopTimer, time } = useTime();
 
 
     const handleOnPress = () => {
@@ -34,6 +43,19 @@ const PosTask = ({ route }: Props) => {
     }
 
     useEffect(() => {
+        if (done) {
+            stopTimer();
+            sendPosTaskAnswer({ taskOrder, questionOrder, body: { answerSeconds: time, idOptions: idOptionSelected } })
+            navigation.push('PosTask', { taskOrder, questionOrder: questionOrder + 1 })
+        }
+    }, [done])
+
+    useEffect(() => {
+        getPosTaskQuestion({ taskOrder, questionOrder })
+        startTimer();
+    }, [])
+
+    useEffect(() => {
         let intervalId: NodeJS.Timeout | null = null;
         if (recording) {
             getTime();
@@ -48,24 +70,11 @@ const PosTask = ({ route }: Props) => {
         }
     }, [recording]);
 
-    //MOCK DATA
-    const data = {
-        question: 'Are you on the bridge?',
-        options: [
-            {
-                id: 1,
-                text: "Yes, I am"
-            },
-            {
-                id: 2,
-                text: "Yes, there is"
-            }
-        ]
-    }
+    if (!data) return null;
 
     return (
         <View style={getStyles(theme).container}>
-            <Question question={data} />
+            <Question question={data} setAnswered={setAnswered} setIdOptionSelected={setIdOptionSelected} answered={answered} />
             <Title />
             <View style={getStyles(theme).secondaryContainer}>
                 <Record

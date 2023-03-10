@@ -6,6 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import useTheme from '@hooks/useTheme';
 import React, { useState, useEffect } from 'react';
 import usePower from '@hooks/usePower';
+import { useDuringTaskContext } from '@hooks/useDuringTaskContext';
 
 import { Theme } from '@theme';
 
@@ -20,7 +21,8 @@ const Power = ({ powerProp, blockReRoll }: Props) => {
     const [description, setDescription] = useState('');
     const [image, setImage] = useState<any>(null);
     const { rollPower, data, error, loading } = usePower();
-    const [power, setPower] = useState<PowerEnum>(powerProp);
+    const { power, setPower } = useDuringTaskContext()
+    // const [power, setPower] = useState<PowerEnum>(powerProp);
 
 
     useEffect(() => {

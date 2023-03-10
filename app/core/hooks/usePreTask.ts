@@ -7,6 +7,25 @@ import { environment } from "@environments/environment";
 
 import { PreTask, getPreTaskParams } from '@interfaces/PreTask.interface';
 
+const getError = (status: number) => {
+    switch (status) {
+        case 400:
+            return 'Invalid task order';
+        case 401:
+            return 'Unauthorized';
+        case 403:
+            return 'Unauthorized';
+        case 404:
+            return 'Task not found';
+        case 498:
+            return 'Token expired';
+        case 500:
+            return 'Internal server error';
+        default:
+            return 'An error occurred';
+    }
+};
+
 const usePreTask = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -30,34 +49,9 @@ const usePreTask = () => {
             } else {
                 throw new Error(response.data);
             }
-        } catch (err) {
+        } catch (err: any) {
             setLoading(false);
-            switch ((err as any).response.status) {
-                case 400:
-                    setError('Invalid taskOrder | Invalid linkOrder');
-                    break;
-                case 401:
-                    setError('Missing authentication');
-                    break;
-                case 403:
-                    setError('Unauthorized to access this resource');
-                    break;
-                case 404:
-                    setError('Task not found');
-                    break;
-                case 410:
-                    setError('Endpoint deprecated');
-                    break;
-                case 498:
-                    setError('Invalid token');
-                    break;
-                case 500:
-                    setError('Internal server error');
-                    break;
-                default:
-                    setError('Un error ha ocurrido');
-                    break;
-            }
+            setError(getError(err.response.status));
         }
     }, []);
 
@@ -77,39 +71,17 @@ const usePreTask = () => {
             } else {
                 throw new Error(response.data);
             }
-        } catch (err) {
+        } catch (err: any) {
             setLoading(false);
-            switch ((err as any).response.status) {
-                case 400:
-                    setError('Invalid taskOrder | Invalid linkOrder');
-                    break;
-                case 401:
-                    setError('Missing authentication');
-                    break;
-                case 403:
-                    setError('Unauthorized to access this resource');
-                    break;
-                case 404:
-                    setError('Task not found');
-                    break;
-                case 498:
-                    setError('Invalid token');
-                    break;
-                case 500:
-                    setError('Internal server error');
-                    break;
-                default:
-                    setError('Un error ha ocurrido');
-                    break;
-            }
+            setError(getError(err.response.status));
             return 0;
         }
     }, []);
 
-    const setPreTaskFinished = useCallback(async (taskOrder: number) => {
+    const setPreTaskComplete = useCallback(async (inputs: { taskOrder: number }) => {
         setLoading(true);
         try {
-            const response = await axios.post(`${environment.apiUrl}/tasks/${taskOrder}/pretask/done`, {}, {
+            const response = await axios.post(`${environment.apiUrl}/tasks/${inputs.taskOrder}/pretask/complete`, {}, {
                 headers: {
                     Authorization: `Bearer ${await authStorage.getAccessToken()}`,
                 },
@@ -122,36 +94,14 @@ const usePreTask = () => {
             } else {
                 throw new Error(response.data);
             }
-        } catch (err) {
+        } catch (err: any) {
             setLoading(false);
-            switch ((err as any).response.status) {
-                case 400:
-                    setError('Invalid taskOrder | Invalid linkOrder');
-                    break;
-                case 401:
-                    setError('Missing authentication');
-                    break;
-                case 403:
-                    setError('Unauthorized to access this resource');
-                    break;
-                case 404:
-                    setError('Task not found');
-                    break;
-                case 498:
-                    setError('Invalid token');
-                    break;
-                case 500:
-                    setError('Internal server error');
-                    break;
-                default:
-                    setError('Un error ha ocurrido');
-                    break;
-            }
+            setError(getError(err.response.status));
         }
     }, []);
 
 
-    return { loading, error, data, getPreTask, getTotalNumberOfPreTasks, setPreTaskDone: setPreTaskFinished };
+    return { loading, error, data, getPreTask, getTotalNumberOfPreTasks, setPreTaskComplete };
 };
 
 export default usePreTask;

@@ -1,26 +1,35 @@
 import { View, Text, StyleSheet } from 'react-native'
 import Pressable from '@components/Pressable'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import useTheme from '@hooks/useTheme'
 
 import { Theme } from '@theme'
 
 interface Props {
     text: string
+    nounTranslation: string
 }
 
-const MemoryProView = ({ text }: Props) => {
-    const [isNounPressed, setIsNounPressed] = useState(false)
+const MemoryProView = ({ text, nounTranslation }: Props) => {
+    const [noun, setNoun] = useState('')
+    const [question, setQuestion] = useState(['', ''])
     const theme = useTheme()
 
     const textFiltered = text.replace(/[\[\]]/g, '')
     const matchResult = textFiltered.match(/{(.*?)}/g);
-    const noun = matchResult ? matchResult[0].replace(/[{}]/g, '') : '';
-    const question = matchResult ? textFiltered.split(matchResult[0]) : ''
+
+    useEffect(() => {
+        setNoun(matchResult ? matchResult[0].replace(/[{}]/g, '') : '')
+        setQuestion(matchResult ? textFiltered.split(matchResult[0]) : [''])
+    }, [])
 
     const handlePress = () => {
-        setIsNounPressed(!isNounPressed)
+        if (matchResult && noun === matchResult[0].replace(/[{}]/g, '')) {
+            setNoun(nounTranslation)
+        } else {
+            setNoun(matchResult ? matchResult[0].replace(/[{}]/g, '') : '')
+        }
     }
 
     return (
@@ -30,14 +39,6 @@ const MemoryProView = ({ text }: Props) => {
                 <Text style={getStyles(theme).noun}>
                     {noun}
                 </Text>
-                {
-                    isNounPressed
-                    && <View style={getStyles(theme).dialog}>
-                        <Text style={getStyles(theme).dialogtext}>Puente</Text>
-                        <View style={getStyles(theme).triangle} />
-                    </View>
-                }
-
             </Pressable>
             <Text style={getStyles(theme).text}>{question[1]}</Text>
         </View>
@@ -50,6 +51,7 @@ const getStyles = (theme: Theme) =>
             marginHorizontal: 20,
             flexDirection: 'row',
             marginTop: 10,
+            flexWrap: 'wrap',
         },
         text: {
             fontSize: theme.fontSize.xxl,
@@ -73,6 +75,9 @@ const getStyles = (theme: Theme) =>
             backgroundColor: theme.colors.gray,
             paddingHorizontal: 10,
             paddingVertical: 5,
+            textAlign: 'center',
+            justifyContent: 'center',
+            alignItems: 'center',
             ...theme.shadow,
             elevation: 15,
         },

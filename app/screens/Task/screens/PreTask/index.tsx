@@ -19,7 +19,7 @@ const PreTask = ({ route }: Props) => {
 
     const theme = useTheme();
     const navigation = useNavigation<any>();
-    const { loading, error, data, getPreTask, getTotalNumberOfPreTasks, setPreTaskDone } = usePreTask();
+    const { loading, error, data, getPreTask, getTotalNumberOfPreTasks, setPreTaskComplete } = usePreTask();
     const { setPhaseCompleted, setOnPressNext, setProgress, progress } = useTaskContext();
 
     const onRenderComplete = async () => {
@@ -27,11 +27,11 @@ const PreTask = ({ route }: Props) => {
         const numberOfPreTasks = await getTotalNumberOfPreTasks(taskOrder);
         setPhaseCompleted(true);
         setProgress(linkOrder / numberOfPreTasks);
-        setOnPressNext(() => () => {
+        setOnPressNext(() => async () => {
             if (linkOrder < numberOfPreTasks) {
                 navigation.navigate('PreTask', { taskOrder, linkOrder: linkOrder + 1 });
             } else {
-                setPreTaskDone(taskOrder);
+                await setPreTaskComplete({ taskOrder });
                 navigation.reset({
                     index: 0,
                     routes: [

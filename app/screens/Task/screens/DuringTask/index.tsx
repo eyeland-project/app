@@ -14,6 +14,7 @@ import WaitingBegin from "./screens/WaitingBegin";
 import Transition from "./screens/Transition";
 import Question from "./screens/Question";
 import FinalScore from "./screens/FinalScore";
+import { Power } from "@enums/Power.enum";
 
 interface Props {
     route: any
@@ -24,6 +25,7 @@ const Stack = createNativeStackNavigator();
 const DuringTask = ({ route }: Props) => {
     const authStorage = useAuthStorage();
     const [isSessionStarted, setIsSessionStarted] = useState(false);
+    const [power, setPower] = useState(Power.SuperRadar);
 
     const connectSocket = async () => {
         socket.connect();
@@ -50,7 +52,7 @@ const DuringTask = ({ route }: Props) => {
     }
 
     return (
-        <DuringTaskContext.Provider value={{ socket }}>
+        <DuringTaskContext.Provider value={{ socket, power, setPower }}>
             <Stack.Navigator>
                 {
                     !isSessionStarted
@@ -95,7 +97,7 @@ const DuringTask = ({ route }: Props) => {
                     }}
                     component={WaitingBegin}
                 />
-                <Stack.Screen
+                {/* <Stack.Screen
                     name="Transition"
                     options={{
                         ...optionsPrimary
@@ -104,7 +106,7 @@ const DuringTask = ({ route }: Props) => {
                         taskOrder: route.params.taskOrder,
                     }}
                     component={Transition}
-                />
+                /> */}
                 <Stack.Screen
                     name="Question"
                     options={{
@@ -112,10 +114,11 @@ const DuringTask = ({ route }: Props) => {
                     }}
                     initialParams={{
                         taskOrder: route.params.taskOrder,
+                        questionOrder: 0,
                     }}
                     component={Question}
                 />
-                <Stack.Screen
+                {/* <Stack.Screen
                     name="FinalScore"
                     options={{
                         ...optionsPrimary
@@ -124,7 +127,7 @@ const DuringTask = ({ route }: Props) => {
                         taskOrder: route.params.taskOrder,
                     }}
                     component={FinalScore}
-                />
+                /> */}
             </Stack.Navigator>
         </DuringTaskContext.Provider>
     )

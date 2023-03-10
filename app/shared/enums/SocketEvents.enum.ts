@@ -4,4 +4,5 @@ export enum SocketEvents {
     sessionTeacherEnd = "session:teacher:end",
     TeamsStudentUpdate = "teams:student:update",
     TeamStudentUpdate = "team:student:update",
+    teamStudentAnswer = "team:student:answer"
 }
