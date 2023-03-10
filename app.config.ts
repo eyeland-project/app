@@ -4,8 +4,16 @@ import { ExpoConfig } from "expo/config";
 // import { ExpoConfig } from '@expo/config-types';
 
 const config: ExpoConfig = {
-	name: "my-app",
-	slug: "my-app",
+	name: "Eyeland",
+	slug: "Eyeland",
+	icon: "./assets/icon.png",
+	backgroundColor: "#FFFFFF",
+	android: {
+		adaptiveIcon: {
+			backgroundColor: "#FFFFFF",
+			foregroundImage: "./assets/adaptive-icon.png"
+		}
+	}
 };
 
 export default config;
