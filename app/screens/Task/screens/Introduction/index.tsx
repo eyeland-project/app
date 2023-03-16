@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback } from 'react';
 
 import { View, StyleSheet, Image, ScrollView } from 'react-native'
 
@@ -15,6 +15,7 @@ import { useNavigation } from '@react-navigation/native';
 import useIntroduction from '@hooks/useIntroduction';
 import useProgress from '@hooks/useProgress';
 import useTaskContext from '@hooks/useTaskContext';
+import { useFocusEffect } from '@react-navigation/native';
 
 interface Props {
     route: any
@@ -27,13 +28,16 @@ const Introduction = ({ route }: Props) => {
     const navigation = useNavigation<any>();
     const { loading: loadingIntroduction, error: errorIntroduction, data: dataIntroduction, getIntroduction } = useIntroduction();
     const { loading: loadingProgress, error: errorProgress, data: dataProgress, getProgress } = useProgress();
-    const { resetContext } = useTaskContext();
+    const { resetContext, setIcon } = useTaskContext();
 
-    useEffect(() => {
-        getIntroduction({ taskOrder });
-        getProgress({ taskOrder });
-        resetContext();
-    }, []);
+    useFocusEffect(
+        useCallback(() => {
+            getIntroduction({ taskOrder });
+            getProgress({ taskOrder });
+            resetContext();
+            setIcon('home')
+        }, [])
+    );
 
     return (
         <View style={getStyles(theme).container}>
@@ -57,14 +61,12 @@ const Introduction = ({ route }: Props) => {
                             <Section
                                 title='During-Task'
                                 completed={dataProgress.duringtask.completed}
-                                // blocked={dataProgress.duringtask.blocked}
                                 blocked={dataProgress.duringtask.blocked}
                                 onPress={() => {
                                     navigation.navigate('DuringTask', { taskOrder, questionOrder: 1 });
                                 }} />
-                            <Section title='PosTask'
+                            <Section title='Post-Task'
                                 completed={dataProgress.postask.completed}
-                                // blocked={dataProgress.postask.blocked}
                                 blocked={dataProgress.postask.blocked}
                                 onPress={() => {
                                     navigation.navigate('PosTask', { taskOrder, questionOrder: 1 });
@@ -74,7 +76,7 @@ const Introduction = ({ route }: Props) => {
                         <Placeholder />
                     )
                 }
-
+                <View style={{ height: 80 }} />
             </ScrollView>
         </View>
     )
@@ -84,11 +86,10 @@ const getStyles = (theme: Theme) =>
     StyleSheet.create({
         container: {
             backgroundColor: theme.colors.primary,
-            height: '100%',
+            flex: 1,
         },
         scrollView: {
             backgroundColor: theme.colors.primary,
-            paddingBottom: 80,
         },
         text: {
             color: theme.colors.black,

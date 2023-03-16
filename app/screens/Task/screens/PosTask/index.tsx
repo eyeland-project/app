@@ -2,6 +2,7 @@ import { View, Text, StyleSheet } from 'react-native'
 import Record from './components/Record'
 import Question from './components/Question'
 import Title from './components/Title'
+import Placeholder from './components/Placeholder'
 
 import { useEffect, useState } from 'react'
 import useTheme from '@hooks/useTheme'
@@ -10,6 +11,7 @@ import { useNavigation } from '@react-navigation/native'
 import usePosTask from '@hooks/usePosTask'
 import usePosTaskQuestion from '@hooks/usePosTaskQuestion'
 import useTime from '@hooks/useTime'
+import useTaskContext from '@hooks/useTaskContext'
 
 import { Theme } from '@theme'
 
@@ -27,6 +29,8 @@ const PosTask = ({ route }: Props) => {
     const navigation = useNavigation<any>();
     const { data, loading, error, getPosTaskQuestion, sendPosTaskAnswer } = usePosTaskQuestion();
     const { startTimer, stopTimer, time } = useTime();
+    const { setIcon } = useTaskContext();
+    const { data: generalData, getPosTask } = usePosTask();
 
 
     const handleOnPress = () => {
@@ -43,17 +47,41 @@ const PosTask = ({ route }: Props) => {
     }
 
     useEffect(() => {
-        if (done) {
-            stopTimer();
-            sendPosTaskAnswer({ taskOrder, questionOrder, body: { answerSeconds: time, idOptions: idOptionSelected } })
-            navigation.push('PosTask', { taskOrder, questionOrder: questionOrder + 1 })
+        const sendAnswer = async () => {
+            if (done) {
+                stopTimer();
+
+                const [_, { numQuestions }] = await Promise.all([
+                    sendPosTaskAnswer({ taskOrder, questionOrder, body: { answerSeconds: time, idOptions: idOptionSelected } }),
+                    getPosTask({ taskOrder })
+                ])
+
+                if (questionOrder === numQuestions) {
+                    navigation.reset({
+                        index: 0,
+                        routes: [
+                            { name: 'Introduction', params: { taskOrder } },
+                        ]
+                    })
+                } else {
+                    navigation.pop(1)
+                    navigation.push('PosTask', { taskOrder, questionOrder: questionOrder + 1 })
+                }
+            }
         }
+
+        sendAnswer();
     }, [done])
 
     useEffect(() => {
-        getPosTaskQuestion({ taskOrder, questionOrder })
-        startTimer();
-    }, [])
+        const initQuestion = async () => {
+            await getPosTaskQuestion({ taskOrder, questionOrder })
+            startTimer();
+            setIcon('closecircle')
+        }
+
+        initQuestion();
+    }, [questionOrder])
 
     useEffect(() => {
         let intervalId: NodeJS.Timeout | null = null;
@@ -70,7 +98,7 @@ const PosTask = ({ route }: Props) => {
         }
     }, [recording]);
 
-    if (!data) return null;
+    if (!data) return <Placeholder />;
 
     return (
         <View style={getStyles(theme).container}>

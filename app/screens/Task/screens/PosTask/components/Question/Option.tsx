@@ -28,12 +28,15 @@ const Option = ({ content, correct, id, setAnswered, setIdOptionSelected, answer
     return (
         <Pressable style={getStyles(theme, selected, rigth).option} onPress={
             () => {
-                if (!answered) setSelected(true)
+                if (!answered) {
+                    setSelected(true)
+                    setIdOptionSelected(id)
+                }
+
                 if (correct) {
                     playSuccessSound()
-                    setAnswered(true)
                     setRigth(true)
-                    setIdOptionSelected(id)
+                    setAnswered(true)
                 } else {
                     playWrongSound()
                 }

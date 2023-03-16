@@ -1,12 +1,8 @@
-import { View, Text, StyleSheet } from 'react-native'
 import MemoryProView from './MemoryProView'
 import SuperRadarView from './SuperRadarView'
 import SuperHearing from './SuperHearing'
 import DefaultView from './DefaultView'
 
-import useTheme from '@hooks/useTheme'
-
-import { Theme } from '@theme'
 import { Power } from '@enums/Power.enum'
 
 interface Props {
@@ -17,8 +13,6 @@ interface Props {
 }
 
 const Query = ({ text, power, nounTranslation, prepositionTranslation }: Props) => {
-    const theme = useTheme()
-
     switch (power) {
         case Power.MemoryPro:
             return <MemoryProView text={text} nounTranslation={nounTranslation} />
@@ -27,18 +21,11 @@ const Query = ({ text, power, nounTranslation, prepositionTranslation }: Props) 
             return <SuperRadarView text={text} prepositionTranslation={prepositionTranslation} />
 
         case Power.SuperHearing:
-            return <SuperHearing />
+            return <SuperHearing text={text} />
 
         default:
             return <DefaultView />
     }
 }
-
-const getStyles = (theme: Theme) =>
-    StyleSheet.create({
-        container: {
-        }
-    })
-
 
 export default Query

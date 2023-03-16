@@ -34,13 +34,13 @@ const SuperRadarView = ({ text, prepositionTranslation }: Props) => {
 
     return (
         <View style={getStyles(theme).container}>
-            <Text style={getStyles(theme).text}>{question[0]}</Text>
-            <Pressable style={getStyles(theme).nounContainer} onPress={handlePress}>
-                <Text style={getStyles(theme).prepostion}>
+            <Text style={getStyles(theme).text}>
+                {question[0]}
+                <Text style={getStyles(theme).prepostion} onPress={handlePress}>
                     {preposition}
                 </Text>
-            </Pressable>
-            <Text style={getStyles(theme).text}>{question[1]}</Text>
+                {question[1]}
+            </Text>
         </View>
     )
 }

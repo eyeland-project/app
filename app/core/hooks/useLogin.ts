@@ -17,6 +17,7 @@ const useLogin = () => {
     const [data, setData] = useState<Login | null>(null);
 
     const login = useCallback(async (inputs: Login) => {
+        setError(null);
         setLoading(true);
         try {
             const response = await axios.post(`${environment.apiUrl}/login`, {

@@ -19,15 +19,16 @@ interface TaskProps {
 	description: string;
 	name: string;
 	image?: any;
+	blocked: boolean;
 }
 
-const Task = ({ id, order, name, description, image }: TaskProps) => {
+const Task = ({ id, order, name, description, image, blocked }: TaskProps) => {
 	const theme = useTheme();
 	const navigation = useNavigation<any>();
 	return (
 		<View style={getStyles(theme).card}>
 			<ImageBackground
-				source={image}
+				source={!blocked && image}
 			>
 				<LinearGradient
 					colors={[
@@ -43,9 +44,13 @@ const Task = ({ id, order, name, description, image }: TaskProps) => {
 					<Button
 						text="Comenzar"
 						onPress={() => navigation.navigate("Task", { taskOrder: order })}
+						disabled={blocked}
 					/>
 				</View>
 			</ImageBackground>
+			{
+				blocked && <View style={getStyles(theme).blockedOverlay} />
+			}
 		</View>
 	);
 };
@@ -57,6 +62,7 @@ const getStyles = (theme: Theme) =>
 			borderRadius: theme.borderRadius.medium,
 			overflow: "hidden",
 			marginHorizontal: 20,
+			position: "relative",
 			...theme.shadow,
 		},
 		container: {
@@ -70,6 +76,13 @@ const getStyles = (theme: Theme) =>
 			top: 0,
 			height: "100%",
 			width: "100%",
+		},
+		blockedOverlay: {
+			height: "100%",
+			width: "100%",
+			backgroundColor: theme.colors.white,
+			opacity: 0.8,
+			position: "absolute",
 		}
 	});
 

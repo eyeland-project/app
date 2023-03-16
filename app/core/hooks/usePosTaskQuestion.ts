@@ -62,7 +62,6 @@ const usePosTaskQuestion = () => {
             });
 
             if (response.status === 200) {
-                setData(response.data);
                 return response.data;
             } else {
                 throw new Error(response.data);

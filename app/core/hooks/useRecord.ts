@@ -37,7 +37,7 @@ const useRecord = () => {
         });
         setFinished(true);
         setRecording(undefined);
-        if (recording?._finalDurationMillis && recording?._finalDurationMillis >= 20000) {
+        if (recording?._finalDurationMillis && recording?._finalDurationMillis >= 5000) {
             setDone(true);
             playSoundSuccessRecording();
             const uri = (recording as Audio.Recording).getURI();
@@ -45,6 +45,9 @@ const useRecord = () => {
             return uri;
         } else {
             playSoundFailRecording();
+            setTimeout(() => {
+                setFinished(false);
+            }, 1500);
         }
     }
 

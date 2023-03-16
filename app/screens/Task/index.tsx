@@ -13,7 +13,7 @@ const Stack = createNativeStackNavigator();
 
 const Task = ({ route }: { route: any }) => {
     const { taskOrder } = route.params;
-    const { phaseCompleted, onPressNext, progress, setPhaseCompleted } = useTaskContext();
+    const { phaseCompleted, onPressNext, progress, setPhaseCompleted, icon } = useTaskContext();
 
     const optionsPrimary: NativeStackNavigationOptions = {
         animation: "slide_from_right",
@@ -24,59 +24,55 @@ const Task = ({ route }: { route: any }) => {
         header: () => <Header progress={progress} showNext={phaseCompleted} onPress={() => {
             setPhaseCompleted(false);
             onPressNext();
-        }} icon="closecircle" />
+        }} icon={icon} />
     }
 
     return (
-        <>
-
-            {/* TODO - Change this later */}
-            <Stack.Navigator>
-                <Stack.Screen
-                    name="Introduction"
-                    options={{
-                        ...optionsPrimary,
-                    }}
-                    initialParams={{
-                        taskOrder: taskOrder,
-                    }}
-                    component={Introduction}
-                />
-                <Stack.Screen
-                    name="PreTask"
-                    options={{
-                        ...optionsPrimary
-                    }}
-                    initialParams={{
-                        taskOrder: taskOrder,
-                        linkOrder: 0,
-                    }}
-                    component={PreTask}
-                />
-                <Stack.Screen
-                    name="DuringTask"
-                    options={{
-                        ...optionsPrimary,
-                        headerShown: false
-                    }}
-                    initialParams={{
-                        taskOrder: taskOrder,
-                    }}
-                    component={DuringTask}
-                />
-                <Stack.Screen
-                    name="PosTask"
-                    options={{
-                        ...optionsPrimary
-                    }}
-                    initialParams={{
-                        taskOrder: taskOrder,
-                        questionOrder: 1,
-                    }}
-                    component={PosTask}
-                />
-            </Stack.Navigator>
-        </>
+        <Stack.Navigator>
+            <Stack.Screen
+                name="Introduction"
+                options={{
+                    ...optionsPrimary,
+                }}
+                initialParams={{
+                    taskOrder: taskOrder,
+                }}
+                component={Introduction}
+            />
+            <Stack.Screen
+                name="PreTask"
+                options={{
+                    ...optionsPrimary
+                }}
+                initialParams={{
+                    taskOrder: taskOrder,
+                    linkOrder: 0,
+                }}
+                component={PreTask}
+            />
+            <Stack.Screen
+                name="DuringTask"
+                options={{
+                    ...optionsPrimary,
+                    headerShown: false
+                }}
+                initialParams={{
+                    taskOrder: taskOrder,
+                }}
+                component={DuringTask}
+            />
+            <Stack.Screen
+                name="PosTask"
+                options={{
+                    ...optionsPrimary
+                }}
+                initialParams={{
+                    taskOrder: taskOrder,
+                    questionOrder: 1,
+                }}
+                component={PosTask}
+            />
+        </Stack.Navigator>
     )
 }
 
