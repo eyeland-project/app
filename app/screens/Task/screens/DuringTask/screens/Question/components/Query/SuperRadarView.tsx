@@ -32,6 +32,8 @@ const SuperRadarView = ({ text, prepositionTranslation }: Props) => {
         }
     }
 
+    console.log(text, matchResult, question)
+
     return (
         <View style={getStyles(theme).container}>
             <Text style={getStyles(theme).text}>

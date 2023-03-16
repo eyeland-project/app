@@ -49,7 +49,7 @@ const Introduction = ({ route }: Props) => {
 
                             <Title text={dataIntroduction.name} />
                             <Keywords keywords={dataIntroduction.keywords} />
-                            <Image source={{ uri: dataIntroduction.thumbnailUrl }} style={getStyles(theme).image} />
+                            <Image source={{ uri: dataIntroduction.thumbnailUrl }} style={getStyles(theme).image} alt={dataIntroduction.thumbnailAlt} />
                             <Description text={dataIntroduction.longDescription} />
                             <Section
                                 title='Pre-Task'

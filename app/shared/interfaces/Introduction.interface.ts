@@ -1,9 +1,10 @@
 export interface Introduction {
-    idTask: number;
+    id: number;
     name: string;
     description: string;
-    thumbnailUrl: string;
     taskOrder: number;
+    thumbnailUrl: string;
+    thumbnailAlt: string;
     keywords: string[];
     longDescription: string;
 }

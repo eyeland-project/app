@@ -17,17 +17,25 @@ const Section = ({ title, completed, blocked, onPress }: Props) => {
     const theme = useTheme();
 
     return (
-        <View style={getStyles(theme, completed, blocked).container}>
+        <View
+            style={getStyles(theme, completed, blocked).container}
+            accessible={true}
+            accessibilityLabel={`${title}. ${completed ? 'Completado' : 'No completado'}. ${blocked ? 'Bloqueado' : 'Disponible'}`}
+            accessibilityHint={`${blocked ? 'Esta sección está bloqueada.' : 'Presione el boton de continuar para iniciar.'}`}
+        >
             <Text style={getStyles(theme, completed, blocked).text}>{title}</Text>
             <Pressable
                 onPress={onPress}
                 style={getStyles(theme, completed, blocked).button}
                 disabled={blocked}
+                accessibilityRole="button"
+                accessibilityLabel={completed ? "Reiniciar sección" : "Continuar sección"}
             >
                 <AntDesign
                     name={completed ? 'reload1' : "arrowright"}
                     size={20}
                     color={theme.colors.white}
+                    accessible={false}
                 />
             </Pressable>
         </View>

@@ -61,17 +61,17 @@ const Home = () => {
 							stickyHeaderIndices={[0]}
 							stickyHeaderHiddenOnScroll={true}
 							// TODO - Remove the slice
-							data={tasks.slice(0, 2)}
+							data={tasks}
 							renderItem={({ item, index }) => (
 								<>
 									{index === 0 && <View style={{ marginVertical: 5 }} />}
 									<Task
-										id={item.idTask}
+										id={item.id}
 										name={item.name}
 										order={item.taskOrder}
 										description={item.description}
 										image={{ uri: item.thumbnailUrl }}
-										blocked={item.blocked}
+										blocked={item.blocked || item.comingSoon}
 									/>
 								</>
 							)}
@@ -89,6 +89,7 @@ const getStyles = (theme: Theme) =>
 	StyleSheet.create({
 		container: {
 			backgroundColor: theme.colors.primary,
+			height: "100%",
 		},
 		separator: {
 			height: 20,

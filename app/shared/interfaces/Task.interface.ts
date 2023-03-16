@@ -1,8 +1,11 @@
 export interface Task {
-    idTask: number;
+    id: number;
     name: string;
     description: string;
-    thumbnailUrl: string;
     taskOrder: number;
     completed: boolean;
+    blocked: boolean;
+    comingSoon: boolean;
+    thumbnailUrl: string;
+    thumbnailAlt: string;
 }

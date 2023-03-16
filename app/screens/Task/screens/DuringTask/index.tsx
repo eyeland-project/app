@@ -15,6 +15,8 @@ import Transition from "./screens/Transition";
 import Question from "./screens/Question";
 import FinalScore from "./screens/FinalScore";
 import { Power } from "@enums/Power.enum";
+import { SocketEvents } from "@enums/SocketEvents.enum";
+import { useNavigation } from "@react-navigation/native";
 
 interface Props {
     route: any
@@ -26,6 +28,7 @@ const DuringTask = ({ route }: Props) => {
     const authStorage = useAuthStorage();
     const [isSessionStarted, setIsSessionStarted] = useState(false);
     const [power, setPower] = useState(Power.SuperRadar);
+    const navigation = useNavigation<any>();
 
     const connectSocket = async () => {
         socket.connect();
@@ -36,6 +39,11 @@ const DuringTask = ({ route }: Props) => {
 
     useEffect(() => {
         connectSocket();
+
+        socket.once(SocketEvents.sessionTeacherEnd, () => {
+            navigation.navigate("Introduction", { taskOrder: route.params.taskOrder });
+        })
+
         return () => {
             socket.disconnect();
         };

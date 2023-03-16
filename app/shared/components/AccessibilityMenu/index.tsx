@@ -1,6 +1,6 @@
-import { View, StyleSheet, Image, Dimensions } from 'react-native'
+import { View, StyleSheet, Image, Dimensions, AccessibilityInfo, findNodeHandle } from 'react-native'
 import Pressable from '@components/Pressable'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 import Options from './Options'
 
@@ -25,8 +25,12 @@ const Accessibility = () => {
                 }
                 <Pressable
                     onPress={() => setShowOptions(!showOptions)}
+                    accessible={true}
+                    accessibilityLabel="Opciones de accesibilidad"
+                    accessibilityHint="Alternar funciones accesibles"
+                    accessibilityRole="button"
                 >
-                    <Image style={getStyles(theme).image} source={require('@icons/accessibility.png')} />
+                    <Image style={getStyles(theme).image} source={require('@icons/accessibility.png')} resizeMode="contain" />
                 </Pressable>
             </View>
         </>
@@ -38,7 +42,7 @@ const getStyles = (theme: Theme) => StyleSheet.create({
         position: 'absolute',
         height: Dimensions.get('window').height,
         width: Dimensions.get('window').width,
-        backgroundColor: 'trasparent',
+        backgroundColor: 'transparent',
         bottom: 0,
     },
     container: {
