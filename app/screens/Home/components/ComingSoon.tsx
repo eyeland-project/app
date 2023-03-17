@@ -7,12 +7,20 @@ const ComingSoon = () => {
 	const theme = useTheme();
 
 	return (
-		<View style={getStyles(theme).container}>
+		<View
+			style={getStyles(theme).container}
+			accessible={true}
+			accessibilityLabel="Muy pronto"
+			accessibilityHint="Esta característica estará disponible en breve"
+		>
 			<Image
 				source={require("@images/comingSoon.png")}
 				style={getStyles(theme).image}
+				accessible={false}
 			/>
-			<Text style={getStyles(theme).text}>Coming soon...</Text>
+			<Text style={getStyles(theme).text} accessible={false}>
+				Muy pronto...
+			</Text>
 		</View>
 	);
 };

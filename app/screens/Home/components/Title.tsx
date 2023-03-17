@@ -18,20 +18,27 @@ const Title = ({ text }: TitleProps) => {
     const navigation = useNavigation<any>()
 
     return (
-        <View style={getStyles(theme).container}>
-            <Text style={getStyles(theme).text}>{text}</Text>
-            <Pressable onPress={() => {
-                authStorage.removeAccessToken()
-                navigation.reset({
-                    index: 0,
-                    routes: [{ name: 'Login' }],
-                })
-            }}>
-                <MaterialCommunityIcons name="logout" size={30} color={theme.colors.secondary} />
+        <View style={getStyles(theme).container} accessible={true} accessibilityLabel={`Titulo y boton para cerrar sesión`} accessibilityRole="header">
+            <Text style={getStyles(theme).text} accessible={false}>{text}</Text>
+            <Pressable
+                onPress={() => {
+                    authStorage.removeAccessToken()
+                    navigation.reset({
+                        index: 0,
+                        routes: [{ name: 'Login' }],
+                    })
+                }}
+                accessible={true}
+                accessibilityLabel="Cerrar sesión"
+                accessibilityHint="Presiona para cerrar sesión"
+                accessibilityRole="button"
+            >
+                <MaterialCommunityIcons name="logout" size={30} color={theme.colors.secondary} accessible={false} />
             </Pressable>
         </View>
     )
 }
+
 
 const getStyles = (theme: Theme) =>
     StyleSheet.create({
@@ -50,8 +57,5 @@ const getStyles = (theme: Theme) =>
 
         },
     })
-
-
-
 
 export default Title

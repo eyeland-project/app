@@ -8,9 +8,10 @@ import usePlaySound from '@hooks/usePlaySound'
 
 interface Props {
     onPress: () => void
+    accessibilityLabel?: string
 }
 
-const ContinueButton = ({ onPress }: Props) => {
+const ContinueButton = ({ onPress, accessibilityLabel }: Props) => {
     const theme = useTheme()
     const scaleValue = new Animated.Value(1)
     const playSound = usePlaySound(require('@assets/sounds/success.wav'))
@@ -38,7 +39,9 @@ const ContinueButton = ({ onPress }: Props) => {
         <Pressable
             onPress={() => {
                 scaleButton()
-            }}>
+            }}
+            accessibilityLabel={accessibilityLabel}
+        >
             <Animated.View style={{ transform: [{ scale: scaleValue }] }}>
                 <Text style={getStyles(theme).text}>Siguiente</Text>
             </Animated.View>

@@ -7,7 +7,6 @@ interface Props extends PressableProps {
     onPress?: ((event: GestureResponderEvent) => void) | null | undefined
 }
 
-
 const Pressable = ({ onPress, ...props }: Props) => {
     const playSound = usePlaySound(require('@sounds/tap.wav'))
 

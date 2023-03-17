@@ -57,32 +57,40 @@ const Power = ({ powerProp, blockReRoll }: Props) => {
     }
 
     return (
-        <View style={getStyles(theme).container}>
+        <View
+            style={getStyles(theme).container}
+            accessible
+            accessibilityLabel={`Tu superpoder es ${title}. ${description}.`}
+        >
             <View style={getStyles(theme).imageContainer}>
-                <Image source={image} style={getStyles(theme).image} />
+                <Image
+                    source={image}
+                    style={getStyles(theme).image}
+                    accessible
+                    accessibilityLabel={`Imagen del superpoder ${title}`}
+                />
             </View>
             <View style={getStyles(theme).textContainer}>
                 <Text style={getStyles(theme).title}>{title}</Text>
                 <Text style={getStyles(theme).description}>{description}</Text>
             </View>
-            {
-                !blockReRoll &&
-                <Pressable onPress={handleOnPress}>
+            {!blockReRoll && (
+                <Pressable onPress={handleOnPress} accessibilityLabel="Recargar superpoder">
                     <View style={getStyles(theme).iconContainer}>
                         {loading ? (
                             <ActivityIndicator color={theme.colors.primary} />
                         ) : (
                             <Ionicons
-                                name={"reload"}
+                                name={'reload'}
                                 size={26}
                                 color={theme.colors.primary}
                             />
                         )}
                     </View>
                 </Pressable>
-            }
+            )}
         </View>
-    )
+    );
 }
 
 const getStyles = (theme: Theme) =>

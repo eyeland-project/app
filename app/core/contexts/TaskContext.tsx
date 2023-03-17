@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction, createContext, useState } from 'react';
+import AntDesign from '@expo/vector-icons/AntDesign'
 
 interface TaskContextProps {
     progress?: number;
@@ -8,6 +9,8 @@ interface TaskContextProps {
     onPressNext: () => void;
     setOnPressNext: Dispatch<SetStateAction<() => void>>;
     resetContext: () => void;
+    icon?: keyof typeof AntDesign.glyphMap;
+    setIcon: Dispatch<SetStateAction<keyof typeof AntDesign.glyphMap>>;
 }
 
 const TaskContext = createContext<TaskContextProps | null>(null);
@@ -16,6 +19,7 @@ const TaskProvider = ({ children }: { children: React.ReactNode }) => {
     const [progress, setProgress] = useState<number | undefined>(undefined);
     const [phaseCompleted, setPhaseCompleted] = useState(false);
     const [onPressNext, setOnPressNext] = useState<() => void>(() => () => { });
+    const [icon, setIcon] = useState<keyof typeof AntDesign.glyphMap>('closecircle');
 
     const resetContext = () => {
         setProgress(undefined);
@@ -24,7 +28,7 @@ const TaskProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     return (
-        <TaskContext.Provider value={{ progress, setProgress, phaseCompleted, setPhaseCompleted, onPressNext, setOnPressNext, resetContext }}>
+        <TaskContext.Provider value={{ progress, setProgress, phaseCompleted, setPhaseCompleted, onPressNext, setOnPressNext, resetContext, icon, setIcon }}>
             {children}
         </TaskContext.Provider>
     );

@@ -13,6 +13,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import { Theme } from '@theme'
 import { SocketEvents } from '@enums/SocketEvents.enum';
+import { Power as PowerEnum } from '@enums/Power.enum';
 
 interface Props {
     route: any
@@ -28,8 +29,11 @@ const WaitingBegin = ({ route }: Props) => {
 
     const init = async () => {
         await getMyTeam()
-        if (data) setPower(data.myPower)
     }
+
+    useEffect(() => {
+        if (data) setPower(data.myPower)
+    }, [data])
 
     useEffect(() => {
         resetContext()
@@ -39,33 +43,74 @@ const WaitingBegin = ({ route }: Props) => {
             navigation.navigate('Question', { taskOrder, questionOrder: 1 })
         })
 
+        socket.on(SocketEvents.TeamStudentUpdate, (data: { power: PowerEnum }) => {
+            setPower(data.power)
+        })
+
         return () => {
             socket.off(SocketEvents.sessionTeacherStart)
+            socket.off(SocketEvents.TeamStudentUpdate)
         }
     }, [])
 
+    if (!data || loading) return null
+
     return (
-        <View style={getStyles(theme).container}>
-            {
-                !loading && data
-                    ? <>
-                        <Title text={data.name} />
-                        <Text style={getStyles(theme).title}>Instrucciones</Text>
-                        <Text style={getStyles(theme).description}>Avanza respondiendo a las preguntas que te haga el guía turístico en cada parada obligada.</Text>
-                        <Text style={getStyles(theme).title}>Tu super poder es</Text>
-                        <Power powerProp={power} blockReRoll={data.students.length >= 3} />
-                        <LottieView
-                            source={require('@animations/waitingBegin.json')}
-                            autoPlay
-                            loop
-                            style={getStyles(theme).animation}
-                        />
-                        <Text style={getStyles(theme).waitingText}>Espera a que tu profesor de comienzo a la actividad...</Text>
-                    </>
-                    : <Placeholder />
-            }
+        <View
+            style={getStyles(theme).container}
+            accessible
+            accessibilityLabel="Pantalla de espera para comenzar la actividad"
+        >
+            {!loading && data ? (
+                <>
+                    <Title text={data.name} />
+                    <Text
+                        style={getStyles(theme).title}
+                        accessible
+                        accessibilityRole="header"
+                        accessibilityLabel="Instrucciones"
+                    >
+                        Instrucciones
+                    </Text>
+                    <Text
+                        style={getStyles(theme).description}
+                        accessible
+                        accessibilityLabel="Avanza respondiendo a las preguntas que te haga el guía turístico en cada parada obligada."
+                    >
+                        Avanza respondiendo a las preguntas que te haga el guía turístico en
+                        cada parada obligada.
+                    </Text>
+                    <Text
+                        style={getStyles(theme).title}
+                        accessible
+                        accessibilityRole="header"
+                        accessibilityLabel="Tu super poder es"
+                    >
+                        Tu super poder es
+                    </Text>
+                    <Power
+                        powerProp={power}
+                        blockReRoll={data.students.length >= 3}
+                    />
+                    <LottieView
+                        source={require('@animations/waitingBegin.json')}
+                        autoPlay
+                        loop
+                        style={getStyles(theme).animation}
+                    />
+                    <Text
+                        style={getStyles(theme).waitingText}
+                        accessible
+                        accessibilityLabel="Espera a que tu profesor de comienzo a la actividad..."
+                    >
+                        Espera a que tu profesor de comienzo a la actividad...
+                    </Text>
+                </>
+            ) : (
+                <Placeholder />
+            )}
         </View>
-    )
+    );
 }
 
 const getStyles = (theme: Theme) =>

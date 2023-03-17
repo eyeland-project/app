@@ -8,9 +8,10 @@ import useTaskContext from '@hooks/useTaskContext'
 
 interface Props {
     icon?: keyof typeof AntDesign.glyphMap;
+    accessibilityLabel?: string;
 }
 
-const BackButton = ({ icon }: Props) => {
+const BackButton = ({ icon, accessibilityLabel }: Props) => {
     const navigation = useNavigation()
     const theme = useTheme()
     const { resetContext } = useTaskContext()
@@ -40,7 +41,9 @@ const BackButton = ({ icon }: Props) => {
             onPress={() => {
                 scaleButton()
             }}
-            style={{ padding: 4 }}>
+            style={{ padding: 6 }}
+            accessibilityLabel={accessibilityLabel}
+        >
             <Animated.View style={{ transform: [{ scale: scaleValue }] }}>
                 <AntDesign
                     name={icon ? icon : "back"}

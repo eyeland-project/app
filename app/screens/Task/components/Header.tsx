@@ -46,7 +46,10 @@ const Header = ({ progress, showNext, icon, onPress }: Props) => {
 
     return (
         <View style={getStyles(theme).row}>
-            <HomeButton icon={icon} />
+            <HomeButton
+                icon={icon}
+                accessibilityLabel="Volver al inicio"
+            />
             {
                 progress && onPress
                     ? (
@@ -54,7 +57,11 @@ const Header = ({ progress, showNext, icon, onPress }: Props) => {
                             <Progress.Bar progress={progress} width={null} height={5} color={theme.colors.secondary} style={{ flex: 1, marginHorizontal: 20 }} />
                             <Animated.View style={{ opacity: continueOpacity, transform: [{ translateX: continueTranslateX }] }}>
                                 {
-                                    showNext && <ContinueButton onPress={onPress} />
+                                    showNext &&
+                                    <ContinueButton
+                                        onPress={onPress}
+                                        accessibilityLabel="Continuar"
+                                    />
                                 }
                             </Animated.View>
                         </>

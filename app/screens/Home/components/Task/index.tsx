@@ -19,15 +19,22 @@ interface TaskProps {
 	description: string;
 	name: string;
 	image?: any;
+	blocked: boolean;
 }
 
-const Task = ({ id, order, name, description, image }: TaskProps) => {
+const Task = ({ id, order, name, description, image, blocked }: TaskProps) => {
 	const theme = useTheme();
 	const navigation = useNavigation<any>();
 	return (
-		<View style={getStyles(theme).card}>
+		<View
+			style={getStyles(theme).card}
+			accessible={true}
+			accessibilityLabel={`${order}. ${name}. ${description}. ${blocked ? "Bloqueado" : "Disponible"}`}
+			accessibilityHint={`${blocked ? "Esta tarea está bloqueada." : "Presione el boton de comenzar para iniciar la tarea."}`}
+		>
 			<ImageBackground
 				source={image}
+				accessible={false}
 			>
 				<LinearGradient
 					colors={[
@@ -36,6 +43,7 @@ const Task = ({ id, order, name, description, image }: TaskProps) => {
 					style={getStyles(theme).gradient}
 					start={[1, 1]}
 					end={[0, 1]}
+					accessible={false}
 				/>
 				<View style={getStyles(theme).container}>
 					<Title name={order + ". " + name} />
@@ -43,9 +51,14 @@ const Task = ({ id, order, name, description, image }: TaskProps) => {
 					<Button
 						text="Comenzar"
 						onPress={() => navigation.navigate("Task", { taskOrder: order })}
+						disabled={blocked}
+						accessible={false}
 					/>
 				</View>
 			</ImageBackground>
+			{
+				blocked && <View style={getStyles(theme).blockedOverlay} accessible={false} />
+			}
 		</View>
 	);
 };
@@ -57,6 +70,7 @@ const getStyles = (theme: Theme) =>
 			borderRadius: theme.borderRadius.medium,
 			overflow: "hidden",
 			marginHorizontal: 20,
+			position: "relative",
 			...theme.shadow,
 		},
 		container: {
@@ -70,6 +84,13 @@ const getStyles = (theme: Theme) =>
 			top: 0,
 			height: "100%",
 			width: "100%",
+		},
+		blockedOverlay: {
+			height: "100%",
+			width: "100%",
+			backgroundColor: theme.colors.white,
+			opacity: 0.8,
+			position: "absolute",
 		}
 	});
 

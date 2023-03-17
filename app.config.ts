@@ -7,11 +7,16 @@ const config: ExpoConfig = {
 	name: "Eyeland",
 	slug: "Eyeland",
 	icon: "./assets/icon.png",
-	backgroundColor: "#FFFFFF",
+	backgroundColor: "#43FB9B",
+	splash: {
+		image: "./assets/splash.png",
+		resizeMode: "contain",
+		backgroundColor: "#FFFFFF"
+	},
 	android: {
 		package: "com.eyeland",
 		adaptiveIcon: {
-			backgroundColor: "#FFFFFF",
+			backgroundColor: "#43FB9B",
 			foregroundImage: "./assets/adaptive-icon.png"
 		}
 	},

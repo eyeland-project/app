@@ -21,7 +21,8 @@ const MemoryProView = ({ text, nounTranslation }: Props) => {
 
     useEffect(() => {
         setNoun(matchResult ? matchResult[0].replace(/[{}]/g, '') : '')
-        setQuestion(matchResult ? textFiltered.split(matchResult[0]) : [''])
+        setQuestion(matchResult ? textFiltered.split(matchResult[0]) : [textFiltered])
+        console.log(textFiltered)
     }, [])
 
     const handlePress = () => {
@@ -34,13 +35,13 @@ const MemoryProView = ({ text, nounTranslation }: Props) => {
 
     return (
         <View style={getStyles(theme).container}>
-            <Text style={getStyles(theme).text}>{question[0]}</Text>
-            <Pressable style={getStyles(theme).nounContainer} onPress={handlePress}>
-                <Text style={getStyles(theme).noun}>
+            <Text style={getStyles(theme).text}>
+                {question[0]}
+                <Text style={getStyles(theme).noun} onPress={handlePress}>
                     {noun}
                 </Text>
-            </Pressable>
-            <Text style={getStyles(theme).text}>{question[1]}</Text>
+                {question[1]}
+            </Text>
         </View>
     )
 }

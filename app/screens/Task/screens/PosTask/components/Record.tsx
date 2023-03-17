@@ -18,7 +18,6 @@ interface Props {
     onPress: () => void
 }
 
-
 const Record = ({ blocked, recording, done, finished, onPress }: Props) => {
     const theme = useTheme()
 
@@ -45,17 +44,31 @@ const Record = ({ blocked, recording, done, finished, onPress }: Props) => {
         }
     }, [recording, scaleValue]);
 
+    const getAccessibilityLabel = () => {
+        if (blocked) return 'Debes contestar la pregunta primero';
+        if (recording) return 'Detener grabación';
+        if (done) return 'Grabación completada';
+        if (finished) return 'Finalizado';
+        return 'Iniciar grabación';
+    }
+
     return (
         <Animated.View style={[getStyles(theme, blocked).containerPulse, { transform: [{ scale: scaleValue }] }]}>
-            <Pressable style={getStyles(theme, blocked).container} onPress={() => {
-                blocked
-                    ? ToastAndroid.show("¡Debes contestar la pregunta primero!", ToastAndroid.SHORT)
-                    : onPress()
-            }}>
+            <Pressable
+                style={getStyles(theme, blocked).container}
+                onPress={() => {
+                    blocked
+                        ? ToastAndroid.show("¡Debes contestar la pregunta primero!", ToastAndroid.SHORT)
+                        : onPress()
+                }}
+                accessibilityLabel={getAccessibilityLabel()}
+                accessibilityRole="button"
+            >
                 <FontAwesome5
                     name={blocked ? 'microphone-slash' : recording ? 'stop' : done ? 'check' : finished ? 'exclamation' : 'microphone'}
                     size={70}
-                    color={blocked ? 'gray' : 'white'} />
+                    color={blocked ? 'gray' : 'white'}
+                    accessible={false} />
             </Pressable>
         </Animated.View>
     )
@@ -82,7 +95,5 @@ const getStyles = (theme: Theme, blocked: boolean) =>
             ...theme.shadow
         },
     })
-
-
 
 export default Record

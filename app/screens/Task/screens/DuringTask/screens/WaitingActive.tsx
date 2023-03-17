@@ -33,12 +33,24 @@ const WaitingActive = ({ route }: { route: any }) => {
                 loop
                 style={getStyles(theme).animation}
             />
-            <Text style={getStyles(theme).text}>Espera que tu profesor active la During-Task para comenzar.</Text>
-            <Link to={{ screen: 'Introduction', params: { taskOrder: taskOrder } }} style={getStyles(theme).link}>
+            <Text
+                style={getStyles(theme).text}
+                accessible
+                accessibilityLabel="Espera que tu profesor active la During-Task para comenzar."
+            >
+                Espera que tu profesor active la During-Task para comenzar.
+            </Text>
+            <Link
+                to={{ screen: 'Introduction', params: { taskOrder: taskOrder } }}
+                style={getStyles(theme).link}
+                accessible
+                accessibilityLabel="Volver a la lista de tareas"
+                accessibilityHint="Presiona dos veces para volver a la lista de tareas."
+            >
                 <Text style={getStyles(theme).linkText}>Volver a la lista de tareas</Text>
             </Link>
         </View>
-    )
+    );
 }
 
 const getStyles = (theme: Theme) =>

@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, AccessibilityInfo } from 'react-native'
 import { FontAwesome5 } from '@expo/vector-icons';
 import Pressable from '@components/Pressable';
 
@@ -11,21 +11,29 @@ const Title = () => {
     const theme = useTheme()
     const [open, setOpen] = useState(false)
 
+    const toggleDialog = () => {
+        AccessibilityInfo.announceForAccessibility('Grábate diciendo la pregunta y su correspondiente respuesta. Recuerda: El audio debe durar más de 20 segundos');
+        setOpen(!open);
+    }
+
     return (
         <View style={getStyles(theme).titleContainer}>
-            <Text style={getStyles(theme).title}>
+            <Text style={getStyles(theme).title} accessibilityLabel="Grabación">
                 Grabación
             </Text>
-            <Pressable onPress={() => setOpen(!open)}>
+            <Pressable onPress={toggleDialog} accessibilityLabel="Intrucciones" accessibilityHint='Doble click para conocer las instrucciones para la grabación'>
                 <FontAwesome5
                     name="question-circle"
                     size={20}
-                    color="black" />
+                    color="black"
+                    accessible={false} />
                 {
-                    open && <View style={getStyles(theme).dialog}>
+                    open && <View style={getStyles(theme).dialog} accessible={true}>
                         <View style={getStyles(theme).triangle}></View>
-                        <Text style={getStyles(theme).dialogText}>Grábate diciendo la pregunta y su correspondiente respuesta.</Text>
-                        <Text style={getStyles(theme).dialogText}><Text style={{ color: theme.colors.red }}>Recuerda:</Text> El audio debe durar más de 20 segundos </Text>
+                        <Text style={getStyles(theme).dialogText} accessibilityLabel="Grábate diciendo la pregunta y su correspondiente respuesta.">Grábate diciendo la pregunta y su correspondiente respuesta.</Text>
+                        <Text style={getStyles(theme).dialogText} accessibilityLabel="Recuerda: El audio debe durar más de 20 segundos">
+                            <Text style={{ color: theme.colors.red }}>Recuerda:</Text> El audio debe durar más de 20 segundos
+                        </Text>
                     </View>
                 }
             </Pressable>

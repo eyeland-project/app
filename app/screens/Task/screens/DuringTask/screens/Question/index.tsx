@@ -1,5 +1,4 @@
 import { View, ImageBackground, StyleSheet } from 'react-native'
-import PositionBar from './components/PositionBar'
 import Query from './components/Query'
 import Option from '@screens/Task/components/Option'
 import Placeholder from './components/Placeholder'
@@ -27,12 +26,12 @@ const Question = ({ route }: Props) => {
     const navigation = useNavigation<any>()
     const [containerStyleOptions, setContainerStyleOptions] = useState([{}])
     const [textStyleOptions, setTextStyleOptions] = useState([{}])
-    const playSoundSuccess = usePlaySound(require('@sounds/success.wav'))
-    const playSoundWrong = usePlaySound(require('@sounds/wrong.wav'))
     const { time, startTimer, stopTimer } = useTime()
     const { data, loading, error, getDuringTaskQuestion, sendDuringTaskAnswer } = useDuringTaskQuestion()
     const { power, socket } = useDuringTaskContext()
     const { getDuringTask, data: generalData } = useDuringTask()
+    const playSoundSuccess = usePlaySound(require('@sounds/success.wav'))
+    const playSoundWrong = usePlaySound(require('@sounds/wrong.wav'))
 
     const onPressOption = async (index: number, correct: boolean, id: number) => {
         const newContainerStyleOptions = [...containerStyleOptions]
@@ -52,48 +51,38 @@ const Question = ({ route }: Props) => {
         setContainerStyleOptions(newContainerStyleOptions)
         setTextStyleOptions(newTextStyleOptions)
 
+
         const [_, { numQuestions }] = await Promise.all([
             sendDuringTaskAnswer({ taskOrder, questionOrder, body: { idOption: id, answerSeconds: time } }),
             getDuringTask({ taskOrder })
         ])
 
+        navigateNextQuestion(numQuestions)
+    }
+
+    const navigateNextQuestion = (numQuestions: number) => {
         if (questionOrder === numQuestions) {
-            navigation.reset({
-                index: 0,
-                routes: [
-                    { name: 'Introduction', params: { taskOrder } },
-                ]
-            })
+            navigation.pop(1)
         } else {
+            navigation.pop(1)
             navigation.push('Question', { taskOrder, questionOrder: questionOrder + 1 })
         }
     }
 
-    const initQuestion = async () => {
-        await getDuringTaskQuestion({ taskOrder, questionOrder })
-        startTimer()
-        // TODO - set progress bar
-    }
-
     useEffect(() => {
+        const initQuestion = async () => {
+            getDuringTaskQuestion({ taskOrder, questionOrder })
+            startTimer()
+            // TODO - set progress bar
+        }
+
         initQuestion()
 
         socket.once(SocketEvents.teamStudentAnswer, async (data: any) => {
-            await getDuringTask({ taskOrder })
-
-            if (questionOrder === generalData?.numQuestions) {
-                navigation.reset({
-                    index: 0,
-                    routes: [
-                        { name: 'Introduction', params: { taskOrder } },
-                        { name: 'PosTask', params: { taskOrder } }
-                    ]
-                })
-            } else {
-                navigation.navigate('Question', { taskOrder, questionOrder: questionOrder + 1 })
-            }
+            const { numQuestions } = await getDuringTask({ taskOrder })
+            navigateNextQuestion(numQuestions)
         })
-    }, [])
+    }, [questionOrder])
 
     if (loading || !data) return <Placeholder />
 
@@ -101,11 +90,9 @@ const Question = ({ route }: Props) => {
         <View style={getStyles(theme).container}>
             {/* TODO - make events for position change */}
             {/* <PositionBar groupName='Ocelots' position={5} /> */}
-            <View style={{ flexDirection: 'column-reverse' }}>
-                <View style={getStyles(theme).imageContainer}>
-                    <ImageBackground style={getStyles(theme).image} source={{ uri: data.imgUrl }} />
-                </View>
-                <Query text={data.content} power={power} nounTranslation={data.nounTranslation[0]} prepositionTranslation={data.prepositionTranslation[0]} />
+            <Query text={data.content} power={power} nounTranslation={data.nounTranslation[0]} prepositionTranslation={data.prepositionTranslation[0]} />
+            <View style={getStyles(theme).imageContainer} accessible={true} accessibilityLabel={data.imgAlt}>
+                <ImageBackground style={getStyles(theme).image} source={{ uri: `${data.imgUrl}?t=${data.id}` }} />
             </View>
             <View style={getStyles(theme).optionsContainer}>
                 <Option
