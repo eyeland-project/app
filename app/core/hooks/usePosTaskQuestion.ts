@@ -53,7 +53,7 @@ const usePosTaskQuestion = () => {
         }
     }, []);
 
-    const sendPosTaskAnswer = useCallback(async (inputs: { taskOrder: number, questionOrder: number, body: { idOptions: number, answerSeconds: number } }) => {
+    const sendPosTaskAnswer = useCallback(async (inputs: { taskOrder: number, questionOrder: number, body: { idOption: number, answerSeconds: number } }) => {
         try {
             const response = await axios.post(`${environment.apiUrl}/tasks/${inputs.taskOrder}/postask/questions/${inputs.questionOrder}`, inputs.body, {
                 headers: {

@@ -21,7 +21,8 @@ const MemoryProView = ({ text, nounTranslation }: Props) => {
 
     useEffect(() => {
         setNoun(matchResult ? matchResult[0].replace(/[{}]/g, '') : '')
-        setQuestion(matchResult ? textFiltered.split(matchResult[0]) : [''])
+        setQuestion(matchResult ? textFiltered.split(matchResult[0]) : [textFiltered])
+        console.log(textFiltered)
     }, [])
 
     const handlePress = () => {

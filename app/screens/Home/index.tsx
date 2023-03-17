@@ -5,50 +5,27 @@ import ComingSoon from "./components/ComingSoon";
 import Title from "./components/Title";
 import Placeholder from "./components/Placeholder";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import useTheme from "@hooks/useTheme";
 import useTasks from "@hooks/useTasks";
+import { useFocusEffect } from "@react-navigation/native";
 
 import { Theme } from "@theme";
 import { Task as TaskInterface } from "@app/shared/interfaces/Task.interface";
-import { TabRouter } from "@react-navigation/native";
 
 const Home = () => {
 	const theme = useTheme();
 	const { loading, error, data, getTasks } = useTasks();
-	const [tasks, setTasks] = useState<(TaskInterface & { blocked: boolean })[]>([]);
 
 	const initTasks = async () => {
 		await getTasks();
 	}
 
-	const assignBlocked = (tasks: TaskInterface[]) => {
-		let isBlocked = false;
-		const tasksTemp = tasks.map((task: TaskInterface) => {
-			const blockedTask = {
-				...task,
-				blocked: isBlocked,
-			};
-
-			if (!task.completed) {
-				isBlocked = true;
-			}
-
-			return blockedTask;
-		});
-
-		setTasks(tasksTemp);
-	};
-
-	useEffect(() => {
-		if (data) assignBlocked(data);
-	}, [data]);
-
-
-	useEffect(() => {
-		initTasks();
-	}, []);
-
+	useFocusEffect(
+		useCallback(() => {
+			initTasks();
+		}, [])
+	)
 
 	return (
 		<View>
@@ -57,11 +34,10 @@ const Home = () => {
 					(
 						<FlatList
 							style={getStyles(theme).container}
-							ListHeaderComponent={<Title text="[Inicio]" />}
+							ListHeaderComponent={<Title text="MENU" />}
 							stickyHeaderIndices={[0]}
 							stickyHeaderHiddenOnScroll={true}
-							// TODO - Remove the slice
-							data={tasks}
+							data={data}
 							renderItem={({ item, index }) => (
 								<>
 									{index === 0 && <View style={{ marginVertical: 5 }} />}

@@ -17,17 +17,19 @@ const Section = ({ title, completed, blocked, onPress }: Props) => {
     const theme = useTheme();
 
     return (
-        <View
+        <Pressable
             style={getStyles(theme, completed, blocked).container}
             accessible={true}
             accessibilityLabel={`${title}. ${completed ? 'Completado' : 'No completado'}. ${blocked ? 'Bloqueado' : 'Disponible'}`}
-            accessibilityHint={`${blocked ? 'Esta sección está bloqueada.' : 'Presione el boton de continuar para iniciar.'}`}
+            accessibilityHint={`${blocked ? 'Esta sección está bloqueada.' : 'Presione para continuar.'}`}
+            onPress={onPress}
+            disabled={blocked}
         >
             <Text style={getStyles(theme, completed, blocked).text}>{title}</Text>
-            <Pressable
-                onPress={onPress}
+            <View
+
                 style={getStyles(theme, completed, blocked).button}
-                disabled={blocked}
+
                 accessibilityRole="button"
                 accessibilityLabel={completed ? "Reiniciar sección" : "Continuar sección"}
             >
@@ -37,8 +39,8 @@ const Section = ({ title, completed, blocked, onPress }: Props) => {
                     color={theme.colors.white}
                     accessible={false}
                 />
-            </Pressable>
-        </View>
+            </View>
+        </Pressable>
     )
 }
 

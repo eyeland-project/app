@@ -41,7 +41,7 @@ const BackButton = ({ icon, accessibilityLabel }: Props) => {
             onPress={() => {
                 scaleButton()
             }}
-            style={{ padding: 4 }}
+            style={{ padding: 6 }}
             accessibilityLabel={accessibilityLabel}
         >
             <Animated.View style={{ transform: [{ scale: scaleValue }] }}>

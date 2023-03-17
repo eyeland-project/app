@@ -21,7 +21,8 @@ const SuperRadarView = ({ text, prepositionTranslation }: Props) => {
 
     useEffect(() => {
         setPreposition(matchResult ? matchResult[0].replace(/[\[\]]/g, '') : '')
-        setQuestion(matchResult ? textFiltered.split(matchResult[0]) : [''])
+        setQuestion(matchResult ? textFiltered.split(matchResult[0]) : [textFiltered])
+        console.log(textFiltered)
     }, [])
 
     const handlePress = () => {
@@ -31,8 +32,6 @@ const SuperRadarView = ({ text, prepositionTranslation }: Props) => {
             setPreposition(matchResult ? matchResult[0].replace(/[\[\]]/g, '') : '')
         }
     }
-
-    console.log(text, matchResult, question)
 
     return (
         <View style={getStyles(theme).container}>

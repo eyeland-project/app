@@ -41,7 +41,9 @@ const Introduction = ({ route }: Props) => {
 
     return (
         <View style={getStyles(theme).container}>
-            <ScrollView style={getStyles(theme).scrollView}>
+            <ScrollView
+                style={getStyles(theme).scrollView}
+            >
                 {
 
                     (dataIntroduction && !loadingIntroduction && dataProgress && !loadingProgress) ? (
@@ -49,7 +51,12 @@ const Introduction = ({ route }: Props) => {
 
                             <Title text={dataIntroduction.name} />
                             <Keywords keywords={dataIntroduction.keywords} />
-                            <Image source={{ uri: dataIntroduction.thumbnailUrl }} style={getStyles(theme).image} alt={dataIntroduction.thumbnailAlt} />
+                            <Image
+                                source={{ uri: dataIntroduction.thumbnailUrl }}
+                                style={getStyles(theme).image}
+                                accessible
+                                accessibilityLabel={dataIntroduction.thumbnailAlt}
+                            />
                             <Description text={dataIntroduction.longDescription} />
                             <Section
                                 title='Pre-Task'

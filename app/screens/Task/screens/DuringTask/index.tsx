@@ -27,7 +27,7 @@ const Stack = createNativeStackNavigator();
 const DuringTask = ({ route }: Props) => {
     const authStorage = useAuthStorage();
     const [isSessionStarted, setIsSessionStarted] = useState(false);
-    const [power, setPower] = useState(Power.SuperRadar);
+    const [power, setPower] = useState(Power.MemoryPro);
     const navigation = useNavigation<any>();
 
     const connectSocket = async () => {

@@ -34,12 +34,7 @@ const PreTask = ({ route }: Props) => {
                 navigation.push('PreTask', { taskOrder, linkOrder: linkOrder + 1 });
             } else {
                 await setPreTaskComplete({ taskOrder });
-                navigation.reset({
-                    index: 0,
-                    routes: [
-                        { name: 'Introduction', params: { taskOrder } }
-                    ]
-                })
+                navigation.pop(1)
             }
         });
     }

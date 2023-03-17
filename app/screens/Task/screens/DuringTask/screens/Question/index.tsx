@@ -62,12 +62,7 @@ const Question = ({ route }: Props) => {
 
     const navigateNextQuestion = (numQuestions: number) => {
         if (questionOrder === numQuestions) {
-            navigation.reset({
-                index: 0,
-                routes: [
-                    { name: 'Introduction', params: { taskOrder } },
-                ]
-            })
+            navigation.pop(1)
         } else {
             navigation.pop(1)
             navigation.push('Question', { taskOrder, questionOrder: questionOrder + 1 })
@@ -96,8 +91,8 @@ const Question = ({ route }: Props) => {
             {/* TODO - make events for position change */}
             {/* <PositionBar groupName='Ocelots' position={5} /> */}
             <Query text={data.content} power={power} nounTranslation={data.nounTranslation[0]} prepositionTranslation={data.prepositionTranslation[0]} />
-            <View style={getStyles(theme).imageContainer}>
-                <ImageBackground style={getStyles(theme).image} source={{ uri: data.imgUrl }} />
+            <View style={getStyles(theme).imageContainer} accessible={true} accessibilityLabel={data.imgAlt}>
+                <ImageBackground style={getStyles(theme).image} source={{ uri: `${data.imgUrl}?t=${data.id}` }} />
             </View>
             <View style={getStyles(theme).optionsContainer}>
                 <Option

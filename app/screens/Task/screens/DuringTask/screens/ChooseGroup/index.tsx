@@ -29,14 +29,9 @@ const ChooseGroup = ({ route }: any) => {
         setGroups(await getTeams())
     }
 
-    useFocusEffect(
-        useCallback(() => {
-            leaveTeam()
-        }, [])
-    )
-
-    useEffect(() => {
-        getGroups()
+    const init = async () => {
+        await leaveTeam()
+        await getGroups()
         resetContext()
 
         socket.on(SocketEvents.TeamsStudentUpdate, (data: Team[]) => {
@@ -46,7 +41,14 @@ const ChooseGroup = ({ route }: any) => {
         return () => {
             socket.off(SocketEvents.TeamsStudentUpdate);
         };
-    }, [])
+    }
+
+
+    useFocusEffect(
+        useCallback(() => {
+            init()
+        }, [])
+    )
 
     if (loading)
         return (

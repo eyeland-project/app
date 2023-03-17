@@ -53,6 +53,7 @@ const Login = () => {
 				name="username"
 				label="Usuario"
 				control={control}
+				autoCapitalize="none"
 				error={errors.username && "El usuario es requerido"}
 				accessible={true}
 				accessibilityLabel="Entrada de nombre de usuario"
@@ -61,6 +62,7 @@ const Login = () => {
 			<TextInput
 				name="password"
 				label="Contraseña"
+				autoCapitalize="none"
 				control={control}
 				error={errors.password && "La contraseña es requerida"}
 				secureTextEntry={true}

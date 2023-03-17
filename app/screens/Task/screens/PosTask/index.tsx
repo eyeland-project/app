@@ -52,17 +52,12 @@ const PosTask = ({ route }: Props) => {
                 stopTimer();
 
                 const [_, { numQuestions }] = await Promise.all([
-                    sendPosTaskAnswer({ taskOrder, questionOrder, body: { answerSeconds: time, idOptions: idOptionSelected } }),
+                    sendPosTaskAnswer({ taskOrder, questionOrder, body: { answerSeconds: time, idOption: idOptionSelected } }),
                     getPosTask({ taskOrder })
                 ])
 
                 if (questionOrder === numQuestions) {
-                    navigation.reset({
-                        index: 0,
-                        routes: [
-                            { name: 'Introduction', params: { taskOrder } },
-                        ]
-                    })
+                    navigation.pop(1)
                 } else {
                     navigation.pop(1)
                     navigation.push('PosTask', { taskOrder, questionOrder: questionOrder + 1 })
@@ -114,7 +109,7 @@ const PosTask = ({ route }: Props) => {
                 />
                 <Text style={getStyles(theme).subtitle}>
                     {
-                        recording && `Recording... ${Math.floor((duration as number) / 1000)} seconds`
+                        recording && `Grabando... ${Math.floor((duration as number) / 1000)} segundos`
                     }
                 </Text>
             </View>
