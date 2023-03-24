@@ -24,7 +24,7 @@ const Query = ({ text, power, nounTranslation, prepositionTranslation }: Props) 
             return <SuperHearing text={text} />
 
         default:
-            return <DefaultView />
+            return <DefaultView text={text} />
     }
 }
 

@@ -35,15 +35,13 @@ const DuringTask = ({ route }: Props) => {
         socket.emit('join', await authStorage.getAccessToken(), (response: { session: boolean }) => {
             setIsSessionStarted(response.session);
         });
+        socket.once(SocketEvents.sessionTeacherEnd, () => {
+            navigation.navigate("Introduction", { taskOrder: route.params.taskOrder });
+        })
     }
 
     useEffect(() => {
         connectSocket();
-
-        socket.once(SocketEvents.sessionTeacherEnd, () => {
-            navigation.navigate("Introduction", { taskOrder: route.params.taskOrder });
-        })
-
         return () => {
             socket.disconnect();
         };

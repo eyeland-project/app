@@ -1,9 +1,6 @@
-import { View, Text, StyleSheet } from 'react-native'
-import Pressable from '@components/Pressable'
-
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
+import { View, Text, StyleSheet, Image, Animated } from 'react-native'
 import useTheme from '@hooks/useTheme'
-
 import { Theme } from '@theme'
 
 interface Props {
@@ -15,23 +12,44 @@ const MemoryProView = ({ text, nounTranslation }: Props) => {
     const [noun, setNoun] = useState('')
     const [question, setQuestion] = useState(['', ''])
     const theme = useTheme()
+    const [showPower, setShowPower] = useState(false)
+
+    const [powerOpacity] = useState(new Animated.Value(0));
 
     const textFiltered = text.replace(/[\[\]]/g, '')
-    const matchResult = textFiltered.match(/{(.*?)}/g);
+    const matchResult = textFiltered.match(/{(.*?)}/g)
 
     useEffect(() => {
         setNoun(matchResult ? matchResult[0].replace(/[{}]/g, '') : '')
         setQuestion(matchResult ? textFiltered.split(matchResult[0]) : [textFiltered])
-        console.log(textFiltered)
     }, [])
 
+
     const handlePress = () => {
-        if (matchResult && noun === matchResult[0].replace(/[{}]/g, '')) {
-            setNoun(nounTranslation)
-        } else {
-            setNoun(matchResult ? matchResult[0].replace(/[{}]/g, '') : '')
-        }
-    }
+        setNoun('');
+        setShowPower(true);
+        Animated.sequence([
+            Animated.timing(powerOpacity, {
+                toValue: 1,
+                duration: 250,
+                useNativeDriver: true,
+            }),
+            Animated.timing(powerOpacity, {
+                toValue: 0,
+                duration: 250,
+                delay: 250,
+                useNativeDriver: true,
+            }),
+        ]).start(() => {
+            setShowPower(false);
+            if (matchResult && noun === matchResult[0].replace(/[{}]/g, '')) {
+                setNoun(nounTranslation);
+            } else {
+                setNoun(matchResult ? matchResult[0].replace(/[{}]/g, '') : '');
+            }
+        });
+    };
+
 
     return (
         <View style={getStyles(theme).container}>
@@ -39,6 +57,16 @@ const MemoryProView = ({ text, nounTranslation }: Props) => {
                 {question[0]}
                 <Text style={getStyles(theme).noun} onPress={handlePress}>
                     {noun}
+                    {
+                        showPower && (
+                            <Animated.View style={{ opacity: powerOpacity }}>
+                                <Animated.Image
+                                    source={require('@images/memoryPro.png')}
+                                    style={getStyles(theme).image}
+                                />
+                            </Animated.View>
+                        )
+                    }
                 </Text>
                 {question[1]}
             </Text>
@@ -54,6 +82,12 @@ const getStyles = (theme: Theme) =>
             marginTop: 10,
             flexWrap: 'wrap',
         },
+        image: {
+            // position: 'absolute',
+            width: 30,
+            height: 30,
+            marginBottom: -7,
+        },
         text: {
             fontSize: theme.fontSize.xxl,
             color: theme.colors.black,
@@ -61,6 +95,7 @@ const getStyles = (theme: Theme) =>
             letterSpacing: theme.spacing.medium
         },
         noun: {
+            position: 'relative',
             fontSize: theme.fontSize.xxl,
             color: theme.colors.black,
             fontFamily: theme.fontWeight.bold,
