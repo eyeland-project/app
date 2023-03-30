@@ -2,28 +2,20 @@ import { useState, useCallback } from 'react';
 import useAuthStorage from './useAuthStorage';
 import axios from 'axios';
 
+import { errorHandler } from '../utils/errorHandler';
 import { environment } from "@environments/environment";
 
 import { DuringTask } from '@interfaces/DuringTask.interface';
 
-const getError = (status: number) => {
-    switch (status) {
-        case 400:
-            return 'Invalid task order'
-        case 401:
-            return 'Unauthorized'
-        case 403:
-            return 'Unauthorized'
-        case 404:
-            return 'Task not found'
-        case 498:
-            return 'Token expired'
-        case 500:
-            return 'Internal server error'
-        default:
-            return 'An error occurred'
-    }
-}
+const errors: Map<number, string> = new Map([
+    [400, 'Recurso no encontrado'],
+    [401, 'Error de autenticación'],
+    [403, 'No está autorizado para acceder a este recurso'],
+    [404, 'Recurso no encontrado'],
+    [498, 'Su autenticación ha expirado'],
+    [500, 'Un error inesperado ocurrido'],
+]);
+
 
 const useDuringTask = () => {
     const [loading, setLoading] = useState(false);
@@ -32,6 +24,7 @@ const useDuringTask = () => {
     const authStorage = useAuthStorage();
 
     const getDuringTask = useCallback(async (inputs: { taskOrder: number }) => {
+        setError(null);
         setLoading(true);
         try {
             const response = await axios.get(`${environment.apiUrl}/tasks/${inputs.taskOrder}/duringtask`, {
@@ -49,7 +42,7 @@ const useDuringTask = () => {
             }
         } catch (err: any) {
             setLoading(false);
-            setError(getError(err.response.status));
+            setError(errorHandler(err, errors));
         }
     }, []);
 

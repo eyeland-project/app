@@ -3,9 +3,15 @@ import useAuthStorage from './useAuthStorage';
 import usePlaySound from './usePlaySound';
 import axios from 'axios';
 
+import { errorHandler } from '@utils/errorHandler';
 import { environment } from "@environments/environment";
 
 import { Login } from "@interfaces/Login.interface";
+
+const errors: Map<number, string> = new Map([
+    [401, 'Usuario o contraseña incorrectos'],
+    [500, 'Un error inesperado ocurrido'],
+]);
 
 const useLogin = () => {
     const playSoundSuccess = usePlaySound(require('@sounds/loginSucceeded.wav'));
@@ -36,22 +42,9 @@ const useLogin = () => {
             } else {
                 throw new Error(response.data);
             }
-        } catch (err) {
+        } catch (err: any) {
             setLoading(false);
-            switch ((err as any).response.status) {
-                case 400:
-                    setError('Usuario o contraseña incorrectos');
-                    break;
-                case 401:
-                    setError('Usuario o contraseña incorrectos');
-                    break;
-                case 403:
-                    setError('Usuario o contraseña incorrectos');
-                    break;
-                default:
-                    setError('Un error ha ocurrido');
-                    break;
-            }
+            setError(errorHandler(err, errors));
             playSoundError();
         }
     }, []);
@@ -60,5 +53,3 @@ const useLogin = () => {
 };
 
 export default useLogin;
-
-
