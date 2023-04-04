@@ -1,6 +1,6 @@
 import { Audio } from 'expo-av';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import usePlaySound from './usePlaySound';
 
 const useRecord = () => {

@@ -2,9 +2,19 @@ import { useState, useCallback } from 'react';
 import useAuthStorage from './useAuthStorage';
 import axios from 'axios';
 
+import { errorHandler } from '../utils/errorHandler';
 import { environment } from "@environments/environment";
 
 import { Progress, getProgressParams } from '@interfaces/Progress.interface';
+
+const errors: Map<number, string> = new Map([
+    [400, 'Recurso no encontrado'],
+    [401, 'Error de autenticación'],
+    [403, 'No está autorizado para acceder a este recurso'],
+    [404, 'Recurso no encontrado'],
+    [498, 'Su autenticación ha expirado'],
+    [500, 'Un error inesperado ocurrido'],
+]);
 
 const useProgress = () => {
     const [loading, setLoading] = useState(false);
@@ -13,8 +23,8 @@ const useProgress = () => {
     const authStorage = useAuthStorage();
 
     const getProgress = useCallback(async (inputs: getProgressParams) => {
+        setError(null);
         setLoading(true);
-
         try {
             const response = await axios.get(`${environment.apiUrl}/tasks/${inputs.taskOrder}/progress`, {
                 headers: {
@@ -31,30 +41,7 @@ const useProgress = () => {
             }
         } catch (err) {
             setLoading(false);
-            switch ((err as any).response.status) {
-                case 400:
-                    setError('Invalid task order');
-                    break;
-                case 401:
-                    setError('Unauthorized');
-                    break;
-                case 403:
-                    setError('Unauthorized');
-                    break;
-                case 404:
-                    setError('Task not found');
-                    break;
-                case 498:
-                    setError('Token expired');
-                    break;
-                case 500:
-                    setError('Internal server error');
-                    break;
-                default:
-                    setError('An error occurred');
-                    break;
-            }
-
+            setError(errorHandler(err, errors));
         }
     }, []);
 

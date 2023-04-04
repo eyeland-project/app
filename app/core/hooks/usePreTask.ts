@@ -1,30 +1,20 @@
 import { useState, useCallback } from 'react';
-import usePlaySound from './usePlaySound';
 import useAuthStorage from './useAuthStorage';
 import axios from 'axios';
 
 import { environment } from "@environments/environment";
 
 import { PreTask, getPreTaskParams } from '@interfaces/PreTask.interface';
+import { errorHandler } from '../utils/errorHandler';
 
-const getError = (status: number) => {
-    switch (status) {
-        case 400:
-            return 'Invalid task order';
-        case 401:
-            return 'Unauthorized';
-        case 403:
-            return 'Unauthorized';
-        case 404:
-            return 'Task not found';
-        case 498:
-            return 'Token expired';
-        case 500:
-            return 'Internal server error';
-        default:
-            return 'An error occurred';
-    }
-};
+const errors: Map<number, string> = new Map([
+    [400, 'Recurso no encontrado'],
+    [401, 'Error de autenticación'],
+    [403, 'No está autorizado para acceder a este recurso'],
+    [404, 'Recurso no encontrado'],
+    [498, 'Su autenticación ha expirado'],
+    [500, 'Un error inesperado ocurrido'],
+]);
 
 const usePreTask = () => {
     const [loading, setLoading] = useState(false);
@@ -33,6 +23,7 @@ const usePreTask = () => {
     const authStorage = useAuthStorage();
 
     const getPreTask = useCallback(async (inputs: getPreTaskParams) => {
+        setError(null);
         setLoading(true);
         try {
             const response = await axios.get(`${environment.apiUrl}/tasks/${inputs.taskOrder}/pretask/links/${inputs.linkOrder}`, {
@@ -51,11 +42,12 @@ const usePreTask = () => {
             }
         } catch (err: any) {
             setLoading(false);
-            setError(getError(err.response.status));
+            setError(errorHandler(err, errors));
         }
     }, []);
 
     const getTotalNumberOfPreTasks = useCallback(async (taskOrder: number): Promise<number> => {
+        setError(null);
         setLoading(true);
         try {
             const response = await axios.get(`${environment.apiUrl}/tasks/${taskOrder}/pretask`, {
@@ -73,12 +65,13 @@ const usePreTask = () => {
             }
         } catch (err: any) {
             setLoading(false);
-            setError(getError(err.response.status));
+            setError(errorHandler(err, errors));
             return 0;
         }
     }, []);
 
     const setPreTaskComplete = useCallback(async (inputs: { taskOrder: number }) => {
+        setError(null);
         setLoading(true);
         try {
             const response = await axios.post(`${environment.apiUrl}/tasks/${inputs.taskOrder}/pretask/complete`, {}, {
@@ -96,7 +89,7 @@ const usePreTask = () => {
             }
         } catch (err: any) {
             setLoading(false);
-            setError(getError(err.response.status));
+            setError(errorHandler(err, errors));
         }
     }, []);
 

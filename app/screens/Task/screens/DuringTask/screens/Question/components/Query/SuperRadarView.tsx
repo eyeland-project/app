@@ -1,5 +1,4 @@
-import { View, Text, StyleSheet } from 'react-native'
-import Pressable from '@components/Pressable'
+import { View, Text, StyleSheet, Animated } from 'react-native'
 
 import { useState, useEffect } from 'react'
 import useTheme from '@hooks/useTheme'
@@ -15,6 +14,9 @@ const SuperRadarView = ({ text, prepositionTranslation }: Props) => {
     const [preposition, setPreposition] = useState('')
     const [question, setQuestion] = useState(['', ''])
     const theme = useTheme()
+    const [showPower, setShowPower] = useState(false)
+
+    const [powerOpacity] = useState(new Animated.Value(0));
 
     const textFiltered = text.replace(/[{}]/g, '')
     const matchResult = textFiltered.match(/\[(.*?)\]/g);
@@ -22,15 +24,31 @@ const SuperRadarView = ({ text, prepositionTranslation }: Props) => {
     useEffect(() => {
         setPreposition(matchResult ? matchResult[0].replace(/[\[\]]/g, '') : '')
         setQuestion(matchResult ? textFiltered.split(matchResult[0]) : [textFiltered])
-        console.log(textFiltered)
     }, [])
 
     const handlePress = () => {
-        if (matchResult && preposition === matchResult[0].replace(/[\[\]]/g, '')) {
-            setPreposition(prepositionTranslation)
-        } else {
-            setPreposition(matchResult ? matchResult[0].replace(/[\[\]]/g, '') : '')
-        }
+        setPreposition('');
+        setShowPower(true);
+        Animated.sequence([
+            Animated.timing(powerOpacity, {
+                toValue: 1,
+                duration: 250,
+                useNativeDriver: true,
+            }),
+            Animated.timing(powerOpacity, {
+                toValue: 0,
+                duration: 250,
+                delay: 250,
+                useNativeDriver: true,
+            }),
+        ]).start(() => {
+            setShowPower(false);
+            if (matchResult && preposition === matchResult[0].replace(/[\[\]]/g, '')) {
+                setPreposition(prepositionTranslation)
+            } else {
+                setPreposition(matchResult ? matchResult[0].replace(/[\[\]]/g, '') : '')
+            }
+        });
     }
 
     return (
@@ -39,6 +57,16 @@ const SuperRadarView = ({ text, prepositionTranslation }: Props) => {
                 {question[0]}
                 <Text style={getStyles(theme).prepostion} onPress={handlePress}>
                     {preposition}
+                    {
+                        showPower && (
+                            <Animated.View style={{ opacity: powerOpacity }}>
+                                <Animated.Image
+                                    source={require('@images/superRadar.png')}
+                                    style={getStyles(theme).image}
+                                />
+                            </Animated.View>
+                        )
+                    }
                 </Text>
                 {question[1]}
             </Text>
@@ -53,6 +81,12 @@ const getStyles = (theme: Theme) =>
             flexDirection: 'row',
             marginTop: 10,
             flexWrap: 'wrap',
+        },
+        image: {
+            // position: 'absolute',
+            width: 30,
+            height: 30,
+            marginBottom: -7,
         },
         text: {
             fontSize: theme.fontSize.xxl,

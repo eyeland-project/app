@@ -60,7 +60,7 @@ const ChooseGroup = ({ route }: any) => {
 
     return (
         <FlatList
-            data={groups}
+            data={groups.filter(group => group.taskOrder === taskOrder || group.taskOrder === null)}
             renderItem={({ item }) => (
                 <GroupCard
                     key={item.id}

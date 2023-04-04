@@ -3,26 +3,19 @@ import useAuthStorage from './useAuthStorage';
 
 import axios from 'axios';
 
+import { errorHandler } from '../utils/errorHandler';
 import { environment } from "@environments/environment";
 
 import { Power } from '@enums/Power.enum';
 
-const getError = (status: number) => {
-    switch (status) {
-        case 401:
-            return "Missing authentication";
-        case 403:
-            return "Unauthorized to access this resource";
-        case 404:
-            return "Power not found";
-        case 498:
-            return "Token expired/invalid";
-        case 500:
-            return "Server error";
-        default:
-            return "Unexpected status code";
-    }
-}
+const errors: Map<number, string> = new Map([
+    [400, 'Recurso no encontrado'],
+    [401, 'Error de autenticación'],
+    [403, 'No está autorizado para acceder a este recurso'],
+    [404, 'Recurso no encontrado'], 
+    [498, 'Su autenticación ha expirado'],
+    [500, 'Un error inesperado ocurrido'],
+]);
 
 const usePower = () => {
     const [loading, setLoading] = useState(false);
@@ -31,6 +24,7 @@ const usePower = () => {
     const authStorage = useAuthStorage();
 
     const getMyPower = useCallback(async () => {
+        setError(null);
         setLoading(true);
         try {
             const response = await axios.get(`${environment.apiUrl}/teams/current/power`, {
@@ -47,13 +41,14 @@ const usePower = () => {
             } else {
                 throw new Error(response.data);
             }
-        } catch (err) {
+        } catch (err: any) {
             setLoading(false);
-            getError((err as any).response.status);
+            setError(errorHandler(err, errors));
         }
     }, []);
 
     const rollPower = useCallback(async () => {
+        setError(null);
         setLoading(true);
         try {
             const response = await axios.put(`${environment.apiUrl}/teams/current/reroll`, {}, {
@@ -72,7 +67,7 @@ const usePower = () => {
             }
         } catch (err) {
             setLoading(false);
-            getError((err as any).response.status);
+            setError(errorHandler(err, errors));
         }
     }, []);
 

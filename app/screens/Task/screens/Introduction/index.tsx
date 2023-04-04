@@ -9,6 +9,7 @@ import Keywords from './components/Keywords';
 import Description from './components/Description';
 import Placeholder from './components/Placeholder';
 import Section from './components/Section';
+import ErrorScreen from '@components/ErrorScreen';
 
 import useTheme from '@hooks/useTheme';
 import { useNavigation } from '@react-navigation/native';
@@ -39,50 +40,52 @@ const Introduction = ({ route }: Props) => {
         }, [])
     );
 
+    if (loadingIntroduction || loadingProgress) return <Placeholder />
+
+    if (errorIntroduction || errorProgress) return <ErrorScreen error={errorIntroduction || errorProgress || 'Un error inesperado ha ocurrido'} retryAction={() => {
+        getIntroduction({ taskOrder });
+        getProgress({ taskOrder });
+    }} />
+
+    if (!dataIntroduction || !dataProgress) return <ErrorScreen error='No se recibió la información' retryAction={() => {
+        getIntroduction({ taskOrder });
+        getProgress({ taskOrder });
+    }} />
+
     return (
         <View style={getStyles(theme).container}>
             <ScrollView
                 style={getStyles(theme).scrollView}
             >
-                {
-
-                    (dataIntroduction && !loadingIntroduction && dataProgress && !loadingProgress) ? (
-                        <>
-
-                            <Title text={dataIntroduction.name} />
-                            <Keywords keywords={dataIntroduction.keywords} />
-                            <Image
-                                source={{ uri: dataIntroduction.thumbnailUrl }}
-                                style={getStyles(theme).image}
-                                accessible
-                                accessibilityLabel={dataIntroduction.thumbnailAlt}
-                            />
-                            <Description text={dataIntroduction.longDescription} />
-                            <Section
-                                title='Pre-Task'
-                                completed={dataProgress.pretask.completed}
-                                blocked={dataProgress.pretask.blocked}
-                                onPress={() => {
-                                    navigation.navigate('PreTask', { taskOrder, linkOrder: 1 });
-                                }} />
-                            <Section
-                                title='During-Task'
-                                completed={dataProgress.duringtask.completed}
-                                blocked={dataProgress.duringtask.blocked}
-                                onPress={() => {
-                                    navigation.navigate('DuringTask', { taskOrder, questionOrder: 1 });
-                                }} />
-                            <Section title='Post-Task'
-                                completed={dataProgress.postask.completed}
-                                blocked={dataProgress.postask.blocked}
-                                onPress={() => {
-                                    navigation.navigate('PosTask', { taskOrder, questionOrder: 1 });
-                                }} />
-                        </>
-                    ) : (
-                        <Placeholder />
-                    )
-                }
+                <Title text={dataIntroduction.name} />
+                <Keywords keywords={dataIntroduction.keywords} />
+                <Image
+                    source={{ uri: dataIntroduction.thumbnailUrl }}
+                    style={getStyles(theme).image}
+                    accessible
+                    accessibilityLabel={dataIntroduction.thumbnailAlt}
+                />
+                <Description text={dataIntroduction.longDescription} />
+                <Section
+                    title='Pre-Task'
+                    completed={dataProgress.pretask.completed}
+                    blocked={dataProgress.pretask.blocked}
+                    onPress={() => {
+                        navigation.navigate('PreTask', { taskOrder, linkOrder: 1 });
+                    }} />
+                <Section
+                    title='During-Task'
+                    completed={dataProgress.duringtask.completed}
+                    blocked={dataProgress.duringtask.blocked}
+                    onPress={() => {
+                        navigation.navigate('DuringTask', { taskOrder, questionOrder: 1 });
+                    }} />
+                <Section title='Post-Task'
+                    completed={dataProgress.postask.completed}
+                    blocked={dataProgress.postask.blocked}
+                    onPress={() => {
+                        navigation.navigate('PosTask', { taskOrder, questionOrder: 1 });
+                    }} />
                 <View style={{ height: 80 }} />
             </ScrollView>
         </View>

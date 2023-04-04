@@ -52,7 +52,7 @@ const Options = ({ unShowOptions }: OptionsProps) => {
     }, [highContrast])
 
     const handleLargeText = () => {
-        if (largeText < 3) {
+        if (largeText < 5) {
             setLargeText(largeText + 1)
             modifyTheme({
                 ...theme,

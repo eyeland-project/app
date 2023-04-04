@@ -3,32 +3,21 @@ import useAuthStorage from './useAuthStorage';
 
 import axios from 'axios';
 
+import { errorHandler } from '../utils/errorHandler';
 import { environment } from "@environments/environment";
 
 import { Team } from '@interfaces/Team.interface';
 
-const getError = (status: number) => {
-    switch (status) {
-        case 400:
-            return "Invalid body";
-        case 401:
-            return "Missing authentication";
-        case 403:
-            return "Unauthorized to access this resource | Team is full";
-        case 404:
-            return "Team not found";
-        case 409:
-            return "Student already has a team";
-        case 410:
-            return "Team is not active";
-        case 498:
-            return "Token expired/invalid";
-        case 500:
-            return "Server error";
-        default:
-            return "Unexpected status code";
-    }
-}
+const errors: Map<number, string> = new Map([
+    [400, 'Petición inválida'],
+    [401, 'Error de autenticación'],
+    [403, 'No está autorizado para acceder a este recurso'],
+    [404, 'Recurso no encontrado'],
+    [409, 'El estudiante ya tiene un equipo'],
+    [410, 'El equipo no está activo'],
+    [498, 'Su autenticación ha expirado'],
+    [500, 'Un error inesperado ocurrido'],
+]);
 
 const useTeams = () => {
     const [loading, setLoading] = useState(false);
@@ -37,6 +26,7 @@ const useTeams = () => {
     const authStorage = useAuthStorage();
 
     const getTeams = useCallback(async () => {
+        setError(null);
         setLoading(true);
         try {
             const response = await axios.get(`${environment.apiUrl}/teams`, {
@@ -55,7 +45,7 @@ const useTeams = () => {
             }
         } catch (err) {
             setLoading(false);
-            setError(getError((err as any).response.status));
+            setError(errorHandler(err, errors));
         }
     }, []);
 

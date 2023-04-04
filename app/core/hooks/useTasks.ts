@@ -3,9 +3,17 @@ import useAuthStorage from './useAuthStorage';
 
 import axios from 'axios';
 
+import { errorHandler } from '../utils/errorHandler';
 import { environment } from "@environments/environment";
 
 import { Task } from '@interfaces/Task.interface';
+
+const errors: Map<number, string> = new Map([
+    [401, 'Error de autenticación'],
+    [403, 'No está autorizado para acceder a este recurso'],
+    [498, 'Su autenticación ha expirado'],
+    [500, 'Un error inesperado ocurrido'],
+]);
 
 const useTasks = () => {
     const [loading, setLoading] = useState(false);
@@ -14,6 +22,7 @@ const useTasks = () => {
     const authStorage = useAuthStorage();
 
     const getTasks = useCallback(async () => {
+        setError(null);
         setLoading(true);
         try {
             const response = await axios.get(`${environment.apiUrl}/tasks`, {
@@ -32,23 +41,7 @@ const useTasks = () => {
             }
         } catch (err: any) {
             setLoading(false);
-            switch (err.response.status) {
-                case 401:
-                    setError('Unauthorized');
-                    break;
-                case 403:
-                    setError('Unauthorized');
-                    break;
-                case 498:
-                    setError('Token expired');
-                    break;
-                case 500:
-                    setError('Internal server error');
-                    break;
-                default:
-                    setError('An error occurred');
-                    break;
-            }
+            setError(errorHandler(err, errors));
         }
     }, []);
 

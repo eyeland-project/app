@@ -9,7 +9,7 @@ import { Theme } from '@theme'
 
 const Title = () => {
     const theme = useTheme()
-    const [open, setOpen] = useState(false)
+    const [open, setOpen] = useState(true)
 
     const toggleDialog = () => {
         AccessibilityInfo.announceForAccessibility('Grábate diciendo la pregunta y su correspondiente respuesta. Recuerda: El audio debe durar más de 20 segundos');
