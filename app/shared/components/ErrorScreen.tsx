@@ -51,6 +51,7 @@ const getStyles = (theme: Theme) => StyleSheet.create({
         paddingVertical: 10,
         borderRadius: 5,
         marginTop: 10,
+        ...theme.shadow
     },
     retryButtonText: {
         color: theme.colors.primary,

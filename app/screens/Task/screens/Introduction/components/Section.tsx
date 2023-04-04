@@ -17,30 +17,20 @@ const Section = ({ title, completed, blocked, onPress }: Props) => {
     const theme = useTheme();
 
     return (
-        <Pressable
-            style={getStyles(theme, completed, blocked).container}
-            accessible={true}
-            accessibilityLabel={`${title}. ${completed ? 'Completado' : 'No completado'}. ${blocked ? 'Bloqueado' : 'Disponible'}`}
-            accessibilityHint={`${blocked ? 'Esta sección está bloqueada.' : 'Presione para continuar.'}`}
-            onPress={onPress}
-            disabled={blocked}
-        >
+        <View style={getStyles(theme, completed, blocked).container}>
             <Text style={getStyles(theme, completed, blocked).text}>{title}</Text>
-            <View
-
+            <Pressable
+                onPress={onPress}
                 style={getStyles(theme, completed, blocked).button}
-
-                accessibilityRole="button"
-                accessibilityLabel={completed ? "Reiniciar sección" : "Continuar sección"}
+                disabled={blocked}
             >
                 <AntDesign
                     name={completed ? 'reload1' : "arrowright"}
                     size={20}
                     color={theme.colors.white}
-                    accessible={false}
                 />
-            </View>
-        </Pressable>
+            </Pressable>
+        </View>
     )
 }
 
@@ -57,7 +47,7 @@ const getStyles = (theme: Theme, completed: boolean, blocked: boolean) =>
             paddingVertical: 7,
             marginHorizontal: 20,
             borderRadius: theme.borderRadius.medium,
-            borderColor: theme.colors.green,
+            borderColor: theme.colors.blue,
             borderWidth: completed ? 2 : 0,
             ...theme.shadow
         },
@@ -69,13 +59,14 @@ const getStyles = (theme: Theme, completed: boolean, blocked: boolean) =>
             opacity: blocked ? 0.5 : 1,
         },
         button: {
-            backgroundColor: completed ? theme.colors.green : theme.colors.secondary,
+            backgroundColor: completed ? theme.colors.blue : theme.colors.secondary,
             borderRadius: theme.borderRadius.full,
             padding: 10,
             marginVertical: 5,
             alignItems: 'center',
             justifyContent: 'center',
             opacity: blocked ? 0.5 : 1,
+            ...theme.shadow
         },
     })
 
