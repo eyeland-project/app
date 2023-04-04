@@ -109,7 +109,7 @@ const Question = ({ route }: Props) => {
                     onPress={() => {
                         onPressOption(0, data.options[0].correct, data.options[0].id)
                     }}
-                    ContainerStyle={containerStyleOptions[0]}
+                    containerStyle={containerStyleOptions[0]}
                     textStyle={textStyleOptions[0]}
                 />
                 <Option
@@ -117,7 +117,7 @@ const Question = ({ route }: Props) => {
                     onPress={() => {
                         onPressOption(1, data.options[1].correct, data.options[1].id)
                     }}
-                    ContainerStyle={containerStyleOptions[1]}
+                    containerStyle={containerStyleOptions[1]}
                     textStyle={textStyleOptions[1]}
                 />
             </View>

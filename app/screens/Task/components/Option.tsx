@@ -8,16 +8,16 @@ import { Theme } from '@theme'
 interface Props {
     text: string
     onPress: () => void
-    ContainerStyle: StyleProp<ViewStyle>
+    containerStyle: StyleProp<ViewStyle>
     textStyle: StyleProp<TextStyle>
 }
 
-const Option = ({ text, onPress, ContainerStyle, textStyle }: Props) => {
+const Option = ({ text, onPress, containerStyle, textStyle }: Props) => {
     const theme = useTheme()
 
     const containerStyles = StyleSheet.flatten([
         getStyles(theme).container,
-        ContainerStyle
+        containerStyle
     ]);
 
     const textStyles = StyleSheet.flatten([

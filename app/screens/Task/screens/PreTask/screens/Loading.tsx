@@ -22,10 +22,14 @@ const Loading = ({ route }: { route: any }) => {
     useFocusEffect(
         useCallback(() => {
             const getQuestion = async () => {
-                await getPreTask({ taskOrder });
+                const data = await getPreTask({ taskOrder });
                 if (data) {
                     setData(data);
-                    nextQuestion({ question: data[0], taskOrder });
+                    // nextQuestion({ question: data[0], taskOrder });
+                    // MOCK Funtion
+                    // navigation.navigate('MultipleChoice', { question: data[0], taskOrder });
+                    navigation.navigate('FillBlank', { question: data[3], taskOrder });
+
                 }
             }
             getQuestion();

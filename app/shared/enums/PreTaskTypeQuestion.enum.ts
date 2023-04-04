@@ -1,6 +1,6 @@
 export enum PreTaskTypeQuestion {
-    MULTIPLE_CHOICE = "multiple_choice",
+    FIll_BLANK = "fill",
+    MULTIPLE_CHOICE = "select",
     FLASHCARD = "flashcard",
-    DUOLINGO = "duolingo",
-    MISSING_WORD = "missing_word",
+    ORDER = "order",
 }

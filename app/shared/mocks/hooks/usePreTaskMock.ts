@@ -20,7 +20,7 @@ const usePreTaskMock = () => {
         try {
             const response = await new Promise<{ status: number; data: PreTask }>((resolve) => {
                 setTimeout(() => {
-                    resolve({ status: 200, data: PRETASK });
+                    resolve({ status: 200, data: PRETASK[inputs.taskOrder - 1] });
                 }, 1000);
             });
 
@@ -44,7 +44,7 @@ const usePreTaskMock = () => {
             const response = await new Promise<{ status: number; data: { success: boolean } }>((resolve) => {
                 setTimeout(() => {
                     resolve({ status: 200, data: { success: true } });
-                }, 1000);
+                }, 500);
             });
 
             if (response.status === 200) {
@@ -61,8 +61,8 @@ const usePreTaskMock = () => {
 
     const nextQuestion = ({ question, taskOrder }: { question: PreTaskQuestion, taskOrder: number }) => {
         switch (question.type) {
-            case PreTaskTypeQuestion.DUOLINGO:
-                navigation.navigate('Duolingo', { taskOrder });
+            case PreTaskTypeQuestion.ORDER:
+                // navigation.navigate('Duolingo', { taskOrder });
                 break;
             case PreTaskTypeQuestion.FLASHCARD:
                 navigation.navigate('Flashcard', { taskOrder });
@@ -70,8 +70,8 @@ const usePreTaskMock = () => {
             case PreTaskTypeQuestion.MULTIPLE_CHOICE:
                 navigation.navigate('MultipleChoice', { taskOrder });
                 break;
-            case PreTaskTypeQuestion.MISSING_WORD:
-                navigation.navigate('MissingWord', { taskOrder });
+            case PreTaskTypeQuestion.FIll_BLANK:
+                navigation.navigate('FillBlank', { taskOrder });
                 break;
             default:
                 console.error('No question type found');
