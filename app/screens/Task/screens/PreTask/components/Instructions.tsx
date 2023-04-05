@@ -13,7 +13,7 @@ const Instructions = ({ text }: Props) => {
     const theme = useTheme()
 
     return (
-        <View style={getStyles(theme).container}>
+        <View style={getStyles(theme).container} accessible={true} accessibilityLabel={`Instrucciones: ${text}`}>
             <Text style={getStyles(theme).text}>{text}</Text>
             <View style={getStyles(theme).line}></View>
         </View>

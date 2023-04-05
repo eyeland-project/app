@@ -20,7 +20,6 @@ const FillBlank = ({ route }: Props) => {
     const [containerStyleOptions, setContainerStyleOptions] = useState([{}])
     const [textStyleOptions, setTextStyleOptions] = useState([{}])
     const [blank, setBlank] = useState('       ')
-    // const [questionList, setQuestionList] = useState('')
     const theme = useTheme()
     const playSoundSuccess = usePlaySound(require('@sounds/success.wav'))
     const playSoundWrong = usePlaySound(require('@sounds/wrong.wav'))

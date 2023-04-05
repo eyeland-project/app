@@ -28,7 +28,9 @@ const Loading = ({ route }: { route: any }) => {
                     // nextQuestion({ question: data[0], taskOrder });
                     // MOCK Funtion
                     // navigation.navigate('MultipleChoice', { question: data[0], taskOrder });
-                    navigation.navigate('FillBlank', { question: data[3], taskOrder });
+                    // TODO - Fix when going back it goes to Loading screen 
+                    // TODO - make everything work like continuely, as it's going to be
+                    navigation.navigate('FlashCards', { question: data[1], taskOrder });
 
                 }
             }
@@ -40,12 +42,14 @@ const Loading = ({ route }: { route: any }) => {
 
     return (
         <View style={getStyles(theme).container}>
-            <LottieView
-                source={require('@animations/loading.json')}
-                autoPlay
-                loop
-                style={getStyles(theme).animation}
-            />
+            <View accessible={true} accessibilityLabel="Loading animation">
+                <LottieView
+                    source={require('@animations/loading.json')}
+                    autoPlay
+                    loop
+                    style={getStyles(theme).animation}
+                />
+            </View>
         </View>
     )
 }

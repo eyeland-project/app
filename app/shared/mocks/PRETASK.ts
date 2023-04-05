@@ -32,10 +32,10 @@ export const PRETASK: PreTaskQuestion[][] = [
         },
         {
             id: 2,
-            content: "Cat",
+            content: "",
             type: PreTaskTypeQuestion.FLASHCARD,
             imgAlt: "cat",
-            imgUrl: "https://images.unsplash.com/photo-1495360010541-f48722b34f7d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=736&q=80",
+            imgUrl: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1143&q=80",
             options: [
                 {
                     id: 1,
