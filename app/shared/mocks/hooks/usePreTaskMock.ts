@@ -6,6 +6,9 @@ import { PreTask } from '@interfaces/PreTask.interface';
 import { PreTaskQuestion } from '@interfaces/PreTaskQuestion.interface';
 import { PreTaskTypeQuestion } from '@enums/PreTaskTypeQuestion.enum';
 import { PRETASK } from '../PRETASK';
+import useTaskContext from '@hooks/useTaskContext';
+
+import usePreTaskContext from '@hooks/usePreTaskContext';
 
 const usePreTaskMock = () => {
     const [loading, setLoading] = useState(false);
@@ -13,6 +16,8 @@ const usePreTaskMock = () => {
     const [data, setData] = useState<PreTask | null>(null);
     const authStorage = useAuthStorage();
     const navigation = useNavigation<any>();
+    const { index, data: dataContext, setIndex } = usePreTaskContext();
+    const { taskOrder, setProgress } = useTaskContext();
 
     const getPreTask = useCallback(async (inputs: { taskOrder: number }) => {
         setError(null);
@@ -59,24 +64,60 @@ const usePreTaskMock = () => {
         }
     }, []);
 
-    const nextQuestion = ({ question, taskOrder }: { question: PreTaskQuestion, taskOrder: number }) => {
-        switch (question.type) {
-            case PreTaskTypeQuestion.ORDER:
-                // navigation.navigate('Duolingo', { taskOrder });
-                break;
-            case PreTaskTypeQuestion.FLASHCARD:
-                navigation.navigate('Flashcard', { taskOrder });
-                break;
-            case PreTaskTypeQuestion.MULTIPLE_CHOICE:
-                navigation.navigate('MultipleChoice', { taskOrder });
-                break;
-            case PreTaskTypeQuestion.FIll_BLANK:
-                navigation.navigate('FillBlank', { taskOrder });
-                break;
-            default:
-                console.error('No question type found');
-                break;
-        }
+    const nextQuestion = () => {
+        setTimeout(() => {
+            if (!dataContext) return null;
+
+            if (index === dataContext.length) {
+                navigation.reset({
+                    index: 0,
+                    routes: [
+                        { name: 'Introduction', params: { taskOrder } },
+                    ]
+                })
+                return null;
+            }
+
+            const question: PreTaskQuestion = dataContext[index];
+            let name = '';
+
+            switch (question.type) {
+                case PreTaskTypeQuestion.ORDER:
+                    name = 'Order';
+                    break;
+                case PreTaskTypeQuestion.FLASHCARD:
+                    name = 'FlashCards';
+                    break;
+                case PreTaskTypeQuestion.MULTIPLE_CHOICE:
+                    name = 'MultipleChoice';
+                    break;
+                case PreTaskTypeQuestion.FIll_BLANK:
+                    name = 'FillBlank';
+                    break;
+                default:
+                    console.error('No question type found');
+                    break;
+            }
+
+            if (name === '') {
+                navigation.reset({
+                    index: 0,
+                    routes: [
+                        { name: 'Introduction', params: { taskOrder } }
+                    ]
+                })
+            } else {
+                navigation.reset({
+                    index: 1,
+                    routes: [
+                        { name: name, params: { question } }
+                    ]
+                })
+            }
+
+            setProgress((index + 1) / dataContext.length);
+            setIndex(index + 1);
+        }, 500);
     }
 
     return { loading, error, data, getPreTask, setPreTaskComplete, nextQuestion };

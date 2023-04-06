@@ -10,18 +10,20 @@ import { Theme } from '@theme'
 import { PreTaskQuestion } from '@interfaces/PreTaskQuestion.interface'
 import { useState } from 'react'
 import usePlaySound from '@hooks/usePlaySound'
+import usePreTaskMock from '@mocks/hooks/usePreTaskMock'
 
 interface Props {
     route: any
 }
 
 const MultipleChoice = ({ route }: Props) => {
-    const { question, taskOrder } = route.params as { question: PreTaskQuestion, taskOrder: number }
+    const { question } = route.params as { question: PreTaskQuestion }
     const [containerStyleOptions, setContainerStyleOptions] = useState([{}])
     const [textStyleOptions, setTextStyleOptions] = useState([{}])
     const theme = useTheme()
     const playSoundSuccess = usePlaySound(require('@sounds/success.wav'))
     const playSoundWrong = usePlaySound(require('@sounds/wrong.wav'))
+    const { nextQuestion } = usePreTaskMock()
 
     const onPressOption = (index: number, correct: boolean) => {
         const newContainerStyleOptions = [...containerStyleOptions];
@@ -40,7 +42,7 @@ const MultipleChoice = ({ route }: Props) => {
         setTextStyleOptions(newTextStyleOptions);
 
         if (correct) {
-            // TODO - navigate to next question
+            nextQuestion();
         } else {
             resetContainerStyleOptions();
         }

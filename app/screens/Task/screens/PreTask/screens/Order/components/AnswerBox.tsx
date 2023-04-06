@@ -43,7 +43,8 @@ const getStyles = (theme: Theme) =>
         notEmptyContainer: {
             flexDirection: 'row',
             flexWrap: 'wrap',
-            padding: 10,
+            paddingHorizontal: 10,
+            paddingBottom: 10,
         },
         text: {
             color: theme.colors.black,

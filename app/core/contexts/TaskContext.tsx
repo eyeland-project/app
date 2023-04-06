@@ -11,6 +11,8 @@ interface TaskContextProps {
     resetContext: () => void;
     icon?: keyof typeof AntDesign.glyphMap;
     setIcon: Dispatch<SetStateAction<keyof typeof AntDesign.glyphMap>>;
+    taskOrder: number;
+    setTaskOrder: Dispatch<SetStateAction<number>>;
 }
 
 const TaskContext = createContext<TaskContextProps | null>(null);
@@ -20,6 +22,7 @@ const TaskProvider = ({ children }: { children: React.ReactNode }) => {
     const [phaseCompleted, setPhaseCompleted] = useState(false);
     const [onPressNext, setOnPressNext] = useState<() => void>(() => () => { });
     const [icon, setIcon] = useState<keyof typeof AntDesign.glyphMap>('closecircle');
+    const [taskOrder, setTaskOrder] = useState(0);
 
     const resetContext = () => {
         setProgress(undefined);
@@ -28,7 +31,7 @@ const TaskProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     return (
-        <TaskContext.Provider value={{ progress, setProgress, phaseCompleted, setPhaseCompleted, onPressNext, setOnPressNext, resetContext, icon, setIcon }}>
+        <TaskContext.Provider value={{ progress, setProgress, phaseCompleted, setPhaseCompleted, onPressNext, setOnPressNext, resetContext, icon, setIcon, taskOrder, setTaskOrder }}>
             {children}
         </TaskContext.Provider>
     );

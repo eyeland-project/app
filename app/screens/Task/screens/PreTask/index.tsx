@@ -10,6 +10,8 @@ import Order from "./screens/Order";
 
 import PreTaskProvider from "@contexts/PreTaskContext";
 
+import useTaskContext from "@hooks/useTaskContext";
+
 interface Props {
     route: any
 }
@@ -17,14 +19,12 @@ interface Props {
 const Stack = createNativeStackNavigator();
 
 const PreTask = ({ route }: Props) => {
+    const { progress } = useTaskContext()
+
     const optionsPrimary: NativeStackNavigationOptions = {
         animation: "slide_from_right",
         headerBackVisible: false,
-        headerShown: true,
-        headerTitleStyle: {
-            fontFamily: "Poppins-Regular",
-        },
-        header: () => <Header />
+        headerShown: false,
     }
 
     return (
@@ -47,7 +47,6 @@ const PreTask = ({ route }: Props) => {
                     }}
                     initialParams={{
                         question: null,
-                        taskOrder: 0,
                     }}
                     component={MultipleChoice}
                 />
@@ -58,7 +57,6 @@ const PreTask = ({ route }: Props) => {
                     }}
                     initialParams={{
                         question: null,
-                        taskOrder: 0,
                     }}
                     component={FillBlank}
                 />
@@ -69,7 +67,6 @@ const PreTask = ({ route }: Props) => {
                     }}
                     initialParams={{
                         question: null,
-                        taskOrder: 0,
                     }}
                     component={FlashCards}
                 />
@@ -80,7 +77,6 @@ const PreTask = ({ route }: Props) => {
                     }}
                     initialParams={{
                         question: null,
-                        taskOrder: 0,
                     }}
                     component={Order}
                 />

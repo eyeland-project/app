@@ -8,6 +8,7 @@ import AnswerBox from './components/AnswerBox'
 import { useEffect, useState } from 'react'
 import useTheme from '@hooks/useTheme'
 import usePlaySound from '@hooks/usePlaySound'
+import usePreTaskMock from '@mocks/hooks/usePreTaskMock'
 
 import { Theme } from '@theme'
 import { PreTaskQuestion } from '@interfaces/PreTaskQuestion.interface'
@@ -26,7 +27,7 @@ const CONFIRM_TEXT_STYLE_DEFAULT = (theme: Theme) => {
 }
 
 const Order = ({ route }: Props) => {
-    const { question, taskOrder } = route.params as { question: PreTaskQuestion, taskOrder: number }
+    const { question } = route.params as { question: PreTaskQuestion, taskOrder: number }
     const theme = useTheme()
     const [allOptionsInBox, setAllOptionsInBox] = useState(false)
     const [confirmContainerStyle, setConfirmContainerStyle] = useState({})
@@ -38,6 +39,7 @@ const Order = ({ route }: Props) => {
     const correctOrder = question.options
         .filter((option) => option.correct)[0].content
         .split(' ')
+    const { nextQuestion } = usePreTaskMock()
 
     const onPressConfirm = () => {
         const isCorrect = answerList.every((answer, index) => answer === correctOrder[index])
@@ -45,7 +47,7 @@ const Order = ({ route }: Props) => {
         if (isCorrect) {
             playSoundSuccess()
             setConfirmContainerStyle({ backgroundColor: theme.colors.green })
-            // TODO - Go to next question
+            nextQuestion()
         } else {
             playSoundWrong()
             setConfirmContainerStyle({ backgroundColor: theme.colors.red })
@@ -90,17 +92,19 @@ const Order = ({ route }: Props) => {
                 <Text style={getStyles(theme).question}>{question.content}</Text>
                 <AnswerBox answerList={answerList} onAnswerPress={onAnswerPress} />
                 <View style={getStyles(theme).optionsContainer}>
-                    {optionsList.map((option, index) => (
-                        <>
-                            <Option
-                                key={index}
-                                text={option}
-                                onPress={() => {
-                                    onPressOption(index)
-                                }}
-                            />
-                        </>
-                    ))}
+                    {optionsList.map((option, index) => {
+                        return (
+                            <>
+                                <Option
+                                    key={index}
+                                    text={option}
+                                    onPress={() => {
+                                        onPressOption(index)
+                                    }}
+                                />
+                            </>
+                        )
+                    })}
                 </View>
             </View>
             {
@@ -132,7 +136,7 @@ const getStyles = (theme: Theme) =>
             height: '100%',
         },
         optionsContainer: {
-            marginTop: 20,
+            marginTop: 10,
             flexDirection: 'row',
             marginHorizontal: 20,
         },

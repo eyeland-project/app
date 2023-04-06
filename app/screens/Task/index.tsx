@@ -7,13 +7,14 @@ import DuringTask from './screens/DuringTask';
 import PosTask from "./screens/PosTask";
 import Header from './components/Header';
 
+import { useEffect } from "react";
 import useTaskContext from '@hooks/useTaskContext';
 
 const Stack = createNativeStackNavigator();
 
 const Task = ({ route }: { route: any }) => {
     const { taskOrder } = route.params;
-    const { phaseCompleted, onPressNext, progress, setPhaseCompleted } = useTaskContext();
+    const { phaseCompleted, onPressNext, progress, setPhaseCompleted, setTaskOrder } = useTaskContext();
 
     const optionsPrimary: NativeStackNavigationOptions = {
         animation: "slide_from_right",
@@ -26,6 +27,10 @@ const Task = ({ route }: { route: any }) => {
             onPressNext();
         }} />
     }
+
+    useEffect(() => {
+        setTaskOrder(taskOrder);
+    }, [])
 
     return (
         <Stack.Navigator>
@@ -43,7 +48,7 @@ const Task = ({ route }: { route: any }) => {
                 name="PreTask"
                 options={{
                     ...optionsPrimary,
-                    headerShown: false
+                    headerShown: true
                 }}
                 initialParams={{
                     taskOrder: taskOrder,

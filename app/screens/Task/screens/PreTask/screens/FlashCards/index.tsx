@@ -7,6 +7,7 @@ import Option from './components/Option';
 
 import useTheme from '@hooks/useTheme';
 import usePlaySound from '@hooks/usePlaySound';
+import usePreTaskMock from '@app/shared/mocks/hooks/usePreTaskMock';
 
 import { Theme } from '@theme';
 import { PreTaskQuestion } from '@interfaces/PreTaskQuestion.interface';
@@ -19,7 +20,7 @@ interface Props {
 }
 
 const FlashCards = ({ route }: Props) => {
-    const { question, taskOrder } = route.params as { question: PreTaskQuestion; taskOrder: number };
+    const { question } = route.params as { question: PreTaskQuestion };
     const theme = useTheme();
     const [optionIndex, setOptionIndex] = useState<number>(0);
     const [isFlipped, setIsFlipped] = useState<boolean>(false);
@@ -31,6 +32,7 @@ const FlashCards = ({ route }: Props) => {
     const flipIndicatorAnimation = useRef(new Animated.Value(0)).current;
     const cardPosition = useRef(new Animated.Value(0)).current;
     const cardOpacity = useRef(new Animated.Value(1)).current;
+    const { nextQuestion } = usePreTaskMock();
 
 
     const updateStyles = (option: 'true' | 'false') => {
@@ -56,7 +58,7 @@ const FlashCards = ({ route }: Props) => {
             if (optionsQuestionShuffled[optionIndex].correct) {
                 setContainerCardStyle({ backgroundColor: hexToRgbA(theme.colors.green, 0.2) });
                 playSoundSuccess();
-                // TODO - Go to next question
+                nextQuestion();
             } else {
                 Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
                 playSoundWrong();
