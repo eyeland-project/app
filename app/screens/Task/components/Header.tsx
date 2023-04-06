@@ -51,23 +51,22 @@ const Header = ({ progress, showNext, icon, onPress }: Props) => {
                 accessibilityLabel="Volver al inicio"
             />
             {
+                progress && <Progress.Bar progress={progress} width={null} height={5} color={theme.colors.secondary} style={{ flex: 1, marginHorizontal: 20 }} />
+            }
+            {
                 progress && onPress
                     ? (
-                        <>
-                            <Progress.Bar progress={progress} width={null} height={5} color={theme.colors.secondary} style={{ flex: 1, marginHorizontal: 20 }} />
-                            <Animated.View style={{ opacity: continueOpacity, transform: [{ translateX: continueTranslateX }] }}>
-                                {
-                                    showNext &&
-                                    <ContinueButton
-                                        onPress={onPress}
-                                        accessibilityLabel="Continuar"
-                                    />
-                                }
-                            </Animated.View>
-                        </>
+                        <Animated.View style={{ opacity: continueOpacity, transform: [{ translateX: continueTranslateX }] }}>
+                            {
+                                showNext &&
+                                <ContinueButton
+                                    onPress={onPress}
+                                    accessibilityLabel="Continuar"
+                                />
+                            }
+                        </Animated.View>
                     ) : null
             }
-
         </View>
     )
 }

@@ -1,91 +1,99 @@
-import { View, StyleSheet } from 'react-native'
-import WebView from 'react-native-webview';
-import Placeholder from './components/Placeholder';
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { NativeStackNavigationOptions } from "@react-navigation/native-stack";
+import Header from "../../components/Header";
 
-import useTheme from '@hooks/useTheme';
-import { useNavigation } from '@react-navigation/native';
-import usePreTask from '@hooks/usePreTask';
-import { useEffect } from 'react';
-import useTaskContext from '@hooks/useTaskContext';
+import Loading from "./screens/Loading";
+import MultipleChoice from "./screens/MultipleChoice";
+import FillBlank from "./screens/FillBlank";
+import FlashCards from "./screens/FlashCards";
+import Order from "./screens/Order";
 
-import { Theme } from '@theme';
+import PreTaskProvider from "@contexts/PreTaskContext";
+
+import useTaskContext from "@hooks/useTaskContext";
 
 interface Props {
     route: any
 }
 
+const Stack = createNativeStackNavigator();
+
 const PreTask = ({ route }: Props) => {
-    const { taskOrder, linkOrder } = route.params as { taskOrder: number, linkOrder: number };
+    const { progress } = useTaskContext()
 
-    const theme = useTheme();
-    const navigation = useNavigation<any>();
-    const { loading, error, data, getPreTask, getTotalNumberOfPreTasks, setPreTaskComplete } = usePreTask();
-    const { setPhaseCompleted, setOnPressNext, setProgress, progress, setIcon } = useTaskContext();
-
-    const onRenderComplete = async () => {
-        setIcon('closecircle');
-        await getPreTask({ taskOrder, linkOrder });
-        const numberOfPreTasks = await getTotalNumberOfPreTasks(taskOrder);
-        setPhaseCompleted(true);
-        setProgress(linkOrder / numberOfPreTasks);
-        setOnPressNext(() => async () => {
-            if (linkOrder < numberOfPreTasks) {
-                navigation.pop(1)
-                navigation.push('PreTask', { taskOrder, linkOrder: linkOrder + 1 });
-            } else {
-                await setPreTaskComplete({ taskOrder });
-                navigation.pop(1)
-            }
-        });
+    const optionsPrimary: NativeStackNavigationOptions = {
+        animation: "slide_from_right",
+        headerBackVisible: false,
+        headerShown: false,
     }
 
-    useEffect(() => {
-        onRenderComplete();
-    }, [linkOrder]);
-
     return (
-        <View style={getStyles(theme).container}>
-            {
-                (data && !loading)
-                    ? <WebView
-                        source={{ uri: data.url }}
-                        style={{ marginBottom: 90, marginTop: 10 }}
-                    />
-                    : <Placeholder />
-            }
-
-        </View>
+        <PreTaskProvider>
+            <Stack.Navigator>
+                <Stack.Screen
+                    name="Loading"
+                    options={{
+                        ...optionsPrimary,
+                    }}
+                    initialParams={{
+                        taskOrder: route.params.taskOrder,
+                    }}
+                    component={Loading}
+                />
+                <Stack.Screen
+                    name="MultipleChoice"
+                    options={{
+                        ...optionsPrimary,
+                    }}
+                    initialParams={{
+                        question: null,
+                    }}
+                    component={MultipleChoice}
+                />
+                <Stack.Screen
+                    name="FillBlank"
+                    options={{
+                        ...optionsPrimary,
+                    }}
+                    initialParams={{
+                        question: null,
+                    }}
+                    component={FillBlank}
+                />
+                <Stack.Screen
+                    name="FlashCards"
+                    options={{
+                        ...optionsPrimary,
+                    }}
+                    initialParams={{
+                        question: null,
+                    }}
+                    component={FlashCards}
+                />
+                <Stack.Screen
+                    name="Order"
+                    options={{
+                        ...optionsPrimary,
+                    }}
+                    initialParams={{
+                        question: null,
+                    }}
+                    component={Order}
+                />
+                {/* <Stack.Screen
+                name="PreTask"
+                options={{
+                    ...optionsPrimary,
+                }}
+                initialParams={{
+                    taskOrder: route.params.taskOrder,
+                    questionOrder: 0,
+                }}
+                component={PreTask}
+            /> */}
+            </Stack.Navigator>
+        </PreTaskProvider>
     )
 }
-
-const getStyles = (theme: Theme) =>
-    StyleSheet.create({
-        container: {
-            backgroundColor: theme.colors.primary,
-            height: '100%',
-        },
-        scrollView: {
-            backgroundColor: theme.colors.primary,
-            paddingHorizontal: 20,
-        },
-        text: {
-            color: theme.colors.black,
-            fontSize: theme.fontSize.large,
-            fontFamily: theme.fontWeight.bold,
-        },
-        image: {
-            width: '100%',
-            height: 200,
-            borderRadius: theme.borderRadius.medium,
-            marginBottom: 40,
-        },
-        row: {
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            paddingHorizontal: 20,
-        },
-    })
-
 
 export default PreTask

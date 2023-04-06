@@ -1,29 +1,16 @@
 import { useState, useCallback } from 'react';
-import usePlaySound from './usePlaySound';
-import useAuthStorage from './useAuthStorage';
-import axios from 'axios';
-
-import { environment } from "@environments/environment";
+import useAuthStorage from '@hooks/useAuthStorage';
+import { useNavigation } from '@react-navigation/native';
 
 import { PreTask } from '@interfaces/PreTask.interface';
-import { errorHandler } from '../utils/errorHandler';
-import { PreTaskTypeQuestion } from '@enums/PreTaskTypeQuestion.enum';
 import { PreTaskQuestion } from '@interfaces/PreTaskQuestion.interface';
+import { PreTaskTypeQuestion } from '@enums/PreTaskTypeQuestion.enum';
+import { PRETASK } from '../PRETASK';
+import useTaskContext from '@hooks/useTaskContext';
 
-import { useNavigation } from '@react-navigation/native';
-import usePreTaskContext from './usePreTaskContext';
-import useTaskContext from './useTaskContext';
+import usePreTaskContext from '@hooks/usePreTaskContext';
 
-const errors: Map<number, string> = new Map([
-    [400, 'Recurso no encontrado'],
-    [401, 'Error de autenticación'],
-    [403, 'No está autorizado para acceder a este recurso'],
-    [404, 'Recurso no encontrado'],
-    [498, 'Su autenticación ha expirado'],
-    [500, 'Un error inesperado ocurrido'],
-]);
-
-const usePreTask = () => {
+const usePreTaskMock = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [data, setData] = useState<PreTask | null>(null);
@@ -36,11 +23,10 @@ const usePreTask = () => {
         setError(null);
         setLoading(true);
         try {
-            const response = await axios.get(`${environment.apiUrl}/tasks/${inputs.taskOrder}/pretask`, {
-                headers: {
-                    Authorization: `Bearer ${await authStorage.getAccessToken()}`,
-                },
-                timeout: 10000,
+            const response = await new Promise<{ status: number; data: PreTask }>((resolve) => {
+                setTimeout(() => {
+                    resolve({ status: 200, data: PRETASK[inputs.taskOrder - 1] });
+                }, 1000);
             });
 
             if (response.status === 200) {
@@ -48,11 +34,11 @@ const usePreTask = () => {
                 setData(response.data);
                 return response.data;
             } else {
-                throw new Error(response.data);
+                throw new Error();
             }
-        } catch (err) {
+        } catch (err: any) {
             setLoading(false);
-            setError((err as any).message || 'An error occurred');
+            setError(err.message);
         }
     }, []);
 
@@ -60,22 +46,21 @@ const usePreTask = () => {
         setError(null);
         setLoading(true);
         try {
-            const response = await axios.post(`${environment.apiUrl}/tasks/${inputs.taskOrder}/pretask/complete`, {}, {
-                headers: {
-                    Authorization: `Bearer ${await authStorage.getAccessToken()}`,
-                },
-                timeout: 10000,
+            const response = await new Promise<{ status: number; data: { success: boolean } }>((resolve) => {
+                setTimeout(() => {
+                    resolve({ status: 200, data: { success: true } });
+                }, 500);
             });
 
             if (response.status === 200) {
                 setLoading(false);
                 return response.data;
             } else {
-                throw new Error(response.data);
+                throw new Error();
             }
         } catch (err: any) {
             setLoading(false);
-            setError(errorHandler(err, errors));
+            setError(err.message);
         }
     }, []);
 
@@ -138,4 +123,4 @@ const usePreTask = () => {
     return { loading, error, data, getPreTask, setPreTaskComplete, nextQuestion };
 };
 
-export default usePreTask;
+export default usePreTaskMock;

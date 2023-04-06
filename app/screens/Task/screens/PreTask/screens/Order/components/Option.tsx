@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, StyleProp, ViewStyle, TextStyle } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
 import Pressable from '@components/Pressable'
 
 import useTheme from '@hooks/useTheme'
@@ -8,26 +8,14 @@ import { Theme } from '@theme'
 interface Props {
     text: string
     onPress: () => void
-    containerStyle: StyleProp<ViewStyle>
-    textStyle: StyleProp<TextStyle>
 }
 
-const Option = ({ text, onPress, containerStyle, textStyle }: Props) => {
+const Option = ({ text, onPress }: Props) => {
     const theme = useTheme()
 
-    const containerStyles = StyleSheet.flatten([
-        getStyles(theme).container,
-        containerStyle
-    ]);
-
-    const textStyles = StyleSheet.flatten([
-        getStyles(theme).text,
-        textStyle
-    ])
-
     return (
-        <Pressable style={containerStyles} onPress={onPress}>
-            <Text style={textStyles}>{text}</Text>
+        <Pressable style={getStyles(theme).container} onPress={onPress}>
+            <Text style={getStyles(theme).text}>{text}</Text>
         </Pressable>
     )
 }
@@ -36,12 +24,13 @@ const getStyles = (theme: Theme) =>
     StyleSheet.create({
         container: {
             backgroundColor: theme.colors.black,
-            marginHorizontal: 20,
-            marginBottom: 20,
+            paddingHorizontal: 20,
             borderRadius: theme.borderRadius.medium,
             paddingVertical: 10,
             justifyContent: 'center',
             alignItems: 'center',
+            marginEnd: 10,
+            marginTop: 10,
             ...theme.shadow
         },
         text: {

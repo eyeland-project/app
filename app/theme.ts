@@ -8,7 +8,7 @@ export let theme: Theme = {
         yellow: '#ffff00',
         green: '#00ff00',
         red: '#ff0000',
-        blue: '#53E0FF',
+        blue: '#0496FF',
         orange: '#FFA500',
     },
     borderRadius: {

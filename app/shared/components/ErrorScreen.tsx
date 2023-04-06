@@ -15,10 +15,17 @@ const ErrorScreen = ({ error, retryAction }: Props) => {
 
     return (
         <View style={getStyles(theme).errorContainer}>
-            <Text style={getStyles(theme).errorText}>
+            <Text
+                accessible={true}
+                accessibilityLabel={`Error: ${error}`}
+                style={getStyles(theme).errorText}
+            >
                 {error}
             </Text>
             <Pressable
+                accessible={true}
+                accessibilityLabel="Reintentar"
+                accessibilityRole="button"
                 style={getStyles(theme).retryButton}
                 onPress={() => {
                     retryAction();
@@ -51,6 +58,7 @@ const getStyles = (theme: Theme) => StyleSheet.create({
         paddingVertical: 10,
         borderRadius: 5,
         marginTop: 10,
+        ...theme.shadow
     },
     retryButtonText: {
         color: theme.colors.primary,

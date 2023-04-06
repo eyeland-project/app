@@ -4,7 +4,7 @@ import { socket } from "@utils/socket";
 import Header from "../../components/Header";
 
 import { useEffect, useState } from "react";
-import useAuthStorage from "@app/core/hooks/useAuthStorage";
+import useAuthStorage from "@hooks/useAuthStorage";
 
 import { DuringTaskContext } from "@contexts/DuringTaskContext";
 import WaitingActive from "./screens/WaitingActive";

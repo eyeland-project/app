@@ -29,8 +29,7 @@ const getStyles = (theme: Theme) =>
             color: theme.colors.black,
             fontSize: theme.fontSize.xxxl,
             fontFamily: theme.fontWeight.bold,
-            letterSpacing: theme.spacing.medium,
-            marginBottom: -10,
+            letterSpacing: theme.spacing.medium
         },
     })
 

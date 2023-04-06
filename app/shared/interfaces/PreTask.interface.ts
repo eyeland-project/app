@@ -1,10 +1,3 @@
-export interface PreTask {
-    id: number;
-    topic: string;
-    url: string;
-}
+import { PreTaskQuestion } from "./PreTaskQuestion.interface";
 
-export interface getPreTaskParams {
-    taskOrder: number;
-    linkOrder: number;
-}
+export type PreTask = PreTaskQuestion[];
