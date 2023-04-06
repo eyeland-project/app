@@ -6,6 +6,7 @@ import Loading from "./screens/Loading";
 import MultipleChoice from "./screens/MultipleChoice";
 import FillBlank from "./screens/FillBlank";
 import FlashCards from "./screens/FlashCards";
+import Order from "./screens/Order";
 
 import PreTaskProvider from "@app/core/contexts/PreTaskContext";
 
@@ -71,6 +72,17 @@ const PreTask = ({ route }: Props) => {
                         taskOrder: 0,
                     }}
                     component={FlashCards}
+                />
+                <Stack.Screen
+                    name="Order"
+                    options={{
+                        ...optionsPrimary,
+                    }}
+                    initialParams={{
+                        question: null,
+                        taskOrder: 0,
+                    }}
+                    component={Order}
                 />
                 {/* <Stack.Screen
                 name="PreTask"

@@ -12,6 +12,7 @@ import { Theme } from '@theme';
 import { PreTaskQuestion } from '@interfaces/PreTaskQuestion.interface';
 
 import { hexToRgbA } from '@utils/hexToRgba';
+import { shuffleList } from '@app/core/utils/shuffleList';
 
 interface Props {
     route: any;
@@ -88,12 +89,7 @@ const FlashCards = ({ route }: Props) => {
     }
 
     const shuffleOptions = (question: PreTaskQuestion) => {
-        const options = [...question.options];
-        for (let i = options.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [options[i], options[j]] = [options[j], options[i]];
-        }
-        return options;
+        return shuffleList(question.options);
     }
 
     const animateNextCard = () => {

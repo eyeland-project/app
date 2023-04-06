@@ -30,7 +30,7 @@ const Loading = ({ route }: { route: any }) => {
                     // navigation.navigate('MultipleChoice', { question: data[0], taskOrder });
                     // TODO - Fix when going back it goes to Loading screen 
                     // TODO - make everything work like continuely, as it's going to be
-                    navigation.navigate('FlashCards', { question: data[1], taskOrder });
+                    navigation.navigate('Order', { question: data[2], taskOrder });
 
                 }
             }
