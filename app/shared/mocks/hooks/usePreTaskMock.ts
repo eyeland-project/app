@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import { PreTask } from '@interfaces/PreTask.interface';
 import { PreTaskQuestion } from '@interfaces/PreTaskQuestion.interface';
-import { PreTaskTypeQuestion } from '@app/shared/enums/PreTaskTypeQuestion.enum';
+import { PreTaskTypeQuestion } from '@enums/PreTaskTypeQuestion.enum';
 import { PRETASK } from '../PRETASK';
 
 const usePreTaskMock = () => {

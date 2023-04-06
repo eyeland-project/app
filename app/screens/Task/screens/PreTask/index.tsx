@@ -8,7 +8,7 @@ import FillBlank from "./screens/FillBlank";
 import FlashCards from "./screens/FlashCards";
 import Order from "./screens/Order";
 
-import PreTaskProvider from "@app/core/contexts/PreTaskContext";
+import PreTaskProvider from "@contexts/PreTaskContext";
 
 interface Props {
     route: any

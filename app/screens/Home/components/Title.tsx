@@ -3,7 +3,7 @@ import Pressable from '@components/Pressable'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import useTheme from '@hooks/useTheme'
-import useAuthStorage from '@app/core/hooks/useAuthStorage';
+import useAuthStorage from '@hooks/useAuthStorage';
 import { useNavigation } from '@react-navigation/native';
 
 import { Theme } from '@theme'

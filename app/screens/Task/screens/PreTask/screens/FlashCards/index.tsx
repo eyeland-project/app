@@ -12,7 +12,7 @@ import { Theme } from '@theme';
 import { PreTaskQuestion } from '@interfaces/PreTaskQuestion.interface';
 
 import { hexToRgbA } from '@utils/hexToRgba';
-import { shuffleList } from '@app/core/utils/shuffleList';
+import { shuffleList } from '@utils/shuffleList';
 
 interface Props {
     route: any;

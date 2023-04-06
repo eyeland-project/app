@@ -5,9 +5,9 @@ import Header from "../../components/Header";
 import Loading from "./screens/Loading";
 
 import { useEffect, useState } from "react";
-import useAuthStorage from "@app/core/hooks/useAuthStorage";
+import useAuthStorage from "@hooks/useAuthStorage";
 
-import PreTaskProvider from "@app/core/contexts/PreTaskContext";
+import PreTaskProvider from "@contexts/PreTaskContext";
 
 interface Props {
     route: any
