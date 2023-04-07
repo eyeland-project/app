@@ -1,7 +1,8 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, Animated, Easing } from 'react-native'
 import Pressable from '@components/Pressable'
 import AntDesign from '@expo/vector-icons/AntDesign'
 
+import React, { useEffect, useRef } from 'react';
 import useTheme from '@hooks/useTheme';
 
 import { Theme } from '@theme';
@@ -16,22 +17,47 @@ interface Props {
 const Section = ({ title, completed, blocked, onPress }: Props) => {
     const theme = useTheme();
 
+    const scaleAnim = useRef(new Animated.Value(1)).current;
+
+    useEffect(() => {
+        if (!completed && !blocked) {
+            const pulse = () => {
+                Animated.sequence([
+                    Animated.timing(scaleAnim, {
+                        toValue: 1.05,
+                        duration: 500,
+                        easing: Easing.inOut(Easing.quad),
+                        useNativeDriver: true,
+                    }),
+                    Animated.timing(scaleAnim, {
+                        toValue: 1,
+                        duration: 500,
+                        easing: Easing.inOut(Easing.quad),
+                        useNativeDriver: true,
+                    }),
+                ]).start(pulse);
+            };
+            pulse();
+        }
+    }, [completed, blocked, scaleAnim]);
+
     return (
-        <View style={getStyles(theme, completed, blocked).container}>
+        <Animated.View style={[getStyles(theme, completed, blocked).container, { transform: [{ scale: scaleAnim }] }]}>
             <Text style={getStyles(theme, completed, blocked).text}>{title}</Text>
-            <Pressable
-                onPress={onPress}
-                style={getStyles(theme, completed, blocked).button}
-                disabled={blocked}
-            >
-                <AntDesign
-                    name={completed ? 'reload1' : "arrowright"}
-                    size={20}
-                    color={theme.colors.white}
-                />
-            </Pressable>
-        </View>
-    )
+            <View style={getStyles(theme, completed, blocked).button}>
+                <Pressable
+                    onPress={onPress}
+                    disabled={blocked}
+                >
+                    <AntDesign
+                        name={completed ? 'reload1' : 'arrowright'}
+                        size={20}
+                        color={theme.colors.white}
+                    />
+                </Pressable>
+            </View>
+        </Animated.View>
+    );
 }
 
 const getStyles = (theme: Theme, completed: boolean, blocked: boolean) =>

@@ -35,14 +35,17 @@ const getStyles = (theme: Theme) =>
             borderWidth: 1.5,
             borderRadius: theme.borderRadius.medium,
             marginHorizontal: 20,
+            // minHeight: 200,
         },
         emptyContainer: {
             alignItems: 'center',
             justifyContent: 'center',
+            height: 82,
         },
         notEmptyContainer: {
             flexDirection: 'row',
             flexWrap: 'wrap',
+            alignItems: 'flex-start',
             paddingHorizontal: 10,
             paddingBottom: 10,
         },
@@ -54,7 +57,6 @@ const getStyles = (theme: Theme) =>
             textAlign: 'center',
             opacity: 0.4,
             marginHorizontal: 20,
-            marginVertical: 40,
         }
     })
 

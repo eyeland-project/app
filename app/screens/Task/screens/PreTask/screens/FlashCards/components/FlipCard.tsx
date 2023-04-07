@@ -40,7 +40,7 @@ const FlipCard = ({ question, optionIndex, optionsQuestionShuffled, containerCar
                 >
                     {/* Face Side */}
                     {
-                        question.content
+                        !question.imgUrl
                             ? (
                                 <View style={getStyles(theme).back} accessible={true} accessibilityLabel="Parte trasera de la tarjeta">
                                     <Text style={getStyles(theme).backText}>{question.content}</Text>

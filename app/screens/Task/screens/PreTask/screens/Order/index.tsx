@@ -8,7 +8,7 @@ import AnswerBox from './components/AnswerBox'
 import { useEffect, useState } from 'react'
 import useTheme from '@hooks/useTheme'
 import usePlaySound from '@hooks/usePlaySound'
-import usePreTaskMock from '@mocks/hooks/usePreTaskMock'
+import usePreTask from '@hooks/usePreTask'
 
 import { Theme } from '@theme'
 import { PreTaskQuestion } from '@interfaces/PreTaskQuestion.interface'
@@ -36,10 +36,10 @@ const Order = ({ route }: Props) => {
     const [answerList, setAnswerList] = useState([] as string[])
     const playSoundSuccess = usePlaySound(require('@sounds/success.wav'))
     const playSoundWrong = usePlaySound(require('@sounds/wrong.wav'))
+    const { nextQuestion } = usePreTask()
     const correctOrder = question.options
         .filter((option) => option.correct)[0].content
         .split(' ')
-    const { nextQuestion } = usePreTaskMock()
 
     const onPressConfirm = () => {
         const isCorrect = answerList.every((answer, index) => answer === correctOrder[index])
@@ -94,15 +94,13 @@ const Order = ({ route }: Props) => {
                 <View style={getStyles(theme).optionsContainer}>
                     {optionsList.map((option, index) => {
                         return (
-                            <>
-                                <Option
-                                    key={index}
-                                    text={option}
-                                    onPress={() => {
-                                        onPressOption(index)
-                                    }}
-                                />
-                            </>
+                            <Option
+                                key={index}
+                                text={option}
+                                onPress={() => {
+                                    onPressOption(index)
+                                }}
+                            />
                         )
                     })}
                 </View>
@@ -136,9 +134,10 @@ const getStyles = (theme: Theme) =>
             height: '100%',
         },
         optionsContainer: {
-            marginTop: 10,
+            marginTop: 30,
             flexDirection: 'row',
             marginHorizontal: 20,
+            flexWrap: 'wrap',
         },
         question: {
             fontSize: theme.fontSize.xxl,

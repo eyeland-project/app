@@ -4,10 +4,8 @@ import ErrorScreen from "@components/ErrorScreen";
 
 import { useCallback, useEffect } from "react";
 import { useFocusEffect } from "@react-navigation/native";
-// import usePreTask from "@hooks/usePreTask";
-import usePreTaskMock from "@mocks/hooks/usePreTaskMock";
+import usePreTask from "@hooks/usePreTask";
 import useTheme from "@hooks/useTheme";
-import { useNavigation } from "@react-navigation/native";
 import usePreTaskContext from "@hooks/usePreTaskContext";
 
 import { Theme } from "@theme";
@@ -15,7 +13,7 @@ import { Theme } from "@theme";
 const Loading = ({ route }: { route: any }) => {
     const { taskOrder } = route.params
     const theme = useTheme();
-    const { getPreTask, data, error, loading, nextQuestion } = usePreTaskMock();
+    const { getPreTask, data, error, loading, nextQuestion } = usePreTask();
     const { setData, data: dataContext } = usePreTaskContext();
 
     useFocusEffect(

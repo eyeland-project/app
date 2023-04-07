@@ -2,6 +2,7 @@ import { View, ImageBackground, StyleSheet } from 'react-native'
 import Query from './components/Query'
 import Option from '@screens/Task/components/Option'
 import Placeholder from './components/Placeholder'
+import PositionBar from './components/PositionBar'
 
 import { useState, useEffect } from 'react'
 import useTheme from '@hooks/useTheme'
@@ -11,6 +12,7 @@ import useDuringTaskQuestion from '@hooks/useDuringTaskQuestion'
 import { useDuringTaskContext } from '@hooks/useDuringTaskContext'
 import { useNavigation } from '@react-navigation/native'
 import useDuringTask from '@hooks/useDuringTask'
+
 import { SocketEvents } from '@enums/SocketEvents.enum'
 
 
@@ -26,9 +28,10 @@ const Question = ({ route }: Props) => {
     const navigation = useNavigation<any>()
     const [containerStyleOptions, setContainerStyleOptions] = useState([{}])
     const [textStyleOptions, setTextStyleOptions] = useState([{}])
+    const [position, setPosition] = useState(1)
     const { time, startTimer, stopTimer } = useTime()
     const { data, loading, error, getDuringTaskQuestion, sendDuringTaskAnswer } = useDuringTaskQuestion()
-    const { power, socket } = useDuringTaskContext()
+    const { power, socket, team } = useDuringTaskContext()
     const { getDuringTask, data: generalData } = useDuringTask()
     const playSoundSuccess = usePlaySound(require('@sounds/success.wav'))
     const playSoundWrong = usePlaySound(require('@sounds/wrong.wav'))
@@ -78,7 +81,6 @@ const Question = ({ route }: Props) => {
         const initQuestion = async () => {
             getDuringTaskQuestion({ taskOrder, questionOrder })
             startTimer()
-            // TODO - set progress bar
         }
 
         initQuestion()
@@ -86,6 +88,18 @@ const Question = ({ route }: Props) => {
         socket.once(SocketEvents.teamStudentAnswer, async (data: any) => {
             const { numQuestions } = await getDuringTask({ taskOrder })
             navigateNextQuestion(numQuestions)
+        })
+
+        socket.on(SocketEvents.courseLeaderboardUpdate, (data: {
+            id: number;
+            name: string;
+            position: number;
+        }[]) => {
+            if (!team) return
+
+            const { id } = team
+            const teamPosition = data.findIndex(team => team.id === id)
+            setPosition(teamPosition)
         })
 
         return () => {
@@ -97,8 +111,7 @@ const Question = ({ route }: Props) => {
 
     return (
         <View style={getStyles(theme).container}>
-            {/* TODO - make events for position change */}
-            {/* <PositionBar groupName='Ocelots' position={5} /> */}
+            <PositionBar groupName={team?.name || 'Tu equipo'} position={position} />
             <Query text={data.content} power={power} nounTranslation={data.nounTranslation[0]} prepositionTranslation={data.prepositionTranslation[0]} />
             <View style={getStyles(theme).imageContainer} accessible={true} accessibilityLabel={'Imagen de la pregunta'} accessibilityHint={`Super hearing: ${data.imgAlt}`}>
                 <ImageBackground style={getStyles(theme).image} source={{ uri: `${data.imgUrl}?t=${data.id}` }} />

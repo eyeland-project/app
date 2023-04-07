@@ -18,6 +18,8 @@ import { Power } from "@enums/Power.enum";
 import { SocketEvents } from "@enums/SocketEvents.enum";
 import { useNavigation } from "@react-navigation/native";
 
+import { Team } from "@interfaces/Team.interface";
+
 interface Props {
     route: any
 }
@@ -27,6 +29,7 @@ const Stack = createNativeStackNavigator();
 const DuringTask = ({ route }: Props) => {
     const authStorage = useAuthStorage();
     const [isSessionStarted, setIsSessionStarted] = useState(false);
+    const [team, setTeam] = useState<Team | null>(null);
     const [power, setPower] = useState(Power.MemoryPro);
     const navigation = useNavigation<any>();
 
@@ -58,7 +61,7 @@ const DuringTask = ({ route }: Props) => {
     }
 
     return (
-        <DuringTaskContext.Provider value={{ socket, power, setPower }}>
+        <DuringTaskContext.Provider value={{ socket, power, setPower, team, setTeam }}>
             <Stack.Navigator>
                 {
                     !isSessionStarted

@@ -7,10 +7,9 @@ import MultipleChoice from "./screens/MultipleChoice";
 import FillBlank from "./screens/FillBlank";
 import FlashCards from "./screens/FlashCards";
 import Order from "./screens/Order";
+import Complete from "./screens/Complete";
 
 import PreTaskProvider from "@contexts/PreTaskContext";
-
-import useTaskContext from "@hooks/useTaskContext";
 
 interface Props {
     route: any
@@ -19,8 +18,6 @@ interface Props {
 const Stack = createNativeStackNavigator();
 
 const PreTask = ({ route }: Props) => {
-    const { progress } = useTaskContext()
-
     const optionsPrimary: NativeStackNavigationOptions = {
         animation: "slide_from_right",
         headerBackVisible: false,
@@ -80,17 +77,13 @@ const PreTask = ({ route }: Props) => {
                     }}
                     component={Order}
                 />
-                {/* <Stack.Screen
-                name="PreTask"
-                options={{
-                    ...optionsPrimary,
-                }}
-                initialParams={{
-                    taskOrder: route.params.taskOrder,
-                    questionOrder: 0,
-                }}
-                component={PreTask}
-            /> */}
+                <Stack.Screen
+                    name="Complete"
+                    options={{
+                        ...optionsPrimary,
+                    }}
+                    component={Complete}
+                />
             </Stack.Navigator>
         </PreTaskProvider>
     )

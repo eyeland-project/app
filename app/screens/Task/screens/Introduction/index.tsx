@@ -67,20 +67,20 @@ const Introduction = ({ route }: Props) => {
                 />
                 <Description text={dataIntroduction.longDescription} />
                 <Section
-                    title='Pre-Task'
+                    title='Aprendizaje'
                     completed={dataProgress.pretask.completed}
                     blocked={dataProgress.pretask.blocked}
                     onPress={() => {
                         navigation.navigate('PreTask', { taskOrder, linkOrder: 1 });
                     }} />
                 <Section
-                    title='During-Task'
+                    title='Actividad grupal'
                     completed={dataProgress.duringtask.completed}
                     blocked={dataProgress.duringtask.blocked}
                     onPress={() => {
                         navigation.navigate('DuringTask', { taskOrder, questionOrder: 1 });
                     }} />
-                <Section title='Post-Task'
+                <Section title='Evaluación'
                     completed={dataProgress.postask.completed}
                     blocked={dataProgress.postask.blocked}
                     onPress={() => {

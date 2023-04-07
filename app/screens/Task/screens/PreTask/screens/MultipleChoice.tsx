@@ -10,7 +10,7 @@ import { Theme } from '@theme'
 import { PreTaskQuestion } from '@interfaces/PreTaskQuestion.interface'
 import { useState } from 'react'
 import usePlaySound from '@hooks/usePlaySound'
-import usePreTaskMock from '@mocks/hooks/usePreTaskMock'
+import usePreTask from '@hooks/usePreTask'
 
 interface Props {
     route: any
@@ -23,7 +23,7 @@ const MultipleChoice = ({ route }: Props) => {
     const theme = useTheme()
     const playSoundSuccess = usePlaySound(require('@sounds/success.wav'))
     const playSoundWrong = usePlaySound(require('@sounds/wrong.wav'))
-    const { nextQuestion } = usePreTaskMock()
+    const { nextQuestion } = usePreTask()
 
     const onPressOption = (index: number, correct: boolean) => {
         const newContainerStyleOptions = [...containerStyleOptions];

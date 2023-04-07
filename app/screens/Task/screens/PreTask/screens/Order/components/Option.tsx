@@ -26,7 +26,7 @@ const getStyles = (theme: Theme) =>
             backgroundColor: theme.colors.black,
             paddingHorizontal: 20,
             borderRadius: theme.borderRadius.medium,
-            paddingVertical: 10,
+            height: 60,
             justifyContent: 'center',
             alignItems: 'center',
             marginEnd: 10,

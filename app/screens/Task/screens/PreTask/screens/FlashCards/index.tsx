@@ -7,7 +7,7 @@ import Option from './components/Option';
 
 import useTheme from '@hooks/useTheme';
 import usePlaySound from '@hooks/usePlaySound';
-import usePreTaskMock from '@app/shared/mocks/hooks/usePreTaskMock';
+import usePreTask from '@hooks/usePreTask';
 
 import { Theme } from '@theme';
 import { PreTaskQuestion } from '@interfaces/PreTaskQuestion.interface';
@@ -32,11 +32,13 @@ const FlashCards = ({ route }: Props) => {
     const flipIndicatorAnimation = useRef(new Animated.Value(0)).current;
     const cardPosition = useRef(new Animated.Value(0)).current;
     const cardOpacity = useRef(new Animated.Value(1)).current;
-    const { nextQuestion } = usePreTaskMock();
+    const { nextQuestion } = usePreTask();
 
 
     const updateStyles = (option: 'true' | 'false') => {
-        const color = option === 'true' ? theme.colors.green : theme.colors.red;
+        const isCorrect = optionsQuestionShuffled[optionIndex].correct;
+        const color = (option === 'true' && isCorrect) || (option === 'false' && !isCorrect) ? theme.colors.green : theme.colors.red;
+
         const updatedContainerStyleOptions = {
             ...containerStyleOptions,
             [option === 'true' ? 0 : 1]: { backgroundColor: color },

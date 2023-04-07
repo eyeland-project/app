@@ -17,7 +17,7 @@ const Placeholder = () => {
 
     return (
         <View style={getStyles(theme).container}>
-            <Title text="[Inicio]" />
+            <Title text="MENÚ" />
             <View style={getStyles(theme).card}>
                 <PlaceholderRN
                     Animation={ShineOverlay}

@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import useAuthStorage from './useAuthStorage';
+import { useDuringTaskContext } from './useDuringTaskContext';
 
 import axios from 'axios';
 
@@ -25,6 +26,7 @@ const useTeam = () => {
     const [error, setError] = useState<string | null>(null);
     const [data, setData] = useState<Team & { myPower: Power } | null>(null);
     const authStorage = useAuthStorage();
+    const { team, setTeam } = useDuringTaskContext();
 
     const joinTeam = useCallback(async (data: { code: string, taskOrder: number }) => {
         setError(null);
@@ -41,6 +43,7 @@ const useTeam = () => {
             if (response.status === 200) {
                 setLoading(false);
                 setData(response.data);
+                setTeam(response.data);
                 return response.data;
             } else {
                 throw new Error(response.data);
@@ -65,6 +68,7 @@ const useTeam = () => {
             if (response.status === 200) {
                 setLoading(false);
                 setData(response.data);
+                setTeam(null);
                 return response.data;
             } else {
                 throw new Error(response.data);

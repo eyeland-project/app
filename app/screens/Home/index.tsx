@@ -28,14 +28,14 @@ const Home = () => {
 
 	if (loading) return <Placeholder />;
 
-	if (error) return <ErrorScreen error={error} retryAction={initTasks} />;
+	if (error) return <><Title text="MENÚ" /><ErrorScreen error={error} retryAction={initTasks} /></>;
 
-	if (!data) return <ErrorScreen error={'No se recibió información'} retryAction={initTasks} />;
+	if (!data) return <><Title text="MENÚ" /><ErrorScreen error={'No se recibió información'} retryAction={initTasks} /></>;
 
 	return (
 		<FlatList
 			style={getStyles(theme).container}
-			ListHeaderComponent={<Title text="MENU" />}
+			ListHeaderComponent={<Title text="MENÚ" />}
 			stickyHeaderIndices={[0]}
 			stickyHeaderHiddenOnScroll={true}
 			data={data}

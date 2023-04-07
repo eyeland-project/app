@@ -1,5 +1,4 @@
 import { useState, useCallback } from 'react';
-import usePlaySound from './usePlaySound';
 import useAuthStorage from './useAuthStorage';
 import axios from 'axios';
 
@@ -36,7 +35,7 @@ const usePreTask = () => {
         setError(null);
         setLoading(true);
         try {
-            const response = await axios.get(`${environment.apiUrl}/tasks/${inputs.taskOrder}/pretask`, {
+            const response = await axios.get(`${environment.apiUrl}/tasks/${inputs.taskOrder}/pretask/questions`, {
                 headers: {
                     Authorization: `Bearer ${await authStorage.getAccessToken()}`,
                 },
@@ -52,7 +51,7 @@ const usePreTask = () => {
             }
         } catch (err) {
             setLoading(false);
-            setError((err as any).message || 'An error occurred');
+            setError(errorHandler(err, errors));
         }
     }, []);
 
@@ -85,9 +84,9 @@ const usePreTask = () => {
 
             if (index === dataContext.length) {
                 navigation.reset({
-                    index: 0,
+                    index: 1,
                     routes: [
-                        { name: 'Introduction', params: { taskOrder } },
+                        { name: 'Complete', params: { taskOrder } }
                     ]
                 })
                 return null;
@@ -116,9 +115,9 @@ const usePreTask = () => {
 
             if (name === '') {
                 navigation.reset({
-                    index: 0,
+                    index: 1,
                     routes: [
-                        { name: 'Introduction', params: { taskOrder } }
+                        { name: 'Complete', params: { taskOrder } }
                     ]
                 })
             } else {
@@ -132,7 +131,7 @@ const usePreTask = () => {
 
             setProgress((index + 1) / dataContext.length);
             setIndex(index + 1);
-        }, 500);
+        }, 250);
     }
 
     return { loading, error, data, getPreTask, setPreTaskComplete, nextQuestion };
