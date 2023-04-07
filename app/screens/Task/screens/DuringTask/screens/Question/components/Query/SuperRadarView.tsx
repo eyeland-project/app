@@ -1,74 +1,96 @@
-import { View, Text, StyleSheet, Animated } from 'react-native'
+import { View, Text, StyleSheet, Animated, ToastAndroid } from 'react-native'
 
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import useTheme from '@hooks/useTheme'
 
 import { Theme } from '@theme'
 
 interface Props {
     text: string
-    prepositionTranslation: string
+    prepositionTranslations: string[]
 }
 
-const SuperRadarView = ({ text, prepositionTranslation }: Props) => {
-    const [preposition, setPreposition] = useState('')
-    const [question, setQuestion] = useState(['', ''])
+const SuperRadarView = ({ text, prepositionTranslations }: Props) => {
+    const [prepositions, setPrepositions] = useState<string[]>([])
+    const [question, setQuestion] = useState<string[]>([])
     const theme = useTheme()
-    const [showPower, setShowPower] = useState(false)
-
-    const [powerOpacity] = useState(new Animated.Value(0));
+    const [showPower, setShowPower] = useState<boolean[]>(prepositionTranslations.map(() => false))
+    const [powerOpacity] = useState<Animated.Value[]>(prepositionTranslations.map(() => new Animated.Value(0)));
+    const [animating, setAnimating] = useState<boolean>(false);
 
     const textFiltered = text.replace(/[{}]/g, '')
-    const matchResult = textFiltered.match(/\[(.*?)\]/g);
+    const matchResults = textFiltered.match(/\[(.*?)\]/g);
 
     useEffect(() => {
-        setPreposition(matchResult ? matchResult[0].replace(/[\[\]]/g, '') : '')
-        setQuestion(matchResult ? textFiltered.split(matchResult[0]) : [textFiltered])
+        setPrepositions(matchResults ? matchResults?.map((match) => match.replace(/[\[\]]/g, '')) : [])
+        setQuestion(matchResults ? textFiltered.split(/\[.*?\]/) : [textFiltered])
     }, [])
 
-    const handlePress = () => {
-        setPreposition('');
-        setShowPower(true);
+    const usePower = (index: number) => {
+        if (animating) return;
+        setAnimating(true);
+        setShowPower({
+            ...showPower,
+            [index]: true,
+        });
         Animated.sequence([
-            Animated.timing(powerOpacity, {
+            Animated.timing(powerOpacity[index], {
                 toValue: 1,
                 duration: 250,
                 useNativeDriver: true,
             }),
-            Animated.timing(powerOpacity, {
+            Animated.timing(powerOpacity[index], {
                 toValue: 0,
                 duration: 250,
                 delay: 250,
                 useNativeDriver: true,
             }),
         ]).start(() => {
-            setShowPower(false);
-            if (matchResult && preposition === matchResult[0].replace(/[\[\]]/g, '')) {
-                setPreposition(prepositionTranslation)
+            setShowPower({
+                ...showPower,
+                [index]: false,
+            });
+            if (matchResults && prepositions[index] === matchResults[index].replace(/[\[\]]/g, '')) {
+                setPrepositions((prevPrepositions) =>
+                    prevPrepositions.map((prevPreposition, i) => (i === index ? prepositionTranslations[index] : prevPreposition))
+                );
             } else {
-                setPreposition(matchResult ? matchResult[0].replace(/[\[\]]/g, '') : '')
+                setPrepositions(matchResults ? matchResults.map((match) => match.replace(/[\[\]]/g, '')) : [])
             }
+            setAnimating(false);
         });
+    }
+
+    const handlePress = (index: number) => {
+        if (animating) {
+            ToastAndroid.show('Por favor espera un momento para volver a usar tu poder...', ToastAndroid.SHORT);
+        }
+        usePower(index);
     }
 
     return (
         <View style={getStyles(theme).container}>
             <Text style={getStyles(theme).text}>
-                {question[0]}
-                <Text style={getStyles(theme).prepostion} onPress={handlePress}>
-                    {preposition}
-                    {
-                        showPower && (
-                            <Animated.View style={{ opacity: powerOpacity }}>
-                                <Animated.Image
-                                    source={require('@images/superRadar.png')}
-                                    style={getStyles(theme).image}
-                                />
-                            </Animated.View>
-                        )
-                    }
-                </Text>
-                {question[1]}
+                {question.map((word, index) => (
+                    <React.Fragment key={index}>
+                        {word}
+                        {index < prepositions.length && (
+                            <Text style={getStyles(theme).prepostion} onPress={() => handlePress(index)}>
+                                {
+                                    showPower[index]
+                                        ? (
+                                            <Animated.View style={{ opacity: powerOpacity[index] }}>
+                                                <Animated.Image
+                                                    source={require('@images/superRadar.png')}
+                                                    style={getStyles(theme).image}
+                                                />
+                                            </Animated.View>
+                                        ) : (prepositions[index])
+                                }
+                            </Text>
+                        )}
+                    </React.Fragment>
+                ))}
             </Text>
         </View>
     )

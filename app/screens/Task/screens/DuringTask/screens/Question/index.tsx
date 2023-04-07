@@ -112,7 +112,7 @@ const Question = ({ route }: Props) => {
     return (
         <View style={getStyles(theme).container}>
             <PositionBar groupName={team?.name || 'Tu equipo'} position={position} />
-            <Query text={data.content} power={power} nounTranslation={data.nounTranslation[0]} prepositionTranslation={data.prepositionTranslation[0]} />
+            <Query text={data.content} power={power} nounTranslations={data.nounTranslation} prepositionTranslations={data.prepositionTranslation} />
             <View style={getStyles(theme).imageContainer} accessible={true} accessibilityLabel={'Imagen de la pregunta'} accessibilityHint={`Super hearing: ${data.imgAlt}`}>
                 <ImageBackground style={getStyles(theme).image} source={{ uri: `${data.imgUrl}?t=${data.id}` }} />
             </View>

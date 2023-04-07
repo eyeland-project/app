@@ -1,74 +1,98 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, Image, Animated } from 'react-native'
+import { View, Text, StyleSheet, Animated, ToastAndroid } from 'react-native'
+
 import useTheme from '@hooks/useTheme'
+
 import { Theme } from '@theme'
 
 interface Props {
     text: string
-    nounTranslation: string
+    nounTranslations: string[]
 }
 
-const MemoryProView = ({ text, nounTranslation }: Props) => {
-    const [noun, setNoun] = useState('')
-    const [question, setQuestion] = useState(['', ''])
+const MemoryProView = ({ text, nounTranslations }: Props) => {
+    const [nouns, setNouns] = useState<string[]>([])
+    const [question, setQuestion] = useState<string[]>([])
     const theme = useTheme()
-    const [showPower, setShowPower] = useState(false)
-
-    const [powerOpacity] = useState(new Animated.Value(0));
+    const [showPower, setShowPower] = useState<boolean[]>(nounTranslations.map(() => false))
+    const [powerOpacity] = useState<Animated.Value[]>(nounTranslations.map(() => new Animated.Value(0)));
+    const [animating, setAnimating] = useState<boolean>(false);
 
     const textFiltered = text.replace(/[\[\]]/g, '')
-    const matchResult = textFiltered.match(/{(.*?)}/g)
+    const matchResults = textFiltered.match(/{(.*?)}/g)
 
     useEffect(() => {
-        setNoun(matchResult ? matchResult[0].replace(/[{}]/g, '') : '')
-        setQuestion(matchResult ? textFiltered.split(matchResult[0]) : [textFiltered])
+        setNouns(matchResults ? matchResults.map((match) => match.replace(/[{}]/g, '')) : [])
+        setQuestion(matchResults ? textFiltered.split(/{.*?}/) : [textFiltered])
     }, [])
 
-
-    const handlePress = () => {
-        setNoun('');
-        setShowPower(true);
+    const usePower = (index: number) => {
+        if (animating) return;
+        setAnimating(true);
+        setShowPower({
+            ...showPower,
+            [index]: true,
+        });
         Animated.sequence([
-            Animated.timing(powerOpacity, {
+            Animated.timing(powerOpacity[index], {
                 toValue: 1,
                 duration: 250,
                 useNativeDriver: true,
             }),
-            Animated.timing(powerOpacity, {
+            Animated.timing(powerOpacity[index], {
                 toValue: 0,
                 duration: 250,
                 delay: 250,
                 useNativeDriver: true,
             }),
         ]).start(() => {
-            setShowPower(false);
-            if (matchResult && noun === matchResult[0].replace(/[{}]/g, '')) {
-                setNoun(nounTranslation);
+            setShowPower({
+                ...showPower,
+                [index]: false,
+            });
+            if (matchResults && nouns[index] === matchResults[index].replace(/[{}]/g, '')) {
+                setNouns((prevNouns) =>
+                    prevNouns.map((prevNoun, i) => (i === index ? nounTranslations[index] : prevNoun))
+                );
             } else {
-                setNoun(matchResult ? matchResult[0].replace(/[{}]/g, '') : '');
+                setNouns(matchResults ? matchResults.map((match) => match.replace(/[{}]/g, '')) : []);
             }
+            setAnimating(false);
         });
     };
 
 
+    const handlePress = (index: number) => {
+        if (animating) {
+            ToastAndroid.show('Por favor espera un momento para volver a usar tu poder...', ToastAndroid.SHORT);
+        }
+        usePower(index);
+    };
+
     return (
         <View style={getStyles(theme).container}>
             <Text style={getStyles(theme).text}>
-                {question[0]}
-                <Text style={getStyles(theme).noun} onPress={handlePress}>
-                    {noun}
-                    {
-                        showPower && (
-                            <Animated.View style={{ opacity: powerOpacity }}>
-                                <Animated.Image
-                                    source={require('@images/memoryPro.png')}
-                                    style={getStyles(theme).image}
-                                />
-                            </Animated.View>
-                        )
-                    }
-                </Text>
-                {question[1]}
+                {question.map((part, index) => (
+                    <React.Fragment key={index}>
+                        {part}
+                        {index < nouns.length && (
+                            <Text style={getStyles(theme).noun} onPress={() => handlePress(index)}>
+                                {
+                                    showPower[index]
+                                        ? (
+                                            <Animated.View style={{ opacity: powerOpacity[index] }}>
+                                                <Animated.Image
+                                                    source={require('@images/memoryPro.png')}
+                                                    style={getStyles(theme).image}
+                                                />
+                                            </Animated.View>
+                                        )
+                                        : (nouns[index])
+                                }
+                            </Text>
+                        )}
+                    </React.Fragment>
+                ))}
             </Text>
         </View>
     )
@@ -83,7 +107,6 @@ const getStyles = (theme: Theme) =>
             flexWrap: 'wrap',
         },
         image: {
-            // position: 'absolute',
             width: 30,
             height: 30,
             marginBottom: -7,
