@@ -26,7 +26,7 @@ const useTeam = () => {
     const [error, setError] = useState<string | null>(null);
     const [data, setData] = useState<Team & { myPower: Power } | null>(null);
     const authStorage = useAuthStorage();
-    const { team, setTeam } = useDuringTaskContext();
+    const { setTeam, setPower } = useDuringTaskContext();
 
     const joinTeam = useCallback(async (data: { code: string, taskOrder: number }) => {
         setError(null);
@@ -43,7 +43,7 @@ const useTeam = () => {
             if (response.status === 200) {
                 setLoading(false);
                 setData(response.data);
-                setTeam(response.data);
+                // TODO - Remove this from here
                 return response.data;
             } else {
                 throw new Error(response.data);
@@ -79,7 +79,7 @@ const useTeam = () => {
         }
     }, []);
 
-    const getMyTeam = useCallback(async () => {
+    const getMyTeam = async () => {
         setError(null);
         setLoading(true);
         try {
@@ -93,6 +93,8 @@ const useTeam = () => {
             if (response.status === 200) {
                 setLoading(false);
                 setData(response.data);
+                setTeam(response.data);
+                setPower(response.data.myPower);
                 return response.data;
             } else {
                 throw new Error(response.data);
@@ -101,7 +103,7 @@ const useTeam = () => {
             setLoading(false);
             setError(errorHandler(err, errors));
         }
-    }, []);
+    }
 
     return { loading, error, data, joinTeam, leaveTeam, getMyTeam };
 }

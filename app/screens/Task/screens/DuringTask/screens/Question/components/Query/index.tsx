@@ -7,7 +7,7 @@ import { Power } from '@enums/Power.enum'
 
 interface Props {
     text: string
-    power: Power
+    power: Power | null
     nounTranslation: string
     prepositionTranslation: string
 }

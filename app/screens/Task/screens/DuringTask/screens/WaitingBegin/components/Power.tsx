@@ -1,29 +1,25 @@
-import { View, Text, StyleSheet, Image, ActivityIndicator, ToastAndroid } from 'react-native'
+import { View, Text, StyleSheet, Image, ActivityIndicator } from 'react-native'
 import { Power as PowerEnum } from '@enums/Power.enum';
 import Pressable from '@components/Pressable';
 import { Ionicons } from '@expo/vector-icons';
 
 import useTheme from '@hooks/useTheme';
 import React, { useState, useEffect } from 'react';
-import usePower from '@hooks/usePower';
-import { useDuringTaskContext } from '@hooks/useDuringTaskContext';
 
 import { Theme } from '@theme';
 
 interface Props {
-    powerProp: PowerEnum;
+    power: PowerEnum;
     blockReRoll: boolean;
+    onReRoll: () => void;
+    loading: boolean;
 }
 
-const Power = ({ powerProp, blockReRoll }: Props) => {
+const Power = ({ power, blockReRoll, onReRoll, loading }: Props) => {
     const theme = useTheme();
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [image, setImage] = useState<any>(null);
-    const { rollPower, data, error, loading } = usePower();
-    const { power, setPower } = useDuringTaskContext()
-    // const [power, setPower] = useState<PowerEnum>(powerProp);
-
 
     useEffect(() => {
         switch (power) {
@@ -45,17 +41,6 @@ const Power = ({ powerProp, blockReRoll }: Props) => {
         }
     }, [power])
 
-    const handleOnPress = async () => {
-        const data = await rollPower()
-        if (!error && data) {
-            setPower(data.power);
-        }
-    }
-
-    if (error) {
-        ToastAndroid.show('Error al obtener el poder', ToastAndroid.SHORT);
-    }
-
     return (
         <View
             style={getStyles(theme).container}
@@ -75,7 +60,7 @@ const Power = ({ powerProp, blockReRoll }: Props) => {
                 <Text style={getStyles(theme).description}>{description}</Text>
             </View>
             {!blockReRoll && (
-                <Pressable onPress={handleOnPress} accessibilityLabel="Recargar superpoder">
+                <Pressable onPress={onReRoll} accessibilityLabel="Recargar superpoder">
                     <View style={getStyles(theme).iconContainer}>
                         {loading ? (
                             <ActivityIndicator color={theme.colors.primary} />

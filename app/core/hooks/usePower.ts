@@ -12,7 +12,7 @@ const errors: Map<number, string> = new Map([
     [400, 'Recurso no encontrado'],
     [401, 'Error de autenticación'],
     [403, 'No está autorizado para acceder a este recurso'],
-    [404, 'Recurso no encontrado'], 
+    [404, 'Recurso no encontrado'],
     [498, 'Su autenticación ha expirado'],
     [500, 'Un error inesperado ocurrido'],
 ]);
@@ -47,7 +47,7 @@ const usePower = () => {
         }
     }, []);
 
-    const rollPower = useCallback(async () => {
+    const rollPower = async () => {
         setError(null);
         setLoading(true);
         try {
@@ -60,7 +60,6 @@ const usePower = () => {
 
             if (response.status === 200) {
                 setLoading(false);
-                setData(response.data);
                 return response.data;
             } else {
                 throw new Error(response.data);
@@ -69,7 +68,7 @@ const usePower = () => {
             setLoading(false);
             setError(errorHandler(err, errors));
         }
-    }, []);
+    }
 
     return { loading, error, data, getMyPower, rollPower };
 };

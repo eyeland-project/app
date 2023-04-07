@@ -5,8 +5,8 @@ import Header from "../../components/Header";
 
 import { useEffect, useState } from "react";
 import useAuthStorage from "@hooks/useAuthStorage";
+import { useNavigation } from "@react-navigation/native";
 
-import { DuringTaskContext } from "@contexts/DuringTaskContext";
 import WaitingActive from "./screens/WaitingActive";
 import ChooseGroup from "./screens/ChooseGroup";
 // import ChoosePower from "./screens/ChoosePower";
@@ -14,10 +14,11 @@ import WaitingBegin from "./screens/WaitingBegin";
 import Transition from "./screens/Transition";
 import Question from "./screens/Question";
 import FinalScore from "./screens/FinalScore";
+
+import { DuringTaskContext } from "@contexts/DuringTaskContext";
+
 import { Power } from "@enums/Power.enum";
 import { SocketEvents } from "@enums/SocketEvents.enum";
-import { useNavigation } from "@react-navigation/native";
-
 import { Team } from "@interfaces/Team.interface";
 
 interface Props {
@@ -30,7 +31,7 @@ const DuringTask = ({ route }: Props) => {
     const authStorage = useAuthStorage();
     const [isSessionStarted, setIsSessionStarted] = useState(false);
     const [team, setTeam] = useState<Team | null>(null);
-    const [power, setPower] = useState(Power.MemoryPro);
+    const [power, setPower] = useState<Power | null>(null);
     const navigation = useNavigation<any>();
 
     const connectSocket = async () => {

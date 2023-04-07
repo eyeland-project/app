@@ -5,8 +5,8 @@ import { Team } from '@interfaces/Team.interface';
 
 interface DuringTaskValues {
     socket: Socket;
-    power: Power;
-    setPower: Dispatch<SetStateAction<Power>>
+    power: Power | null;
+    setPower: Dispatch<SetStateAction<Power | null>>
     team: Team | null;
     setTeam: Dispatch<SetStateAction<Team | null>>;
 }

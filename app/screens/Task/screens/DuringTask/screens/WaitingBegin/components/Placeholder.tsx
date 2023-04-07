@@ -15,31 +15,39 @@ const Placeholder = () => {
     const theme = useTheme();
 
     return (
-        <View style={getStyles(theme).container}>
-            <View>
-                <PlaceholderRN
-                    Animation={ShineOverlay}
-                >
-                    <PlaceholderLine width={40} height={40} style={{ alignSelf: 'center' }} />
-                    <PlaceholderLine width={30} height={20} />
-                    <PlaceholderLine width={60} />
-                    <PlaceholderLine width={70} />
-                    <PlaceholderLine width={50} />
-                    <PlaceholderLine width={30} height={20} style={{ marginTop: 20 }} />
-                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <PlaceholderMedia style={{ width: 60, height: 60, borderRadius: 8 }} />
-                        <PlaceholderMedia style={{ width: '60%', height: 60, borderRadius: 8 }} />
+        <View style={getStyles(theme).superContainer}>
+            <View style={getStyles(theme).container}>
+                <View>
+                    <PlaceholderRN
+                        Animation={ShineOverlay}
+                    >
+                        <PlaceholderLine width={40} height={40} style={{ alignSelf: 'center' }} />
+                        <PlaceholderLine width={30} height={20} />
+                        <PlaceholderLine width={60} />
+                        <PlaceholderLine width={70} />
+                        <PlaceholderLine width={50} />
+                        <PlaceholderLine width={30} height={20} style={{ marginTop: 20 }} />
+                        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                            <PlaceholderMedia style={{ width: 60, height: 60, borderRadius: 8 }} />
+                            <PlaceholderMedia style={{ width: '60%', height: 60, borderRadius: 8 }} />
 
-                        <PlaceholderMedia style={{ width: 50, height: 50, borderRadius: 30 }} />
-                    </View>
-                </PlaceholderRN>
+                            <PlaceholderMedia style={{ width: 50, height: 50, borderRadius: 30 }} />
+                        </View>
+                    </PlaceholderRN>
+                </View>
             </View>
-        </View>
+        </View >
     )
 }
 
 const getStyles = (theme: Theme) =>
     StyleSheet.create({
+        superContainer: {
+            backgroundColor: theme.colors.primary,
+            height: '100%',
+            flex: 1,
+            alignItems: 'center',
+        },
         container: {
             backgroundColor: theme.colors.primary,
             height: "100%",
