@@ -4,7 +4,7 @@ import LottieView from 'lottie-react-native';
 import Power from './components/Power';
 import Placeholder from './components/Placeholder';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import useTheme from '@hooks/useTheme'
 import useTaskContext from '@hooks/useTaskContext';
 import { useDuringTaskContext } from '@hooks/useDuringTaskContext';
@@ -42,6 +42,7 @@ const WaitingBegin = ({ route }: Props) => {
         getData()
 
         socket.on(SocketEvents.sessionTeacherStart, () => {
+            console.log('sessionTeacherStart')
             navigation.navigate('Question', { taskOrder, questionOrder: 1 })
         })
 

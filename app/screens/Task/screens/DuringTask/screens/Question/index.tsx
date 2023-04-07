@@ -95,7 +95,7 @@ const Question = ({ route }: Props) => {
             name: string;
             position: number;
         }[]) => {
-            if (!team) return
+            if (!team || !data) return
 
             const { id } = team
             const { position } = data.find(team => team.id === id)!
