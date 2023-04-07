@@ -49,6 +49,7 @@ const getStyles = (theme: Theme) =>
             fontSize: theme.fontSize.xxl,
             fontFamily: theme.fontWeight.medium,
             letterSpacing: theme.spacing.medium,
+            marginHorizontal: 10,
         }
     })
 

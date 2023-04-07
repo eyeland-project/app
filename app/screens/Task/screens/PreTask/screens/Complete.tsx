@@ -41,9 +41,10 @@ const Complete = () => {
                 <Text style={getStyles(theme).text}>¡Felicidades, lo lograste!</Text>
             </View>
             <LottieView
-                source={require('@animations/trophy.json')}
+                source={require('@animations/star.json')}
                 autoPlay
                 loop={false}
+                duration={2000}
             />
             <View>
                 <Option text='Volver al menú' onPress={() => { onButtonPress() }} containerStyle={{}} textStyle={{ fontFamily: theme.fontWeight.regular, fontSize: theme.fontSize.xl }} />

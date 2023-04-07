@@ -34,12 +34,12 @@ const ChooseGroup = ({ route }: any) => {
         await getGroups()
         resetContext()
 
-        socket.on(SocketEvents.TeamsStudentUpdate, (data: Team[]) => {
+        socket.on(SocketEvents.teamsStudentUpdate, (data: Team[]) => {
             setGroups(data)
         });
 
         return () => {
-            socket.off(SocketEvents.TeamsStudentUpdate);
+            socket.off(SocketEvents.teamsStudentUpdate);
         };
     }
 

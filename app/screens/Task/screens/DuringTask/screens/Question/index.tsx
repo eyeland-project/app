@@ -63,7 +63,7 @@ const Question = ({ route }: Props) => {
         navigateNextQuestion(numQuestions)
     }
 
-    const navigateNextQuestion = (numQuestions: number) => {
+    const navigateNextQuestion = (numQuestions: number, nextQuestion?: number) => {
         if (questionOrder === numQuestions) {
             navigation.reset({
                 index: 0,
@@ -73,7 +73,7 @@ const Question = ({ route }: Props) => {
             })
         } else {
             navigation.pop(1)
-            navigation.push('Question', { taskOrder, questionOrder: questionOrder + 1 })
+            navigation.push('Question', { taskOrder, questionOrder: nextQuestion ? nextQuestion : questionOrder + 1 })
         }
     }
 
@@ -85,9 +85,9 @@ const Question = ({ route }: Props) => {
 
         initQuestion()
 
-        socket.once(SocketEvents.teamStudentAnswer, async (data: any) => {
+        socket.once(SocketEvents.teamStudentAnswer, async (data: { correct: boolean, nextQuestion: number }) => {
             const { numQuestions } = await getDuringTask({ taskOrder })
-            navigateNextQuestion(numQuestions)
+            navigateNextQuestion(numQuestions, data.nextQuestion)
         })
 
         socket.on(SocketEvents.courseLeaderboardUpdate, (data: {
@@ -98,8 +98,8 @@ const Question = ({ route }: Props) => {
             if (!team) return
 
             const { id } = team
-            const teamPosition = data.findIndex(team => team.id === id)
-            setPosition(teamPosition)
+            const { position } = data.find(team => team.id === id)!
+            setPosition(position)
         })
 
         return () => {

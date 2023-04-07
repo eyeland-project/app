@@ -42,21 +42,20 @@ const Section = ({ title, completed, blocked, onPress }: Props) => {
     }, [completed, blocked, scaleAnim]);
 
     return (
-        <Animated.View style={[getStyles(theme, completed, blocked).container, { transform: [{ scale: scaleAnim }] }]}>
-            <Text style={getStyles(theme, completed, blocked).text}>{title}</Text>
-            <View style={getStyles(theme, completed, blocked).button}>
-                <Pressable
-                    onPress={onPress}
-                    disabled={blocked}
-                >
-                    <AntDesign
-                        name={completed ? 'reload1' : 'arrowright'}
-                        size={20}
-                        color={theme.colors.white}
-                    />
-                </Pressable>
-            </View>
-        </Animated.View>
+        <Pressable onPress={onPress} disabled={blocked}>
+            <Animated.View style={[getStyles(theme, completed, blocked).container, { transform: [{ scale: scaleAnim }] }]}>
+                <Text style={getStyles(theme, completed, blocked).text}>{title}</Text>
+                <View style={getStyles(theme, completed, blocked).button}>
+                    <View>
+                        <AntDesign
+                            name={completed ? 'reload1' : 'arrowright'}
+                            size={23}
+                            color={theme.colors.white}
+                        />
+                    </View>
+                </View>
+            </Animated.View>
+        </Pressable>
     );
 }
 

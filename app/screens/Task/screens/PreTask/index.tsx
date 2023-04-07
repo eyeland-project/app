@@ -1,6 +1,5 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NativeStackNavigationOptions } from "@react-navigation/native-stack";
-import Header from "../../components/Header";
 
 import Loading from "./screens/Loading";
 import MultipleChoice from "./screens/MultipleChoice";
