@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react'
 import useTheme from '@hooks/useTheme'
 import usePlaySound from '@hooks/usePlaySound'
 import usePreTask from '@hooks/usePreTask'
+import useTextToSpeech from '@app/core/hooks/useTextToSpeech'
 
 import { Theme } from '@theme'
 import { PreTaskQuestion } from '@interfaces/PreTaskQuestion.interface'
@@ -38,6 +39,7 @@ const Order = ({ route }: Props) => {
     const [showModal, setShowModal] = useState(false)
     const playSoundSuccess = usePlaySound(require('@sounds/success.wav'))
     const playSoundWrong = usePlaySound(require('@sounds/wrong.wav'))
+    const { speak } = useTextToSpeech()
     const { nextQuestion } = usePreTask()
     const correctOrder = question.options
         .filter((option) => option.correct)[0].content
@@ -69,6 +71,7 @@ const Order = ({ route }: Props) => {
     }
 
     const onPressOption = (index: number) => {
+        speak(optionsList[index])
         setAnswerList([...answerList, optionsList[index]])
         setOptionsList(optionsList.filter((_, i) => i !== index))
 
@@ -90,6 +93,7 @@ const Order = ({ route }: Props) => {
     useEffect(() => {
         setOptionsList(shuffleList(correctOrder))
         setAnswerList([])
+        speak(question.content)
     }, [])
 
     return (

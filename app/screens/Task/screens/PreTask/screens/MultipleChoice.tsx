@@ -4,13 +4,13 @@ import Option from '@screens/Task/components/Option'
 import * as Haptics from 'expo-haptics'
 import Modal from '@screens/Task/components/Modal'
 
-
+import useTextToSpeech from '@hooks/useTextToSpeech'
 import useTheme from '@hooks/useTheme'
 
 import { Theme } from '@theme'
 
 import { PreTaskQuestion } from '@interfaces/PreTaskQuestion.interface'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import usePlaySound from '@hooks/usePlaySound'
 import usePreTask from '@hooks/usePreTask'
 
@@ -28,9 +28,11 @@ const MultipleChoice = ({ route }: Props) => {
     const playSoundSuccess = usePlaySound(require('@sounds/success.wav'))
     const playSoundWrong = usePlaySound(require('@sounds/wrong.wav'))
     const { nextQuestion } = usePreTask()
+    const { speak } = useTextToSpeech()
 
     const onPressOption = (index: number, correct: boolean) => {
         setOptionIndex(index)
+        speak(question.options[index].content)
         const newContainerStyleOptions = [...containerStyleOptions];
         const newTextStyleOptions = [...textStyleOptions];
 
@@ -71,6 +73,10 @@ const MultipleChoice = ({ route }: Props) => {
             setContainerStyleOptions([{}]);
         }, 1000);
     }
+
+    useEffect(() => {
+        speak(question.content)
+    }, [])
 
 
     return (
