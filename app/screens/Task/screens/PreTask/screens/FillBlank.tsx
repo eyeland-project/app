@@ -2,6 +2,7 @@ import { View, Text, StyleSheet, ImageBackground } from 'react-native'
 import Instructions from '../components/Instructions'
 import Option from '@screens/Task/components/Option'
 import * as Haptics from 'expo-haptics'
+import Modal from '@screens/Task/components/Modal'
 
 import useTheme from '@hooks/useTheme'
 
@@ -21,6 +22,8 @@ const FillBlank = ({ route }: Props) => {
     const [containerStyleOptions, setContainerStyleOptions] = useState([{}])
     const [textStyleOptions, setTextStyleOptions] = useState([{}])
     const [blank, setBlank] = useState('       ')
+    const [showModal, setShowModal] = useState(false)
+    const [optionIndex, setOptionIndex] = useState<number>(0)
     const theme = useTheme()
     const playSoundSuccess = usePlaySound(require('@sounds/success.wav'))
     const playSoundWrong = usePlaySound(require('@sounds/wrong.wav'))
@@ -29,6 +32,7 @@ const FillBlank = ({ route }: Props) => {
     const questionList = question.content.split('_')
 
     const onPressOption = (index: number, correct: boolean) => {
+        setOptionIndex(index)
         const newContainerStyleOptions = [...containerStyleOptions];
         const newTextStyleOptions = [...textStyleOptions];
 
@@ -50,6 +54,7 @@ const FillBlank = ({ route }: Props) => {
                 nextQuestion()
             }, 1000);
         } else {
+            setShowModal(true);
             resetContainerStyleOptions();
         }
     }
@@ -62,6 +67,10 @@ const FillBlank = ({ route }: Props) => {
         }
     }
 
+    const closeModal = () => {
+        setShowModal(false);
+    }
+
     const resetContainerStyleOptions = () => {
         setTimeout(() => {
             setContainerStyleOptions([{}]);
@@ -71,30 +80,33 @@ const FillBlank = ({ route }: Props) => {
 
 
     return (
-        <View style={getStyles(theme).container}>
-            <Instructions text='Selecciona la opción correcta' />
-            <Text style={getStyles(theme).question}>
-                {questionList[0]}
-                <Text style={getStyles(theme).underlineText}>{blank}</Text>
-                {questionList[1]}
-            </Text>
-            <View style={getStyles(theme).imageContainer}>
-                <ImageBackground style={getStyles(theme).image} source={{ uri: question.imgUrl }} />
+        <>
+            <View style={getStyles(theme).container}>
+                <Instructions text='Selecciona la opción correcta' />
+                <Text style={getStyles(theme).question}>
+                    {questionList[0]}
+                    <Text style={getStyles(theme).underlineText}>{blank}</Text>
+                    {questionList[1]}
+                </Text>
+                <View style={getStyles(theme).imageContainer}>
+                    <ImageBackground style={getStyles(theme).image} source={{ uri: question.imgUrl }} />
+                </View>
+                <View style={getStyles(theme).optionsContainer}>
+                    {question.options.map((option, index) => (
+                        <Option
+                            key={index}
+                            text={option.content}
+                            onPress={() => {
+                                onPressOption(index, option.correct)
+                            }}
+                            containerStyle={containerStyleOptions[index]}
+                            textStyle={textStyleOptions[index]}
+                        />
+                    ))}
+                </View>
             </View>
-            <View style={getStyles(theme).optionsContainer}>
-                {question.options.map((option, index) => (
-                    <Option
-                        key={index}
-                        text={option.content}
-                        onPress={() => {
-                            onPressOption(index, option.correct)
-                        }}
-                        containerStyle={containerStyleOptions[index]}
-                        textStyle={textStyleOptions[index]}
-                    />
-                ))}
-            </View>
-        </View>
+            <Modal showModal={showModal} closeModal={closeModal} help={question.options[optionIndex].feedback} />
+        </>
     )
 }
 

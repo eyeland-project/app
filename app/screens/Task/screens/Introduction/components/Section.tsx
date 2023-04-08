@@ -25,13 +25,13 @@ const Section = ({ title, completed, blocked, onPress }: Props) => {
                 Animated.sequence([
                     Animated.timing(scaleAnim, {
                         toValue: 1.05,
-                        duration: 500,
+                        duration: 2000,
                         easing: Easing.inOut(Easing.quad),
                         useNativeDriver: true,
                     }),
                     Animated.timing(scaleAnim, {
                         toValue: 1,
-                        duration: 500,
+                        duration: 2000,
                         easing: Easing.inOut(Easing.quad),
                         useNativeDriver: true,
                     }),

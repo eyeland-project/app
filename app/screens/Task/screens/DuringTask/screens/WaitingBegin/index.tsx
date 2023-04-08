@@ -23,8 +23,8 @@ interface Props {
 const WaitingBegin = ({ route }: Props) => {
     const { taskOrder } = route.params
     const theme = useTheme()
-    const { resetContext } = useTaskContext()
-    const { socket, power, setPower } = useDuringTaskContext()
+    const { resetContext, setProgress } = useTaskContext()
+    const { socket, power, setPower, numQuestions } = useDuringTaskContext()
     const { data, loading, getMyTeam } = useTeam()
     const navigation = useNavigation<any>()
     const { rollPower, loading: loadingPower } = usePower()
@@ -42,7 +42,7 @@ const WaitingBegin = ({ route }: Props) => {
         getData()
 
         socket.on(SocketEvents.sessionTeacherStart, () => {
-            console.log('sessionTeacherStart')
+            if (numQuestions) setProgress(1 / numQuestions)
             navigation.navigate('Question', { taskOrder, questionOrder: 1 })
         })
 

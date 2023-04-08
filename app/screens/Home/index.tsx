@@ -48,6 +48,7 @@ const Home = () => {
 						order={item.taskOrder}
 						description={item.description}
 						image={{ uri: item.thumbnailUrl }}
+						completed={item.completed}
 						blocked={item.blocked || item.comingSoon}
 					/>
 				</>

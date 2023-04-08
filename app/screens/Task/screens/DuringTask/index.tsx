@@ -11,9 +11,12 @@ import WaitingActive from "./screens/WaitingActive";
 import ChooseGroup from "./screens/ChooseGroup";
 // import ChoosePower from "./screens/ChoosePower";
 import WaitingBegin from "./screens/WaitingBegin";
-import Transition from "./screens/Transition";
+// import Transition from "./screens/Transition";
 import Question from "./screens/Question";
 import FinalScore from "./screens/FinalScore";
+
+import useDuringTask from "@hooks/useDuringTask";
+import useTaskContext from "@hooks/useTaskContext";
 
 import { DuringTaskContext } from "@contexts/DuringTaskContext";
 
@@ -32,7 +35,17 @@ const DuringTask = ({ route }: Props) => {
     const [isSessionStarted, setIsSessionStarted] = useState(false);
     const [team, setTeam] = useState<Team | null>(null);
     const [power, setPower] = useState<Power | null>(null);
+    const [position, setPosition] = useState<number | null>(1);
+    const [numQuestions, setNumQuestions] = useState<number | null>(null);
+    const { setProgress } = useTaskContext();
+    const { getDuringTask } = useDuringTask();
     const navigation = useNavigation<any>();
+
+    const getData = async () => {
+        const data = await getDuringTask({ taskOrder: route.params.taskOrder });
+        setNumQuestions(data.numQuestions);
+    }
+
 
     const connectSocket = async () => {
         socket.connect();
@@ -46,6 +59,7 @@ const DuringTask = ({ route }: Props) => {
 
     useEffect(() => {
         connectSocket();
+        getData();
         return () => {
             socket.disconnect();
         };
@@ -54,16 +68,12 @@ const DuringTask = ({ route }: Props) => {
     const optionsPrimary: NativeStackNavigationOptions = {
         animation: "slide_from_right",
         headerBackVisible: false,
-        headerShown: true,
-        headerTitleStyle: {
-            fontFamily: "Poppins-Regular",
-        },
-        header: () => <Header />
+        headerShown: false
     }
 
     return (
-        <DuringTaskContext.Provider value={{ socket, power, setPower, team, setTeam }}>
-            <Stack.Navigator>
+        <DuringTaskContext.Provider value={{ socket, power, setPower, team, setTeam, position, setPosition, numQuestions }}>
+            <Stack.Navigator >
                 {
                     !isSessionStarted
                     && <Stack.Screen
@@ -128,7 +138,7 @@ const DuringTask = ({ route }: Props) => {
                     }}
                     component={Question}
                 />
-                {/* <Stack.Screen
+                <Stack.Screen
                     name="FinalScore"
                     options={{
                         ...optionsPrimary
@@ -137,7 +147,7 @@ const DuringTask = ({ route }: Props) => {
                         taskOrder: route.params.taskOrder,
                     }}
                     component={FinalScore}
-                /> */}
+                />
             </Stack.Navigator>
         </DuringTaskContext.Provider>
     )

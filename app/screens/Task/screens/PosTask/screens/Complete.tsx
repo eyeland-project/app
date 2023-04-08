@@ -1,17 +1,16 @@
 import { View, Text, StyleSheet } from 'react-native'
-import Option from '@screens/Task/components/Option'
 import LottieView from 'lottie-react-native';
+import Option from '@screens/Task/components/Option'
 
+import { useEffect } from 'react';
+import useTaskContext from '@hooks/useTaskContext';
 import useTheme from '@hooks/useTheme'
-import { useDuringTaskContext } from '@hooks/useDuringTaskContext'
-import useTaskContext from '@hooks/useTaskContext'
 import { useNavigation } from '@react-navigation/native';
 
 import { Theme } from '@theme'
 
-const FinalScore = () => {
+const Complete = () => {
     const theme = useTheme()
-    const { position, team } = useDuringTaskContext()
     const { taskOrder } = useTaskContext()
     const navigation = useNavigation<any>()
 
@@ -26,17 +25,20 @@ const FinalScore = () => {
 
     return (
         <View style={getStyles(theme).container}>
-            <Text style={getStyles(theme).title}>Resultados finales</Text>
             <View>
-                <Text style={getStyles(theme).position}>{position || 0}°</Text>
-                <Text style={getStyles(theme).groupName}>{team?.name || 'Ocelots'}</Text>
                 <LottieView
                     source={require('@animations/celebration.json')}
                     autoPlay
                     loop
                     style={{ width: 500, position: 'absolute', top: -80, alignItems: 'center', alignSelf: 'center' }}
                 />
+                <Text style={getStyles(theme).text}>¡Felicidades, has terminado este módulo!</Text>
             </View>
+            <LottieView
+                source={require('@animations/winningCup.json')}
+                autoPlay
+                loop={false}
+            />
             <View>
                 <Option text='Volver al menú' onPress={() => { onButtonPress() }} containerStyle={{}} textStyle={{ fontFamily: theme.fontWeight.regular, fontSize: theme.fontSize.xl }} />
                 <View style={getStyles(theme).safeSpace} />
@@ -48,37 +50,26 @@ const FinalScore = () => {
 const getStyles = (theme: Theme) =>
     StyleSheet.create({
         container: {
-            flex: 1,
             backgroundColor: theme.colors.primary,
-            justifyContent: 'space-between',
+            height: "100%",
+            justifyContent: "space-between",
         },
-        title: {
-            color: theme.colors.black,
-            fontSize: theme.fontSize.xxxl,
-            fontFamily: theme.fontWeight.bold,
-            letterSpacing: theme.spacing.medium,
-            marginBottom: 80,
-            textAlign: 'center'
-        },
-        position: {
-            color: theme.colors.black,
-            fontSize: 150,
-            fontFamily: theme.fontWeight.bold,
-            letterSpacing: theme.spacing.medium,
-            textAlign: 'center',
-            marginBottom: -90
-        },
-        groupName: {
-            color: theme.colors.black,
+        text: {
             fontSize: theme.fontSize.xxxxxxl,
             fontFamily: theme.fontWeight.bold,
+            color: theme.colors.black,
             letterSpacing: theme.spacing.medium,
-            textAlign: 'center'
+            marginHorizontal: 20,
+            marginTop: 20,
+            textAlign: "center",
         },
         safeSpace: {
             height: 80,
         },
+        animationsContainer: {
+            alignItems: "center",
+            position: "relative",
+        }
     })
 
-
-export default FinalScore
+export default Complete

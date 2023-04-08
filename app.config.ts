@@ -8,7 +8,7 @@ const config: ExpoConfig = {
 	slug: "Eyeland",
 	icon: "./assets/icon.png",
 	splash: {
-		image: "./assets/splash.png",
+		image: "./assets/splashScreen.png",
 		resizeMode: "contain",
 		backgroundColor: "#FFFFFF"
 	},

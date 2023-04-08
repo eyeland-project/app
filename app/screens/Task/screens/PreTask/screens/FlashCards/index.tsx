@@ -4,6 +4,7 @@ import Instructions from '../../components/Instructions';
 import * as Haptics from 'expo-haptics';
 import FlipCard from './components/FlipCard';
 import Option from './components/Option';
+import Modal from '@screens/Task/components/Modal';
 
 import useTheme from '@hooks/useTheme';
 import usePlaySound from '@hooks/usePlaySound';
@@ -24,9 +25,11 @@ const FlashCards = ({ route }: Props) => {
     const theme = useTheme();
     const [optionIndex, setOptionIndex] = useState<number>(0);
     const [isFlipped, setIsFlipped] = useState<boolean>(false);
-    const [optionsQuestionShuffled, setOptionsQuestionShuffled] = useState<{ content: string, correct: boolean, id: number }[]>([]);
+    const [optionsQuestionShuffled, setOptionsQuestionShuffled] = useState<{ content: string, correct: boolean, id: number, feedback: string }[]>([]);
     const [containerStyleOptions, setContainerStyleOptions] = useState([{}])
     const [containerCardStyle, setContainerCardStyle] = useState({})
+    const [feedback, setFeedback] = useState('')
+    const [showModal, setShowModal] = useState(false)
     const playSoundSuccess = usePlaySound(require('@sounds/success.wav'))
     const playSoundWrong = usePlaySound(require('@sounds/wrong.wav'))
     const flipIndicatorAnimation = useRef(new Animated.Value(0)).current;
@@ -53,7 +56,24 @@ const FlashCards = ({ route }: Props) => {
         }, 1000);
     }
 
+    const incorrectAnswer = () => {
+        setOptionIndex(0);
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+        playSoundWrong();
+        setContainerCardStyle({ backgroundColor: hexToRgbA(theme.colors.red, 0.2) });
+        setOptionsQuestionShuffled(shuffleOptions(question).map((option, index) => {
+            return {
+                id: index,
+                content: option.content,
+                correct: option.correct,
+                feedback: option.feedback,
+            };
+        }));
+        setShowModal(true);
+    }
+
     const onPressOption = (option: 'true' | 'false') => {
+        setFeedback(optionsQuestionShuffled[optionIndex].feedback);
         updateStyles(option);
 
         if (option === 'true') {
@@ -62,25 +82,13 @@ const FlashCards = ({ route }: Props) => {
                 playSoundSuccess();
                 nextQuestion();
             } else {
-                Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-                playSoundWrong();
-                setContainerCardStyle({ backgroundColor: hexToRgbA(theme.colors.red, 0.2) });
+                incorrectAnswer();
             }
         }
 
         if (option === 'false') {
             if (optionsQuestionShuffled[optionIndex].correct) {
-                setOptionIndex(0);
-                Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-                playSoundWrong();
-                setContainerCardStyle({ backgroundColor: hexToRgbA(theme.colors.red, 0.2) });
-                setOptionsQuestionShuffled(shuffleOptions(question).map((option, index) => {
-                    return {
-                        id: index,
-                        content: option.content,
-                        correct: option.correct,
-                    };
-                }));
+                incorrectAnswer();
             } else {
                 setOptionIndex(optionIndex + 1);
                 playSoundSuccess();
@@ -94,6 +102,10 @@ const FlashCards = ({ route }: Props) => {
 
     const shuffleOptions = (question: PreTaskQuestion) => {
         return shuffleList(question.options);
+    }
+
+    const closeModal = () => {
+        setShowModal(false);
     }
 
     const animateNextCard = () => {
@@ -139,6 +151,7 @@ const FlashCards = ({ route }: Props) => {
                 id: index,
                 content: option.content,
                 correct: option.correct,
+                feedback: option.feedback,
             };
         }));
 
@@ -148,36 +161,39 @@ const FlashCards = ({ route }: Props) => {
     if (optionsQuestionShuffled.length === 0) return null;
 
     return (
-        <View
-            style={getStyles(theme).container}
-            accessible={true}
-            accessibilityLabel="Pantalla de tarjetas">
-            <Instructions text='Voltea la tarjeta, ¿es correcta?' />
-            <FlipCard
-                setIsFlipped={setIsFlipped}
-                containerStyle={{ transform: [{ translateX: cardPosition }], opacity: cardOpacity }}
-                containerCardStyle={containerCardStyle}
-                optionIndex={optionIndex}
-                optionsQuestionShuffled={optionsQuestionShuffled}
-                question={question}
-                isFlipped={isFlipped} />
+        <>
             <View
-                style={getStyles(theme).optionsContainer}
+                style={getStyles(theme).container}
                 accessible={true}
-                accessibilityLabel="Opciones">
-                <Option
-                    accessibilityLabel='Correcto'
-                    containerStyle={containerStyleOptions[0]}
-                    iconName='check'
-                    onPress={() => { onPressOption('true') }} />
-                <View style={{ width: 50 }} />
-                <Option
-                    accessibilityLabel='Incorrecto'
-                    containerStyle={containerStyleOptions[1]}
-                    iconName='cross'
-                    onPress={() => { onPressOption('false') }} />
+                accessibilityLabel="Pantalla de tarjetas">
+                <Instructions text='Voltea la tarjeta, ¿es correcta?' />
+                <FlipCard
+                    setIsFlipped={setIsFlipped}
+                    containerStyle={{ transform: [{ translateX: cardPosition }], opacity: cardOpacity }}
+                    containerCardStyle={containerCardStyle}
+                    optionIndex={optionIndex}
+                    optionsQuestionShuffled={optionsQuestionShuffled}
+                    question={question}
+                    isFlipped={isFlipped} />
+                <View
+                    style={getStyles(theme).optionsContainer}
+                    accessible={true}
+                    accessibilityLabel="Opciones">
+                    <Option
+                        accessibilityLabel='Correcto'
+                        containerStyle={containerStyleOptions[0]}
+                        iconName='check'
+                        onPress={() => { onPressOption('true') }} />
+                    <View style={{ width: 50 }} />
+                    <Option
+                        accessibilityLabel='Incorrecto'
+                        containerStyle={containerStyleOptions[1]}
+                        iconName='cross'
+                        onPress={() => { onPressOption('false') }} />
+                </View>
             </View>
-        </View>
+            <Modal closeModal={closeModal} showModal={showModal} help={feedback} />
+        </>
     );
 };
 

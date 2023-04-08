@@ -20,14 +20,15 @@ interface TaskProps {
 	name: string;
 	image?: any;
 	blocked: boolean;
+	completed: boolean;
 }
 
-const Task = ({ id, order, name, description, image, blocked }: TaskProps) => {
+const Task = ({ id, order, name, description, image, blocked, completed }: TaskProps) => {
 	const theme = useTheme();
 	const navigation = useNavigation<any>();
 	return (
 		<View
-			style={getStyles(theme).card}
+			style={[getStyles(theme).card, completed && getStyles(theme).cardCompleted]}
 			accessible={true}
 			accessibilityLabel={`${order}. ${name}. ${description}. ${blocked ? "Bloqueado" : "Disponible"}`}
 			accessibilityHint={`${blocked ? "Esta tarea está bloqueada." : "Presione el boton de comenzar para iniciar la tarea."}`}
@@ -50,6 +51,8 @@ const Task = ({ id, order, name, description, image, blocked }: TaskProps) => {
 					<Description text={description} />
 					<Button
 						text="Comenzar"
+						icon={completed ? 'reload1' : 'arrowright'}
+						style={completed && { backgroundColor: theme.colors.blue }}
 						onPress={() => navigation.navigate("Task", { taskOrder: order })}
 						disabled={blocked}
 						accessible={false}
@@ -72,6 +75,10 @@ const getStyles = (theme: Theme) =>
 			marginHorizontal: 20,
 			position: "relative",
 			...theme.shadow,
+		},
+		cardCompleted: {
+			borderColor: theme.colors.blue,
+			borderWidth: 2,
 		},
 		container: {
 			paddingHorizontal: 20,

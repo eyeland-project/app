@@ -5,12 +5,14 @@ import useTheme from '@hooks/useTheme'
 import { Theme } from '@theme'
 
 interface Props {
-    groupName: string,
-    position: number
+    groupName?: string,
+    position: number | null
 }
 
 const PositionBar = ({ groupName, position }: Props) => {
     const theme = useTheme()
+
+    if (!groupName || !position) return null
 
     return (
         <View style={getStyles(theme).container}>

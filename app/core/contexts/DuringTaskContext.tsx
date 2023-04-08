@@ -9,6 +9,9 @@ interface DuringTaskValues {
     setPower: Dispatch<SetStateAction<Power | null>>
     team: Team | null;
     setTeam: Dispatch<SetStateAction<Team | null>>;
+    position: number | null;
+    setPosition: Dispatch<SetStateAction<number | null>>;
+    numQuestions: number | null;
 }
 
 export const DuringTaskContext = createContext<DuringTaskValues | null>(null);

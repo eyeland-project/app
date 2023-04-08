@@ -12,6 +12,7 @@ import useDuringTaskQuestion from '@hooks/useDuringTaskQuestion'
 import { useDuringTaskContext } from '@hooks/useDuringTaskContext'
 import { useNavigation } from '@react-navigation/native'
 import useDuringTask from '@hooks/useDuringTask'
+import useTaskContext from '@hooks/useTaskContext'
 
 import { SocketEvents } from '@enums/SocketEvents.enum'
 
@@ -28,11 +29,11 @@ const Question = ({ route }: Props) => {
     const navigation = useNavigation<any>()
     const [containerStyleOptions, setContainerStyleOptions] = useState([{}])
     const [textStyleOptions, setTextStyleOptions] = useState([{}])
-    const [position, setPosition] = useState(1)
     const { time, startTimer, stopTimer } = useTime()
     const { data, loading, error, getDuringTaskQuestion, sendDuringTaskAnswer } = useDuringTaskQuestion()
-    const { power, socket, team } = useDuringTaskContext()
+    const { power, socket, team, position, setPosition, numQuestions } = useDuringTaskContext()
     const { getDuringTask, data: generalData } = useDuringTask()
+    const { setProgress } = useTaskContext()
     const playSoundSuccess = usePlaySound(require('@sounds/success.wav'))
     const playSoundWrong = usePlaySound(require('@sounds/wrong.wav'))
 
@@ -55,23 +56,20 @@ const Question = ({ route }: Props) => {
         setTextStyleOptions(newTextStyleOptions)
 
 
-        const [_, { numQuestions }] = await Promise.all([
-            sendDuringTaskAnswer({ taskOrder, questionOrder, body: { idOption: id, answerSeconds: time } }),
-            getDuringTask({ taskOrder })
-        ])
-
-        navigateNextQuestion(numQuestions)
+        await sendDuringTaskAnswer({ taskOrder, questionOrder, body: { idOption: id, answerSeconds: time } }),
+            navigateNextQuestion()
     }
 
-    const navigateNextQuestion = (numQuestions: number, nextQuestion?: number) => {
+    const navigateNextQuestion = (nextQuestion?: number) => {
         if (questionOrder === numQuestions) {
             navigation.reset({
-                index: 0,
+                index: 1,
                 routes: [
-                    { name: 'Introduction', params: { taskOrder } },
+                    { name: 'FinalScore' },
                 ]
             })
         } else {
+            if (numQuestions) setProgress((questionOrder + 1) / numQuestions)
             navigation.pop(1)
             navigation.push('Question', { taskOrder, questionOrder: nextQuestion ? nextQuestion : questionOrder + 1 })
         }
@@ -87,7 +85,7 @@ const Question = ({ route }: Props) => {
 
         socket.once(SocketEvents.teamStudentAnswer, async (data: { correct: boolean, nextQuestion: number }) => {
             const { numQuestions } = await getDuringTask({ taskOrder })
-            navigateNextQuestion(numQuestions, data.nextQuestion)
+            navigateNextQuestion(data.nextQuestion)
         })
 
         socket.on(SocketEvents.courseLeaderboardUpdate, (data: {
@@ -98,8 +96,9 @@ const Question = ({ route }: Props) => {
             if (!team || !data) return
 
             const { id } = team
-            const { position } = data.find(team => team.id === id)!
-            setPosition(position)
+            const myTeam = data.find(team => team.id === id)
+            if (!myTeam) return
+            setPosition(myTeam.position)
         })
 
         return () => {
@@ -111,7 +110,7 @@ const Question = ({ route }: Props) => {
 
     return (
         <View style={getStyles(theme).container}>
-            <PositionBar groupName={team?.name || 'Tu equipo'} position={position} />
+            <PositionBar groupName={team?.name} position={position} />
             <Query text={data.content} power={power} nounTranslations={data.nounTranslation} prepositionTranslations={data.prepositionTranslation} />
             <View style={getStyles(theme).imageContainer} accessible={true} accessibilityLabel={'Imagen de la pregunta'} accessibilityHint={`Super hearing: ${data.imgAlt}`}>
                 <ImageBackground style={getStyles(theme).image} source={{ uri: `${data.imgUrl}?t=${data.id}` }} />

@@ -2,6 +2,8 @@ import { View, Text, StyleSheet, ImageBackground } from 'react-native'
 import Instructions from '../components/Instructions'
 import Option from '@screens/Task/components/Option'
 import * as Haptics from 'expo-haptics'
+import Modal from '@screens/Task/components/Modal'
+
 
 import useTheme from '@hooks/useTheme'
 
@@ -20,12 +22,15 @@ const MultipleChoice = ({ route }: Props) => {
     const { question } = route.params as { question: PreTaskQuestion }
     const [containerStyleOptions, setContainerStyleOptions] = useState([{}])
     const [textStyleOptions, setTextStyleOptions] = useState([{}])
+    const [showModal, setShowModal] = useState(false)
+    const [optionIndex, setOptionIndex] = useState<number>(0)
     const theme = useTheme()
     const playSoundSuccess = usePlaySound(require('@sounds/success.wav'))
     const playSoundWrong = usePlaySound(require('@sounds/wrong.wav'))
     const { nextQuestion } = usePreTask()
 
     const onPressOption = (index: number, correct: boolean) => {
+        setOptionIndex(index)
         const newContainerStyleOptions = [...containerStyleOptions];
         const newTextStyleOptions = [...textStyleOptions];
 
@@ -44,8 +49,13 @@ const MultipleChoice = ({ route }: Props) => {
         if (correct) {
             nextQuestion();
         } else {
+            setShowModal(true);
             resetContainerStyleOptions();
         }
+    }
+
+    const closeModal = () => {
+        setShowModal(false);
     }
 
     const playSound = (correct: boolean) => {
@@ -64,26 +74,29 @@ const MultipleChoice = ({ route }: Props) => {
 
 
     return (
-        <View style={getStyles(theme).container}>
-            <Instructions text='Selecciona la opción correcta' />
-            <Text style={getStyles(theme).question}>{question.content}</Text>
-            <View style={getStyles(theme).imageContainer}>
-                <ImageBackground style={getStyles(theme).image} source={{ uri: question.imgUrl }} />
+        <>
+            <View style={getStyles(theme).container}>
+                <Instructions text='Selecciona la opción correcta' />
+                <Text style={getStyles(theme).question}>{question.content}</Text>
+                <View style={getStyles(theme).imageContainer}>
+                    <ImageBackground style={getStyles(theme).image} source={{ uri: question.imgUrl }} />
+                </View>
+                <View style={getStyles(theme).optionsContainer}>
+                    {question.options.map((option, index) => (
+                        <Option
+                            key={index}
+                            text={option.content}
+                            onPress={() => {
+                                onPressOption(index, option.correct)
+                            }}
+                            containerStyle={containerStyleOptions[index]}
+                            textStyle={textStyleOptions[index]}
+                        />
+                    ))}
+                </View>
             </View>
-            <View style={getStyles(theme).optionsContainer}>
-                {question.options.map((option, index) => (
-                    <Option
-                        key={index}
-                        text={option.content}
-                        onPress={() => {
-                            onPressOption(index, option.correct)
-                        }}
-                        containerStyle={containerStyleOptions[index]}
-                        textStyle={textStyleOptions[index]}
-                    />
-                ))}
-            </View>
-        </View>
+            <Modal showModal={showModal} closeModal={closeModal} help={question.options[optionIndex].feedback} />
+        </>
     )
 }
 

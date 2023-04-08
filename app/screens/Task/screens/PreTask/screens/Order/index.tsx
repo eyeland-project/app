@@ -1,9 +1,10 @@
-import { View, Text, StyleSheet, ImageBackground } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
 import Instructions from '../../components/Instructions'
 import OptionTask from '@screens/Task/components/Option'
 import * as Haptics from 'expo-haptics'
 import Option from './components/Option'
 import AnswerBox from './components/AnswerBox'
+import Modal from '@screens/Task/components/Modal'
 
 import { useEffect, useState } from 'react'
 import useTheme from '@hooks/useTheme'
@@ -34,6 +35,7 @@ const Order = ({ route }: Props) => {
     const [confirmTextStyle, setConfirmTextStyle] = useState(CONFIRM_TEXT_STYLE_DEFAULT(theme))
     const [optionsList, setOptionsList] = useState([] as string[])
     const [answerList, setAnswerList] = useState([] as string[])
+    const [showModal, setShowModal] = useState(false)
     const playSoundSuccess = usePlaySound(require('@sounds/success.wav'))
     const playSoundWrong = usePlaySound(require('@sounds/wrong.wav'))
     const { nextQuestion } = usePreTask()
@@ -52,6 +54,7 @@ const Order = ({ route }: Props) => {
             playSoundWrong()
             setConfirmContainerStyle({ backgroundColor: theme.colors.red })
             Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
+            setShowModal(true)
             resetStates()
         }
     }
@@ -74,6 +77,10 @@ const Order = ({ route }: Props) => {
         }
     }
 
+    const closeModal = () => {
+        setShowModal(false)
+    }
+
     const onAnswerPress = (index: number) => {
         setOptionsList([...optionsList, answerList[index]])
         setAnswerList(answerList.filter((_, i) => i !== index))
@@ -86,33 +93,36 @@ const Order = ({ route }: Props) => {
     }, [])
 
     return (
-        <View style={getStyles(theme).container}>
-            <View>
-                <Instructions text='Traduce organizando las palabras en el orden correcto' />
-                <Text style={getStyles(theme).question}>{question.content}</Text>
-                <AnswerBox answerList={answerList} onAnswerPress={onAnswerPress} />
-                <View style={getStyles(theme).optionsContainer}>
-                    {optionsList.map((option, index) => {
-                        return (
-                            <Option
-                                key={index}
-                                text={option}
-                                onPress={() => {
-                                    onPressOption(index)
-                                }}
-                            />
-                        )
-                    })}
-                </View>
-            </View>
-            {
-                allOptionsInBox &&
+        <>
+            <View style={getStyles(theme).container}>
                 <View>
-                    <OptionTask text='Confirmar' onPress={() => { onPressConfirm() }} containerStyle={confirmContainerStyle} textStyle={confirmTextStyle} />
-                    <View style={getStyles(theme).safeSpace} />
+                    <Instructions text='Traduce organizando las palabras en el orden correcto' />
+                    <Text style={getStyles(theme).question}>{question.content}</Text>
+                    <AnswerBox answerList={answerList} onAnswerPress={onAnswerPress} />
+                    <View style={getStyles(theme).optionsContainer}>
+                        {optionsList.map((option, index) => {
+                            return (
+                                <Option
+                                    key={index}
+                                    text={option}
+                                    onPress={() => {
+                                        onPressOption(index)
+                                    }}
+                                />
+                            )
+                        })}
+                    </View>
                 </View>
-            }
-        </View>
+                {
+                    allOptionsInBox &&
+                    <View>
+                        <OptionTask text='Confirmar' onPress={() => { onPressConfirm() }} containerStyle={confirmContainerStyle} textStyle={confirmTextStyle} />
+                        <View style={getStyles(theme).safeSpace} />
+                    </View>
+                }
+            </View>
+            <Modal showModal={showModal} closeModal={() => { closeModal() }} help={correctOrder.join(' ')} />
+        </>
     )
 }
 

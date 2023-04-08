@@ -60,7 +60,6 @@ const Task = ({ route }: { route: any }) => {
                 name="DuringTask"
                 options={{
                     ...optionsPrimary,
-                    headerShown: false
                 }}
                 initialParams={{
                     taskOrder: taskOrder,
