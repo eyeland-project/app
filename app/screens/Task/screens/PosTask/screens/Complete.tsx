@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import useTaskContext from '@hooks/useTaskContext';
 import useTheme from '@hooks/useTheme'
 import { useNavigation } from '@react-navigation/native';
+import usePlaySound from '@app/core/hooks/usePlaySound';
 
 import { Theme } from '@theme'
 
@@ -13,6 +14,7 @@ const Complete = () => {
     const theme = useTheme()
     const { taskOrder } = useTaskContext()
     const navigation = useNavigation<any>()
+    const playSoundSuccess = usePlaySound(require('@sounds/complete.wav'))
 
     const onButtonPress = () => {
         navigation.reset({
@@ -22,6 +24,10 @@ const Complete = () => {
             ]
         })
     }
+
+    useEffect(() => {
+        playSoundSuccess()
+    }, [])
 
     return (
         <View style={getStyles(theme).container}>

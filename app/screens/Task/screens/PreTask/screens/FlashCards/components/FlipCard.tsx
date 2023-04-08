@@ -37,6 +37,7 @@ const FlipCard = ({ question, optionIndex, optionsQuestionShuffled, containerCar
                     style={getStyles(theme).flipCard}
                     flip={isFlipped}
                     clickable={false}
+                    useNativeDriver={true}
                 >
                     {/* Face Side */}
                     {

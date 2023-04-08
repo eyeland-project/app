@@ -82,7 +82,7 @@ const FillBlank = ({ route }: Props) => {
     }
 
     useEffect(() => {
-        speak(question.content.replace(/_/g, '.'))
+        speak(question.content.split('_'))
     }, [])
 
 

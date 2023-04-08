@@ -75,7 +75,7 @@ const MultipleChoice = ({ route }: Props) => {
     }
 
     useEffect(() => {
-        speak(question.content)
+        speak(question.content), 'es'
     }, [])
 
 

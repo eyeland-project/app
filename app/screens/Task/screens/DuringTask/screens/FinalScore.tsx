@@ -2,10 +2,12 @@ import { View, Text, StyleSheet } from 'react-native'
 import Option from '@screens/Task/components/Option'
 import LottieView from 'lottie-react-native';
 
+import { useEffect } from 'react';
 import useTheme from '@hooks/useTheme'
 import { useDuringTaskContext } from '@hooks/useDuringTaskContext'
 import useTaskContext from '@hooks/useTaskContext'
 import { useNavigation } from '@react-navigation/native';
+import usePlaySound from '@app/core/hooks/usePlaySound';
 
 import { Theme } from '@theme'
 
@@ -14,6 +16,7 @@ const FinalScore = () => {
     const { position, team } = useDuringTaskContext()
     const { taskOrder } = useTaskContext()
     const navigation = useNavigation<any>()
+    const playSoundSuccess = usePlaySound(require('@sounds/complete.wav'))
 
     const onButtonPress = () => {
         navigation.reset({
@@ -23,6 +26,10 @@ const FinalScore = () => {
             ]
         })
     }
+
+    useEffect(() => {
+        playSoundSuccess()
+    }, [])
 
     return (
         <View style={getStyles(theme).container}>

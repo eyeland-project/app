@@ -30,8 +30,9 @@ const FlashCards = ({ route }: Props) => {
     const [containerCardStyle, setContainerCardStyle] = useState({})
     const [feedback, setFeedback] = useState('')
     const [showModal, setShowModal] = useState(false)
-    const playSoundSuccess = usePlaySound(require('@sounds/success.wav'))
-    const playSoundWrong = usePlaySound(require('@sounds/wrong.wav'))
+    const playSoundSuccess = usePlaySound(require('@sounds/success.wav'), '@sounds/success.wav')
+    const playSoundWrong = usePlaySound(require('@sounds/wrong.wav'), '@sounds/wrong.wav')
+    const playCardEffect = usePlaySound(require('@sounds/flashcard.wav'), '@sounds/flashcard.wav')
     const flipIndicatorAnimation = useRef(new Animated.Value(0)).current;
     const cardPosition = useRef(new Animated.Value(0)).current;
     const cardOpacity = useRef(new Animated.Value(1)).current;
@@ -41,7 +42,6 @@ const FlashCards = ({ route }: Props) => {
     const updateStyles = (option: 'true' | 'false') => {
         const isCorrect = optionsQuestionShuffled[optionIndex].correct;
         const color = (option === 'true' && isCorrect) || (option === 'false' && !isCorrect) ? theme.colors.green : theme.colors.red;
-
         const updatedContainerStyleOptions = {
             ...containerStyleOptions,
             [option === 'true' ? 0 : 1]: { backgroundColor: color },
@@ -109,6 +109,7 @@ const FlashCards = ({ route }: Props) => {
     }
 
     const animateNextCard = () => {
+        playCardEffect();
         // Fade out the current card
         Animated.timing(cardOpacity, {
             toValue: 0,
