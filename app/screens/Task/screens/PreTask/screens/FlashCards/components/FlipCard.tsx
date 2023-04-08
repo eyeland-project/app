@@ -1,8 +1,7 @@
 import React, { Dispatch, SetStateAction, useRef } from 'react';
-import { View, Text, StyleSheet, ImageBackground, Animated } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground, Animated, Pressable } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
 import FlipCardNative from 'react-native-flip-card';
-import Pressable from '@components/Pressable';
 
 import useTheme from '@hooks/useTheme';
 
@@ -25,7 +24,11 @@ const FlipCard = ({ question, optionIndex, optionsQuestionShuffled, containerCar
 
 
     return (
-        <Pressable onPress={() => { setIsFlipped(!isFlipped) }}>
+        <Pressable
+            onPress={() => { setIsFlipped(!isFlipped) }}
+            accessibilityLabel="Presiona dos veces para girar la tarjeta"
+            accessibilityRole="button"
+        >
             <Animated.View style={[getStyles(theme).imageContainer, containerStyle]}
                 accessible={true}
                 accessibilityLabel="Voltear tarjeta"
@@ -66,7 +69,13 @@ const FlipCard = ({ question, optionIndex, optionsQuestionShuffled, containerCar
                                     </Animated.View>
                                 </View>
                             )
-                            : (<ImageBackground style={getStyles(theme).image} source={{ uri: question.imgUrl }} accessible={true} accessibilityLabel="Cara de la tarjeta">
+                            : (<ImageBackground
+                                style={getStyles(theme).image}
+                                source={{ uri: question.imgUrl }}
+                                resizeMode='contain'
+                                accessible={true}
+                                accessibilityLabel={question.imgAlt + ". Toca dos veces para girar la tarjeta"}
+                            >
                                 <Animated.View
                                     style={[
                                         getStyles(theme).flipIndicator,
@@ -90,8 +99,8 @@ const FlipCard = ({ question, optionIndex, optionsQuestionShuffled, containerCar
                             )
                     }
                     {/* Back Side */}
-                    <View style={[getStyles(theme).back, containerCardStyle]} accessible={true} accessibilityLabel="Parte trasera de la tarjeta">
-                        <Text style={getStyles(theme).backText}>{optionsQuestionShuffled[optionIndex].content}</Text>
+                    <View style={[getStyles(theme).back, containerCardStyle]} accessible={true} accessibilityLabel={optionsQuestionShuffled[optionIndex].content + ". Toca dos veces para girar la tarjeta"}>
+                        <Text style={getStyles(theme).backText} >{optionsQuestionShuffled[optionIndex].content}</Text>
                     </View>
                 </FlipCardNative>
             </Animated.View>
@@ -103,7 +112,7 @@ const getStyles = (theme: Theme) =>
     StyleSheet.create({
         imageContainer: {
             marginHorizontal: 20,
-            height: 200,
+            height: 400,
             borderRadius: theme.borderRadius.medium,
             overflow: 'hidden',
             ...theme.shadow,

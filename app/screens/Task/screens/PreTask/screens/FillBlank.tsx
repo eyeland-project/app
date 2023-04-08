@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ImageBackground } from 'react-native'
+import { View, Text, StyleSheet, ImageBackground, AccessibilityInfo } from 'react-native'
 import Instructions from '../components/Instructions'
 import Option from '@screens/Task/components/Option'
 import * as Haptics from 'expo-haptics'
@@ -82,6 +82,7 @@ const FillBlank = ({ route }: Props) => {
     }
 
     useEffect(() => {
+        AccessibilityInfo.announceForAccessibility(question.content)
         speak(question.content.split('_'))
     }, [])
 
@@ -96,7 +97,12 @@ const FillBlank = ({ route }: Props) => {
                     {questionList[1]}
                 </Text>
                 <View style={getStyles(theme).imageContainer}>
-                    <ImageBackground style={getStyles(theme).image} source={{ uri: question.imgUrl }} />
+                    <ImageBackground
+                        style={getStyles(theme).image}
+                        source={{ uri: question.imgUrl }}
+                        resizeMode='center'
+                        accessible
+                        accessibilityLabel={question.imgAlt} />
                 </View>
                 <View style={getStyles(theme).optionsContainer}>
                     {question.options.map((option, index) => (

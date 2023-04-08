@@ -11,10 +11,12 @@ import useTasks from "@hooks/useTasks";
 import { useFocusEffect } from "@react-navigation/native";
 
 import { Theme } from "@theme";
+import { Fragment, useRef } from "react";
 
 const Home = () => {
 	const theme = useTheme();
 	const { loading, error, data, getTasks } = useTasks();
+	const firstFocus = useRef(null);
 
 	const initTasks = async () => {
 		await getTasks();

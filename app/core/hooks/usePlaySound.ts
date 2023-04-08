@@ -5,7 +5,6 @@ const usePlaySound = (soundPath: any, soundPathDescription?: string) => {
     const [soundObject, setSoundObject] = useState<Audio.Sound | null>(null);
 
     const playSound = async () => {
-        if (soundPath === 28) return
         const { sound } = await Audio.Sound.createAsync(soundPath);
         setSoundObject(soundObject);
 
@@ -16,7 +15,6 @@ const usePlaySound = (soundPath: any, soundPathDescription?: string) => {
 
         return soundObject
             ? () => {
-
                 soundObject.unloadAsync();
             }
             : undefined;

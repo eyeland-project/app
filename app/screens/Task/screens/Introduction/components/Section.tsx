@@ -24,7 +24,7 @@ const Section = ({ title, completed, blocked, onPress }: Props) => {
             const pulse = () => {
                 Animated.sequence([
                     Animated.timing(scaleAnim, {
-                        toValue: 1.05,
+                        toValue: 1.01,
                         duration: 2000,
                         easing: Easing.inOut(Easing.quad),
                         useNativeDriver: true,

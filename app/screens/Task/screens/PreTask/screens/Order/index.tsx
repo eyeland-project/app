@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, AccessibilityInfo } from 'react-native'
 import Instructions from '../../components/Instructions'
 import OptionTask from '@screens/Task/components/Option'
 import * as Haptics from 'expo-haptics'
@@ -93,6 +93,7 @@ const Order = ({ route }: Props) => {
     useEffect(() => {
         setOptionsList(shuffleList(correctOrder))
         setAnswerList([])
+        AccessibilityInfo.announceForAccessibility(question.content)
         speak(question.content, 'es')
     }, [])
 

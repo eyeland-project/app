@@ -36,6 +36,7 @@ const Task = ({ id, order, name, description, image, blocked, completed }: TaskP
 			<ImageBackground
 				source={image}
 				accessible={false}
+				resizeMode="cover"
 			>
 				<LinearGradient
 					colors={[

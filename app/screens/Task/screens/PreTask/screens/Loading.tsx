@@ -38,7 +38,7 @@ const Loading = ({ route }: { route: any }) => {
 
     return (
         <View style={getStyles(theme).container}>
-            <View accessible={true} accessibilityLabel="Loading animation">
+            <View accessible={true} accessibilityLabel="Cargando">
                 <LottieView
                     source={require('@animations/loading.json')}
                     autoPlay

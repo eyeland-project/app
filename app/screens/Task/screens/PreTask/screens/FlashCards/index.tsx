@@ -181,13 +181,13 @@ const FlashCards = ({ route }: Props) => {
                     accessible={true}
                     accessibilityLabel="Opciones">
                     <Option
-                        accessibilityLabel='Correcto'
+                        accessibilityLabel='Verdadero'
                         containerStyle={containerStyleOptions[0]}
                         iconName='check'
                         onPress={() => { onPressOption('true') }} />
                     <View style={{ width: 50 }} />
                     <Option
-                        accessibilityLabel='Incorrecto'
+                        accessibilityLabel='Falso'
                         containerStyle={containerStyleOptions[1]}
                         iconName='cross'
                         onPress={() => { onPressOption('false') }} />

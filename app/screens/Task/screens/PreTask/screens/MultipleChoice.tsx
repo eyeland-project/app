@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ImageBackground } from 'react-native'
+import { View, Text, StyleSheet, ImageBackground, AccessibilityInfo } from 'react-native'
 import Instructions from '../components/Instructions'
 import Option from '@screens/Task/components/Option'
 import * as Haptics from 'expo-haptics'
@@ -75,7 +75,8 @@ const MultipleChoice = ({ route }: Props) => {
     }
 
     useEffect(() => {
-        speak(question.content), 'es'
+        AccessibilityInfo.announceForAccessibility(question.content)
+        speak(question.content, 'es')
     }, [])
 
 
@@ -85,7 +86,13 @@ const MultipleChoice = ({ route }: Props) => {
                 <Instructions text='Selecciona la opción correcta' />
                 <Text style={getStyles(theme).question}>{question.content}</Text>
                 <View style={getStyles(theme).imageContainer}>
-                    <ImageBackground style={getStyles(theme).image} source={{ uri: question.imgUrl }} />
+                    <ImageBackground
+                        style={getStyles(theme).image}
+                        source={{ uri: question.imgUrl }}
+                        resizeMode='contain'
+                        accessible
+                        accessibilityLabel={question.imgAlt}
+                    />
                 </View>
                 <View style={getStyles(theme).optionsContainer}>
                     {question.options.map((option, index) => (
