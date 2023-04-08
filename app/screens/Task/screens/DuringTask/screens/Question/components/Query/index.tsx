@@ -10,9 +10,10 @@ interface Props {
     power: Power | null
     nounTranslations: string[]
     prepositionTranslations: string[]
+    imgAlt: string
 }
 
-const Query = ({ text, power, nounTranslations, prepositionTranslations }: Props) => {
+const Query = ({ text, power, nounTranslations, prepositionTranslations, imgAlt }: Props) => {
     switch (power) {
         case Power.MemoryPro:
             return <MemoryProView text={text} nounTranslations={nounTranslations} />
@@ -21,7 +22,7 @@ const Query = ({ text, power, nounTranslations, prepositionTranslations }: Props
             return <SuperRadarView text={text} prepositionTranslations={prepositionTranslations} />
 
         case Power.SuperHearing:
-            return <SuperHearing text={text} />
+            return <SuperHearing text={text} imgAlt={imgAlt} />
 
         default:
             return <DefaultView text={text} />

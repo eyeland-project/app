@@ -93,7 +93,7 @@ const Order = ({ route }: Props) => {
     useEffect(() => {
         setOptionsList(shuffleList(correctOrder))
         setAnswerList([])
-        speak(question.content)
+        speak(question.content, 'es')
     }, [])
 
     return (
