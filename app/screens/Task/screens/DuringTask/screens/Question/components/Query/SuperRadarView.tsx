@@ -66,6 +66,14 @@ const SuperRadarView = ({ text, prepositionTranslations }: Props) => {
             ToastAndroid.show('Por favor espera un momento para volver a usar tu poder...', ToastAndroid.SHORT);
         }
         usePower(index);
+        console.log('prepositions', prepositions);
+        console.log('question', question);
+        console.log('textFiltered', textFiltered);
+        console.log('matchResults', matchResults);
+        console.log('text', text);
+
+
+
     }
 
     return (

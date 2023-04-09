@@ -56,7 +56,7 @@ const Home = () => {
 				</>
 			)}
 			ItemSeparatorComponent={() => <View style={getStyles(theme).separator} />}
-			ListFooterComponent={<ComingSoon />}
+			ListFooterComponent={<View style={getStyles(theme).safeZone} />}
 		/>
 	);
 };
@@ -69,7 +69,10 @@ const getStyles = (theme: Theme) =>
 		},
 		separator: {
 			height: 20,
-		}
+		},
+		safeZone: {
+			height: 100,
+		},
 	});
 
 export default Home;

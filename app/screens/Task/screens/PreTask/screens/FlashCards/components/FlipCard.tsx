@@ -72,7 +72,7 @@ const FlipCard = ({ question, optionIndex, optionsQuestionShuffled, containerCar
                             : (<ImageBackground
                                 style={getStyles(theme).image}
                                 source={{ uri: question.imgUrl }}
-                                resizeMode='contain'
+                                resizeMode='cover'
                                 accessible={true}
                                 accessibilityLabel={question.imgAlt + ". Toca dos veces para girar la tarjeta"}
                             >
@@ -112,7 +112,10 @@ const getStyles = (theme: Theme) =>
     StyleSheet.create({
         imageContainer: {
             marginHorizontal: 20,
-            height: 400,
+            height: 300,
+            maxWidth: 500,
+            width: '90%',
+            alignSelf: 'center',
             borderRadius: theme.borderRadius.medium,
             overflow: 'hidden',
             ...theme.shadow,

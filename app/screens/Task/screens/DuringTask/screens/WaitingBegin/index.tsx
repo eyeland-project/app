@@ -76,10 +76,9 @@ const WaitingBegin = ({ route }: Props) => {
             <Text
                 style={getStyles(theme).description}
                 accessible
-                accessibilityLabel="Avanza respondiendo a las preguntas que te haga el guía turístico en cada parada obligada."
+                accessibilityLabel="Avanza respondiendo a las preguntas con ayuda de tus amigos. El primer equipo en llegar a la meta gana."
             >
-                Avanza respondiendo a las preguntas que te haga el guía turístico en
-                cada parada obligada.
+                Avanza respondiendo a las preguntas con ayuda de tus amigos. El primer equipo en llegar a la meta gana.
             </Text>
             <Text
                 style={getStyles(theme).title}

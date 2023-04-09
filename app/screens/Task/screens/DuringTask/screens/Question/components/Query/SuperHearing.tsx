@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, Image } from 'react-native'
 import Pressable from '@components/Pressable'
 
 import { useState, useEffect } from 'react'
@@ -19,13 +19,14 @@ const SuperHearing = ({ text, imgAlt }: Props) => {
     // remove from text the brackets and the curly braces
     const textFiltered = text.replace(/[\[\]\{\}]/g, '')
 
+    const onPress = () => {
+        speak(imgAlt, 'es')
+    }
+
     return (
-        <Pressable onPress={
-            () => speak(imgAlt)
-        }>
-            <View style={getStyles(theme).container}>
-                <Text style={getStyles(theme).text}>{textFiltered}</Text>
-            </View>
+        <Pressable onPress={onPress} style={getStyles(theme).container}>
+            <Text style={getStyles(theme).text}>{textFiltered}</Text>
+            <Image source={require('@images/superHearing.png')} style={getStyles(theme).image}></Image>
         </Pressable>
     )
 }
@@ -37,6 +38,7 @@ const getStyles = (theme: Theme) =>
             flexDirection: 'row',
             marginTop: 10,
             flexWrap: 'wrap',
+            alignItems: 'center',
         },
         text: {
             fontSize: theme.fontSize.xxl,
@@ -44,6 +46,11 @@ const getStyles = (theme: Theme) =>
             fontFamily: theme.fontWeight.regular,
             letterSpacing: theme.spacing.medium
         },
+        image: {
+            width: 30,
+            height: 30,
+            marginLeft: 10,
+        }
     })
 
 export default SuperHearing

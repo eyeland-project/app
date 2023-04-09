@@ -62,6 +62,8 @@ const Introduction = ({ route }: Props) => {
                 <Image
                     source={{ uri: dataIntroduction.thumbnailUrl }}
                     style={getStyles(theme).image}
+                    resizeMode='cover'
+                    resizeMethod='auto'
                     accessible
                     accessibilityLabel={dataIntroduction.thumbnailAlt}
                 />

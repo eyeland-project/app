@@ -15,7 +15,12 @@ const PositionBar = ({ groupName, position }: Props) => {
     if (!groupName || !position) return null
 
     return (
-        <View style={getStyles(theme).container}>
+        <View
+            style={getStyles(theme).container}
+            accessible={true}
+            accessibilityLabel={`Grupo: ${groupName}, posición ${position}`}
+            accessibilityRole="text"
+        >
             <Text style={getStyles(theme).groupNameText}>{groupName}</Text>
             <View style={getStyles(theme).positionContainer}>
                 <Text style={getStyles(theme).positionText}>Posición {position}°</Text>
@@ -23,6 +28,7 @@ const PositionBar = ({ groupName, position }: Props) => {
         </View>
     )
 }
+
 
 const getStyles = (theme: Theme) =>
     StyleSheet.create({

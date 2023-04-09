@@ -100,7 +100,7 @@ const FillBlank = ({ route }: Props) => {
                     <ImageBackground
                         style={getStyles(theme).image}
                         source={{ uri: question.imgUrl }}
-                        resizeMode='center'
+                        resizeMode='contain'
                         accessible
                         accessibilityLabel={question.imgAlt} />
                 </View>
