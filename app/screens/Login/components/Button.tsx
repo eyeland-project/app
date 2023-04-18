@@ -21,19 +21,19 @@ const Button = ({ title, ...props }: ButtonProps) => {
 const getStyles = (theme: Theme) =>
 	StyleSheet.create({
 		button: {
-			backgroundColor: theme.colors.secondary,
-			borderRadius: theme.borderRadius.medium,
+			backgroundColor: theme.colors.lightGreen,
+			borderRadius: theme.borderRadius.full,
 			padding: 10,
-			width: "100%",
-			marginTop: 30,
+			width: "60%",
+			marginTop: 15,
 			flexDirection: "row",
 			justifyContent: "center",
 			alignItems: "center",
-			...theme.shadow,
+			alignSelf: "center",
 		},
 		text: {
-			color: theme.colors.white,
-			fontSize: theme.fontSize.small,
+			color: theme.colors.darkGreen,
+			fontSize: theme.fontSize.large,
 			fontFamily: theme.fontWeight.bold,
 			letterSpacing: theme.spacing.medium,
 		},

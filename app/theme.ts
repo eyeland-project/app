@@ -4,9 +4,12 @@ export let theme: Theme = {
         secondary: '#000',
         white: '#fff',
         black: '#000',
-        gray: '#f2f2f2',
+        gray: '#cccccc',
+        darkGray: '#707071',
         yellow: '#ffff00',
         green: '#00ff00',
+        lightGreen: '#abf5ce',
+        darkGreen: '#0d9748',
         red: '#ff0000',
         blue: '#0496FF',
         orange: '#FFA500',
@@ -61,8 +64,11 @@ export interface Theme {
         white: string;
         black: string;
         gray: string;
+        darkGray: string;
         yellow: string;
         green: string;
+        lightGreen: string;
+        darkGreen: string;
         red: string;
         blue: string;
         orange: string;
