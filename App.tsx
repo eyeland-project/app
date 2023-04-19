@@ -26,17 +26,14 @@ const optionsPrimary: NativeStackNavigationOptions = {
 	animation: "fade_from_bottom",
 	headerBackVisible: false,
 	headerShown: false,
-	headerTitleStyle: {
-		fontFamily: "Poppins-Regular",
-	}
 }
 
 export default function App() {
-
+	// assets\fonts\SchibstedGortesk\SchibstedGrotesk-Black.ttf
 	const [loaded] = useFonts({
-		"Poppins-Regular": require("@fonts/Poppins/Poppins-Regular.ttf"),
-		"Poppins-Medium": require("@fonts/Poppins/Poppins-Medium.ttf"),
-		"Poppins-Bold": require("@fonts/Poppins/Poppins-Bold.ttf"),
+		"SchibstedGortesk-Regular": require("@fonts/SchibstedGortesk/SchibstedGrotesk-Regular.ttf"),
+		"SchibstedGortesk-Medium": require("@fonts/SchibstedGortesk/SchibstedGrotesk-Medium.ttf"),
+		"SchibstedGortesk-Bold": require("@fonts/SchibstedGortesk/SchibstedGrotesk-Black.ttf"),
 		"Roboto-Regular": require("@fonts/Roboto/Roboto-Regular.ttf"),
 		"Roboto-Medium": require("@fonts/Roboto/Roboto-Medium.ttf"),
 		"Roboto-Bold": require("@fonts/Roboto/Roboto-Bold.ttf"),

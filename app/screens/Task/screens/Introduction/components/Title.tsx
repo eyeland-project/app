@@ -26,8 +26,8 @@ const getStyles = (theme: Theme) =>
             marginHorizontal: 20,
         },
         text: {
-            color: theme.colors.black,
-            fontSize: theme.fontSize.xxxl,
+            color: theme.colors.darkestGreen,
+            fontSize: theme.fontSize.xxxxxxl,
             fontFamily: theme.fontWeight.bold,
             letterSpacing: theme.spacing.medium
         },

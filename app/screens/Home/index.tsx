@@ -1,6 +1,5 @@
 import { FlatList, View, StyleSheet } from "react-native";
 import Task from "./components/Task";
-import ComingSoon from "./components/ComingSoon";
 import Title from "./components/Title";
 import Placeholder from "./components/Placeholder";
 import ErrorScreen from "@components/ErrorScreen";
@@ -11,12 +10,10 @@ import useTasks from "@hooks/useTasks";
 import { useFocusEffect } from "@react-navigation/native";
 
 import { Theme } from "@theme";
-import { Fragment, useRef } from "react";
 
 const Home = () => {
 	const theme = useTheme();
 	const { loading, error, data, getTasks } = useTasks();
-	const firstFocus = useRef(null);
 
 	const initTasks = async () => {
 		await getTasks();

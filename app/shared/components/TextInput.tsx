@@ -75,6 +75,7 @@ const getStyles = (theme: Theme) =>
 			fontSize: theme.fontSize.small,
 			color: 'red',
 			letterSpacing: theme.spacing.medium,
+			alignSelf: 'center',
 		}
 	});
 

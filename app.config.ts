@@ -7,7 +7,6 @@ const config: ExpoConfig = {
 	name: "Eyeland",
 	slug: "Eyeland",
 	icon: "./assets/icon.png",
-	orientation: "landscape",
 	splash: {
 		image: "./assets/splash.png",
 		resizeMode: "contain",

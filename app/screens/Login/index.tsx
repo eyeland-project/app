@@ -1,7 +1,6 @@
 import { View, StyleSheet, Text, Image } from "react-native";
 
 import TextInput from "@components/TextInput";
-import Title from "./components/Title";
 import Button from "./components/Button";
 
 import { useEffect } from "react";
@@ -48,8 +47,24 @@ const Login = () => {
 			accessible={true}
 			accessibilityLabel="Formulario de ingreso"
 		>
-			<Image source={require('@icons/loginTraceLogo.png')} style={[getStyles(theme).traceLogo, { top: 160, right: -60 }]} resizeMode="center" />
-			<Image source={require('@icons/loginTraceLogo.png')} style={[getStyles(theme).traceLogo, { top: -50, right: 200 }]} resizeMode="center" />
+			<Image
+				source={require("@icons/loginTraceLogo.png")}
+				style={[
+					getStyles(theme).traceLogo,
+					{ top: '10%', right: '-25%' }
+					// : { top: 160, right: -60 }
+				]}
+				resizeMode="center"
+			/>
+			<Image
+				source={require("@icons/loginTraceLogo.png")}
+				style={[
+					getStyles(theme).traceLogo,
+					{ top: '-10%', right: '10%' }
+					// : { top: -50, right: 200 },
+				]}
+				resizeMode="center"
+			/>
 			<View style={getStyles(theme).innerContainer}>
 				<Image source={require('@icons/loginLogo.png')} style={getStyles(theme).logo} resizeMode="center" />
 				<TextInput
@@ -99,11 +114,12 @@ const getStyles = (theme: Theme) =>
 			alignItems: "center",
 			justifyContent: "center",
 			height: "100%",
-			position: "relative"
+			position: "relative",
 		},
 		innerContainer: {
-			maxWidth: 400,
+			maxWidth: 420,
 			width: "100%",
+			paddingHorizontal: 20,
 		},
 		error: {
 			color: theme.colors.red,
@@ -116,13 +132,13 @@ const getStyles = (theme: Theme) =>
 			width: 139,
 			height: 139,
 			marginBottom: 20,
-			alignSelf: "center"
+			alignSelf: "center",
 		},
 		traceLogo: {
 			width: 270,
 			height: 270,
 			position: "absolute",
-		}
+		},
 	});
 
 export default Login

@@ -8,19 +8,21 @@ import PosTask from "./screens/PosTask";
 import Header from './components/Header';
 
 import { useEffect } from "react";
+import useTheme from "@hooks/useTheme";
 import useTaskContext from '@hooks/useTaskContext';
 
 const Stack = createNativeStackNavigator();
 
 const Task = ({ route }: { route: any }) => {
     const { taskOrder } = route.params;
+    const theme = useTheme();
     const { phaseCompleted, onPressNext, progress, setPhaseCompleted, setTaskOrder } = useTaskContext();
 
     const optionsPrimary: NativeStackNavigationOptions = {
         animation: "slide_from_right",
         headerBackVisible: false,
         headerTitleStyle: {
-            fontFamily: "Poppins-Regular",
+            fontFamily: theme.fontWeight.regular,
         },
         header: () => <Header progress={progress} showNext={phaseCompleted} onPress={() => {
             setPhaseCompleted(false);
