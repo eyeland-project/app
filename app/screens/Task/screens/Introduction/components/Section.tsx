@@ -37,6 +37,7 @@ const getStyles = (theme: Theme, completed: boolean, blocked: boolean) =>
             marginHorizontal: 10,
             justifyContent: 'center',
             alignItems: 'center',
+            marginVertical: 10
         },
         text: {
             color: completed ? theme.colors.white : blocked ? theme.colors.gray : theme.colors.darkGreen,

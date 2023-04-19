@@ -18,7 +18,7 @@ const getStyles = (theme: Theme) => StyleSheet.create({
 		fontSize: theme.fontSize.xl,
 		fontFamily: theme.fontWeight.bold,
 		marginBottom: 10,
-		color: theme.colors.black,
+		color: theme.colors.white,
 		letterSpacing: theme.spacing.medium,
 	},
 });

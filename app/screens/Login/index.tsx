@@ -1,4 +1,4 @@
-import { View, StyleSheet, Text, Image } from "react-native";
+import { View, StyleSheet, Text, Image, useWindowDimensions, StatusBar } from "react-native";
 
 import TextInput from "@components/TextInput";
 import Button from "./components/Button";
@@ -24,6 +24,8 @@ const Login = () => {
 	});
 	const { data, error, loading, login } = useLogin();
 	const authStorage = useAuthStorage();
+	const { height, width } = useWindowDimensions();
+	const isPortrait = height > width;
 
 	useEffect(() => {
 		authStorage.getAccessToken().then(token => {
@@ -42,68 +44,69 @@ const Login = () => {
 	};
 
 	return (
-		<View
-			style={getStyles(theme).container}
-			accessible={true}
-			accessibilityLabel="Formulario de ingreso"
-		>
-			<Image
-				source={require("@icons/loginTraceLogo.png")}
-				style={[
-					getStyles(theme).traceLogo,
-					{ top: '10%', right: '-25%' }
-					// : { top: 160, right: -60 }
-				]}
-				resizeMode="center"
-			/>
-			<Image
-				source={require("@icons/loginTraceLogo.png")}
-				style={[
-					getStyles(theme).traceLogo,
-					{ top: '-10%', right: '10%' }
-					// : { top: -50, right: 200 },
-				]}
-				resizeMode="center"
-			/>
-			<View style={getStyles(theme).innerContainer}>
-				<Image source={require('@icons/loginLogo.png')} style={getStyles(theme).logo} resizeMode="center" />
-				<TextInput
-					name="username"
-					placeholder="Usuario"
-					control={control}
-					autoCapitalize="none"
-					error={errors.username && "El usuario es requerido"}
-					accessible={true}
-					accessibilityLabel="Entrada de nombre de usuario"
-					accessibilityHint="Ingrese su nombre de usuario"
-					placeholderTextColor={theme.colors.darkGray}
+		<>
+			<StatusBar backgroundColor={theme.colors.white} barStyle="dark-content" />
+			<View
+				style={getStyles(theme).container}
+				accessible={true}
+				accessibilityLabel="Formulario de ingreso"
+			>
+				<Image
+					source={require("@icons/loginTraceLogo.png")}
+					style={[
+						getStyles(theme).traceLogo,
+						isPortrait ? { top: -100, right: 20 } : { top: 160, right: -60 }
+					]}
+					resizeMode="center"
 				/>
-				<TextInput
-					name="password"
-					placeholder="Contraseña"
-					autoCapitalize="none"
-					control={control}
-					error={errors.password && "La contraseña es requerida"}
-					secureTextEntry={true}
-					accessible={true}
-					accessibilityLabel="Entrada de contraseña"
-					accessibilityHint="Ingresa tu contraseña"
-					placeholderTextColor={theme.colors.darkGray}
+				<Image
+					source={require("@icons/loginTraceLogo.png")}
+					style={[
+						getStyles(theme).traceLogo,
+						isPortrait ? { top: 60, right: -100 } : { top: -50, right: 200 },
+					]}
+					resizeMode="center"
 				/>
-				<Button
-					title={loading ? "Cargando..." : "Ingresar"}
-					onPress={() => {
-						!loading && handleSubmit(onSubmit)();
-					}}
-					accessible={true}
-					accessibilityLabel={loading ? "Cargando..." : "Iniciar sesión"}
-					accessibilityHint="Presiona para iniciar sesión"
-				/>
-				{
-					error && <Text style={getStyles(theme).error}>{error}</Text>
-				}
+				<View style={getStyles(theme).innerContainer}>
+					<Image source={require('@icons/loginLogo.png')} style={getStyles(theme).logo} resizeMode="center" />
+					<TextInput
+						name="username"
+						placeholder="Usuario"
+						control={control}
+						autoCapitalize="none"
+						error={errors.username && "El usuario es requerido"}
+						accessible={true}
+						accessibilityLabel="Entrada de nombre de usuario"
+						accessibilityHint="Ingrese su nombre de usuario"
+						placeholderTextColor={theme.colors.darkGray}
+					/>
+					<TextInput
+						name="password"
+						placeholder="Contraseña"
+						autoCapitalize="none"
+						control={control}
+						error={errors.password && "La contraseña es requerida"}
+						secureTextEntry={true}
+						accessible={true}
+						accessibilityLabel="Entrada de contraseña"
+						accessibilityHint="Ingresa tu contraseña"
+						placeholderTextColor={theme.colors.darkGray}
+					/>
+					<Button
+						title={loading ? "Cargando..." : "Ingresar"}
+						onPress={() => {
+							!loading && handleSubmit(onSubmit)();
+						}}
+						accessible={true}
+						accessibilityLabel={loading ? "Cargando..." : "Iniciar sesión"}
+						accessibilityHint="Presiona para iniciar sesión"
+					/>
+					{
+						error && <Text style={getStyles(theme).error}>{error}</Text>
+					}
+				</View>
 			</View>
-		</View>
+		</>
 	);
 }
 
@@ -138,6 +141,7 @@ const getStyles = (theme: Theme) =>
 			width: 270,
 			height: 270,
 			position: "absolute",
+			alignSelf: "flex-end",
 		},
 	});
 

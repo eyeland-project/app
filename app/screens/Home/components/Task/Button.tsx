@@ -32,7 +32,7 @@ const Button = ({ text, style, icon, ...props }: ButtonProps) => {
 
 const getStyles = (theme: Theme) => StyleSheet.create({
 	button: {
-		backgroundColor: theme.colors.secondary,
+		backgroundColor: theme.colors.bluerGreen,
 		borderRadius: theme.borderRadius.full,
 		padding: 10,
 		paddingHorizontal: 20,
@@ -45,7 +45,7 @@ const getStyles = (theme: Theme) => StyleSheet.create({
 	},
 	text: {
 		color: theme.colors.white,
-		fontFamily: theme.fontWeight.regular,
+		fontFamily: theme.fontWeight.bold,
 		fontSize: theme.fontSize.small,
 		letterSpacing: theme.spacing.medium,
 	},

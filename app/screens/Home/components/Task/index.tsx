@@ -13,6 +13,8 @@ import Button from "./Button";
 import useTheme from "@hooks/useTheme";
 import { Theme } from "@theme";
 
+import { hexToRgbA } from "@utils/hexToRgba";
+
 interface TaskProps {
 	id: number;
 	order: number;
@@ -40,8 +42,8 @@ const Task = ({ id, order, name, description, image, blocked, completed }: TaskP
 			>
 				<LinearGradient
 					colors={[
-						theme.colors.white === "#fff" ? "rgba(255,255,255,0.9)" : "rgba(0,0,0,0.9)",
-						theme.colors.white === "#fff" ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.4)",]}
+						theme.colors.white === "#fff" ? hexToRgbA(theme.colors.darkGreen, 0.9) : "rgba(0,0,0,0.9)",
+						theme.colors.white === "#fff" ? hexToRgbA(theme.colors.darkGray, 0.4) : "rgba(0,0,0,0.4)",]}
 					style={getStyles(theme).gradient}
 					start={[1, 1]}
 					end={[0, 1]}
@@ -96,7 +98,7 @@ const getStyles = (theme: Theme) =>
 		blockedOverlay: {
 			height: "100%",
 			width: "100%",
-			backgroundColor: theme.colors.white,
+			backgroundColor: theme.colors.black,
 			opacity: 0.8,
 			position: "absolute",
 		}

@@ -1,5 +1,5 @@
 
-import { View, StyleSheet, Image, Text, Modal } from 'react-native'
+import { View, StyleSheet, Image, Text, Modal, StatusBar, useWindowDimensions } from 'react-native'
 import Title from './components/Title';
 import Keywords from './components/Keywords';
 import Description from './components/Description';
@@ -35,6 +35,9 @@ const Introduction = ({ route }: Props) => {
     const { loading: loadingProgress, error: errorProgress, data: dataProgress, getProgress } = useProgress();
     const { resetContext, setIcon } = useTaskContext();
     const [showModal, setShowModal] = useState(false);
+
+    const { width: screenWidth } = useWindowDimensions();
+    const isPhone = screenWidth <= 768;
 
     const getIcon = () => {
         if (dataProgress) {
@@ -77,11 +80,12 @@ const Introduction = ({ route }: Props) => {
 
     return (
         <>
-            <View style={getStyles(theme).container}>
-                <Image source={getIcon()} resizeMode='center' style={getStyles(theme).image} />
-                <Title text={dataIntroduction.name} />
-                <ContextButton onPress={toggleModal} />
-                <View style={getStyles(theme).row}>
+            <StatusBar backgroundColor={theme.colors.white} barStyle="dark-content" />
+            <View style={getStyles(theme, isPhone).container}>
+                <Image source={getIcon()} resizeMode='center' style={getStyles(theme, isPhone).image} />
+                <Title text={dataIntroduction.name} isPhone={isPhone} />
+                <ContextButton onPress={toggleModal} isPhone={isPhone} />
+                <View style={getStyles(theme, isPhone).row}>
                     <Section
                         title='Aprendizaje'
                         completed={dataProgress.pretask.completed}
@@ -104,35 +108,35 @@ const Introduction = ({ route }: Props) => {
                         }} />
                 </View>
             </View>
-            <ContextModal showModal={showModal} toggleModal={toggleModal} dataIntroduction={dataIntroduction} />
+            <ContextModal showModal={showModal} toggleModal={toggleModal} dataIntroduction={dataIntroduction} isPhone={isPhone} />
         </>
     )
 }
 
-const getStyles = (theme: Theme) =>
+const getStyles = (theme: Theme, isPhone: boolean) =>
     StyleSheet.create({
         container: {
             backgroundColor: theme.colors.primary,
             alignItems: 'center',
-            // justifyContent: 'center',
-            paddingTop: 40,
+            paddingTop: isPhone ? 20 : 40,
             height: '100%',
         },
         text: {
             color: theme.colors.black,
-            fontSize: theme.fontSize.xxxl,
+            fontSize: isPhone ? theme.fontSize.xl : theme.fontSize.xxxl,
             fontFamily: theme.fontWeight.bold,
         },
         image: {
-            height: 140,
-            width: 140,
+            height: isPhone ? 100 : 140,
+            width: isPhone ? 100 : 140,
         },
         row: {
-            flexDirection: 'row',
+            flexDirection: isPhone ? 'column' : 'row',
             alignItems: 'center',
             paddingHorizontal: 20,
-        }
-    })
+        },
+    });
+
 
 
 export default Introduction

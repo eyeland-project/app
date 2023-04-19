@@ -33,7 +33,7 @@ const Title = ({ text }: TitleProps) => {
                 accessibilityHint="Presiona para cerrar sesión"
                 accessibilityRole="button"
             >
-                <MaterialCommunityIcons name="logout" size={30} color={theme.colors.secondary} accessible={false} />
+                <MaterialCommunityIcons name="logout" size={30} color={theme.colors.bluerGreen} accessible={false} />
             </Pressable>
         </View>
     )
@@ -43,7 +43,7 @@ const Title = ({ text }: TitleProps) => {
 const getStyles = (theme: Theme) =>
     StyleSheet.create({
         container: {
-            backgroundColor: theme.colors.primary,
+            backgroundColor: theme.colors.darkestGreen,
             paddingHorizontal: 20,
             justifyContent: 'space-between',
             flexDirection: 'row',
@@ -51,7 +51,7 @@ const getStyles = (theme: Theme) =>
             paddingVertical: 8,
         },
         text: {
-            color: theme.colors.black,
+            color: theme.colors.bluerGreen,
             fontSize: theme.fontSize.xxxl,
             fontFamily: theme.fontWeight.bold,
 

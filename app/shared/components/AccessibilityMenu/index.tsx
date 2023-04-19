@@ -52,8 +52,8 @@ const getStyles = (theme: Theme) => StyleSheet.create({
         right: 20,
     },
     image: {
-        width: 70,
-        height: 70,
+        width: 65,
+        height: 65,
     }
 })
 
