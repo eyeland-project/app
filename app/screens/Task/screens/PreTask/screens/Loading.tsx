@@ -7,6 +7,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import usePreTask from "@hooks/usePreTask";
 import useTheme from "@hooks/useTheme";
 import usePreTaskContext from "@hooks/usePreTaskContext";
+import useTaskContext from "@hooks/useTaskContext";
 
 import { Theme } from "@theme";
 
@@ -15,6 +16,7 @@ const Loading = ({ route }: { route: any }) => {
     const theme = useTheme();
     const { getPreTask, data, error, loading, nextQuestion } = usePreTask();
     const { setData, data: dataContext } = usePreTaskContext();
+    const { setTotalQuestions } = useTaskContext();
 
     useFocusEffect(
         useCallback(() => {
@@ -30,6 +32,7 @@ const Loading = ({ route }: { route: any }) => {
 
     useEffect(() => {
         if (dataContext) {
+            setTotalQuestions(dataContext.length);
             nextQuestion();
         }
     }, [dataContext])

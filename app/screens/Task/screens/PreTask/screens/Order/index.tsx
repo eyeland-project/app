@@ -100,10 +100,12 @@ const Order = ({ route }: Props) => {
     return (
         <>
             <View style={getStyles(theme).container}>
-                <View>
-                    <Instructions text='Traduce organizando las palabras en el orden correcto' />
+                <View >
+                    <Instructions text='Ordena las palabras en inglés para traducir la pregunta:' />
                     <Text style={getStyles(theme).question}>{question.content}</Text>
                     <AnswerBox answerList={answerList} onAnswerPress={onAnswerPress} />
+                    <Text style={getStyles(theme).instructions}>Haz click sobre las palabras para agregar</Text>
+                    <View style={getStyles(theme).divider} />
                     <View style={getStyles(theme).optionsContainer}>
                         {optionsList.map((option, index) => {
                             return (
@@ -113,6 +115,7 @@ const Order = ({ route }: Props) => {
                                     onPress={() => {
                                         onPressOption(index)
                                     }}
+                                    ordered={false}
                                 />
                             )
                         })}
@@ -120,7 +123,7 @@ const Order = ({ route }: Props) => {
                 </View>
                 {
                     allOptionsInBox &&
-                    <View>
+                    <View style={{ alignSelf: 'center' }}>
                         <OptionTask text='Confirmar' onPress={() => { onPressConfirm() }} containerStyle={confirmContainerStyle} textStyle={confirmTextStyle} />
                         <View style={getStyles(theme).safeSpace} />
                     </View>
@@ -149,23 +152,44 @@ const getStyles = (theme: Theme) =>
             height: '100%',
         },
         optionsContainer: {
-            marginTop: 30,
             flexDirection: 'row',
             marginHorizontal: 20,
             flexWrap: 'wrap',
+            alignSelf: 'center',
         },
         question: {
-            fontSize: theme.fontSize.xxl,
-            color: theme.colors.black,
-            fontFamily: theme.fontWeight.regular,
+            fontSize: theme.fontSize.xxxxxl,
+            color: theme.colors.darkestGreen,
+            fontFamily: theme.fontWeight.bold,
             letterSpacing: theme.spacing.medium,
             marginHorizontal: 20,
+            alignSelf: 'center',
+            marginBottom: 20,
         },
         separator: {
             width: 10,
         },
         safeSpace: {
             height: 80,
+        },
+        instructions: {
+            fontSize: theme.fontSize.xl,
+            color: theme.colors.darkGray,
+            fontFamily: theme.fontWeight.medium,
+            letterSpacing: theme.spacing.medium,
+            marginHorizontal: 20,
+            alignSelf: 'center',
+            marginTop: 20,
+            textAlign: 'center',
+        },
+        divider: {
+            height: 1,
+            backgroundColor: theme.colors.black,
+            marginVertical: 20,
+            marginHorizontal: 20,
+            maxWidth: 400,
+            width: '90%',
+            alignSelf: 'center',
         }
     })
 

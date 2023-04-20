@@ -9,11 +9,12 @@ export let theme: Theme = {
         yellow: '#ffff00',
         green: '#00ff00',
         bluerGreen: '#41fb99',
+        lightBluerGreen: '#74efae',
         lightGreen: '#abf5ce',
         darkGreen: '#0d9748',
         darkerGreen: '#07792F',
         darkestGreen: '#0B460C',
-        red: '#ff0000',
+        red: '#FD6870',
         blue: '#0496FF',
         orange: '#FFA500',
     },
@@ -46,12 +47,12 @@ export let theme: Theme = {
         xxxxxxl: 40,
     },
     fontFamily: {
-        primary: 'SchibstedGortesk-Regular',
+        primary: 'Raleway-Regular',
     },
     fontWeight: {
-        regular: 'SchibstedGortesk-Regular',
-        medium: 'SchibstedGortesk-Medium',
-        bold: 'SchibstedGortesk-Bold',
+        regular: 'Raleway-Regular',
+        medium: 'Raleway-Medium',
+        bold: 'Raleway-Bold',
     },
     spacing: {
         small: -2,
@@ -71,6 +72,7 @@ export interface Theme {
         yellow: string;
         green: string;
         bluerGreen: string;
+        lightBluerGreen: string;
         lightGreen: string;
         darkGreen: string;
         darkerGreen: string;

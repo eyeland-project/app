@@ -1,10 +1,12 @@
 import Pressable from './Pressable'
 import AntDesign from '@expo/vector-icons/AntDesign'
-import { Animated, Easing } from 'react-native'
+import { Animated, Easing, StyleSheet } from 'react-native'
 
 import { useNavigation } from '@react-navigation/native'
 import useTheme from '@hooks/useTheme'
 import useTaskContext from '@hooks/useTaskContext'
+
+import { Theme } from '@theme'
 
 interface Props {
     icon?: keyof typeof AntDesign.glyphMap;
@@ -44,15 +46,26 @@ const BackButton = ({ icon, accessibilityLabel }: Props) => {
             style={{ padding: 6 }}
             accessibilityLabel={accessibilityLabel}
         >
-            <Animated.View style={{ transform: [{ scale: scaleValue }] }}>
+            <Animated.View style={[getStyles(theme).container, { transform: [{ scale: scaleValue }] }]}>
                 <AntDesign
-                    name={icon ? icon : "back"}
-                    size={27}
-                    color={theme.colors.black}
+                    name={"home"}
+                    size={35}
+                    color={theme.colors.white}
                 />
             </Animated.View>
         </Pressable>
     )
 }
+
+const getStyles = (theme: Theme) =>
+    StyleSheet.create({
+        container: {
+            backgroundColor: theme.colors.lightGreen,
+            borderRadius: theme.borderRadius.full,
+            padding: 9,
+        }
+    })
+
+
 
 export default BackButton

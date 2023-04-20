@@ -2,19 +2,20 @@ import { View, Text, StyleSheet } from 'react-native'
 import LottieView from 'lottie-react-native';
 import Option from '@screens/Task/components/Option'
 
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import useTaskContext from '@hooks/useTaskContext';
 import useTheme from '@hooks/useTheme'
 import usePreTask from '@hooks/usePreTask';
 import { useNavigation } from '@react-navigation/native';
 import usePlaySound from '@app/core/hooks/usePlaySound';
+import { useFocusEffect } from '@react-navigation/native';
 
 import { Theme } from '@theme'
 
 const Complete = () => {
     const theme = useTheme()
     const { setPreTaskComplete } = usePreTask()
-    const { taskOrder } = useTaskContext()
+    const { taskOrder, resetContext } = useTaskContext()
     const navigation = useNavigation<any>()
     const playSoundSuccess = usePlaySound(require('@sounds/complete.wav'))
 
@@ -27,10 +28,13 @@ const Complete = () => {
         })
     }
 
-    useEffect(() => {
-        setPreTaskComplete({ taskOrder })
-        playSoundSuccess()
-    }, [])
+    useFocusEffect(
+        useCallback(() => {
+            setPreTaskComplete({ taskOrder })
+            resetContext()
+            playSoundSuccess()
+        }, [])
+    )
 
     return (
         <View style={getStyles(theme).container}>
@@ -49,8 +53,8 @@ const Complete = () => {
                 loop={false}
                 duration={2000}
             />
-            <View>
-                <Option text='Volver al menú' onPress={() => { onButtonPress() }} containerStyle={{}} textStyle={{ fontFamily: theme.fontWeight.regular, fontSize: theme.fontSize.xl }} />
+            <View style={getStyles(theme).goBackContainer}>
+                <Option text='Volver al menú' onPress={() => { onButtonPress() }} containerStyle={{}} textStyle={{ fontFamily: theme.fontWeight.bold, fontSize: theme.fontSize.xl }} />
                 <View style={getStyles(theme).safeSpace} />
             </View>
         </View>
@@ -67,7 +71,7 @@ const getStyles = (theme: Theme) =>
         text: {
             fontSize: theme.fontSize.xxxxxxl,
             fontFamily: theme.fontWeight.bold,
-            color: theme.colors.black,
+            color: theme.colors.darkestGreen,
             letterSpacing: theme.spacing.medium,
             marginHorizontal: 20,
             marginTop: 20,
@@ -79,6 +83,9 @@ const getStyles = (theme: Theme) =>
         animationsContainer: {
             alignItems: "center",
             position: "relative",
+        },
+        goBackContainer: {
+            alignItems: "center",
         }
     })
 

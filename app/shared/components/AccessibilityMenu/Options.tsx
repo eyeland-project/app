@@ -119,9 +119,9 @@ const Options = ({ unShowOptions }: OptionsProps) => {
                 ...theme,
                 fontWeight: {
                     ...theme.fontWeight,
-                    regular: 'SchibstedGortesk-Regular',
-                    medium: 'SchibstedGortesk-Medium',
-                    bold: 'SchibstedGortesk-Bold',
+                    regular: 'Raleway-Regular',
+                    medium: 'Raleway-Medium',
+                    bold: 'Raleway-Bold',
                 }
             })
         }

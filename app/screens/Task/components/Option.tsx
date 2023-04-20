@@ -35,19 +35,19 @@ const Option = ({ text, onPress, containerStyle, textStyle }: Props) => {
 const getStyles = (theme: Theme) =>
     StyleSheet.create({
         container: {
-            backgroundColor: theme.colors.black,
-            marginHorizontal: 20,
-            marginBottom: 20,
-            borderRadius: theme.borderRadius.medium,
-            paddingVertical: 10,
+            backgroundColor: theme.colors.lightBluerGreen,
+            borderRadius: theme.borderRadius.large,
             justifyContent: 'center',
             alignItems: 'center',
-            ...theme.shadow
+            width: 215,
+            height: 60,
+            marginHorizontal: 10,
+            marginVertical: 10,
         },
         text: {
             color: theme.colors.white,
             fontSize: theme.fontSize.xxl,
-            fontFamily: theme.fontWeight.medium,
+            fontFamily: theme.fontWeight.bold,
             letterSpacing: theme.spacing.medium,
             marginHorizontal: 10,
         }

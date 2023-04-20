@@ -24,11 +24,13 @@ const getStyles = (theme: Theme) =>
     StyleSheet.create({
         container: {
             marginHorizontal: 20,
-            marginBottom: 20,
+            marginBottom: 10,
+            marginTop: 10,
+            alignSelf: 'center',
         },
         text: {
-            color: theme.colors.black,
-            fontSize: theme.fontSize.large,
+            color: theme.colors.darkGray,
+            fontSize: theme.fontSize.xl,
             fontFamily: theme.fontWeight.bold,
         },
         line: {

@@ -18,10 +18,9 @@ const AnswerBox = ({ answerList, onAnswerPress }: Props) => {
         <View style={[getStyles(theme).container, answerList.length > 0 ? getStyles(theme).notEmptyContainer : getStyles(theme).emptyContainer]}>
             {
                 answerList.length > 0
-                    ? answerList.map((answer, index) => (
-                        <Option text={answer} onPress={() => { onAnswerPress(index) }} key={index} />
-                    ))
-                    : <Text style={getStyles(theme).text}>Pulsa las palabras para organizarlas</Text>
+                && answerList.map((answer, index) => (
+                    <Option text={answer} onPress={() => { onAnswerPress(index) }} key={index} ordered={true} />
+                ))
             }
         </View>
     )
@@ -31,10 +30,11 @@ const getStyles = (theme: Theme) =>
     StyleSheet.create({
         container: {
             backgroundColor: theme.colors.primary,
-            borderColor: theme.colors.secondary,
+            borderColor: theme.colors.gray,
             borderWidth: 1.5,
-            borderRadius: theme.borderRadius.medium,
-            marginHorizontal: 20,
+            width: '90%',
+            maxWidth: 800,
+            alignSelf: 'center',
             // minHeight: 200,
         },
         emptyContainer: {

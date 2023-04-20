@@ -47,23 +47,22 @@ const getStyles = (theme: Theme) => StyleSheet.create({
     errorText: {
         color: theme.colors.red,
         marginBottom: 10,
-        fontFamily: theme.fontWeight.regular,
-        fontSize: theme.fontSize.small,
+        fontFamily: theme.fontWeight.medium,
+        fontSize: theme.fontSize.xxl,
         letterSpacing: theme.spacing.medium,
         textAlign: "center",
     },
     retryButton: {
-        backgroundColor: theme.colors.secondary,
+        backgroundColor: theme.colors.darkGreen,
         paddingHorizontal: 20,
         paddingVertical: 10,
         borderRadius: 5,
         marginTop: 10,
-        ...theme.shadow
     },
     retryButtonText: {
-        color: theme.colors.primary,
-        fontFamily: theme.fontWeight.medium,
-        fontSize: theme.fontSize.small,
+        color: theme.colors.white,
+        fontFamily: theme.fontWeight.bold,
+        fontSize: theme.fontSize.xxl,
         letterSpacing: theme.spacing.medium,
     },
 })

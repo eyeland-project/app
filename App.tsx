@@ -29,11 +29,10 @@ const optionsPrimary: NativeStackNavigationOptions = {
 }
 
 export default function App() {
-	// assets\fonts\SchibstedGortesk\SchibstedGrotesk-Black.ttf
 	const [loaded] = useFonts({
-		"SchibstedGortesk-Regular": require("@fonts/SchibstedGortesk/SchibstedGrotesk-Regular.ttf"),
-		"SchibstedGortesk-Medium": require("@fonts/SchibstedGortesk/SchibstedGrotesk-Medium.ttf"),
-		"SchibstedGortesk-Bold": require("@fonts/SchibstedGortesk/SchibstedGrotesk-Black.ttf"),
+		"Raleway-Regular": require("@fonts/Raleway/Raleway-Regular.ttf"),
+		"Raleway-Medium": require("@fonts/Raleway/Raleway-Medium.ttf"),
+		"Raleway-Bold": require("@fonts/Raleway/Raleway-Black.ttf"),
 		"Roboto-Regular": require("@fonts/Roboto/Roboto-Regular.ttf"),
 		"Roboto-Medium": require("@fonts/Roboto/Roboto-Medium.ttf"),
 		"Roboto-Bold": require("@fonts/Roboto/Roboto-Bold.ttf"),

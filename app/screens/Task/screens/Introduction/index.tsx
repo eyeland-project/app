@@ -33,7 +33,7 @@ const Introduction = ({ route }: Props) => {
     const navigation = useNavigation<any>();
     const { loading: loadingIntroduction, error: errorIntroduction, data: dataIntroduction, getIntroduction } = useIntroduction();
     const { loading: loadingProgress, error: errorProgress, data: dataProgress, getProgress } = useProgress();
-    const { resetContext, setIcon } = useTaskContext();
+    const { resetContext, setIcon, setState } = useTaskContext();
     const [showModal, setShowModal] = useState(false);
 
     const { width: screenWidth } = useWindowDimensions();
@@ -91,6 +91,7 @@ const Introduction = ({ route }: Props) => {
                         completed={dataProgress.pretask.completed}
                         blocked={dataProgress.pretask.blocked}
                         onPress={() => {
+                            setState('pre')
                             navigation.navigate('PreTask', { taskOrder, linkOrder: 1 });
                         }} />
                     <Section
@@ -98,12 +99,14 @@ const Introduction = ({ route }: Props) => {
                         completed={dataProgress.duringtask.completed}
                         blocked={dataProgress.duringtask.blocked}
                         onPress={() => {
+                            setState('during')
                             navigation.navigate('DuringTask', { taskOrder, questionOrder: 1 });
                         }} />
                     <Section title='Evaluación'
                         completed={dataProgress.postask.completed}
                         blocked={dataProgress.postask.blocked}
                         onPress={() => {
+                            setState('post')
                             navigation.navigate('PosTask', { taskOrder, questionOrder: 1 });
                         }} />
                 </View>
