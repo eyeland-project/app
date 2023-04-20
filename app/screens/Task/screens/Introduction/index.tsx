@@ -33,7 +33,7 @@ const Introduction = ({ route }: Props) => {
     const navigation = useNavigation<any>();
     const { loading: loadingIntroduction, error: errorIntroduction, data: dataIntroduction, getIntroduction } = useIntroduction();
     const { loading: loadingProgress, error: errorProgress, data: dataProgress, getProgress } = useProgress();
-    const { resetContext, setIcon, setState } = useTaskContext();
+    const { resetContext, setIcon, setState, setShowHeader, setHeaderColor } = useTaskContext();
     const [showModal, setShowModal] = useState(false);
 
     const { width: screenWidth } = useWindowDimensions();
@@ -63,6 +63,8 @@ const Introduction = ({ route }: Props) => {
             getProgress({ taskOrder });
             resetContext();
             setIcon('home')
+            setShowHeader(true);
+            setHeaderColor('white')
         }, [])
     );
 

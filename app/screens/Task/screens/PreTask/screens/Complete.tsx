@@ -1,6 +1,7 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, StatusBar, Image } from 'react-native'
 import LottieView from 'lottie-react-native';
 import Option from '@screens/Task/components/Option'
+import Pressable from '@components/Pressable';
 
 import { useEffect, useCallback } from 'react';
 import useTaskContext from '@hooks/useTaskContext';
@@ -15,7 +16,7 @@ import { Theme } from '@theme'
 const Complete = () => {
     const theme = useTheme()
     const { setPreTaskComplete } = usePreTask()
-    const { taskOrder, resetContext } = useTaskContext()
+    const { taskOrder, resetContext, setHeaderColor, setShowHeader } = useTaskContext()
     const navigation = useNavigation<any>()
     const playSoundSuccess = usePlaySound(require('@sounds/complete.wav'))
 
@@ -33,59 +34,76 @@ const Complete = () => {
             setPreTaskComplete({ taskOrder })
             resetContext()
             playSoundSuccess()
+            setShowHeader(false)
         }, [])
     )
 
     return (
-        <View style={getStyles(theme).container}>
-            <View>
+        <>
+            <StatusBar backgroundColor={theme.colors.darkestGreen} barStyle="light-content" />
+            <View style={getStyles(theme).container}>
+                <Image source={require('@icons/logoWhite.png')} style={getStyles(theme).image} resizeMode='center' />
+                <Text style={getStyles(theme).text}>!Muy bien!</Text>
+                <Pressable onPress={() => { onButtonPress() }} style={getStyles(theme).button}>
+                    <Text style={getStyles(theme).buttonText}>Volver al menú</Text>
+                </Pressable>
+                {/* <View>
+                    <LottieView
+                        source={require('@animations/celebration.json')}
+                        autoPlay
+                        loop
+                        style={{ width: 500, position: 'absolute', top: -80, alignItems: 'center', alignSelf: 'center' }}
+                    />
+                    <Text style={getStyles(theme).text}>¡Felicidades, lo lograste!</Text>
+                </View>
                 <LottieView
-                    source={require('@animations/celebration.json')}
+                    source={require('@animations/star.json')}
                     autoPlay
-                    loop
-                    style={{ width: 500, position: 'absolute', top: -80, alignItems: 'center', alignSelf: 'center' }}
+                    loop={false}
+                    duration={2000}
                 />
-                <Text style={getStyles(theme).text}>¡Felicidades, lo lograste!</Text>
+                <View style={getStyles(theme).goBackContainer}>
+                    <Option text='Volver al menú' onPress={() => { onButtonPress() }} containerStyle={{}} textStyle={{ fontFamily: theme.fontWeight.bold, fontSize: theme.fontSize.xl }} />
+                    <View style={getStyles(theme).safeSpace} />
+                </View> */}
             </View>
-            <LottieView
-                source={require('@animations/star.json')}
-                autoPlay
-                loop={false}
-                duration={2000}
-            />
-            <View style={getStyles(theme).goBackContainer}>
-                <Option text='Volver al menú' onPress={() => { onButtonPress() }} containerStyle={{}} textStyle={{ fontFamily: theme.fontWeight.bold, fontSize: theme.fontSize.xl }} />
-                <View style={getStyles(theme).safeSpace} />
-            </View>
-        </View>
+        </>
     )
 }
 
 const getStyles = (theme: Theme) =>
     StyleSheet.create({
         container: {
-            backgroundColor: theme.colors.primary,
+            backgroundColor: theme.colors.darkestGreen,
             height: "100%",
-            justifyContent: "space-between",
+            justifyContent: 'center',
+            alignItems: 'center',
+        },
+        image: {
+            width: 130,
+            height: 130,
+            marginBottom: 20,
         },
         text: {
             fontSize: theme.fontSize.xxxxxxl,
             fontFamily: theme.fontWeight.bold,
-            color: theme.colors.darkestGreen,
+            color: theme.colors.white,
             letterSpacing: theme.spacing.medium,
             marginHorizontal: 20,
-            marginTop: 20,
+            marginBottom: 20,
             textAlign: "center",
         },
-        safeSpace: {
-            height: 80,
+        button: {
+            backgroundColor: theme.colors.darkGreen,
+            borderRadius: theme.borderRadius.large,
+            paddingVertical: 15,
+            paddingHorizontal: 30,
         },
-        animationsContainer: {
-            alignItems: "center",
-            position: "relative",
-        },
-        goBackContainer: {
-            alignItems: "center",
+        buttonText: {
+            color: theme.colors.bluerGreen,
+            fontSize: theme.fontSize.xxl,
+            fontFamily: theme.fontWeight.bold,
+            letterSpacing: theme.spacing.medium,
         }
     })
 

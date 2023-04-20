@@ -32,7 +32,6 @@ const Stack = createNativeStackNavigator();
 
 const DuringTask = ({ route }: Props) => {
     const authStorage = useAuthStorage();
-    const [isSessionStarted, setIsSessionStarted] = useState(false);
     const [team, setTeam] = useState<Team | null>(null);
     const [power, setPower] = useState<Power | null>(null);
     const [position, setPosition] = useState<number | null>(1);
@@ -49,9 +48,6 @@ const DuringTask = ({ route }: Props) => {
 
     const connectSocket = async () => {
         socket.connect();
-        socket.emit('join', await authStorage.getAccessToken(), (response: { session: boolean }) => {
-            setIsSessionStarted(response.session);
-        });
         socket.once(SocketEvents.sessionTeacherEnd, () => {
             navigation.navigate("Introduction", { taskOrder: route.params.taskOrder });
         })
@@ -74,19 +70,16 @@ const DuringTask = ({ route }: Props) => {
     return (
         <DuringTaskContext.Provider value={{ socket, power, setPower, team, setTeam, position, setPosition, numQuestions }}>
             <Stack.Navigator >
-                {
-                    !isSessionStarted
-                    && <Stack.Screen
-                        name="Waiting"
-                        options={{
-                            ...optionsPrimary
-                        }}
-                        initialParams={{
-                            taskOrder: route.params.taskOrder,
-                        }}
-                        component={WaitingActive}
-                    />
-                }
+                <Stack.Screen
+                    name="Waiting"
+                    options={{
+                        ...optionsPrimary
+                    }}
+                    initialParams={{
+                        taskOrder: route.params.taskOrder,
+                    }}
+                    component={WaitingActive}
+                />
                 <Stack.Screen
                     name="ChooseGroup"
                     options={{

@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction, createContext, useState, useEffect } from 'react';
 import AntDesign from '@expo/vector-icons/AntDesign'
+import { Theme } from '@theme';
 
 interface TaskContextProps {
     progress?: number;
@@ -17,6 +18,10 @@ interface TaskContextProps {
     setState: Dispatch<SetStateAction<'pre' | 'during' | 'post'>>;
     totalQuestions?: number;
     setTotalQuestions: Dispatch<SetStateAction<number | undefined>>;
+    headerColor: keyof Theme['colors'];
+    setHeaderColor: Dispatch<SetStateAction<keyof Theme['colors']>>;
+    showHeader: boolean;
+    setShowHeader: Dispatch<SetStateAction<boolean>>;
 }
 
 const TaskContext = createContext<TaskContextProps | null>(null);
@@ -28,7 +33,10 @@ const TaskProvider = ({ children }: { children: React.ReactNode }) => {
     const [icon, setIcon] = useState<keyof typeof AntDesign.glyphMap>('closecircle');
     const [taskOrder, setTaskOrder] = useState(0);
     const [state, setState] = useState<'pre' | 'during' | 'post'>('pre');
-    const [totalQuestions, setTotalQuestions] = useState<number | undefined>(undefined);
+    const [totalQuestions, setTotalQuestions] = useState<number | undefined>(undefined); 4
+    const [headerColor, setHeaderColor] = useState<keyof Theme['colors']>('white');
+    const [showHeader, setShowHeader] = useState(true);
+
 
     const resetContext = () => {
         setProgress(undefined);
@@ -54,6 +62,10 @@ const TaskProvider = ({ children }: { children: React.ReactNode }) => {
                 setState,
                 totalQuestions,
                 setTotalQuestions,
+                headerColor,
+                setHeaderColor,
+                showHeader,
+                setShowHeader,
             }}>
             {children}
         </TaskContext.Provider>

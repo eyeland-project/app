@@ -1,15 +1,17 @@
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, Image } from "react-native";
 import LottieView from 'lottie-react-native';
 import { Link } from "@react-navigation/native";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useTheme from "@hooks/useTheme";
 import useTaskContext from "@hooks/useTaskContext";
 import { useDuringTaskContext } from "@hooks/useDuringTaskContext";
 import { useNavigation } from "@react-navigation/native";
+import useAuthStorage from "@hooks/useAuthStorage";
 
 import { Theme } from "@theme";
 import { SocketEvents } from "@enums/SocketEvents.enum";
+import Pressable from "@app/shared/components/Pressable";
 
 const WaitingActive = ({ route }: { route: any }) => {
     const { taskOrder } = route.params;
@@ -17,38 +19,39 @@ const WaitingActive = ({ route }: { route: any }) => {
     const { resetContext } = useTaskContext();
     const { socket } = useDuringTaskContext();
     const navigation = useNavigation<any>();
+    const authStorage = useAuthStorage();
+    const [isSessionStarted, setIsSessionStarted] = useState(false);
 
-    useEffect(() => {
+    const init = async () => {
         resetContext();
         socket.once(SocketEvents.sessionTeacherCreate, () => {
-            navigation.navigate("ChooseGroup", { taskOrder: taskOrder });
+            setIsSessionStarted(true);
         });
-    }, []);
+        socket.emit('join', await authStorage.getAccessToken(), (response: { session: boolean }) => {
+            setIsSessionStarted(response.session);
+        });
+    }
 
+    useEffect(() => {
+        init();
+    }, []);
     return (
         <View style={getStyles(theme).container}>
-            <LottieView
-                source={require('@animations/waitingActive.json')}
-                autoPlay
-                loop
-                style={getStyles(theme).animation}
-            />
-            <Text
-                style={getStyles(theme).text}
-                accessible
-                accessibilityLabel="Espera que tu profesor active la During-Task para comenzar."
-            >
-                Espera que tu profesor active la During-Task para comenzar.
-            </Text>
-            <Link
-                to={{ screen: 'Introduction', params: { taskOrder: taskOrder } }}
-                style={getStyles(theme).link}
-                accessible
-                accessibilityLabel="Volver a la lista de tareas"
-                accessibilityHint="Presiona dos veces para volver a la lista de tareas."
-            >
-                <Text style={getStyles(theme).linkText}>Volver a la lista de tareas</Text>
-            </Link>
+            <Text style={getStyles(theme).title}>¡Felicitaciones!</Text>
+            <Text style={getStyles(theme).description}>Completaste el primer paso de tu tarea</Text>
+            <Image source={require('@images/waiting.png')} resizeMode="center" style={getStyles(theme).image} />
+            {
+                isSessionStarted ? (
+                    <Pressable onPress={() => {
+                        navigation.navigate('ChooseGroup', { taskOrder });
+                    }} style={getStyles(theme).button}>
+                        <Text style={getStyles(theme).buttonText}>Comenzar</Text>
+                    </Pressable>
+                ) : (
+                    <Text style={getStyles(theme).text}>Espera a que tu profesor active la etapa para colaboración para comenzar.</Text>
+                )
+
+            }
         </View>
     );
 }
@@ -60,32 +63,49 @@ const getStyles = (theme: Theme) =>
             backgroundColor: theme.colors.primary,
             height: '100%',
             alignItems: 'center',
-            justifyContent: 'center',
+            paddingTop: 20,
+            // justifyContent: 'center',
         },
-        animation: {
+        image: {
             width: 300,
             height: 300,
         },
         text: {
-            color: theme.colors.black,
+            color: theme.colors.darkGray,
             fontSize: theme.fontSize.xl,
-            textAlign: 'center',
-            marginTop: 20,
-            letterSpacing: theme.spacing.medium,
             fontFamily: theme.fontWeight.bold,
-            width: '80%',
-        },
-        link: {
-            marginTop: 40,
-        },
-        linkText: {
-            color: theme.colors.black,
-            fontSize: theme.fontSize.medium,
             textAlign: 'center',
+            marginHorizontal: 20,
+            maxWidth: 400,
+            marginTop: 20,
+        },
+        button: {
+            backgroundColor: theme.colors.darkGreen,
+            paddingVertical: 15,
+            paddingHorizontal: 30,
+            borderRadius: theme.borderRadius.large,
+            marginTop: 20,
+        },
+        buttonText: {
+            color: theme.colors.bluerGreen,
+            fontSize: theme.fontSize.xxl,
+            fontFamily: theme.fontWeight.bold,
             letterSpacing: theme.spacing.medium,
-            fontFamily: theme.fontWeight.regular,
-            width: '80%',
-            textDecorationLine: 'underline',
+        },
+        title: {
+            color: theme.colors.darkestGreen,
+            fontSize: theme.fontSize.xxxxxl,
+            fontFamily: theme.fontWeight.bold,
+            textAlign: 'center',
+        },
+        description: {
+            color: theme.colors.black,
+            fontSize: theme.fontSize.xxxxl,
+            fontFamily: theme.fontWeight.medium,
+            textAlign: 'center',
+            marginHorizontal: 20,
+            maxWidth: 400,
+            marginVertical: 20,
         }
     });
 

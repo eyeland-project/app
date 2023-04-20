@@ -22,7 +22,7 @@ const Header = ({ progress, showNext, icon, onPress }: Props) => {
     const [progressWidth, setProgressWidth] = useState(new Animated.Value(1))
     const [continueOpacity, setContinueOpacity] = useState(new Animated.Value(0))
     const [continueTranslateX, setContinueTranslateX] = useState(new Animated.Value(50))
-    const { state, totalQuestions } = useTaskContext()
+    const { state, totalQuestions, headerColor, showHeader } = useTaskContext()
     const { width: screenWidth } = useWindowDimensions();
     const isPhone = screenWidth <= 768;
 
@@ -70,8 +70,10 @@ const Header = ({ progress, showNext, icon, onPress }: Props) => {
         }
     }, [showNext, progressWidth, continueOpacity, continueTranslateX])
 
+    if (!showHeader) return null
+
     return (
-        <View style={getStyles(theme, isPhone).container}>
+        <View style={{ backgroundColor: theme.colors[headerColor] }}>
             <View style={getStyles(theme, isPhone).row}>
                 <HomeButton
                     icon={icon}
@@ -112,9 +114,6 @@ const getStyles = (theme: Theme, isPhone: boolean) =>
         image: {
             height: isPhone ? 60 : 80,
             width: isPhone ? 60 : 80,
-        },
-        container: {
-            backgroundColor: theme.colors.white,
         },
         title: {
             fontSize: theme.fontSize.xxxxl,
