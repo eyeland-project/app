@@ -51,6 +51,7 @@ const getStyles = (theme: Theme) => StyleSheet.create({
         fontSize: theme.fontSize.xxl,
         letterSpacing: theme.spacing.medium,
         textAlign: "center",
+        maxWidth: "80%",
     },
     retryButton: {
         backgroundColor: theme.colors.darkGreen,

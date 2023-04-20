@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, StyleSheet, Animated } from 'react-native';
+import { View, StyleSheet, Animated, useWindowDimensions, Text } from 'react-native';
 import Instructions from '../../components/Instructions';
 import * as Haptics from 'expo-haptics';
 import FlipCard from './components/FlipCard';
@@ -37,11 +37,12 @@ const FlashCards = ({ route }: Props) => {
     const cardPosition = useRef(new Animated.Value(0)).current;
     const cardOpacity = useRef(new Animated.Value(1)).current;
     const { nextQuestion } = usePreTask();
-
+    const { width: screenWidth } = useWindowDimensions();
+    const isPhone = screenWidth <= 768;
 
     const updateStyles = (option: 'true' | 'false') => {
         const isCorrect = optionsQuestionShuffled[optionIndex].correct;
-        const color = (option === 'true' && isCorrect) || (option === 'false' && !isCorrect) ? theme.colors.green : theme.colors.red;
+        const color = (option === 'true' && isCorrect) || (option === 'false' && !isCorrect) ? theme.colors.lightGreen : theme.colors.red;
         const updatedContainerStyleOptions = {
             ...containerStyleOptions,
             [option === 'true' ? 0 : 1]: { backgroundColor: color },
@@ -164,33 +165,40 @@ const FlashCards = ({ route }: Props) => {
     return (
         <>
             <View
-                style={getStyles(theme).container}
+                style={getStyles(theme, isPhone).container}
                 accessible={true}
                 accessibilityLabel="Pantalla de tarjetas">
-                <Instructions text='Voltea la tarjeta, ¿es correcta?' />
-                <FlipCard
-                    setIsFlipped={setIsFlipped}
-                    containerStyle={{ transform: [{ translateX: cardPosition }], opacity: cardOpacity }}
-                    containerCardStyle={containerCardStyle}
-                    optionIndex={optionIndex}
-                    optionsQuestionShuffled={optionsQuestionShuffled}
-                    question={question}
-                    isFlipped={isFlipped} />
-                <View
-                    style={getStyles(theme).optionsContainer}
-                    accessible={true}
-                    accessibilityLabel="Opciones">
-                    <Option
-                        accessibilityLabel='Verdadero'
-                        containerStyle={containerStyleOptions[0]}
-                        iconName='check'
-                        onPress={() => { onPressOption('true') }} />
-                    <View style={{ width: 50 }} />
-                    <Option
-                        accessibilityLabel='Falso'
-                        containerStyle={containerStyleOptions[1]}
-                        iconName='cross'
-                        onPress={() => { onPressOption('false') }} />
+                <View>
+                    <Instructions text='Voltea la tarjeta:' />
+                    <FlipCard
+                        setIsFlipped={setIsFlipped}
+                        containerStyle={{ transform: [{ translateX: cardPosition }], opacity: cardOpacity }}
+                        containerCardStyle={containerCardStyle}
+                        optionIndex={optionIndex}
+                        optionsQuestionShuffled={optionsQuestionShuffled}
+                        question={question}
+                        isFlipped={isFlipped} />
+                </View>
+                <View style={getStyles(theme, isPhone).innerContainer}>
+                    <Text style={getStyles(theme, isPhone).intructions}>
+                        ¿La descripción corresponde a la imagen?
+                    </Text>
+                    <View
+                        style={getStyles(theme, isPhone).optionsContainer}
+                        accessible={true}
+                        accessibilityLabel="Opciones">
+                        <Option
+                            accessibilityLabel='Sí'
+                            containerStyle={containerStyleOptions[0]}
+                            text='Sí'
+                            onPress={() => { onPressOption('true') }} />
+                        <View style={{ width: 30 }} />
+                        <Option
+                            accessibilityLabel='No'
+                            containerStyle={containerStyleOptions[1]}
+                            text='No'
+                            onPress={() => { onPressOption('false') }} />
+                    </View>
                 </View>
             </View>
             <Modal closeModal={closeModal} showModal={showModal} help={feedback} />
@@ -198,11 +206,13 @@ const FlashCards = ({ route }: Props) => {
     );
 };
 
-const getStyles = (theme: Theme) =>
+const getStyles = (theme: Theme, isPhone: boolean) =>
     StyleSheet.create({
         container: {
             backgroundColor: theme.colors.primary,
             height: '100%',
+            flexDirection: isPhone ? 'column' : 'row',
+            justifyContent: isPhone ? 'flex-start' : 'center',
         },
         optionsContainer: {
             marginTop: 20,
@@ -210,6 +220,17 @@ const getStyles = (theme: Theme) =>
             alignItems: 'center',
             justifyContent: 'center',
             flexDirection: 'row',
+        },
+        intructions: {
+            color: theme.colors.darkestGreen,
+            fontSize: isPhone ? theme.fontSize.xxl : theme.fontSize.xxxxxl,
+            fontFamily: theme.fontWeight.bold,
+            textAlign: isPhone ? 'left' : 'right',
+            marginHorizontal: 20,
+        },
+        innerContainer: {
+            marginTop: isPhone ? 10 : 80,
+            maxWidth: 400,
         }
     });
 
