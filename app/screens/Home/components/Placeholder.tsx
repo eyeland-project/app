@@ -17,32 +17,29 @@ const Placeholder = () => {
     const theme = useTheme();
 
     return (
-        <>
-            <StatusBar backgroundColor={theme.colors.darkestGreen} barStyle="light-content" />
-            <View style={getStyles(theme).container}>
-                <Title text="MENÚ" />
-                <View style={getStyles(theme).card}>
-                    <PlaceholderRN
-                        Animation={props => (
-                            <Shine {...props} style={{ backgroundColor: theme.colors.darkGreen }} reverse={false} />
-                        )}
-                    >
-                        <PlaceholderLine width={40} height={30} color={theme.colors.lightGreen} />
-                        <PlaceholderLine color={theme.colors.lightGreen} />
-                        <PlaceholderLine width={60} color={theme.colors.lightGreen} />
-                        <PlaceholderLine width={70} color={theme.colors.lightGreen} />
-                        <PlaceholderLine style={getStyles(theme).button} width={40} height={40} noMargin={true} color={theme.colors.lightGreen} />
-                    </PlaceholderRN>
-                </View>
-            </View >
-        </>
+        <View style={getStyles(theme).container}>
+            <Title text="MENÚ" />
+            <View style={getStyles(theme).card}>
+                <PlaceholderRN
+                    Animation={props => (
+                        <Shine {...props} style={{ backgroundColor: theme.colors.darkGreen }} reverse={false} />
+                    )}
+                >
+                    <PlaceholderLine width={40} height={30} color={theme.colors.lightGreen} />
+                    <PlaceholderLine color={theme.colors.lightGreen} />
+                    <PlaceholderLine width={60} color={theme.colors.lightGreen} />
+                    <PlaceholderLine width={70} color={theme.colors.lightGreen} />
+                    <PlaceholderLine style={getStyles(theme).button} width={40} height={40} noMargin={true} color={theme.colors.lightGreen} />
+                </PlaceholderRN>
+            </View>
+        </View >
     )
 }
 
 const getStyles = (theme: Theme) =>
     StyleSheet.create({
         container: {
-            backgroundColor: theme.colors.darkestGreen,
+            backgroundColor: theme.colors.white,
             height: "100%",
         },
         card: {

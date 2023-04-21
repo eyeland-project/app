@@ -42,7 +42,7 @@ const Task = ({ id, order, name, description, image, blocked, completed }: TaskP
 			>
 				<LinearGradient
 					colors={[
-						theme.colors.white === "#fff" ? hexToRgbA(theme.colors.darkGreen, 0.9) : "rgba(0,0,0,0.9)",
+						theme.colors.white === "#fff" ? hexToRgbA(theme.colors.bluerGreen, 0.9) : "rgba(0,0,0,0.9)",
 						theme.colors.white === "#fff" ? hexToRgbA(theme.colors.darkGray, 0.4) : "rgba(0,0,0,0.4)",]}
 					style={getStyles(theme).gradient}
 					start={[1, 1]}
@@ -98,7 +98,7 @@ const getStyles = (theme: Theme) =>
 		blockedOverlay: {
 			height: "100%",
 			width: "100%",
-			backgroundColor: theme.colors.black,
+			backgroundColor: theme.colors.gray,
 			opacity: 0.8,
 			position: "absolute",
 		}

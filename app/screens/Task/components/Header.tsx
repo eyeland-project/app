@@ -22,7 +22,7 @@ const Header = ({ progress, showNext, icon, onPress }: Props) => {
     const [progressWidth, setProgressWidth] = useState(new Animated.Value(1))
     const [continueOpacity, setContinueOpacity] = useState(new Animated.Value(0))
     const [continueTranslateX, setContinueTranslateX] = useState(new Animated.Value(50))
-    const { state, totalQuestions, headerColor, showHeader } = useTaskContext()
+    const { state, totalQuestions, headerColor, showHeader, headerComplementaryColor } = useTaskContext()
     const { width: screenWidth } = useWindowDimensions();
     const isPhone = screenWidth <= 768;
 
@@ -74,25 +74,25 @@ const Header = ({ progress, showNext, icon, onPress }: Props) => {
 
     return (
         <View style={{ backgroundColor: theme.colors[headerColor] }}>
-            <View style={getStyles(theme, isPhone).row}>
+            <View style={getStyles(theme, isPhone, headerComplementaryColor).row}>
                 <HomeButton
                     icon={icon}
                     accessibilityLabel="Volver al inicio"
                 />
                 {
-                    progress && <Image source={getIcon()} resizeMode='center' style={getStyles(theme, isPhone).image} />
+                    progress && <Image source={getIcon()} resizeMode='center' style={getStyles(theme, isPhone, headerComplementaryColor).image} />
                 }
             </View>
             {
                 progress && (
                     <>
-                        <Text style={getStyles(theme, isPhone).title}>{getTitle()}</Text>
-                        <View style={getStyles(theme, isPhone).bar}>
+                        <Text style={getStyles(theme, isPhone, headerComplementaryColor).title}>{getTitle()}</Text>
+                        <View style={getStyles(theme, isPhone, headerComplementaryColor).bar}>
                             {
-                                totalQuestions && <Text style={getStyles(theme, isPhone).counter}>{progress * totalQuestions + '/' + totalQuestions}</Text>
+                                totalQuestions && <Text style={getStyles(theme, isPhone, headerComplementaryColor).counter}>{Math.round(progress * totalQuestions) + '/' + totalQuestions}</Text>
                             }
-                            <View style={getStyles(theme, isPhone).row}>
-                                <Progress.Bar progress={progress} width={null} height={10} color={theme.colors.lightGreen} borderColor={theme.colors.gray} style={{ flex: 1, borderRadius: theme.borderRadius.full }} />
+                            <View style={getStyles(theme, isPhone, headerComplementaryColor).row}>
+                                <Progress.Bar progress={progress} width={null} height={10} color={theme.colors[headerComplementaryColor]} borderColor={theme.colors.gray} style={{ flex: 1, borderRadius: theme.borderRadius.full }} />
                             </View>
                         </View>
                     </>
@@ -102,7 +102,7 @@ const Header = ({ progress, showNext, icon, onPress }: Props) => {
     )
 }
 
-const getStyles = (theme: Theme, isPhone: boolean) =>
+const getStyles = (theme: Theme, isPhone: boolean, complemenataryColor: keyof Theme['colors']) =>
     StyleSheet.create({
         row: {
             flexDirection: 'row',
@@ -117,7 +117,7 @@ const getStyles = (theme: Theme, isPhone: boolean) =>
         },
         title: {
             fontSize: theme.fontSize.xxxxl,
-            color: theme.colors.darkGreen,
+            color: theme.colors[complemenataryColor],
             fontFamily: theme.fontWeight.bold,
             textAlign: 'center',
             alignSelf: 'center',
@@ -127,7 +127,7 @@ const getStyles = (theme: Theme, isPhone: boolean) =>
         },
         counter: {
             fontSize: theme.fontSize.xl,
-            color: theme.colors.darkGreen,
+            color: theme.colors[complemenataryColor],
             fontFamily: theme.fontWeight.medium,
             letterSpacing: theme.spacing.medium,
             textAlign: 'center',

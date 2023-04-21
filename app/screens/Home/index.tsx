@@ -33,39 +33,36 @@ const Home = () => {
 	if (!data) return <><Title text="MENÚ" /><ErrorScreen error={'No se recibió información'} retryAction={initTasks} /></>;
 
 	return (
-		<>
-			<StatusBar backgroundColor={theme.colors.darkestGreen} barStyle="light-content" />
-			<FlatList
-				style={getStyles(theme).container}
-				ListHeaderComponent={<Title text="MENÚ" />}
-				stickyHeaderIndices={[0]}
-				stickyHeaderHiddenOnScroll={true}
-				data={data}
-				renderItem={({ item, index }) => (
-					<>
-						{index === 0 && <View style={{ marginVertical: 5 }} />}
-						<Task
-							id={item.id}
-							name={item.name}
-							order={item.taskOrder}
-							description={item.description}
-							image={{ uri: item.thumbnailUrl }}
-							completed={item.completed}
-							blocked={item.blocked || item.comingSoon}
-						/>
-					</>
-				)}
-				ItemSeparatorComponent={() => <View style={getStyles(theme).separator} />}
-				ListFooterComponent={<View style={getStyles(theme).safeZone} />}
-			/>
-		</>
+		<FlatList
+			style={getStyles(theme).container}
+			ListHeaderComponent={<Title text="MENÚ" />}
+			stickyHeaderIndices={[0]}
+			stickyHeaderHiddenOnScroll={true}
+			data={data}
+			renderItem={({ item, index }) => (
+				<>
+					{index === 0 && <View style={{ marginVertical: 5 }} />}
+					<Task
+						id={item.id}
+						name={item.name}
+						order={item.taskOrder}
+						description={item.description}
+						image={{ uri: item.thumbnailUrl }}
+						completed={item.completed}
+						blocked={item.blocked || item.comingSoon}
+					/>
+				</>
+			)}
+			ItemSeparatorComponent={() => <View style={getStyles(theme).separator} />}
+			ListFooterComponent={<View style={getStyles(theme).safeZone} />}
+		/>
 	);
 };
 
 const getStyles = (theme: Theme) =>
 	StyleSheet.create({
 		container: {
-			backgroundColor: theme.colors.darkestGreen,
+			backgroundColor: theme.colors.white,
 			height: "100%",
 		},
 		separator: {

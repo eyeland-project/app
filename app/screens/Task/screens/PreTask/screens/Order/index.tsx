@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, AccessibilityInfo } from 'react-native'
+import { View, Text, StyleSheet, AccessibilityInfo, ScrollView } from 'react-native'
 import Instructions from '../../components/Instructions'
 import OptionTask from '@screens/Task/components/Option'
 import * as Haptics from 'expo-haptics'
@@ -98,7 +98,7 @@ const Order = ({ route }: Props) => {
     }, [])
 
     return (
-        <>
+        <ScrollView>
             <View style={getStyles(theme).container}>
                 <View >
                     <Instructions text='Ordena las palabras en inglés para traducir la pregunta:' />
@@ -130,7 +130,8 @@ const Order = ({ route }: Props) => {
                 }
             </View>
             <Modal showModal={showModal} closeModal={() => { closeModal() }} help={correctOrder.join(' ')} />
-        </>
+            <View style={{ height: 100 }} />
+        </ScrollView >
     )
 }
 

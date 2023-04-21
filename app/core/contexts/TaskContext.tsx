@@ -22,6 +22,8 @@ interface TaskContextProps {
     setHeaderColor: Dispatch<SetStateAction<keyof Theme['colors']>>;
     showHeader: boolean;
     setShowHeader: Dispatch<SetStateAction<boolean>>;
+    headerComplementaryColor: keyof Theme['colors'];
+    setHeaderComplementaryColor: Dispatch<SetStateAction<keyof Theme['colors']>>;
 }
 
 const TaskContext = createContext<TaskContextProps | null>(null);
@@ -36,6 +38,7 @@ const TaskProvider = ({ children }: { children: React.ReactNode }) => {
     const [totalQuestions, setTotalQuestions] = useState<number | undefined>(undefined); 4
     const [headerColor, setHeaderColor] = useState<keyof Theme['colors']>('white');
     const [showHeader, setShowHeader] = useState(true);
+    const [headerComplementaryColor, setHeaderComplementaryColor] = useState<keyof Theme['colors']>('darkGreen');
 
 
     const resetContext = () => {
@@ -66,6 +69,8 @@ const TaskProvider = ({ children }: { children: React.ReactNode }) => {
                 setHeaderColor,
                 showHeader,
                 setShowHeader,
+                headerComplementaryColor,
+                setHeaderComplementaryColor,
             }}>
             {children}
         </TaskContext.Provider>

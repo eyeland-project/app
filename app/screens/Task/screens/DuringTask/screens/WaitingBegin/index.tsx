@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, StatusBar } from 'react-native'
 import Title from '../../components/Title'
 import LottieView from 'lottie-react-native';
 import Power from './components/Power';
@@ -23,7 +23,7 @@ interface Props {
 const WaitingBegin = ({ route }: Props) => {
     const { taskOrder } = route.params
     const theme = useTheme()
-    const { resetContext, setProgress } = useTaskContext()
+    const { resetContext, setProgress, setHeaderColor, setHeaderComplementaryColor } = useTaskContext()
     const { socket, power, setPower, numQuestions } = useDuringTaskContext()
     const { data, loading, getMyTeam } = useTeam()
     const navigation = useNavigation<any>()
@@ -38,7 +38,9 @@ const WaitingBegin = ({ route }: Props) => {
     }
 
     useEffect(() => {
-        resetContext()
+        setProgress(0.01)
+        setHeaderColor('white')
+        setHeaderComplementaryColor('darkGreen')
         getData()
 
         socket.on(SocketEvents.sessionTeacherStart, () => {
@@ -59,55 +61,58 @@ const WaitingBegin = ({ route }: Props) => {
     if (!data || loading || !power) return <Placeholder />
 
     return (
-        <View
-            style={getStyles(theme).container}
-            accessible
-            accessibilityLabel="Pantalla de espera para comenzar la actividad"
-        >
-            <Title text={data.name} />
-            <Text
-                style={getStyles(theme).title}
+        <>
+            <StatusBar backgroundColor={theme.colors.white} barStyle="dark-content" />
+            <View
+                style={getStyles(theme).container}
                 accessible
-                accessibilityRole="header"
-                accessibilityLabel="Instrucciones"
+                accessibilityLabel="Pantalla de espera para comenzar la actividad"
             >
-                Instrucciones
-            </Text>
-            <Text
-                style={getStyles(theme).description}
-                accessible
-                accessibilityLabel="Avanza respondiendo a las preguntas con ayuda de tus amigos. El primer equipo en llegar a la meta gana."
-            >
-                Avanza respondiendo a las preguntas con ayuda de tus amigos. El primer equipo en llegar a la meta gana.
-            </Text>
-            <Text
-                style={getStyles(theme).title}
-                accessible
-                accessibilityRole="header"
-                accessibilityLabel="Tu super poder es"
-            >
-                Tu super poder es
-            </Text>
-            <Power
-                power={power}
-                onReRoll={() => { handleReRoll() }}
-                loading={loadingPower}
-                blockReRoll={data.students.length >= 3}
-            />
-            <LottieView
-                source={require('@animations/waitingBegin.json')}
-                autoPlay
-                loop
-                style={getStyles(theme).animation}
-            />
-            <Text
-                style={getStyles(theme).waitingText}
-                accessible
-                accessibilityLabel="Espera a que tu profesor de comienzo a la actividad..."
-            >
-                Espera a que tu profesor de comienzo a la actividad...
-            </Text>
-        </View>
+                <Title text={data.name} />
+                <Text
+                    style={getStyles(theme).title}
+                    accessible
+                    accessibilityRole="header"
+                    accessibilityLabel="Instrucciones"
+                >
+                    Instrucciones
+                </Text>
+                <Text
+                    style={getStyles(theme).description}
+                    accessible
+                    accessibilityLabel="Avanza respondiendo a las preguntas con ayuda de tus amigos. El primer equipo en llegar a la meta gana."
+                >
+                    Avanza respondiendo a las preguntas con ayuda de tus amigos. El primer equipo en llegar a la meta gana.
+                </Text>
+                <Text
+                    style={getStyles(theme).title}
+                    accessible
+                    accessibilityRole="header"
+                    accessibilityLabel="Tu super poder es"
+                >
+                    Tu super poder es
+                </Text>
+                <Power
+                    power={power}
+                    onReRoll={() => { handleReRoll() }}
+                    loading={loadingPower}
+                    blockReRoll={data.students.length >= 3}
+                />
+                <LottieView
+                    source={require('@animations/waitingBegin.json')}
+                    autoPlay
+                    loop
+                    style={getStyles(theme).animation}
+                />
+                <Text
+                    style={getStyles(theme).waitingText}
+                    accessible
+                    accessibilityLabel="Espera a que tu profesor de comienzo a la actividad..."
+                >
+                    Espera a que tu profesor de comienzo a la actividad...
+                </Text>
+            </View>
+        </>
     );
 }
 

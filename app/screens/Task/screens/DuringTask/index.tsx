@@ -36,13 +36,14 @@ const DuringTask = ({ route }: Props) => {
     const [power, setPower] = useState<Power | null>(null);
     const [position, setPosition] = useState<number | null>(1);
     const [numQuestions, setNumQuestions] = useState<number | null>(null);
-    const { setProgress } = useTaskContext();
+    const { setProgress, setTotalQuestions } = useTaskContext();
     const { getDuringTask } = useDuringTask();
     const navigation = useNavigation<any>();
 
     const getData = async () => {
         const data = await getDuringTask({ taskOrder: route.params.taskOrder });
         setNumQuestions(data.numQuestions);
+        setTotalQuestions(data.numQuestions);
     }
 
 

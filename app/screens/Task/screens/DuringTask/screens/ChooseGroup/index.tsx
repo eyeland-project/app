@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, FlatList } from 'react-native'
+import { View, Text, StyleSheet, FlatList, useWindowDimensions, StatusBar } from 'react-native'
 import GroupCard from './components/GroupCard'
 import Placeholder from './components/Placeholder'
 
@@ -18,22 +18,27 @@ import { Team } from '@interfaces/Team.interface'
 
 const ChooseGroup = ({ route }: any) => {
     const theme = useTheme()
-    const { resetContext } = useTaskContext()
+    const { resetContext, setProgress, setTotalQuestions, setHeaderColor, setHeaderComplementaryColor } = useTaskContext()
     const { error, loading, data, getTeams } = useTeams()
     const { leaveTeam } = useTeam()
     const { socket } = useDuringTaskContext()
     const [groups, setGroups] = useState<Team[]>([])
     const { taskOrder } = route.params
+    const { width: screenWidth } = useWindowDimensions();
+    const isPhone = screenWidth <= 768;
 
     const getGroups = async () => {
         setGroups(await getTeams())
     }
 
     const init = async () => {
+        resetContext()
+        setProgress(0.01)
+        setHeaderColor('darkestGreen')
+        setHeaderComplementaryColor('bluerGreen')
+
         await leaveTeam()
         await getGroups()
-        resetContext()
-
         socket.on(SocketEvents.teamsStudentUpdate, (data: Team[]) => {
             setGroups(data)
         });
@@ -53,47 +58,90 @@ const ChooseGroup = ({ route }: any) => {
     if (loading)
         return (
             <>
-                <Text style={getStyles(theme).text}>Es momento de que escojas tu grupo:</Text>
+                <View style={getStyles(theme, isPhone).container}>
+                    <Text style={getStyles(theme, isPhone).text}>Escoge tu equipo para comenzar el reto grupal</Text>
+                    <Text style={getStyles(theme, isPhone).secondaryText}> Cada equipo está conformado por 3 participantes, que podrán acceder a un <Text style={getStyles(theme, isPhone).secondaryInnerText}>superpoder</Text> aleatoriamente</Text>
+                </View>
                 <Placeholder />
             </>
         )
 
     return (
-        <FlatList
-            data={groups.filter(group => group.taskOrder === taskOrder || group.taskOrder === null)}
-            renderItem={({ item }) => (
-                <GroupCard
-                    key={item.id}
-                    id={item.code}
-                    name={item.name}
-                    members={item.students}
-                    taskOrder={taskOrder}
-                />
-            )}
-            keyExtractor={item => item.id.toString()}
-            ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
-            style={getStyles(theme).flatlist}
-            ListHeaderComponent={() => <Text style={getStyles(theme).text}>Es momento de que escojas tu grupo:</Text>}
-            ListFooterComponent={() => <View style={{ height: 80 }} />}
-        />
+        <>
+            <StatusBar backgroundColor={theme.colors.darkestGreen} barStyle="light-content" />
+            <View style={getStyles(theme, isPhone).container}>
+                <Text style={getStyles(theme, isPhone).text}>Escoge tu equipo para comenzar el reto grupal</Text>
+                <Text style={getStyles(theme, isPhone).secondaryText}> Cada equipo está conformado por 3 participantes, que podrán acceder a un <Text style={getStyles(theme, isPhone).secondaryInnerText}>superpoder</Text> aleatoriamente</Text>
+            </View>
+            <FlatList
+                data={groups.filter(group => group.taskOrder === taskOrder || group.taskOrder === null)}
+                renderItem={({ item, index }) => (
+                    <GroupCard
+                        key={item.id}
+                        id={item.code}
+                        index={index + 1}
+                        name={item.name}
+                        members={item.students}
+                        taskOrder={taskOrder}
+                    />
+                )}
+                numColumns={isPhone ? 1 : 3}
+                centerContent={true}
+                keyExtractor={item => item.id.toString()}
+                ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
+                style={getStyles(theme, isPhone).flatlist}
+                ListFooterComponent={() => <View style={{ height: 80 }} />}
+            />
+        </>
     )
 }
 
-const getStyles = (theme: Theme) =>
+const getStyles = (theme: Theme, isPhone: boolean) =>
     StyleSheet.create({
         container: {
-            backgroundColor: theme.colors.primary,
+            backgroundColor: theme.colors.darkestGreen,
+
         },
         text: {
-            color: theme.colors.black,
-            fontSize: theme.fontSize.xxl,
+            color: theme.colors.white,
+            fontSize: isPhone ? theme.fontSize.xxxl : theme.fontSize.xxxxxl,
             fontFamily: theme.fontWeight.bold,
             letterSpacing: theme.spacing.medium,
             paddingHorizontal: 20,
             marginBottom: 20,
+            textAlign: 'center',
+            alignSelf: 'center',
         },
         flatlist: {
-            backgroundColor: theme.colors.primary,
+            backgroundColor: theme.colors.darkestGreen,
+            paddingStart: isPhone ? 0 : 100,
+            // alignSelf: 'center',
+            // width: '100%',
+            // marginHorizontal: 'auto',
+
+
+            // flexDirection: isPhone ? 'column' : 'row',
+        },
+        secondaryText: {
+            color: theme.colors.bluerGreen,
+            fontSize: isPhone ? theme.fontSize.xl : theme.fontSize.xxl,
+            fontFamily: theme.fontWeight.medium,
+            letterSpacing: theme.spacing.medium,
+            paddingHorizontal: 20,
+            marginBottom: 20,
+            textAlign: 'center',
+            alignSelf: 'center',
+            maxWidth: 700,
+        },
+        secondaryInnerText: {
+            color: theme.colors.bluerGreen,
+            fontSize: isPhone ? theme.fontSize.xxxl : theme.fontSize.xxxxl,
+            fontFamily: theme.fontWeight.medium,
+            letterSpacing: theme.spacing.medium,
+            paddingHorizontal: 20,
+            marginBottom: 20,
+            textAlign: 'center',
+            alignSelf: 'center',
         }
     })
 
