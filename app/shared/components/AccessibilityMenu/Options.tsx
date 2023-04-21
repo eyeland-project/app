@@ -9,6 +9,8 @@ import { Theme } from '@theme'
 import setStatusBarBackgroundColor from 'expo-status-bar/build/setStatusBarBackgroundColor'
 import setStatusBarStyle from 'expo-status-bar/build/setStatusBarStyle'
 
+import { invertColor } from '@utils/invertColor'
+
 interface OptionsProps {
     unShowOptions: () => void
 }
@@ -28,26 +30,32 @@ const Options = ({ unShowOptions }: OptionsProps) => {
         setHighContrast(!highContrast)
     }
 
+    const invertColors = (theme: Theme) => {
+        const newColors = Object.keys(theme.colors).map((key) => {
+            const colorKey = key as keyof Theme['colors'];
+            theme.colors[colorKey] = invertColor(theme.colors[colorKey])
+        })
+
+        return {
+            ...theme,
+            colors: {
+                ...theme.colors,
+                ...newColors
+            },
+            shadow: {
+                ...theme.shadow,
+                shadowColor: invertColor(theme.shadow.shadowColor)
+            }
+        }
+    }
+
     useEffect(() => {
         if (initialRender.current) {
             initialRender.current = false
         } else {
-            modifyTheme({
-                ...theme,
-                colors: {
-                    ...theme.colors,
-                    primary: highContrast ? '#000' : '#fff',
-                    secondary: highContrast ? '#fff' : '#000',
-                    white: highContrast ? '#000' : '#fff',
-                    black: highContrast ? '#fff' : '#000'
-                },
-                shadow: {
-                    ...theme.shadow,
-                    shadowColor: highContrast ? '#fff' : '#000'
-                }
-            })
-            setStatusBarBackgroundColor(highContrast ? '#000' : '#fff', false)
-            setStatusBarStyle(highContrast ? 'light' : 'dark')
+            modifyTheme(invertColors(theme))
+            // setStatusBarBackgroundColor(highContrast ? '#000' : '#fff', false)
+            // setStatusBarStyle(highContrast ? 'light' : 'dark')
         }
     }, [highContrast])
 
