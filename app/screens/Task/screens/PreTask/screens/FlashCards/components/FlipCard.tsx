@@ -103,10 +103,13 @@ const FlipCard = ({
 							</Animated.View>
 						</View>
 					) : (
-						<ImageBackground
-							style={styles.image}
-							source={{ uri: question.imgUrl }}
-							resizeMode="cover"
+						<View style={styles.imageContainer}>
+							{loadingImage && <ActivityIndicator size="large" color={theme.colors.primary} />}
+							{errorImage && <Text style={styles.errorMessage}>Un error inesperado ha ocurrido</Text>}
+							<Image
+								style={styles.image}
+								source={{ uri: question.imgUrl }}
+								resizeMode="cover"
 							accessible={true}
 							accessibilityLabel={
 								question.imgAlt +
