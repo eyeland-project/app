@@ -21,7 +21,7 @@ const Button = ({ text, style, icon, ...props }: ButtonProps) => {
 			{icon && (
 				<AntDesign
 					name={icon}
-					size={23}
+					size={20}
 					color={theme.colors.white}
 					style={getStyles(theme).icon}
 				/>

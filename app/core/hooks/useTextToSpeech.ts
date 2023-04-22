@@ -1,6 +1,9 @@
 import * as Speech from 'expo-speech';
+import { useState } from 'react';
 
 export default function useTextToSpeech() {
+    const [playing, setPlaying] = useState(false);
+
     Speech.VoiceQuality.Enhanced;
 
     const speak = (text: string | string[], language?: string) => {
@@ -19,11 +22,17 @@ export default function useTextToSpeech() {
         } else {
             Speech.speak(text, {
                 language: language || 'en',
+                onStart() {
+                    setPlaying(true);
+                },
+                onDone() {
+                    setPlaying(false);
+                },
             });
         }
 
     };
 
 
-    return { speak };
+    return { speak, playing };
 }

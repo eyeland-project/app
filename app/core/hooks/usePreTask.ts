@@ -108,6 +108,12 @@ const usePreTask = () => {
                 case PreTaskTypeQuestion.FIll_BLANK:
                     name = 'FillBlank';
                     break;
+                case PreTaskTypeQuestion.AUDIO_MULTIPLE_CHOICE:
+                    name = 'AudioMultipleChoice';
+                    break;
+                case PreTaskTypeQuestion.AUDIO_ORDER:
+                    name = 'AudioOrder';
+                    break;
                 default:
                     console.error('No question type found');
                     break;
