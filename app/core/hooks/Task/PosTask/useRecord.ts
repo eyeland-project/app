@@ -1,4 +1,5 @@
 import { Audio } from 'expo-av';
+import { AppState } from 'react-native';
 
 import { useState } from 'react';
 import usePlaySound from '../../usePlaySound';
@@ -20,6 +21,10 @@ const useRecord = () => {
 
 	async function startRecording() {
 		try {
+			if (AppState.currentState !== 'active') {
+				console.log("App is in the background, can't start recording");
+				return;
+			}
 			await Audio.requestPermissionsAsync();
 			await Audio.setAudioModeAsync({
 				allowsRecordingIOS: true,

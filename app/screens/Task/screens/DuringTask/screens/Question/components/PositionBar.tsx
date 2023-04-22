@@ -47,6 +47,7 @@ const getStyles = (theme: Theme) =>
 			fontSize: theme.fontSize.xl,
 			fontFamily: theme.fontWeight.bold,
 			letterSpacing: theme.spacing.medium,
+			color: theme.colors.black,
 			marginLeft: 20,
 			marginTop: 10,
 			marginBottom: 5
@@ -66,6 +67,7 @@ const getStyles = (theme: Theme) =>
 			fontSize: theme.fontSize.large,
 			fontFamily: theme.fontWeight.regular,
 			letterSpacing: theme.spacing.medium,
+			color: theme.colors.black,
 			marginBottom: -5
 		}
 	});

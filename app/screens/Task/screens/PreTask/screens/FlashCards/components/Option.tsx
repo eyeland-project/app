@@ -31,7 +31,7 @@ const Option: React.FC<Props> = ({
 				accessibilityLabel={accessibilityLabel}
 				accessibilityRole="button"
 			>
-				<Entypo name={iconName} size={50} color="white" />
+				<Entypo name={iconName} size={50} color={theme.colors.white} />
 			</View>
 		</Pressable>
 	);
