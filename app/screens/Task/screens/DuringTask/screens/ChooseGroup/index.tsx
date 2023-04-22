@@ -16,93 +16,94 @@ import { SocketEvents } from '@enums/SocketEvents.enum';
 import { Team } from '@interfaces/Team.interface';
 
 const ChooseGroup = ({ route }: any) => {
-	const theme = useTheme();
-	const { resetContext } = useTaskContext();
-	const { error, loading, data, getTeams } = useTeams();
-	const { leaveTeam } = useTeam();
-	const { socket } = useDuringTaskContext();
-	const [groups, setGroups] = useState<Team[]>([]);
-	const { taskOrder } = route.params;
-	const styles = getStyles(theme);
+    const theme = useTheme();
+    const { resetContext } = useTaskContext();
+    const { error, loading, data, getTeams } = useTeams();
+    const { leaveTeam } = useTeam();
+    const { socket } = useDuringTaskContext();
+    const [groups, setGroups] = useState<Team[]>([]);
+    const { taskOrder } = route.params;
+    const styles = getStyles(theme);
 
-	const getGroups = async () => {
-		setGroups(await getTeams());
-	};
+    const getGroups = async () => {
+        setGroups(await getTeams());
+    };
 
-	const init = async () => {
-		await leaveTeam();
-		await getGroups();
-		resetContext();
+    const init = async () => {
+        await leaveTeam();
+        await getGroups();
+        resetContext();
 
-		socket.on(SocketEvents.teamsStudentUpdate, (data: Team[]) => {
-			setGroups(data);
-		});
+        socket.on(SocketEvents.teamsStudentUpdate, (data: Team[]) => {
+            setGroups(data);
+        });
 
-		return () => {
-			socket.off(SocketEvents.teamsStudentUpdate);
-		};
-	};
+        return () => {
+            socket.off(SocketEvents.teamsStudentUpdate);
+        };
+    };
 
-	useFocusEffect(
-		useCallback(() => {
-			init();
-		}, [])
-	);
+    useFocusEffect(
+        useCallback(() => {
+            init();
+        }, [])
+    );
 
-	if (loading)
-		return (
-			<>
-				<Text style={styles.text}>
-					Es momento de que escojas tu grupo:
-				</Text>
-				<Placeholder />
-			</>
-		);
+    if (loading)
+        return (
+            <>
+                <Text style={styles.text}>
+                    Es momento de que escojas tu grupo:
+                </Text>
+                <Placeholder />
+            </>
+        );
 
-	return (
-		<FlatList
-			data={groups.filter(
-				(group) =>
-					group.taskOrder === taskOrder || group.taskOrder === null
-			)}
-			renderItem={({ item }) => (
-				<GroupCard
-					key={item.id}
-					id={item.code}
-					name={item.name}
-					members={item.students}
-					taskOrder={taskOrder}
-				/>
-			)}
-			keyExtractor={(item) => item.id.toString()}
-			ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
-			style={styles.flatlist}
-			ListHeaderComponent={() => (
-				<Text style={styles.text}>
-					Es momento de que escojas tu grupo:
-				</Text>
-			)}
-			ListFooterComponent={() => <View style={{ height: 80 }} />}
-		/>
-	);
+    return (
+        <FlatList
+            data={groups.filter(
+                (group) =>
+                    group.taskOrder === taskOrder || group.taskOrder === null
+            )}
+            renderItem={({ item }) => (
+                <GroupCard
+                    key={item.id}
+                    id={item.code}
+                    name={item.name}
+                    members={item.students}
+                    taskOrder={taskOrder}
+                />
+            )}
+            keyExtractor={(item) => item.id.toString()}
+            ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
+            style={styles.flatlist}
+            ListHeaderComponent={() => (
+                <Text style={styles.text}>
+                    Es momento de que escojas tu grupo:
+                </Text>
+            )}
+            ListFooterComponent={() => <View style={{ height: 80 }} />}
+        />
+    );
 };
 
 const getStyles = (theme: Theme) =>
-	StyleSheet.create({
-		container: {
-			backgroundColor: theme.colors.primary
-		},
-		text: {
-			color: theme.colors.black,
-			fontSize: theme.fontSize.xxl,
-			fontFamily: theme.fontWeight.bold,
-			letterSpacing: theme.spacing.medium,
-			paddingHorizontal: 20,
-			marginBottom: 20
-		},
-		flatlist: {
-			backgroundColor: theme.colors.primary
-		}
-	});
+    StyleSheet.create({
+        container: {
+            backgroundColor: theme.colors.primary
+        },
+        text: {
+            color: theme.colors.black,
+            backgroundColor: theme.colors.primary,
+            fontSize: theme.fontSize.xxl,
+            fontFamily: theme.fontWeight.bold,
+            letterSpacing: theme.spacing.medium,
+            paddingHorizontal: 20,
+            paddingBottom: 20
+        },
+        flatlist: {
+            backgroundColor: theme.colors.primary
+        }
+    });
 
 export default ChooseGroup;

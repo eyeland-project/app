@@ -3,7 +3,9 @@ import {
 	Text,
 	StyleSheet,
 	ImageBackground,
-	AccessibilityInfo
+	Image,
+	AccessibilityInfo,
+	ActivityIndicator
 } from 'react-native';
 import Instructions from '../components/Instructions';
 import Option from '@screens/Task/components/Option';
@@ -30,6 +32,8 @@ const FillBlank = ({ route }: Props) => {
 	const [textStyleOptions, setTextStyleOptions] = useState([{}]);
 	const [blank, setBlank] = useState('       ');
 	const [showModal, setShowModal] = useState(false);
+	const [loadingImage, setLoadingImage] = useState(true);
+	const [errorImage, setErrorImage] = useState(false);
 	const [optionIndex, setOptionIndex] = useState<number>(0);
 	const theme = useTheme();
 	const playSoundSuccess = usePlaySound(require('@sounds/success.wav'));
@@ -103,14 +107,23 @@ const FillBlank = ({ route }: Props) => {
 					{questionList[1]}
 				</Text>
 				<View style={styles.imageContainer}>
-					<ImageBackground
+					{loadingImage && <ActivityIndicator size="large" color={theme.colors.primary} />}
+					{errorImage && <Text style={styles.errorMessage}>Un error inesperado ha ocurrido</Text>}
+					<Image
 						style={styles.image}
 						source={{ uri: question.imgUrl }}
 						resizeMode="contain"
 						accessible
 						accessibilityLabel={question.imgAlt}
+						onLoadStart={() => setLoadingImage(true)}
+						onLoadEnd={() => setLoadingImage(false)}
+						onError={() => {
+							setLoadingImage(false);
+							setErrorImage(true);
+						}}
 					/>
 				</View>
+
 				<View style={styles.optionsContainer}>
 					{question.options.map((option, index) => (
 						<Option
@@ -168,7 +181,15 @@ const getStyles = (theme: Theme) =>
 		},
 		underlineText: {
 			textDecorationLine: 'underline'
-		}
+		},
+		errorMessage: {
+			fontSize: theme.fontSize.large,
+			color: theme.colors.red,
+			fontFamily: theme.fontWeight.regular,
+			letterSpacing: theme.spacing.medium,
+			textAlign: 'center',
+			marginTop: 20
+		},
 	});
 
 export default FillBlank;

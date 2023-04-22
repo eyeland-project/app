@@ -1,11 +1,13 @@
-import React, { Dispatch, SetStateAction, useRef } from 'react';
+import React, { Dispatch, SetStateAction, useRef, useState } from 'react';
 import {
 	View,
 	Text,
 	StyleSheet,
 	ImageBackground,
 	Animated,
-	Pressable
+	Pressable,
+	Image,
+	ActivityIndicator
 } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
 import FlipCardNative from 'react-native-flip-card';
@@ -41,6 +43,9 @@ const FlipCard = ({
 	const theme = useTheme();
 	const styles = getStyles(theme);
 	const flipIndicatorAnimation = useRef(new Animated.Value(0)).current;
+	const [loadingImage, setLoadingImage] = useState(true);
+	const [errorImage, setErrorImage] = useState(false);
+
 
 	return (
 		<Pressable
@@ -72,78 +77,69 @@ const FlipCard = ({
 							accessible={true}
 							accessibilityLabel="Parte trasera de la tarjeta"
 						>
-							<Text style={styles.backText}>
-								{question.content}
-							</Text>
+							<Text style={styles.backText}>{question.content}</Text>
 							<Animated.View
 								style={[
 									styles.flipIndicator,
 									{
 										transform: [
 											{
-												translateY:
-													flipIndicatorAnimation.interpolate(
-														{
-															inputRange: [0, 1],
-															outputRange: [0, -5]
-														}
-													)
-											}
-										]
-									}
+												translateY: flipIndicatorAnimation.interpolate({
+													inputRange: [0, 1],
+													outputRange: [0, -5],
+												}),
+											},
+										],
+									},
 								]}
 								accessible={true}
 								accessibilityLabel="Indicador de voltear"
 							>
-								<Entypo
-									name="arrow-with-circle-up"
-									size={24}
-									color="black"
-								/>
+								<Entypo name="arrow-with-circle-up" size={24} color="black" />
 							</Animated.View>
 						</View>
 					) : (
-						<View style={styles.imageContainer}>
+						<View>
 							{loadingImage && <ActivityIndicator size="large" color={theme.colors.primary} />}
 							{errorImage && <Text style={styles.errorMessage}>Un error inesperado ha ocurrido</Text>}
 							<Image
 								style={styles.image}
 								source={{ uri: question.imgUrl }}
 								resizeMode="cover"
-							accessible={true}
-							accessibilityLabel={
-								question.imgAlt +
-								'. Toca dos veces para girar la tarjeta'
-							}
-						>
+								onLoadStart={() => setLoadingImage(true)}
+								onLoadEnd={() => setLoadingImage(false)}
+								onError={() => {
+									setLoadingImage(false);
+									setErrorImage(true);
+								}}
+								accessible={true}
+								accessibilityLabel={
+									question.imgAlt +
+									'. Toca dos veces para girar la tarjeta'
+								}
+							/>
 							<Animated.View
 								style={[
 									styles.flipIndicator,
 									{
 										transform: [
 											{
-												translateY:
-													flipIndicatorAnimation.interpolate(
-														{
-															inputRange: [0, 1],
-															outputRange: [0, -5]
-														}
-													)
-											}
-										]
-									}
+												translateY: flipIndicatorAnimation.interpolate({
+													inputRange: [0, 1],
+													outputRange: [0, -5],
+												}),
+											},
+										],
+									},
 								]}
 								accessible={true}
 								accessibilityLabel="Indicador de voltear"
 							>
-								<Entypo
-									name="arrow-with-circle-up"
-									size={24}
-									color="white"
-								/>
+								<Entypo name="arrow-with-circle-up" size={24} color="white" />
 							</Animated.View>
-						</ImageBackground>
+						</View>
 					)}
+
 					{/* Back Side */}
 					<View
 						style={[styles.back, containerCardStyle]}
@@ -173,12 +169,14 @@ const getStyles = (theme: Theme) =>
 			alignSelf: 'center',
 			borderRadius: theme.borderRadius.medium,
 			overflow: 'hidden',
-			...theme.shadow
 		},
 		flipCard: {
 			width: '100%',
+			borderWidth: 1,
+			overflow: 'hidden',
+			borderColor: theme.colors.black,
 			height: '100%',
-			borderRadius: theme.borderRadius.medium
+			borderRadius: theme.borderRadius.medium,
 		},
 		image: {
 			width: '100%',
@@ -202,7 +200,15 @@ const getStyles = (theme: Theme) =>
 			bottom: 10,
 			right: 10,
 			transform: [{ rotate: '45deg' }]
-		}
+		},
+		errorMessage: {
+			fontSize: theme.fontSize.large,
+			color: theme.colors.red,
+			fontFamily: theme.fontWeight.regular,
+			letterSpacing: theme.spacing.medium,
+			textAlign: 'center',
+			marginTop: 20
+		},
 	});
 
 export default FlipCard;

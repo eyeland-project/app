@@ -1,4 +1,4 @@
-import { View, ImageBackground, StyleSheet } from 'react-native';
+import { View, StyleSheet, Image, ActivityIndicator, Text } from 'react-native';
 import Query from './components/Query';
 import Option from '@screens/Task/components/Option';
 import Placeholder from './components/Placeholder';
@@ -28,6 +28,8 @@ const Question = ({ route }: Props) => {
 	const navigation = useNavigation<any>();
 	const [containerStyleOptions, setContainerStyleOptions] = useState([{}]);
 	const [textStyleOptions, setTextStyleOptions] = useState([{}]);
+	const [loadingImage, setLoadingImage] = useState(true);
+	const [errorImage, setErrorImage] = useState(false);
 	const { time, startTimer, stopTimer } = useTime();
 	const {
 		data,
@@ -145,18 +147,22 @@ const Question = ({ route }: Props) => {
 				prepositionTranslations={data.prepositionTranslation}
 				imgAlt={data.imgAlt}
 			/>
-			<View
-				style={styles.imageContainer}
-				accessible={true}
-				accessibilityLabel={'Imagen de la pregunta'}
-				accessibilityHint={`Super hearing: ${data.imgAlt}`}
-			>
-				<ImageBackground
+			<View style={styles.imageContainer} accessible={true} accessibilityLabel={'Imagen de la pregunta'} accessibilityHint={`Super hearing: ${data.imgAlt}`}>
+				{loadingImage && <ActivityIndicator size="large" color={theme.colors.primary} />}
+				{errorImage && <Text style={styles.errorMessage}>Un error inesperado ha ocurrido</Text>}
+				<Image
 					style={styles.image}
 					source={{ uri: `${data.imgUrl}?t=${data.id}` }}
 					resizeMode="contain"
+					onLoadStart={() => setLoadingImage(true)}
+					onLoadEnd={() => setLoadingImage(false)}
+					onError={() => {
+						setLoadingImage(false);
+						setErrorImage(true);
+					}}
 				/>
 			</View>
+
 			<View style={styles.optionsContainer}>
 				<Option
 					text={data.options[0].content}
@@ -205,7 +211,15 @@ const getStyles = (theme: Theme) =>
 		},
 		optionsContainer: {
 			marginTop: 40
-		}
+		},
+		errorMessage: {
+			fontSize: theme.fontSize.large,
+			color: theme.colors.red,
+			fontFamily: theme.fontWeight.regular,
+			letterSpacing: theme.spacing.medium,
+			textAlign: 'center',
+			marginTop: 20
+		},
 	});
 
 export default Question;
