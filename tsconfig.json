@@ -1,9 +1,6 @@
 {
 	"extends": "expo/tsconfig.base",
 	"compilerOptions": {
-		"typeRoots": [
-			"node_modules/@types"
-		],
 		"forceConsistentCasingInFileNames": true,
 		"allowJs": false,
 		"strict": true,
@@ -27,7 +24,7 @@
 			"@interfaces/*": ["app/shared/interfaces/*"],
 			"@enums/*": ["app/shared/enums/*"],
 			"@mocks/*": ["app/shared/mocks/*"],
-			"@theme": ["app/theme.ts"],
+			"@theme": ["app/theme.ts"]
 		}
 	}
 }

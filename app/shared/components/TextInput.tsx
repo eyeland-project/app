@@ -4,13 +4,13 @@ import {
 	View,
 	Text,
 	StyleSheet
-} from "react-native";
+} from 'react-native';
 
-import useTheme from "@hooks/useTheme";
+import useTheme from '@hooks/useTheme';
 
-import { Theme } from "@theme";
-import { Controller, Control } from "react-hook-form";
-import { Login } from "@interfaces/Login.interface";
+import { Theme } from '@theme';
+import { Controller, Control } from 'react-hook-form';
+import { Login } from '@interfaces/Login.interface';
 
 export interface TextInputProps extends TextInputPropsNative {
 	name: 'username' | 'password';
@@ -19,18 +19,25 @@ export interface TextInputProps extends TextInputPropsNative {
 	error?: string;
 }
 
-const TextInput = ({ name, label, control, error, ...props }: TextInputProps) => {
+const TextInput = ({
+	name,
+	label,
+	control,
+	error,
+	...props
+}: TextInputProps) => {
 	const theme = useTheme();
+	const styles = getStyles(theme);
 
 	return (
-		<View style={getStyles(theme).constainer}>
-			<Text style={getStyles(theme).text}>{label}</Text>
+		<View style={styles.constainer}>
+			<Text style={styles.text}>{label}</Text>
 			<Controller
 				control={control}
 				rules={{ required: true }}
 				render={({ field: { onChange, onBlur, value } }) => (
 					<TextInputNative
-						style={getStyles(theme).input}
+						style={styles.input}
 						onBlur={onBlur}
 						onChangeText={onChange}
 						value={value}
@@ -40,7 +47,7 @@ const TextInput = ({ name, label, control, error, ...props }: TextInputProps) =>
 				)}
 				name={name}
 			/>
-			{error && <Text style={getStyles(theme).error}>{error}</Text>}
+			{error && <Text style={styles.error}>{error}</Text>}
 		</View>
 	);
 };
@@ -49,8 +56,8 @@ const getStyles = (theme: Theme) =>
 	StyleSheet.create({
 		constainer: {
 			backgroundColor: theme.colors.primary,
-			width: "100%",
-			marginBottom: 10,
+			width: '100%',
+			marginBottom: 10
 		},
 		input: {
 			borderRadius: theme.borderRadius.medium,
@@ -61,19 +68,19 @@ const getStyles = (theme: Theme) =>
 			paddingVertical: 6,
 			borderWidth: 1,
 			paddingHorizontal: 10,
-			letterSpacing: theme.spacing.medium,
+			letterSpacing: theme.spacing.medium
 		},
 		text: {
 			fontFamily: theme.fontWeight.regular,
 			fontSize: theme.fontSize.small,
 			color: theme.colors.black,
-			letterSpacing: theme.spacing.medium,
+			letterSpacing: theme.spacing.medium
 		},
 		error: {
 			fontFamily: theme.fontWeight.regular,
 			fontSize: theme.fontSize.small,
 			color: 'red',
-			letterSpacing: theme.spacing.medium,
+			letterSpacing: theme.spacing.medium
 		}
 	});
 

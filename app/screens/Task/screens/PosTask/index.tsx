@@ -1,68 +1,66 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { NativeStackNavigationOptions } from "@react-navigation/native-stack";
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 
-import Complete from "./screens/Complete";
-import Question from "./screens/Question";
+import Complete from './screens/Complete';
+import Question from './screens/Question';
 
-import { PosTaskContext } from "@contexts/PosTaskContext";
+import { PosTaskContext } from '@contexts/PosTaskContext';
 
-import { useEffect, useState } from "react";
-import useTaskContext from "@hooks/useTaskContext";
-import usePosTask from "@hooks/usePosTask";
-
+import { useEffect, useState } from 'react';
+import useTaskContext from '@app/core/hooks/Task/useTaskContext';
+import usePosTask from '@app/core/hooks/Task/PosTask/usePosTask';
 
 interface Props {
-    route: any
+	route: any;
 }
 
 const Stack = createNativeStackNavigator();
 
 const PosTask = ({ route }: Props) => {
-    const { taskOrder } = route.params;
-    const { getPosTask } = usePosTask();
-    const { setProgress } = useTaskContext();
-    const [numQuestions, setNumQuestions] = useState<number | null>(null);
+	const { taskOrder } = route.params;
+	const { getPosTask } = usePosTask();
+	const { setProgress } = useTaskContext();
+	const [numQuestions, setNumQuestions] = useState<number | null>(null);
 
-    useEffect(() => {
-        const getData = async () => {
-            const data = await getPosTask({ taskOrder });
-            setNumQuestions(data.numQuestions);
-            setProgress(1 / data.numQuestions);
-        }
-        getData();
-    }, [])
+	useEffect(() => {
+		const getData = async () => {
+			const data = await getPosTask({ taskOrder });
+			setNumQuestions(data.numQuestions);
+			setProgress(1 / data.numQuestions);
+		};
+		getData();
+	}, []);
 
+	const optionsPrimary: NativeStackNavigationOptions = {
+		animation: 'slide_from_right',
+		headerBackVisible: false,
+		headerShown: false
+	};
 
-    const optionsPrimary: NativeStackNavigationOptions = {
-        animation: "slide_from_right",
-        headerBackVisible: false,
-        headerShown: false,
-    }
+	return (
+		<PosTaskContext.Provider value={{ numQuestions }}>
+			<Stack.Navigator>
+				<Stack.Screen
+					name="Question"
+					options={{
+						...optionsPrimary
+					}}
+					initialParams={{
+						taskOrder: route.params.taskOrder,
+						questionOrder: route.params.questionOrder
+					}}
+					component={Question}
+				/>
+				<Stack.Screen
+					name="Complete"
+					options={{
+						...optionsPrimary
+					}}
+					component={Complete}
+				/>
+			</Stack.Navigator>
+		</PosTaskContext.Provider>
+	);
+};
 
-    return (
-        <PosTaskContext.Provider value={{ numQuestions }}>
-            <Stack.Navigator>
-                <Stack.Screen
-                    name="Question"
-                    options={{
-                        ...optionsPrimary,
-                    }}
-                    initialParams={{
-                        taskOrder: route.params.taskOrder,
-                        questionOrder: route.params.questionOrder,
-                    }}
-                    component={Question}
-                />
-                <Stack.Screen
-                    name="Complete"
-                    options={{
-                        ...optionsPrimary,
-                    }}
-                    component={Complete}
-                />
-            </Stack.Navigator>
-        </PosTaskContext.Provider>
-    )
-}
-
-export default PosTask
+export default PosTask;

@@ -1,44 +1,45 @@
-import { View, Text, StyleSheet } from 'react-native'
-import Pressable from '@components/Pressable'
+import { View, Text, StyleSheet } from 'react-native';
+import Pressable from '@components/Pressable';
 
-import useTheme from '@hooks/useTheme'
+import useTheme from '@hooks/useTheme';
 
-import { Theme } from '@theme'
+import { Theme } from '@theme';
 
 interface Props {
-    text: string
-    onPress: () => void
+	text: string;
+	onPress: () => void;
 }
 
 const Option = ({ text, onPress }: Props) => {
-    const theme = useTheme()
+	const theme = useTheme();
+	const styles = getStyles(theme);
 
-    return (
-        <Pressable style={getStyles(theme).container} onPress={onPress}>
-            <Text style={getStyles(theme).text}>{text}</Text>
-        </Pressable>
-    )
-}
+	return (
+		<Pressable style={styles.container} onPress={onPress}>
+			<Text style={styles.text}>{text}</Text>
+		</Pressable>
+	);
+};
 
 const getStyles = (theme: Theme) =>
-    StyleSheet.create({
-        container: {
-            backgroundColor: theme.colors.black,
-            paddingHorizontal: 20,
-            borderRadius: theme.borderRadius.medium,
-            height: 60,
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginEnd: 10,
-            marginTop: 10,
-            ...theme.shadow
-        },
-        text: {
-            color: theme.colors.white,
-            fontSize: theme.fontSize.xxl,
-            fontFamily: theme.fontWeight.medium,
-            letterSpacing: theme.spacing.medium,
-        }
-    })
+	StyleSheet.create({
+		container: {
+			backgroundColor: theme.colors.black,
+			paddingHorizontal: 20,
+			borderRadius: theme.borderRadius.medium,
+			height: 60,
+			justifyContent: 'center',
+			alignItems: 'center',
+			marginEnd: 10,
+			marginTop: 10,
+			...theme.shadow
+		},
+		text: {
+			color: theme.colors.white,
+			fontSize: theme.fontSize.xxl,
+			fontFamily: theme.fontWeight.medium,
+			letterSpacing: theme.spacing.medium
+		}
+	});
 
-export default Option
+export default Option;

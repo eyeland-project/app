@@ -8,35 +8,46 @@ import useTheme from '@hooks/useTheme';
 import { Theme } from '@theme';
 
 interface Props {
-    onPress: () => void;
-    containerStyle: {};
-    iconName: 'check' | 'cross';
-    accessibilityLabel: string;
+	onPress: () => void;
+	containerStyle: {};
+	iconName: 'check' | 'cross';
+	accessibilityLabel: string;
 }
 
-const Option: React.FC<Props> = ({ onPress, containerStyle, iconName, accessibilityLabel }) => {
-    const theme = useTheme();
+const Option: React.FC<Props> = ({
+	onPress,
+	containerStyle,
+	iconName,
+	accessibilityLabel
+}) => {
+	const theme = useTheme();
+	const styles = getStyles(theme);
 
-    return (
-        <Pressable onPress={onPress}>
-            <View style={[getStyles(theme).option, containerStyle]} accessible={true} accessibilityLabel={accessibilityLabel} accessibilityRole="button">
-                <Entypo name={iconName} size={50} color="white" />
-            </View>
-        </Pressable>
-    );
+	return (
+		<Pressable onPress={onPress}>
+			<View
+				style={[styles.option, containerStyle]}
+				accessible={true}
+				accessibilityLabel={accessibilityLabel}
+				accessibilityRole="button"
+			>
+				<Entypo name={iconName} size={50} color="white" />
+			</View>
+		</Pressable>
+	);
 };
 
 const getStyles = (theme: Theme) =>
-    StyleSheet.create({
-        option: {
-            width: 80,
-            height: 80,
-            borderRadius: theme.borderRadius.medium,
-            backgroundColor: theme.colors.secondary,
-            alignItems: 'center',
-            justifyContent: 'center',
-            ...theme.shadow,
-        },
-    });
+	StyleSheet.create({
+		option: {
+			width: 80,
+			height: 80,
+			borderRadius: theme.borderRadius.medium,
+			backgroundColor: theme.colors.secondary,
+			alignItems: 'center',
+			justifyContent: 'center',
+			...theme.shadow
+		}
+	});
 
 export default Option;

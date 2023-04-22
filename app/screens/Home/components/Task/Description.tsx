@@ -1,7 +1,7 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet } from 'react-native';
 
-import useTheme from "@hooks/useTheme";
-import { Theme } from "@theme";
+import useTheme from '@hooks/useTheme';
+import { Theme } from '@theme';
 
 interface DescriptionProps {
 	text: string;
@@ -9,10 +9,11 @@ interface DescriptionProps {
 
 const Description = ({ text }: DescriptionProps) => {
 	const theme = useTheme();
+	const styles = getStyles(theme);
 
 	return (
 		<View>
-			<Text style={getStyles(theme).description}>{text}</Text>
+			<Text style={styles.description}>{text}</Text>
 		</View>
 	);
 };
@@ -23,8 +24,8 @@ const getStyles = (theme: Theme) =>
 			fontFamily: theme.fontWeight.regular,
 			color: theme.colors.black,
 			letterSpacing: theme.spacing.medium,
-			fontSize: theme.fontSize.small,
-		},
+			fontSize: theme.fontSize.small
+		}
 	});
 
 export default Description;

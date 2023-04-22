@@ -1,6 +1,6 @@
-import { Group } from "./Group.interface";
+import { Group } from './Group.interface';
 
 export interface User {
-    id: number;
-    name: string;
+	id: number;
+	name: string;
 }

@@ -1,3 +1,3 @@
-import { PreTaskQuestion } from "./PreTaskQuestion.interface";
+import { PreTaskQuestion } from './PreTaskQuestion.interface';
 
 export type PreTask = PreTaskQuestion[];

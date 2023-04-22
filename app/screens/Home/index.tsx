@@ -1,22 +1,20 @@
-import { FlatList, View, StyleSheet } from "react-native";
-import Task from "./components/Task";
-import ComingSoon from "./components/ComingSoon";
-import Title from "./components/Title";
-import Placeholder from "./components/Placeholder";
-import ErrorScreen from "@components/ErrorScreen";
+import { FlatList, View, StyleSheet } from 'react-native';
+import Task from './components/Task';
+import Title from './components/Title';
+import Placeholder from './components/Placeholder';
+import ErrorScreen from '@components/ErrorScreen';
 
-import { useCallback } from "react";
-import useTheme from "@hooks/useTheme";
-import useTasks from "@hooks/useTasks";
-import { useFocusEffect } from "@react-navigation/native";
+import { useCallback } from 'react';
+import useTheme from '@hooks/useTheme';
+import useTasks from '@app/core/hooks/Task/useTasks';
+import { useFocusEffect } from '@react-navigation/native';
 
-import { Theme } from "@theme";
-import { Fragment, useRef } from "react";
+import { Theme } from '@theme';
 
 const Home = () => {
 	const theme = useTheme();
 	const { loading, error, data, getTasks } = useTasks();
-	const firstFocus = useRef(null);
+	const styles = getStyles(theme);
 
 	const initTasks = async () => {
 		await getTasks();
@@ -30,13 +28,28 @@ const Home = () => {
 
 	if (loading) return <Placeholder />;
 
-	if (error) return <><Title text="MENÚ" /><ErrorScreen error={error} retryAction={initTasks} /></>;
+	if (error)
+		return (
+			<>
+				<Title text="MENÚ" />
+				<ErrorScreen error={error} retryAction={initTasks} />
+			</>
+		);
 
-	if (!data) return <><Title text="MENÚ" /><ErrorScreen error={'No se recibió información'} retryAction={initTasks} /></>;
+	if (!data)
+		return (
+			<>
+				<Title text="MENÚ" />
+				<ErrorScreen
+					error={'No se recibió información'}
+					retryAction={initTasks}
+				/>
+			</>
+		);
 
 	return (
 		<FlatList
-			style={getStyles(theme).container}
+			style={styles.container}
 			ListHeaderComponent={<Title text="MENÚ" />}
 			stickyHeaderIndices={[0]}
 			stickyHeaderHiddenOnScroll={true}
@@ -55,8 +68,8 @@ const Home = () => {
 					/>
 				</>
 			)}
-			ItemSeparatorComponent={() => <View style={getStyles(theme).separator} />}
-			ListFooterComponent={<View style={getStyles(theme).safeZone} />}
+			ItemSeparatorComponent={() => <View style={styles.separator} />}
+			ListFooterComponent={<View style={styles.safeZone} />}
 		/>
 	);
 };
@@ -65,14 +78,14 @@ const getStyles = (theme: Theme) =>
 	StyleSheet.create({
 		container: {
 			backgroundColor: theme.colors.primary,
-			height: "100%",
+			height: '100%'
 		},
 		separator: {
-			height: 20,
+			height: 20
 		},
 		safeZone: {
-			height: 100,
-		},
+			height: 100
+		}
 	});
 
 export default Home;

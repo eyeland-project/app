@@ -1,8 +1,8 @@
-import { Text, StyleSheet, PressableProps } from "react-native";
-import Pressable from "@components/Pressable";
+import { Text, StyleSheet, PressableProps } from 'react-native';
+import Pressable from '@components/Pressable';
 
-import useTheme from "@hooks/useTheme";
-import { Theme } from "@theme";
+import useTheme from '@hooks/useTheme';
+import { Theme } from '@theme';
 
 interface ButtonProps extends PressableProps {
 	title: string;
@@ -10,10 +10,11 @@ interface ButtonProps extends PressableProps {
 
 const Button = ({ title, ...props }: ButtonProps) => {
 	const theme = useTheme();
+	const styles = getStyles(theme);
 
 	return (
-		<Pressable style={getStyles(theme).button} {...props}>
-			<Text style={getStyles(theme).text}>{title}</Text>
+		<Pressable style={styles.button} {...props}>
+			<Text style={styles.text}>{title}</Text>
 		</Pressable>
 	);
 };
@@ -24,19 +25,19 @@ const getStyles = (theme: Theme) =>
 			backgroundColor: theme.colors.secondary,
 			borderRadius: theme.borderRadius.medium,
 			padding: 10,
-			width: "100%",
+			width: '100%',
 			marginTop: 30,
-			flexDirection: "row",
-			justifyContent: "center",
-			alignItems: "center",
-			...theme.shadow,
+			flexDirection: 'row',
+			justifyContent: 'center',
+			alignItems: 'center',
+			...theme.shadow
 		},
 		text: {
 			color: theme.colors.white,
 			fontSize: theme.fontSize.small,
 			fontFamily: theme.fontWeight.bold,
-			letterSpacing: theme.spacing.medium,
-		},
+			letterSpacing: theme.spacing.medium
+		}
 	});
 
 export default Button;

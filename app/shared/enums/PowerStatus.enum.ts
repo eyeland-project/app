@@ -1,6 +1,6 @@
 export enum PowerStatus {
-    'Disponible',
-    'Conflicto',
-    'Seleccionado',
-    'Ocupado'
+	'Disponible',
+	'Conflicto',
+	'Seleccionado',
+	'Ocupado'
 }

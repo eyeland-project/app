@@ -1,42 +1,38 @@
-import { View, Text, StyleSheet } from 'react-native'
-import useTheme from '@hooks/useTheme'
+import { View, Text, StyleSheet } from 'react-native';
+import useTheme from '@hooks/useTheme';
 
-import { Theme } from '@theme'
+import { Theme } from '@theme';
 
 interface Props {
-    text: string
+	text: string;
 }
 const DefaultView = ({ text }: Props) => {
-    const theme = useTheme()
+	const theme = useTheme();
+	const styles = getStyles(theme);
 
-    // remove from text the brackets and the curly braces
-    const textFiltered = text.replace(/[\[\]\{\}]/g, '')
+	const textFiltered = text.replace(/[\[\]\{\}]/g, '');
 
-    return (
-        <View style={getStyles(theme).container}>
-            <Text style={getStyles(theme).text}>{textFiltered}</Text>
-        </View>
-    )
-}
+	return (
+		<View style={styles.container}>
+			<Text style={styles.text}>{textFiltered}</Text>
+		</View>
+	);
+};
 
 const getStyles = (theme: Theme) =>
-    StyleSheet.create({
-        container: {
-            marginHorizontal: 20,
-            flexDirection: 'row',
-            marginTop: 10,
-            flexWrap: 'wrap',
-        },
-        text: {
-            fontSize: theme.fontSize.xxl,
-            color: theme.colors.black,
-            fontFamily: theme.fontWeight.regular,
-            letterSpacing: theme.spacing.medium
-        },
-    })
+	StyleSheet.create({
+		container: {
+			marginHorizontal: 20,
+			flexDirection: 'row',
+			marginTop: 10,
+			flexWrap: 'wrap'
+		},
+		text: {
+			fontSize: theme.fontSize.xxl,
+			color: theme.colors.black,
+			fontFamily: theme.fontWeight.regular,
+			letterSpacing: theme.spacing.medium
+		}
+	});
 
-export default DefaultView
-
-
-
-
+export default DefaultView;

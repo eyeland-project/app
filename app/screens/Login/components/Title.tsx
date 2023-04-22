@@ -1,7 +1,7 @@
-import { Text, StyleSheet } from "react-native";
+import { Text, StyleSheet } from 'react-native';
 
-import useTheme from "@hooks/useTheme";
-import { Theme } from "@theme";
+import useTheme from '@hooks/useTheme';
+import { Theme } from '@theme';
 
 interface TitleProps {
 	name: string;
@@ -9,7 +9,9 @@ interface TitleProps {
 
 const Title = ({ name }: TitleProps) => {
 	const theme = useTheme();
-	return <Text style={getStyles(theme).title}>{name}</Text>;
+	const styles = getStyles(theme);
+
+	return <Text style={styles.title}>{name}</Text>;
 };
 
 const getStyles = (theme: Theme) =>
@@ -18,8 +20,8 @@ const getStyles = (theme: Theme) =>
 			fontSize: theme.fontSize.xxxxxxl,
 			fontFamily: theme.fontWeight.bold,
 			color: theme.colors.black,
-			letterSpacing: theme.spacing.medium,
-		},
+			letterSpacing: theme.spacing.medium
+		}
 	});
 
 export default Title;
