@@ -40,7 +40,7 @@ const useRecord = () => {
 		}
 	}
 
-	async function stopRecording() {
+	async function stopRecording(minimumDuration: number) {
 		console.log('Stopping recording..');
 		playSoundStopRecording();
 		await (recording as Audio.Recording).stopAndUnloadAsync();
@@ -51,7 +51,7 @@ const useRecord = () => {
 		setRecording(undefined);
 		if (
 			recording?._finalDurationMillis &&
-			recording?._finalDurationMillis >= 5000
+			recording?._finalDurationMillis >= minimumDuration
 		) {
 			setDone(true);
 			playSoundSuccessRecording();

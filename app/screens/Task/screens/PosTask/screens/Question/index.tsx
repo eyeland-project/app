@@ -39,7 +39,7 @@ const Question = ({ route }: Props) => {
 
 	const handleOnPress = () => {
 		if (recording) {
-			stopRecording();
+			stopRecording(5000);
 		} else {
 			startRecording();
 		}

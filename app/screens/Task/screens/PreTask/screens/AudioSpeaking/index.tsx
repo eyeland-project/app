@@ -38,7 +38,7 @@ const AudioSpeaking = ({ route }: Props) => {
 
     const handleOnPress = () => {
         if (recording) {
-            stopRecording();
+            stopRecording(1000);
         } else {
             startRecording();
         }
