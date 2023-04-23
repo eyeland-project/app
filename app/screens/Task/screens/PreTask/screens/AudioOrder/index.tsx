@@ -47,7 +47,8 @@ const AudioOrder = ({ route }: Props) => {
 	const [showModal, setShowModal] = useState(false);
 	const playSoundSuccess = usePlaySound(require('@sounds/success.wav'));
 	const playSoundWrong = usePlaySound(require('@sounds/wrong.wav'));
-	const { speak, playing } = useTextToSpeech();
+	const { speak: speakOption, playing: playingOption } = useTextToSpeech();
+	const { speak: speakQuestion, playing: playingQuestion } = useTextToSpeech();
 	const { nextQuestion } = usePreTask();
 	const animationsRef = useRef<LottieView[]>([]);
 	const styles = getStyles(theme);
@@ -83,7 +84,7 @@ const AudioOrder = ({ route }: Props) => {
 	};
 
 	const onPressOption = (index: number) => {
-		speak(optionsList[index]);
+		speakOption(optionsList[index]);
 		setAnswerList([...answerList, optionsList[index]]);
 		setOptionsList(optionsList.filter((_, i) => i !== index));
 
@@ -93,7 +94,7 @@ const AudioOrder = ({ route }: Props) => {
 	};
 
 	const onPressPlayAudio = () => {
-		speak(question.content, 'en');
+		speakQuestion(question.content, 'en');
 	};
 
 	const closeModal = () => {
@@ -101,7 +102,7 @@ const AudioOrder = ({ route }: Props) => {
 	};
 
 	const toggleAnimation = () => {
-		if (playing) {
+		if (playingQuestion) {
 			animationsRef.current?.forEach((animation) => animation.play());
 		} else {
 			animationsRef.current?.forEach((animation) => animation.pause());
@@ -119,12 +120,12 @@ const AudioOrder = ({ route }: Props) => {
 		setOptionsList(shuffleList(correctOrder));
 		setAnswerList([]);
 		AccessibilityInfo.announceForAccessibility(question.content);
-		speak(question.content, 'en');
+		speakQuestion(question.content, 'en');
 	}, []);
 
 	useEffect(() => {
 		toggleAnimation();
-	}, [playing]);
+	}, [playingQuestion]);
 
 	return (
 		<>

@@ -1,8 +1,6 @@
 import {
 	View,
-	Text,
 	StyleSheet,
-	ImageBackground,
 	AccessibilityInfo
 } from 'react-native';
 import Instructions from '../components/Instructions';
@@ -36,12 +34,13 @@ const AudioMultipleChoice = ({ route }: Props) => {
 	const playSoundSuccess = usePlaySound(require('@sounds/success.wav'));
 	const playSoundWrong = usePlaySound(require('@sounds/wrong.wav'));
 	const { nextQuestion } = usePreTask();
-	const { speak, playing } = useTextToSpeech();
+	const { speak: speakQuestion, playing: playingQuestion } = useTextToSpeech();
+	const { speak: speakOption, playing: playingOption } = useTextToSpeech();
 	const animationRef = useRef<LottieView>(null);
 	const styles = getStyles(theme);
 
 	const toggleAnimation = () => {
-		if (playing) {
+		if (playingQuestion) {
 			animationRef.current?.play();
 		} else {
 			animationRef.current?.pause();
@@ -51,7 +50,7 @@ const AudioMultipleChoice = ({ route }: Props) => {
 
 	const onPressOption = (index: number, correct: boolean) => {
 		setOptionIndex(index);
-		speak(question.options[index].content);
+		speakOption(question.options[index].content);
 		const newContainerStyleOptions = [...containerStyleOptions];
 		const newTextStyleOptions = [...textStyleOptions];
 
@@ -88,7 +87,7 @@ const AudioMultipleChoice = ({ route }: Props) => {
 	};
 
 	const onPressPlayAudio = () => {
-		speak(question.content, 'en');
+		speakQuestion(question.content, 'en');
 	};
 
 	const resetContainerStyleOptions = () => {
@@ -99,12 +98,12 @@ const AudioMultipleChoice = ({ route }: Props) => {
 
 	useEffect(() => {
 		AccessibilityInfo.announceForAccessibility(question.content);
-		speak(question.content, 'en');
+		speakQuestion(question.content, 'en');
 	}, []);
 
 	useEffect(() => {
 		toggleAnimation();
-	}, [playing]);
+	}, [playingQuestion]);
 
 	return (
 		<>

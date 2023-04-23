@@ -8,6 +8,7 @@ import FlashCards from './screens/FlashCards';
 import Order from './screens/Order';
 import AudioMultipleChoice from './screens/AudioMultipleChoice';
 import AudioOrder from './screens/AudioOrder';
+import AudioSpeaking from './screens/AudioSpeaking';
 import Complete from './screens/Complete';
 
 import PreTaskProvider from '@contexts/PreTaskContext';
@@ -97,6 +98,16 @@ const PreTask = ({ route }: Props) => {
 						question: null
 					}}
 					component={AudioOrder}
+				/>
+				<Stack.Screen
+					name="AudioSpeaking"
+					options={{
+						...optionsPrimary
+					}}
+					initialParams={{
+						question: null
+					}}
+					component={AudioSpeaking}
 				/>
 				<Stack.Screen
 					name="Complete"

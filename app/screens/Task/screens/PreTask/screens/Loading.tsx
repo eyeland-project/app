@@ -9,11 +9,12 @@ import useTheme from '@hooks/useTheme';
 import usePreTaskContext from '@app/core/hooks/Task/PreTask/usePreTaskContext';
 
 import { Theme } from '@theme';
+import usePreTaskMock from '@app/shared/mocks/hooks/usePreTaskMock';
 
 const Loading = ({ route }: { route: any }) => {
 	const { taskOrder } = route.params;
 	const theme = useTheme();
-	const { getPreTask, data, error, loading, nextQuestion } = usePreTask();
+	const { getPreTask, data, error, loading, nextQuestion } = usePreTaskMock();
 	const { setData, data: dataContext } = usePreTaskContext();
 	const styles = getStyles(theme);
 

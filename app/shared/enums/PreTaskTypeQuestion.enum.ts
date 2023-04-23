@@ -4,5 +4,6 @@ export enum PreTaskTypeQuestion {
 	FLASHCARD = 'flashcard',
 	ORDER = 'order',
 	AUDIO_MULTIPLE_CHOICE = 'audio_select',
-	AUDIO_ORDER = 'audio_order'
+	AUDIO_ORDER = 'audio_order',
+	AUDIO_SPEAKING = 'audio_speaking',
 }

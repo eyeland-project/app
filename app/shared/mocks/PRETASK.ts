@@ -5,36 +5,11 @@ export const PRETASK: PreTaskQuestion[][] = [
 	[
 		{
 			id: 1,
-			content: 'How are you?',
-			type: PreTaskTypeQuestion.AUDIO_ORDER,
+			content: 'There are mangroves in Isla Salamanca',
+			type: PreTaskTypeQuestion.AUDIO_SPEAKING,
 			imgAlt: '',
 			imgUrl: '',
-			options: [
-				{
-					id: 1,
-					content: 'How are you?',
-					correct: true,
-					feedback: ''
-				},
-				{
-					id: 2,
-					content: '_',
-					correct: false,
-					feedback: ''
-				},
-				{
-					id: 3,
-					content: '_',
-					correct: false,
-					feedback: ''
-				},
-				{
-					id: 4,
-					content: '_',
-					correct: false,
-					feedback: ''
-				}
-			]
+			options: []
 		},
 		{
 			id: 2,
