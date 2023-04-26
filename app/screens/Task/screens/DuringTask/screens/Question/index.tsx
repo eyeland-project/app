@@ -87,10 +87,6 @@ const Question = ({ route }: Props) => {
 				routes: [{ name: 'FinalScore' }]
 			});
 		} else {
-			console.log('nextQuestion', nextQuestion);
-			console.log('questionOrder', questionOrder);
-
-
 			if (numQuestions) setProgress((nextQuestion ? nextQuestion : questionOrder + 1) / numQuestions);
 			navigation.pop(1);
 			navigation.push('Question', {
