@@ -37,6 +37,7 @@ const AudioSpeaking = ({ route }: Props) => {
     const animationsRef = useRef<LottieView[]>([]);
     const [wordsStyle, setWordsStyle] = useState<{}[]>([]);
     const [activeWord, setActiveWord] = useState(0);
+    const words = question.content.split(' ');
 
     const handleOnPress = () => {
         if (recording) {
@@ -52,8 +53,24 @@ const AudioSpeaking = ({ route }: Props) => {
     };
 
     const onPressPlayAudio = () => {
+        const wordDuration = 200;
+        let wordIndex = 0;
+
+        // Start speaking
         speak(question.content, 'en');
+
+        // Set the active word and advance the index using a timer
+        const intervalId = setInterval(() => {
+            setActiveWord(wordIndex);
+            wordIndex += 1;
+
+            // Stop the timer when all words have been highlighted
+            if (wordIndex >= question.content.split(' ').length) {
+                clearInterval(intervalId);
+            }
+        }, wordDuration);
     };
+
 
     const toggleAnimation = () => {
         if (playing) {
@@ -66,6 +83,9 @@ const AudioSpeaking = ({ route }: Props) => {
 
     useEffect(() => {
         toggleAnimation();
+        setWordsStyle(
+            words.map(() => ({}))
+        );
     }, [playing]);
 
     useEffect(() => {
@@ -92,12 +112,34 @@ const AudioSpeaking = ({ route }: Props) => {
         };
     }, [recording]);
 
+
+    useEffect(() => {
+        setWordsStyle(
+            words.map(() => ({
+                // fontSize: theme.fontSize.xxl,
+                // color: theme.colors.black,
+                // fontFamily: theme.fontWeight.regular,
+                // letterSpacing: theme.spacing.medium,
+            }))
+        );
+    }, []);
+
+    useEffect(() => {
+        setWordsStyle((prevStyles) =>
+            prevStyles.map((style, index) => {
+                return index === activeWord ? { color: theme.colors.red } : style
+            })
+        );
+    }, [activeWord]);
+
+
+
     return (
         <View style={styles.container}>
             <Instructions text='Grábate diciendo la frase' />
             <Text style={styles.question}>
                 {
-                    question.content.split(' ').map((word, index) => {
+                    words.map((word, index) => {
                         return (
                             <Text
                                 key={index}
@@ -109,7 +151,7 @@ const AudioSpeaking = ({ route }: Props) => {
                     })
                 }
             </Text>
-            <Text style={styles.question}>{question.content}</Text>
+            {/* <Text style={styles.question}>{question.content}</Text> */}
             <Pressable
                 style={styles.playerContainer}
                 onPress={onPressPlayAudio}
