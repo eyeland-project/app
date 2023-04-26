@@ -131,7 +131,7 @@ const AudioOrder = ({ route }: Props) => {
 		<>
 			<View style={styles.container}>
 				<View>
-					<Instructions text="Traduce organizando las palabras en el orden correcto" />
+					<Instructions text="Ordena las palabras en el orden correcto" />
 					<Pressable
 						style={styles.playerContainer}
 						onPress={onPressPlayAudio}

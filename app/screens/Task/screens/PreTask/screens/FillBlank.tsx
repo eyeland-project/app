@@ -100,7 +100,7 @@ const FillBlank = ({ route }: Props) => {
 	return (
 		<>
 			<View style={styles.container}>
-				<Instructions text="Selecciona la opción correcta" />
+				<Instructions text="Selecciona la opción correcta para completar la frase" />
 				<Text style={styles.question}>
 					{questionList[0]}
 					<Text style={styles.underlineText}>{blank}</Text>

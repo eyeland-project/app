@@ -35,6 +35,8 @@ const AudioSpeaking = ({ route }: Props) => {
     const { setIcon, setProgress } = useTaskContext();
     const styles = getStyles(theme);
     const animationsRef = useRef<LottieView[]>([]);
+    const [wordsStyle, setWordsStyle] = useState<{}[]>([]);
+    const [activeWord, setActiveWord] = useState(0);
 
     const handleOnPress = () => {
         if (recording) {
@@ -93,6 +95,20 @@ const AudioSpeaking = ({ route }: Props) => {
     return (
         <View style={styles.container}>
             <Instructions text='Grábate diciendo la frase' />
+            <Text style={styles.question}>
+                {
+                    question.content.split(' ').map((word, index) => {
+                        return (
+                            <Text
+                                key={index}
+                                style={wordsStyle[index]}
+                            >
+                                {word}{' '}
+                            </Text>
+                        );
+                    })
+                }
+            </Text>
             <Text style={styles.question}>{question.content}</Text>
             <Pressable
                 style={styles.playerContainer}

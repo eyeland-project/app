@@ -109,7 +109,7 @@ const Order = ({ route }: Props) => {
 		<>
 			<View style={styles.container}>
 				<View>
-					<Instructions text="Traduce organizando las palabras en el orden correcto" />
+					<Instructions text="Ordena las palabras en inglés para traducir la frase" />
 					<Text style={styles.question}>{question.content}</Text>
 					<AnswerBox
 						answerList={answerList}

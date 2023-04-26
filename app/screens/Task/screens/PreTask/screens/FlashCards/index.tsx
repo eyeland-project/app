@@ -54,7 +54,7 @@ const FlashCards = ({ route }: Props) => {
 		const isCorrect = optionsQuestionShuffled[optionIndex].correct;
 		const color =
 			(option === 'true' && isCorrect) ||
-			(option === 'false' && !isCorrect)
+				(option === 'false' && !isCorrect)
 				? theme.colors.green
 				: theme.colors.red;
 		const updatedContainerStyleOptions = {
@@ -190,7 +190,7 @@ const FlashCards = ({ route }: Props) => {
 				accessible={true}
 				accessibilityLabel="Pantalla de tarjetas"
 			>
-				<Instructions text="Voltea la tarjeta, ¿es correcta?" />
+				<Instructions text="Voltea la tarjeta, ¿La descripción corresponde a la imagen?" />
 				<FlipCard
 					setIsFlipped={setIsFlipped}
 					containerStyle={{
