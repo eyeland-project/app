@@ -36,7 +36,7 @@ const AudioSpeaking = ({ route }: Props) => {
     const styles = getStyles(theme);
     const animationsRef = useRef<LottieView[]>([]);
     const [wordsStyle, setWordsStyle] = useState<{}[]>([]);
-    const [activeWord, setActiveWord] = useState(0);
+    const [activeWord, setActiveWord] = useState(-1);
     const words = question.content.split(' ');
 
     const handleOnPress = () => {
@@ -83,9 +83,12 @@ const AudioSpeaking = ({ route }: Props) => {
 
     useEffect(() => {
         toggleAnimation();
-        setWordsStyle(
-            words.map(() => ({}))
-        );
+        if (!playing) {
+            setWordsStyle(
+                wordsStyle.map(() => ({}))
+            );
+            setActiveWord(-1);
+        }
     }, [playing]);
 
     useEffect(() => {
@@ -115,19 +118,14 @@ const AudioSpeaking = ({ route }: Props) => {
 
     useEffect(() => {
         setWordsStyle(
-            words.map(() => ({
-                // fontSize: theme.fontSize.xxl,
-                // color: theme.colors.black,
-                // fontFamily: theme.fontWeight.regular,
-                // letterSpacing: theme.spacing.medium,
-            }))
+            words.map(() => ({}))
         );
     }, []);
 
     useEffect(() => {
         setWordsStyle((prevStyles) =>
             prevStyles.map((style, index) => {
-                return index === activeWord ? { color: theme.colors.red } : style
+                return index === activeWord ? { color: theme.colors.red } : {}
             })
         );
     }, [activeWord]);
