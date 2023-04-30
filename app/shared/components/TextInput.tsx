@@ -17,6 +17,7 @@ export interface TextInputProps extends TextInputPropsNative {
 	label: string;
 	control: Control<Login>;
 	error?: string;
+	trim?: boolean;
 }
 
 const TextInput = ({
@@ -24,6 +25,7 @@ const TextInput = ({
 	label,
 	control,
 	error,
+	trim,
 	...props
 }: TextInputProps) => {
 	const theme = useTheme();
@@ -39,7 +41,7 @@ const TextInput = ({
 					<TextInputNative
 						style={styles.input}
 						onBlur={onBlur}
-						onChangeText={onChange}
+						onChangeText={trim ? (text) => onChange(text.trim()) : onChange}
 						value={value}
 						placeholder={props.placeholder}
 						{...props}

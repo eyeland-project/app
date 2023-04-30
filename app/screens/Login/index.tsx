@@ -59,9 +59,11 @@ const Login = () => {
 				control={control}
 				autoCapitalize="none"
 				error={errors.username && 'El usuario es requerido'}
+				trim={true}
 				accessible={true}
 				accessibilityLabel="Entrada de nombre de usuario"
 				accessibilityHint="Ingrese su nombre de usuario"
+				autoComplete='username'
 			/>
 			<TextInput
 				name="password"
@@ -73,6 +75,7 @@ const Login = () => {
 				accessible={true}
 				accessibilityLabel="Entrada de contraseña"
 				accessibilityHint="Ingresa tu contraseña"
+				autoComplete='password'
 			/>
 			<Button
 				title={loading ? 'Cargando...' : 'Iniciar sesión'}
