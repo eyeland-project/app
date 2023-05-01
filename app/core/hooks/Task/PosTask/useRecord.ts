@@ -8,6 +8,7 @@ const useRecord = () => {
 	const [recording, setRecording] = useState<Audio.Recording>();
 	const [finished, setFinished] = useState(false);
 	const [done, setDone] = useState(false);
+	const [audioUri, setAudioUri] = useState<string>('');
 	const playSoundStartRecording = usePlaySound(
 		require('@sounds/startRecording.wav')
 	);
@@ -53,11 +54,14 @@ const useRecord = () => {
 			recording?._finalDurationMillis &&
 			recording?._finalDurationMillis >= minimumDuration
 		) {
-			setDone(true);
 			playSoundSuccessRecording();
 			const uri = (recording as Audio.Recording).getURI();
 			console.log('Recording stopped and stored at', uri);
-			return uri;
+			if (uri) {
+				setAudioUri(uri);
+				setDone(true);
+				return uri;
+			}
 		} else {
 			playSoundFailRecording();
 			setTimeout(() => {
@@ -66,7 +70,7 @@ const useRecord = () => {
 		}
 	}
 
-	return { recording, finished, done, startRecording, stopRecording };
+	return { recording, finished, done, startRecording, stopRecording, audioUri };
 };
 
 export default useRecord;

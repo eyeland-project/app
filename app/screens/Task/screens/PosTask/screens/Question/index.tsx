@@ -23,7 +23,7 @@ interface Props {
 const Question = ({ route }: Props) => {
 	const { taskOrder, questionOrder } = route.params;
 	const theme = useTheme();
-	const { recording, done, finished, startRecording, stopRecording } =
+	const { recording, done, finished, startRecording, stopRecording, audioUri } =
 		useRecord();
 	const [duration, setDuration] = useState<number | null>(null);
 	const [answered, setAnswered] = useState(false);
@@ -37,11 +37,11 @@ const Question = ({ route }: Props) => {
 	const { data: generalData, getPosTask } = usePosTask();
 	const styles = getStyles(theme);
 
-	const handleOnPress = () => {
+	const handleOnPress = async () => {
 		if (recording) {
-			stopRecording(5000);
+			await stopRecording(500);
 		} else {
-			startRecording();
+			await startRecording();
 		}
 	};
 
@@ -58,7 +58,7 @@ const Question = ({ route }: Props) => {
 				await sendPosTaskAnswer({
 					taskOrder,
 					questionOrder,
-					body: { answerSeconds: time, idOption: idOptionSelected }
+					body: { answerSeconds: time, idOption: idOptionSelected, audioUri }
 				});
 
 				if (questionOrder === numQuestions) {

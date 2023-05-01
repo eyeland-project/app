@@ -64,9 +64,9 @@ const Record = ({ blocked, recording, done, finished, onPress }: Props) => {
 				onPress={() => {
 					blocked
 						? ToastAndroid.show(
-								'¡Debes contestar la pregunta primero!',
-								ToastAndroid.SHORT
-						  )
+							'¡Debes contestar la pregunta primero!',
+							ToastAndroid.SHORT
+						)
 						: onPress();
 				}}
 				accessibilityLabel={getAccessibilityLabel()}
@@ -77,12 +77,12 @@ const Record = ({ blocked, recording, done, finished, onPress }: Props) => {
 						blocked
 							? 'microphone-slash'
 							: recording
-							? 'stop'
-							: done
-							? 'check'
-							: finished
-							? 'exclamation'
-							: 'microphone'
+								? 'stop'
+								: done
+									? 'check'
+									: finished
+										? 'exclamation'
+										: 'microphone'
 					}
 					size={70}
 					color={blocked ? 'gray' : 'white'}

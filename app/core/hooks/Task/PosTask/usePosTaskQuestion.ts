@@ -1,6 +1,8 @@
 import { useState, useCallback } from 'react';
 import useAuthStorage from '../../useAuthStorage';
 import axios from 'axios';
+import * as FileSystem from 'expo-file-system';
+import { Platform } from 'react-native';
 
 import { errorHandler } from '../../../utils/errorHandler';
 import { environment } from '@environments/environment';
@@ -55,16 +57,40 @@ const usePosTaskQuestion = () => {
 		async (inputs: {
 			taskOrder: number;
 			questionOrder: number;
-			body: { idOption: number; answerSeconds: number };
+			body: { idOption: number; answerSeconds: number, audioUri: string };
 		}) => {
 			setError(null);
 			try {
+				const formData = new FormData();
+				if (Platform.OS === 'web') {
+					const response = await fetch(inputs.body.audioUri);
+					const audioBlob = await response.blob();
+					formData.append('audio', audioBlob, 'audio.m4a');
+				} else {
+					const audioData = await FileSystem.readAsStringAsync(inputs.body.audioUri, { encoding: FileSystem.EncodingType.Base64 });
+					formData.append('audio', audioData);
+				}
+
+				// formData.append('idOption', inputs.body.idOption.toString());
+				// formData.append('answerSeconds', inputs.body.answerSeconds.toString());
+
+				axios.interceptors.request.use(function (config) {
+					console.log(config);
+					return config;
+				}, function (error) {
+					return Promise.reject(error);
+				});
+
 				const response = await axios.post(
 					`${environment.apiUrl}/tasks/${inputs.taskOrder}/postask/questions/${inputs.questionOrder}`,
-					inputs.body,
+					formData,
 					{
 						headers: {
+							// "Content-Type": "multipart/form-data",
 							Authorization: `Bearer ${await authStorage.getAccessToken()}`
+						},
+						transformRequest: (data, headers) => {
+							return data;
 						}
 					}
 				);
