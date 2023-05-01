@@ -55,7 +55,7 @@ const getStyles = (theme: Theme) =>
 			textAlign: 'center'
 		},
 		retryButton: {
-			backgroundColor: theme.colors.secondary,
+			backgroundColor: theme.colors.black,
 			paddingHorizontal: 20,
 			paddingVertical: 10,
 			borderRadius: 5,

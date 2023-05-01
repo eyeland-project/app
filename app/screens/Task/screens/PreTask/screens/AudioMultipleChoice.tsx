@@ -114,7 +114,7 @@ const AudioMultipleChoice = ({ route }: Props) => {
 				<Instructions text="Selecciona la opción correcta" />
 				<Pressable onPress={onPressPlayAudio}>
 					{
-						currentPlatform === 'web' ? (
+						currentPlatform !== 'web' ? (
 							<LottieView
 								source={require('@animations/audioButton.json')}
 								loop

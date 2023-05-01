@@ -5,6 +5,8 @@ import useTheme from '@hooks/useTheme';
 
 import { Theme } from '@theme';
 
+import { hexToRgbA } from '@utils/hexToRgba';
+
 interface Props {
 	text: string;
 	nounTranslations: string[];
@@ -22,9 +24,42 @@ const MemoryProView = ({ text, nounTranslations }: Props) => {
 	);
 	const [animating, setAnimating] = useState<boolean>(false);
 	const styles = getStyles(theme);
+	const [nounColors] = useState<Animated.Value[]>(
+		nounTranslations.map(() => new Animated.Value(0))
+	);
+
 
 	const textFiltered = text.replace(/[\[\]]/g, '');
 	const matchResults = textFiltered.match(/{(.*?)}/g);
+
+	const getInterpolatedColor = (index: number) => {
+		return nounColors[index].interpolate({
+			inputRange: [0, 1],
+			outputRange: [hexToRgbA(theme.colors.black, 1), hexToRgbA(theme.colors.black, 0.5)],
+		});
+	};
+
+	const animateColors = () => {
+		nounColors.forEach((nounColor, index) => {
+			if (!showPower[index] && nouns[index] !== nounTranslations[index]) {
+				Animated.loop(
+					Animated.sequence([
+						Animated.timing(nounColor, {
+							toValue: 1,
+							duration: 1000,
+							useNativeDriver: false,
+						}),
+						Animated.timing(nounColor, {
+							toValue: 0,
+							duration: 1000,
+							useNativeDriver: false,
+						}),
+					])
+				).start();
+			}
+		});
+	};
+
 
 	useEffect(() => {
 		setNouns(
@@ -36,6 +71,11 @@ const MemoryProView = ({ text, nounTranslations }: Props) => {
 			matchResults ? textFiltered.split(/{.*?}/) : [textFiltered]
 		);
 	}, []);
+
+	useEffect(() => {
+		animateColors();
+	}, [nouns]);
+
 
 	const usePower = (index: number) => {
 		if (animating) return;
@@ -74,8 +114,8 @@ const MemoryProView = ({ text, nounTranslations }: Props) => {
 				setNouns(
 					matchResults
 						? matchResults.map((match) =>
-								match.replace(/[{}]/g, '')
-						  )
+							match.replace(/[{}]/g, '')
+						)
 						: []
 				);
 			}
@@ -100,8 +140,16 @@ const MemoryProView = ({ text, nounTranslations }: Props) => {
 					<React.Fragment key={index}>
 						{part}
 						{index < nouns.length && (
-							<Text
-								style={styles.noun}
+							<Animated.Text
+								style={[
+									styles.noun,
+									{
+										color:
+											!showPower[index] && nouns[index] !== nounTranslations[index]
+												? getInterpolatedColor(index)
+												: theme.colors.black,
+									},
+								]}
 								onPress={() => handlePress(index)}
 							>
 								{showPower[index] ? (
@@ -116,7 +164,7 @@ const MemoryProView = ({ text, nounTranslations }: Props) => {
 								) : (
 									nouns[index]
 								)}
-							</Text>
+							</Animated.Text>
 						)}
 					</React.Fragment>
 				))}
@@ -142,14 +190,14 @@ const getStyles = (theme: Theme) =>
 			fontSize: theme.fontSize.xxl,
 			color: theme.colors.black,
 			fontFamily: theme.fontWeight.regular,
-			letterSpacing: theme.spacing.medium
+			letterSpacing: theme.spacing.medium,
 		},
 		noun: {
 			position: 'relative',
 			fontSize: theme.fontSize.xxl,
 			color: theme.colors.black,
 			fontFamily: theme.fontWeight.bold,
-			letterSpacing: theme.spacing.medium
+			letterSpacing: theme.spacing.medium,
 		},
 		nounContainer: {
 			position: 'relative'

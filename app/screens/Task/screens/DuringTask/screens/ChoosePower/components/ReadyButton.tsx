@@ -33,7 +33,7 @@ const getStyles = (theme: Theme, ready: boolean) =>
 		container: {
 			backgroundColor: ready
 				? theme.colors.green
-				: theme.colors.secondary,
+				: theme.colors.black,
 			marginHorizontal: 20,
 			borderRadius: theme.borderRadius.medium,
 			paddingHorizontal: 20,

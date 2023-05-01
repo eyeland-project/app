@@ -115,6 +115,7 @@ const getStyles = (theme: Theme, isPhone: boolean, isTablet: boolean, isDesktop:
 			marginTop: 20,
 			fontFamily: theme.fontWeight.medium,
 			letterSpacing: theme.spacing.medium,
+			alignSelf: 'center',
 			textAlign: isDesktop ? 'center' : 'left'
 		},
 		image: {

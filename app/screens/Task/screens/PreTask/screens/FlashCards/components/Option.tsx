@@ -43,7 +43,7 @@ const getStyles = (theme: Theme) =>
 			width: 80,
 			height: 80,
 			borderRadius: theme.borderRadius.medium,
-			backgroundColor: theme.colors.secondary,
+			backgroundColor: theme.colors.black,
 			alignItems: 'center',
 			justifyContent: 'center',
 			...theme.shadow

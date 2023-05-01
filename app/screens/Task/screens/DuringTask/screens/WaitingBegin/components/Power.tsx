@@ -94,7 +94,7 @@ const getStyles = (theme: Theme) =>
 			alignItems: 'center'
 		},
 		iconContainer: {
-			backgroundColor: theme.colors.secondary,
+			backgroundColor: theme.colors.black,
 			width: 45,
 			height: 45,
 			borderRadius: theme.borderRadius.full,

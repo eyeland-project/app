@@ -107,7 +107,7 @@ const FillBlank = ({ route }: Props) => {
 					{questionList[1]}
 				</Text>
 				<View style={styles.imageContainer}>
-					{loadingImage && <ActivityIndicator size="large" color={theme.colors.white} />}
+					{loadingImage && <ActivityIndicator size="large" color={theme.colors.black} />}
 					{errorImage && <Text style={styles.errorMessage}>Un error inesperado ha ocurrido</Text>}
 					<Image
 						style={styles.image}

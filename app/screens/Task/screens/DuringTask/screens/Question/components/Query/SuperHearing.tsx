@@ -1,7 +1,13 @@
-import { View, Text, StyleSheet, Image } from 'react-native';
+import {
+	View,
+	Text,
+	StyleSheet,
+	Image,
+	Animated,
+} from 'react-native';
 import Pressable from '@components/Pressable';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import useTheme from '@hooks/useTheme';
 import useTextToSpeech from '@hooks/useTextToSpeech';
 
@@ -17,20 +23,44 @@ const SuperHearing = ({ text, imgAlt }: Props) => {
 	const { speak } = useTextToSpeech();
 	const styles = getStyles(theme);
 
-	// remove from text the brackets and the curly braces
 	const textFiltered = text.replace(/[\[\]\{\}]/g, '');
 
 	const onPress = () => {
 		speak(imgAlt, 'es');
 	};
 
+	const scale = useRef(new Animated.Value(1)).current;
+
+	useEffect(() => {
+		const pulse = Animated.loop(
+			Animated.sequence([
+				Animated.timing(scale, {
+					toValue: 1.1,
+					duration: 500,
+					useNativeDriver: true,
+				}),
+				Animated.timing(scale, {
+					toValue: 1,
+					duration: 500,
+					useNativeDriver: true,
+				}),
+			])
+		);
+
+		pulse.start();
+		return () => pulse.stop();
+	}, []);
+
 	return (
 		<Pressable onPress={onPress} style={styles.container}>
 			<Text style={styles.text}>{textFiltered}</Text>
-			<Image
+			<Animated.Image
 				source={require('@images/superHearing.png')}
-				style={styles.image}
-			></Image>
+				style={[
+					styles.image,
+					{ transform: [{ scale }] },
+				]}
+			></Animated.Image>
 		</Pressable>
 	);
 };
@@ -42,19 +72,19 @@ const getStyles = (theme: Theme) =>
 			flexDirection: 'row',
 			marginTop: 10,
 			flexWrap: 'wrap',
-			alignItems: 'center'
+			alignItems: 'center',
 		},
 		text: {
 			fontSize: theme.fontSize.xxl,
 			color: theme.colors.black,
 			fontFamily: theme.fontWeight.regular,
-			letterSpacing: theme.spacing.medium
+			letterSpacing: theme.spacing.medium,
 		},
 		image: {
 			width: 30,
 			height: 30,
-			marginLeft: 10
-		}
+			marginLeft: 10,
+		},
 	});
 
 export default SuperHearing;
