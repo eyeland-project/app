@@ -148,7 +148,7 @@ const Question = ({ route }: Props) => {
 				imgAlt={data.imgAlt}
 			/>
 			<View style={styles.imageContainer} accessible={true} accessibilityLabel={'Imagen de la pregunta'} accessibilityHint={`Super hearing: ${data.imgAlt}`}>
-				{loadingImage && <ActivityIndicator size="large" color={theme.colors.primary} />}
+				{loadingImage && <ActivityIndicator size="large" color={theme.colors.white} />}
 				{errorImage && <Text style={styles.errorMessage}>Un error inesperado ha ocurrido</Text>}
 				<Image
 					style={styles.image}
@@ -196,7 +196,7 @@ const Question = ({ route }: Props) => {
 const getStyles = (theme: Theme) =>
 	StyleSheet.create({
 		container: {
-			backgroundColor: theme.colors.primary,
+			backgroundColor: theme.colors.white,
 			height: '100%'
 		},
 		imageContainer: {

@@ -59,7 +59,7 @@ const Power = ({ title, status, image, description, people }: Props) => {
 const getStyles = (theme: Theme) =>
 	StyleSheet.create({
 		container: {
-			backgroundColor: theme.colors.primary,
+			backgroundColor: theme.colors.white,
 			flexDirection: 'row',
 			marginHorizontal: 20,
 			marginBottom: 20,

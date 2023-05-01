@@ -1,8 +1,8 @@
-import { View, StyleSheet } from 'react-native';
-import LottieView from 'lottie-react-native';
+import { View, StyleSheet, ActivityIndicator, Platform, Text } from 'react-native';
 import ErrorScreen from '@components/ErrorScreen';
+import LottieView from 'lottie-react-native';
 
-import { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import usePreTask from '@app/core/hooks/Task/PreTask/usePreTask';
 import useTheme from '@hooks/useTheme';
@@ -16,6 +16,7 @@ const Loading = ({ route }: { route: any }) => {
 	const { getPreTask, data, error, loading, nextQuestion } = usePreTask();
 	const { setData, data: dataContext } = usePreTaskContext();
 	const styles = getStyles(theme);
+	const currentPlatform = Platform.OS;
 
 	useFocusEffect(
 		useCallback(() => {
@@ -48,12 +49,18 @@ const Loading = ({ route }: { route: any }) => {
 	return (
 		<View style={styles.container}>
 			<View accessible={true} accessibilityLabel="Cargando">
-				<LottieView
-					source={require('@animations/loading.json')}
-					autoPlay
-					loop
-					style={styles.animation}
-				/>
+				{
+					currentPlatform !== 'web' ?
+						<LottieView
+							source={require('@animations/loading.json')}
+							autoPlay
+							loop
+							style={styles.animation}
+						/>
+						:
+						<ActivityIndicator size={50} color={theme.colors.black} style={styles.animation} />
+
+				}
 			</View>
 		</View>
 	);
@@ -63,13 +70,14 @@ const getStyles = (theme: Theme) =>
 	StyleSheet.create({
 		container: {
 			flex: 1,
-			backgroundColor: theme.colors.white
+			backgroundColor: theme.colors.white,
+			justifyContent: 'center',
 		},
 		animation: {
 			width: 200,
 			height: 200,
 			alignSelf: 'center',
-			marginTop: 100
+			// justifyContent: 'center',
 		}
 	});
 

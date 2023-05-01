@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Platform } from 'react-native';
 import LottieView from 'lottie-react-native';
 import Option from '@screens/Task/components/Option';
 
@@ -18,6 +18,7 @@ const Complete = () => {
 	const navigation = useNavigation<any>();
 	const playSoundSuccess = usePlaySound(require('@sounds/complete.wav'));
 	const styles = getStyles(theme);
+	const currentPlatform = Platform.OS;
 
 	const onButtonPress = () => {
 		navigation.reset({
@@ -34,26 +35,34 @@ const Complete = () => {
 	return (
 		<View style={styles.container}>
 			<View>
-				<LottieView
-					source={require('@animations/celebration.json')}
-					autoPlay
-					loop
-					style={{
-						width: 500,
-						position: 'absolute',
-						top: -80,
-						alignItems: 'center',
-						alignSelf: 'center'
-					}}
-				/>
+				{
+					currentPlatform !== 'web' && (
+						<LottieView
+							source={require('@animations/celebration.json')}
+							autoPlay
+							loop
+							style={{
+								width: 500,
+								position: 'absolute',
+								top: -80,
+								alignItems: 'center',
+								alignSelf: 'center'
+							}}
+						/>
+					)
+				}
 				<Text style={styles.text}>¡Felicidades, lo lograste!</Text>
 			</View>
-			<LottieView
-				source={require('@animations/star.json')}
-				autoPlay
-				loop={false}
-				duration={2000}
-			/>
+			{
+				currentPlatform !== 'web' && (
+					<LottieView
+						source={require('@animations/star.json')}
+						autoPlay
+						loop={false}
+						duration={2000}
+					/>
+				)
+			}
 			<View>
 				<Option
 					text="Volver al menú"
@@ -75,7 +84,7 @@ const Complete = () => {
 const getStyles = (theme: Theme) =>
 	StyleSheet.create({
 		container: {
-			backgroundColor: theme.colors.primary,
+			backgroundColor: theme.colors.white,
 			height: '100%',
 			justifyContent: 'space-between'
 		},

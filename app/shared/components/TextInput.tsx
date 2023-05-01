@@ -57,7 +57,7 @@ const TextInput = ({
 const getStyles = (theme: Theme) =>
 	StyleSheet.create({
 		constainer: {
-			backgroundColor: theme.colors.primary,
+			backgroundColor: theme.colors.white,
 			width: '100%',
 			marginBottom: 10
 		},

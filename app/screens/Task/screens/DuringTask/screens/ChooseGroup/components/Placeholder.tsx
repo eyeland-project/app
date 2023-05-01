@@ -37,11 +37,11 @@ const Placeholder = () => {
 const getStyles = (theme: Theme) =>
 	StyleSheet.create({
 		container: {
-			backgroundColor: theme.colors.primary,
+			backgroundColor: theme.colors.white,
 			height: '100%'
 		},
 		card: {
-			backgroundColor: theme.colors.primary,
+			backgroundColor: theme.colors.white,
 			padding: 20,
 			borderRadius: theme.borderRadius.medium,
 			marginHorizontal: 20,

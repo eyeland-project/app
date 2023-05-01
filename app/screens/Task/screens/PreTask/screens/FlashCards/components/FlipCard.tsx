@@ -100,7 +100,7 @@ const FlipCard = ({
 						</View>
 					) : (
 						<View>
-							{loadingImage && <ActivityIndicator size="large" color={theme.colors.primary} />}
+							{loadingImage && <ActivityIndicator size="large" color={theme.colors.white} />}
 							{errorImage && <Text style={styles.errorMessage}>Un error inesperado ha ocurrido</Text>}
 							<Image
 								style={styles.image}
@@ -183,7 +183,7 @@ const getStyles = (theme: Theme) =>
 			height: '100%'
 		},
 		back: {
-			backgroundColor: theme.colors.primary,
+			backgroundColor: theme.colors.white,
 			width: '100%',
 			height: '100%',
 			justifyContent: 'center',

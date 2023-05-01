@@ -69,7 +69,7 @@ const Section = ({ title, completed, blocked, onPress }: Props) => {
 const getStyles = (theme: Theme, completed: boolean, blocked: boolean) =>
 	StyleSheet.create({
 		container: {
-			backgroundColor: theme.colors.primary,
+			backgroundColor: theme.colors.white,
 			marginBottom: 20,
 			flexDirection: 'row',
 			justifyContent: 'space-between',
@@ -93,7 +93,7 @@ const getStyles = (theme: Theme, completed: boolean, blocked: boolean) =>
 		button: {
 			backgroundColor: completed
 				? theme.colors.blue
-				: theme.colors.secondary,
+				: theme.colors.darkGreen,
 			borderRadius: theme.borderRadius.full,
 			padding: 10,
 			marginVertical: 5,

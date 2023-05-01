@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
-import { socket } from '@utils/socket';
+import { socket } from '@listeners/socket';
 import Header from '../../components/Header';
 
 import { useEffect, useState } from 'react';
@@ -15,8 +15,8 @@ import WaitingBegin from './screens/WaitingBegin';
 import Question from './screens/Question';
 import FinalScore from './screens/FinalScore';
 
-import useDuringTask from '@app/core/hooks/Task/DurinTask/useDuringTask';
-import useTaskContext from '@app/core/hooks/Task/useTaskContext';
+import useDuringTask from '@hooks/Task/DurinTask/useDuringTask';
+import useTaskContext from '@hooks/Task/useTaskContext';
 
 import { DuringTaskContext } from '@contexts/DuringTaskContext';
 

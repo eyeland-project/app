@@ -54,7 +54,7 @@ const getStyles = (theme: Theme) =>
 			marginHorizontal: 20
 		},
 		optionsContainer: {
-			backgroundColor: theme.colors.primary,
+			backgroundColor: theme.colors.white,
 			justifyContent: 'center',
 			alignItems: 'center',
 			flexDirection: 'row',

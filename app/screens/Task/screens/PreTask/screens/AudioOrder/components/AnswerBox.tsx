@@ -46,8 +46,8 @@ const AnswerBox = ({ answerList, onAnswerPress }: Props) => {
 const getStyles = (theme: Theme) =>
 	StyleSheet.create({
 		container: {
-			backgroundColor: theme.colors.primary,
-			borderColor: theme.colors.secondary,
+			backgroundColor: theme.colors.white,
+			borderColor: theme.colors.black,
 			borderWidth: 1.5,
 			borderRadius: theme.borderRadius.medium,
 			marginHorizontal: 20

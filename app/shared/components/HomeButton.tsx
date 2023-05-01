@@ -46,7 +46,7 @@ const BackButton = ({ icon, accessibilityLabel }: Props) => {
 		>
 			<Animated.View style={{ transform: [{ scale: scaleValue }] }}>
 				<AntDesign
-					name={icon ? icon : 'back'}
+					name={icon ? icon : 'home'}
 					size={27}
 					color={theme.colors.black}
 				/>

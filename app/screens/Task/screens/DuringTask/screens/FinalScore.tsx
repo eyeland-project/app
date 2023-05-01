@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Platform } from 'react-native';
 import Option from '@screens/Task/components/Option';
 import LottieView from 'lottie-react-native';
 
@@ -18,6 +18,7 @@ const FinalScore = () => {
 	const navigation = useNavigation<any>();
 	const playSoundSuccess = usePlaySound(require('@sounds/complete.wav'));
 	const styles = getStyles(theme);
+	const currentPlatform = Platform.OS;
 
 	const onButtonPress = () => {
 		navigation.reset({
@@ -36,18 +37,22 @@ const FinalScore = () => {
 			<View>
 				<Text style={styles.position}>{position || 0}°</Text>
 				<Text style={styles.groupName}>{team?.name || 'Ocelots'}</Text>
-				<LottieView
-					source={require('@animations/celebration.json')}
-					autoPlay
-					loop
-					style={{
-						width: 500,
-						position: 'absolute',
-						top: -80,
-						alignItems: 'center',
-						alignSelf: 'center'
-					}}
-				/>
+				{
+					currentPlatform !== 'web' && (
+						<LottieView
+							source={require('@animations/celebration.json')}
+							autoPlay
+							loop
+							style={{
+								width: 500,
+								position: 'absolute',
+								top: -80,
+								alignItems: 'center',
+								alignSelf: 'center'
+							}}
+						/>
+					)
+				}
 			</View>
 			<View>
 				<Option
@@ -71,7 +76,7 @@ const getStyles = (theme: Theme) =>
 	StyleSheet.create({
 		container: {
 			flex: 1,
-			backgroundColor: theme.colors.primary,
+			backgroundColor: theme.colors.white,
 			justifyContent: 'space-between'
 		},
 		title: {

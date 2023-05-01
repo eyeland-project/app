@@ -45,7 +45,7 @@ const Placeholder = () => {
 const getStyles = (theme: Theme) =>
 	StyleSheet.create({
 		container: {
-			backgroundColor: theme.colors.primary,
+			backgroundColor: theme.colors.white,
 			paddingHorizontal: 20,
 			height: '100%'
 		}

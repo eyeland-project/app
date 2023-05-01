@@ -1,5 +1,5 @@
 
-import { View, Text, StyleSheet, AccessibilityInfo } from 'react-native';
+import { View, Text, StyleSheet, AccessibilityInfo, Platform } from 'react-native';
 import Record from './components/Record';
 import LottieView from 'lottie-react-native';
 import Pressable from '@components/Pressable';
@@ -14,6 +14,7 @@ import useTime from '@hooks/useTime';
 import useTaskContext from '@hooks/Task/useTaskContext';
 import usePreTaskContext from '@hooks/Task/PreTask/usePreTaskContext';
 import useTextToSpeech from '@hooks/useTextToSpeech';
+import useMediaQuery from '@hooks/useMediaQuery';
 
 import { Theme } from '@theme';
 import { PreTaskQuestion } from '@interfaces/PreTaskQuestion.interface';
@@ -33,6 +34,8 @@ const AudioSpeaking = ({ route }: Props) => {
     const { startTimer, stopTimer, time } = useTime();
     const { speak, playing } = useTextToSpeech();
     const { setIcon, setProgress } = useTaskContext();
+    const currentPlatform = Platform.OS;
+    const { isPhone, isTablet, isDesktop } = useMediaQuery();
     const styles = getStyles(theme);
     const animationsRef = useRef<LottieView[]>([]);
     const [wordsStyle, setWordsStyle] = useState<{}[]>([]);
@@ -160,21 +163,25 @@ const AudioSpeaking = ({ route }: Props) => {
                     color={theme.colors.black}
                 />
                 <View style={styles.animationContainer}>
-                    {[...Array(4)].map((_, index) => {
-                        return (
-                            <LottieView
-                                key={index}
-                                ref={(animation) => {
-                                    if (animation)
-                                        animationsRef.current[index] =
-                                            animation;
-                                }}
-                                source={require('@animations/audioWave.json')}
-                                loop={false}
-                                style={styles.animation}
-                            />
-                        );
-                    })}
+                    {
+                        currentPlatform !== 'web' && (
+                            [...Array(isPhone ? 4 : isTablet ? 8 : 16)].map((_, index) => {
+                                return (
+                                    <LottieView
+                                        key={index}
+                                        ref={(animation) => {
+                                            if (animation)
+                                                animationsRef.current[index] =
+                                                    animation;
+                                        }}
+                                        source={require('@animations/audioWave.json')}
+                                        loop={false}
+                                        style={styles.animation}
+                                    />
+                                );
+                            })
+                        )
+                    }
                 </View>
             </Pressable>
             <Text style={styles.title} accessibilityLabel="Grabación">
@@ -203,7 +210,7 @@ const AudioSpeaking = ({ route }: Props) => {
 const getStyles = (theme: Theme) =>
     StyleSheet.create({
         container: {
-            backgroundColor: theme.colors.primary,
+            backgroundColor: theme.colors.white,
             height: '100%',
             flex: 1
         },
@@ -218,7 +225,7 @@ const getStyles = (theme: Theme) =>
             marginTop: 30
         },
         secondaryContainer: {
-            backgroundColor: theme.colors.primary,
+            backgroundColor: theme.colors.white,
             justifyContent: 'center',
             alignItems: 'center'
         },

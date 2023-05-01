@@ -57,7 +57,7 @@ const Header = ({ progress, showNext, icon, onPress }: Props) => {
 					progress={progress}
 					width={null}
 					height={5}
-					color={theme.colors.secondary}
+					color={theme.colors.black}
 					style={{ flex: 1, marginHorizontal: 20 }}
 				/>
 			)}
@@ -87,7 +87,7 @@ const getStyles = (theme: Theme) =>
 			alignItems: 'center',
 			justifyContent: 'space-between',
 			paddingHorizontal: 20,
-			backgroundColor: theme.colors.primary,
+			backgroundColor: theme.colors.white,
 			paddingVertical: 10
 		}
 	});

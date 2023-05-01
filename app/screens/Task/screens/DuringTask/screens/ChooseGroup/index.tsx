@@ -90,11 +90,11 @@ const ChooseGroup = ({ route }: any) => {
 const getStyles = (theme: Theme) =>
     StyleSheet.create({
         container: {
-            backgroundColor: theme.colors.primary
+            backgroundColor: theme.colors.white
         },
         text: {
             color: theme.colors.black,
-            backgroundColor: theme.colors.primary,
+            backgroundColor: theme.colors.white,
             fontSize: theme.fontSize.xxl,
             fontFamily: theme.fontWeight.bold,
             letterSpacing: theme.spacing.medium,
@@ -102,7 +102,7 @@ const getStyles = (theme: Theme) =>
             paddingBottom: 20
         },
         flatlist: {
-            backgroundColor: theme.colors.primary
+            backgroundColor: theme.colors.white
         }
     });
 

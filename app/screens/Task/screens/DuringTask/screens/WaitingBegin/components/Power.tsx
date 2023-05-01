@@ -71,12 +71,12 @@ const Power = ({ power, blockReRoll, onReRoll, loading }: Props) => {
 				>
 					<View style={styles.iconContainer}>
 						{loading ? (
-							<ActivityIndicator color={theme.colors.primary} />
+							<ActivityIndicator color={theme.colors.white} />
 						) : (
 							<Ionicons
 								name={'reload'}
 								size={26}
-								color={theme.colors.primary}
+								color={theme.colors.white}
 							/>
 						)}
 					</View>

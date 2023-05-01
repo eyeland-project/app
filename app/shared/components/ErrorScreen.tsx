@@ -44,7 +44,7 @@ const getStyles = (theme: Theme) =>
 			flex: 1,
 			justifyContent: 'center',
 			alignItems: 'center',
-			backgroundColor: theme.colors.primary
+			backgroundColor: theme.colors.white
 		},
 		errorText: {
 			color: theme.colors.red,
@@ -63,7 +63,7 @@ const getStyles = (theme: Theme) =>
 			...theme.shadow
 		},
 		retryButtonText: {
-			color: theme.colors.primary,
+			color: theme.colors.white,
 			fontFamily: theme.fontWeight.medium,
 			fontSize: theme.fontSize.small,
 			letterSpacing: theme.spacing.medium

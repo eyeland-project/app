@@ -15,7 +15,6 @@ import { Theme } from '@theme';
 const Home = () => {
 	const theme = useTheme();
 	const { loading, error, data, getTasks } = useTasks();
-	// const { isPhone, isTablet, isDesktop } = useMediaQuery();
 	const styles = getStyles(theme);
 
 	const initTasks = async () => {

@@ -1,10 +1,12 @@
 import {
 	View,
 	StyleSheet,
-	AccessibilityInfo
+	AccessibilityInfo,
+	Platform
 } from 'react-native';
 import Instructions from '../components/Instructions';
 import Option from '@screens/Task/components/Option';
+import AntDesign from '@expo/vector-icons/AntDesign';
 import * as Haptics from 'expo-haptics';
 import Modal from '@screens/Task/components/Modal';
 import LottieView from 'lottie-react-native';
@@ -38,6 +40,7 @@ const AudioMultipleChoice = ({ route }: Props) => {
 	const { speak: speakOption, playing: playingOption } = useTextToSpeech();
 	const animationRef = useRef<LottieView>(null);
 	const styles = getStyles(theme);
+	const currentPlatform = Platform.OS;
 
 	const toggleAnimation = () => {
 		if (playingQuestion) {
@@ -110,12 +113,23 @@ const AudioMultipleChoice = ({ route }: Props) => {
 			<View style={styles.container}>
 				<Instructions text="Selecciona la opción correcta" />
 				<Pressable onPress={onPressPlayAudio}>
-					<LottieView
-						source={require('@animations/audioButton.json')}
-						loop
-						style={styles.animation}
-						ref={animationRef}
-					/>
+					{
+						currentPlatform === 'web' ? (
+							<LottieView
+								source={require('@animations/audioButton.json')}
+								loop
+								style={styles.animation}
+								ref={animationRef}
+							/>
+						) : (
+							<AntDesign
+								name="sound"
+								size={100}
+								color={theme.colors.black}
+								style={styles.animation}
+							/>
+						)
+					}
 				</Pressable>
 				<View style={styles.optionsContainer}>
 					{question.options.map((option, index) => (
@@ -143,7 +157,7 @@ const AudioMultipleChoice = ({ route }: Props) => {
 const getStyles = (theme: Theme) =>
 	StyleSheet.create({
 		container: {
-			backgroundColor: theme.colors.primary,
+			backgroundColor: theme.colors.white,
 			height: '100%'
 		},
 		animation: {

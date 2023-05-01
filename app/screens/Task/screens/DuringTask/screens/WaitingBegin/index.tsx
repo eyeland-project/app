@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Platform } from 'react-native';
 import Title from '../../components/Title';
 import LottieView from 'lottie-react-native';
 import Power from './components/Power';
@@ -29,6 +29,7 @@ const WaitingBegin = ({ route }: Props) => {
 	const navigation = useNavigation<any>();
 	const { rollPower, loading: loadingPower } = usePower();
 	const styles = getStyles(theme);
+	const currentPlatform = Platform.OS;
 
 	const getData = async () => {
 		await getMyTeam();
@@ -101,12 +102,16 @@ const WaitingBegin = ({ route }: Props) => {
 				loading={loadingPower}
 				blockReRoll={data.students.length >= 3}
 			/>
-			<LottieView
-				source={require('@animations/waitingBegin.json')}
-				autoPlay
-				loop
-				style={styles.animation}
-			/>
+			{
+				currentPlatform !== 'web' && (
+					< LottieView
+						source={require('@animations/waitingBegin.json')}
+						autoPlay
+						loop
+						style={styles.animation}
+					/>
+				)
+			}
 			<Text
 				style={styles.waitingText}
 				accessible
@@ -121,7 +126,7 @@ const WaitingBegin = ({ route }: Props) => {
 const getStyles = (theme: Theme) =>
 	StyleSheet.create({
 		container: {
-			backgroundColor: theme.colors.primary,
+			backgroundColor: theme.colors.white,
 			height: '100%',
 			flex: 1,
 			alignItems: 'center'

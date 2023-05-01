@@ -96,7 +96,7 @@ const MultipleChoice = ({ route }: Props) => {
 				<Instructions text="Selecciona la opción correcta" />
 				<Text style={styles.question}>{question.content}</Text>
 				<View style={styles.imageContainer}>
-					{loadingImage && <ActivityIndicator size="large" color={theme.colors.primary} />}
+					{loadingImage && <ActivityIndicator size="large" color={theme.colors.white} />}
 					{errorImage && <Text style={styles.errorMessage}>Un error inesperado ha ocurrido</Text>}
 					<Image
 						style={styles.image}
@@ -139,7 +139,7 @@ const MultipleChoice = ({ route }: Props) => {
 const getStyles = (theme: Theme) =>
 	StyleSheet.create({
 		container: {
-			backgroundColor: theme.colors.primary,
+			backgroundColor: theme.colors.white,
 			height: '100%'
 		},
 		imageContainer: {

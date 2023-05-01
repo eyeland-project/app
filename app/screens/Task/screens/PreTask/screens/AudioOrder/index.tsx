@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, AccessibilityInfo } from 'react-native';
+import { View, StyleSheet, AccessibilityInfo, Platform } from 'react-native';
 import Instructions from '../../components/Instructions';
 import OptionTask from '@screens/Task/components/Option';
 import * as Haptics from 'expo-haptics';
@@ -12,8 +12,9 @@ import { AntDesign } from '@expo/vector-icons';
 import { useEffect, useRef, useState } from 'react';
 import useTheme from '@hooks/useTheme';
 import usePlaySound from '@hooks/usePlaySound';
-import usePreTask from '@app/core/hooks/Task/PreTask/usePreTask';
-import useTextToSpeech from '@app/core/hooks/useTextToSpeech';
+import usePreTask from '@hooks/Task/PreTask/usePreTask';
+import useTextToSpeech from '@hooks/useTextToSpeech';
+import useMediaQuery from '@hooks/useMediaQuery';
 
 import { Theme } from '@theme';
 import { PreTaskQuestion } from '@interfaces/PreTaskQuestion.interface';
@@ -51,6 +52,8 @@ const AudioOrder = ({ route }: Props) => {
 	const { speak: speakQuestion, playing: playingQuestion } = useTextToSpeech();
 	const { nextQuestion } = usePreTask();
 	const animationsRef = useRef<LottieView[]>([]);
+	const currentPlatform = Platform.OS;
+	const { isPhone, isTablet, isDesktop } = useMediaQuery();
 	const styles = getStyles(theme);
 	const correctOrder = question.options
 		.filter((option) => option.correct)[0]
@@ -142,21 +145,25 @@ const AudioOrder = ({ route }: Props) => {
 							color={theme.colors.black}
 						/>
 						<View style={styles.animationContainer}>
-							{[...Array(4)].map((_, index) => {
-								return (
-									<LottieView
-										key={index}
-										ref={(animation) => {
-											if (animation)
-												animationsRef.current[index] =
-													animation;
-										}}
-										source={require('@animations/audioWave.json')}
-										loop={false}
-										style={styles.animation}
-									/>
-								);
-							})}
+							{
+								currentPlatform !== 'web' && (
+									[...Array(isPhone ? 4 : isTablet ? 8 : 16)].map((_, index) => {
+										return (
+											<LottieView
+												key={index}
+												ref={(animation) => {
+													if (animation)
+														animationsRef.current[index] =
+															animation;
+												}}
+												source={require('@animations/audioWave.json')}
+												loop={false}
+												style={styles.animation}
+											/>
+										);
+									})
+								)
+							}
 						</View>
 					</Pressable>
 					{/* <Text style={styles.question}>{question.content}</Text> */}
@@ -206,7 +213,7 @@ const AudioOrder = ({ route }: Props) => {
 const getStyles = (theme: Theme) =>
 	StyleSheet.create({
 		container: {
-			backgroundColor: theme.colors.primary,
+			backgroundColor: theme.colors.white,
 			height: '100%',
 			justifyContent: 'space-between'
 		},

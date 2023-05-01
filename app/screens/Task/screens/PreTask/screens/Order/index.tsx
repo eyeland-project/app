@@ -157,7 +157,7 @@ const Order = ({ route }: Props) => {
 const getStyles = (theme: Theme) =>
 	StyleSheet.create({
 		container: {
-			backgroundColor: theme.colors.primary,
+			backgroundColor: theme.colors.white,
 			height: '100%',
 			justifyContent: 'space-between'
 		},

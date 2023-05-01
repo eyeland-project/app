@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Animated, Easing } from 'react-native';
+import { View, Text, StyleSheet, Animated, Easing, Platform } from 'react-native';
 import LottieView from 'lottie-react-native';
 
 import { useState, useEffect } from 'react';
@@ -19,6 +19,7 @@ const Person = ({ dialog }: Props) => {
 	const [translateX, setTranslateX] = useState(new Animated.Value(-50));
 	const [translateY, setTranslateY] = useState(new Animated.Value(-50));
 	const styles = getStyles(theme);
+	const currentPlatform = Platform.OS;
 
 	useEffect(() => {
 		Animated.parallel([
@@ -69,12 +70,16 @@ const Person = ({ dialog }: Props) => {
 
 	return (
 		<View style={styles.container}>
-			<LottieView
-				source={require('@animations/person.json')}
-				autoPlay
-				loop
-				style={styles.animation}
-			/>
+			{
+				currentPlatform !== 'web' && (
+					<LottieView
+						source={require('@animations/person.json')}
+						autoPlay
+						loop
+						style={styles.animation}
+					/>
+				)
+			}
 			<Animated.View style={{ ...styles.dialog, ...dialogStyle }}>
 				<Text style={styles.text}>{dialog}</Text>
 				<View style={styles.triangle}></View>
@@ -86,7 +91,7 @@ const Person = ({ dialog }: Props) => {
 const getStyles = (theme: Theme) =>
 	StyleSheet.create({
 		container: {
-			backgroundColor: theme.colors.primary,
+			backgroundColor: theme.colors.white,
 			flexDirection: 'row',
 			alignItems: 'flex-start',
 			justifyContent: 'flex-start'

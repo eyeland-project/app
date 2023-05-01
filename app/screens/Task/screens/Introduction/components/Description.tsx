@@ -22,7 +22,7 @@ const Description = ({ text }: Props) => {
 const getStyles = (theme: Theme) =>
 	StyleSheet.create({
 		container: {
-			backgroundColor: theme.colors.primary,
+			backgroundColor: theme.colors.white,
 			marginBottom: 20,
 			marginHorizontal: 20
 		},

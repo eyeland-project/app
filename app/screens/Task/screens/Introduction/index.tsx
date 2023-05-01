@@ -135,11 +135,11 @@ const Introduction = ({ route }: Props) => {
 const getStyles = (theme: Theme) =>
 	StyleSheet.create({
 		container: {
-			backgroundColor: theme.colors.primary,
+			backgroundColor: theme.colors.white,
 			flex: 1
 		},
 		scrollView: {
-			backgroundColor: theme.colors.primary
+			backgroundColor: theme.colors.white
 		},
 		text: {
 			color: theme.colors.black,

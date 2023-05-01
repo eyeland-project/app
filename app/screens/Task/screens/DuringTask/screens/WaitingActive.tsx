@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, Platform } from 'react-native';
 import LottieView from 'lottie-react-native';
 import { Link } from '@react-navigation/native';
 
@@ -18,6 +18,7 @@ const WaitingActive = ({ route }: { route: any }) => {
 	const { socket } = useDuringTaskContext();
 	const navigation = useNavigation<any>();
 	const styles = getStyles(theme);
+	const currentPlatform = Platform.OS;
 
 	useEffect(() => {
 		resetContext();
@@ -28,12 +29,16 @@ const WaitingActive = ({ route }: { route: any }) => {
 
 	return (
 		<View style={styles.container}>
-			<LottieView
-				source={require('@animations/waitingActive.json')}
-				autoPlay
-				loop
-				style={styles.animation}
-			/>
+			{
+				currentPlatform !== 'web' && (
+					<LottieView
+						source={require('@animations/waitingActive.json')}
+						autoPlay
+						loop
+						style={styles.animation}
+					/>
+				)
+			}
 			<Text
 				style={styles.text}
 				accessible
@@ -61,7 +66,7 @@ const getStyles = (theme: Theme) =>
 	StyleSheet.create({
 		container: {
 			flex: 1,
-			backgroundColor: theme.colors.primary,
+			backgroundColor: theme.colors.white,
 			height: '100%',
 			alignItems: 'center',
 			justifyContent: 'center'

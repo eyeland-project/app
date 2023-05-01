@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, StyleSheet, Platform } from 'react-native';
 import Person from './components/Person';
 import LottieView from 'lottie-react-native';
 
@@ -15,6 +15,7 @@ const Transition = () => {
 		'¡Hola! Soy tu guía turístico. Te daré las instrucciones para que puedas realizar la actividad.'
 	);
 	const styles = getStyles(theme);
+	const currentPlatform = Platform.OS;
 
 	useEffect(() => {
 		setProgress(0.1);
@@ -30,12 +31,16 @@ const Transition = () => {
 	return (
 		<View style={styles.container}>
 			<Person dialog={dialog} />
-			<LottieView
-				source={require('@animations/map.json')}
-				autoPlay
-				loop={false}
-				style={styles.animation}
-			/>
+			{
+				currentPlatform !== 'web' && (
+					<LottieView
+						source={require('@animations/map.json')}
+						autoPlay
+						loop={false}
+						style={styles.animation}
+					/>
+				)
+			}
 		</View>
 	);
 };
@@ -43,7 +48,7 @@ const Transition = () => {
 const getStyles = (theme: Theme) =>
 	StyleSheet.create({
 		container: {
-			backgroundColor: theme.colors.primary,
+			backgroundColor: theme.colors.white,
 			height: '100%'
 		},
 		animation: {

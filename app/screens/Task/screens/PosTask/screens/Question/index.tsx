@@ -147,7 +147,7 @@ const Question = ({ route }: Props) => {
 const getStyles = (theme: Theme) =>
 	StyleSheet.create({
 		container: {
-			backgroundColor: theme.colors.primary,
+			backgroundColor: theme.colors.white,
 			height: '100%',
 			flex: 1
 		},
@@ -162,7 +162,7 @@ const getStyles = (theme: Theme) =>
 			marginTop: 30
 		},
 		secondaryContainer: {
-			backgroundColor: theme.colors.primary,
+			backgroundColor: theme.colors.white,
 			justifyContent: 'center',
 			alignItems: 'center'
 		}

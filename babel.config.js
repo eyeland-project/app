@@ -17,6 +17,7 @@ module.exports = function (api) {
 						'@app': './app',
 						'@core': './app/core',
 						'@contexts': './app/core/contexts',
+						'@listeners': './app/core/listeners',
 						'@hooks': './app/core/hooks',
 						'@utils': './app/core/utils',
 						'@screens': './app/screens',
