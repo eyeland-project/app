@@ -23,7 +23,7 @@ interface Props {
 }
 
 const Question = ({ route }: Props) => {
-	const { taskOrder, questionOrder } = route.params;
+	const { taskOrder } = route.params;
 	const theme = useTheme();
 	const navigation = useNavigation<any>();
 	const [containerStyleOptions, setContainerStyleOptions] = useState([{}]);
@@ -40,7 +40,6 @@ const Question = ({ route }: Props) => {
 	} = useDuringTaskQuestion();
 	const { power, socket, team, position, setPosition, numQuestions } =
 		useDuringTaskContext();
-	const { getDuringTask, data: generalData } = useDuringTask();
 	const { setProgress } = useTaskContext();
 	const playSoundSuccess = usePlaySound(require('@sounds/success.wav'));
 	const playSoundWrong = usePlaySound(require('@sounds/wrong.wav'));
@@ -72,43 +71,44 @@ const Question = ({ route }: Props) => {
 		setContainerStyleOptions(newContainerStyleOptions);
 		setTextStyleOptions(newTextStyleOptions);
 
-		await sendDuringTaskAnswer({
+		if (data) await sendDuringTaskAnswer({
 			taskOrder,
-			questionOrder,
+			questionOrder: data.questionOrder,
 			body: { idOption: id, answerSeconds: time }
 		}),
+
 			navigateNextQuestion();
 	};
 
-	const navigateNextQuestion = (nextQuestion?: number) => {
-		if (questionOrder === numQuestions) {
-			navigation.reset({
-				index: 1,
-				routes: [{ name: 'FinalScore' }]
-			});
-		} else {
-			if (numQuestions) setProgress((nextQuestion ? nextQuestion : questionOrder + 1) / numQuestions);
-			navigation.pop(1);
-			navigation.push('Question', {
-				taskOrder,
-				questionOrder: nextQuestion ? nextQuestion : questionOrder + 1
-			});
+	const navigateNextQuestion = () => {
+		if (data) {
+			if (data.questionOrder === numQuestions) {
+				navigation.reset({
+					index: 1,
+					routes: [{ name: 'FinalScore' }]
+				});
+			} else {
+				navigation.pop();
+				navigation.push('Question', {
+					taskOrder,
+				});
+			}
 		}
 	};
 
-	useEffect(() => {
-		const initQuestion = async () => {
-			getDuringTaskQuestion({ taskOrder, questionOrder });
-			startTimer();
-		};
+	const initQuestion = async () => {
+		const { questionOrder } = await getDuringTaskQuestion({ taskOrder });
+		if (numQuestions) setProgress(questionOrder / numQuestions)
+		startTimer();
+	};
 
+	useEffect(() => {
 		initQuestion();
 
 		socket.once(
 			SocketEvents.teamStudentAnswer,
-			async (data: { correct: boolean; nextQuestion: number }) => {
-				const { numQuestions } = await getDuringTask({ taskOrder });
-				navigateNextQuestion(data.nextQuestion);
+			async () => {
+				navigateNextQuestion();
 			}
 		);
 

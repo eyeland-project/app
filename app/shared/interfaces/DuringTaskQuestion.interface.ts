@@ -1,6 +1,7 @@
 export interface DuringTaskQuestion {
 	id: number;
 	content: string;
+	questionOrder: number;
 	type: string;
 	imgAlt: string;
 	imgUrl: string;

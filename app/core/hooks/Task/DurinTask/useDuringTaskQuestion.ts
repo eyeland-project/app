@@ -23,12 +23,12 @@ const useDuringTaskQuestion = () => {
 	const authStorage = useAuthStorage();
 
 	const getDuringTaskQuestion = useCallback(
-		async (inputs: { taskOrder: number; questionOrder: number }) => {
+		async (inputs: { taskOrder: number }) => {
 			setError(null);
 			setLoading(true);
 			try {
 				const response = await axios.get(
-					`${environment.apiUrl}/tasks/${inputs.taskOrder}/duringtask/questions/${inputs.questionOrder}`,
+					`${environment.apiUrl}/tasks/${inputs.taskOrder}/duringtask/questions/next`,
 					{
 						headers: {
 							Authorization: `Bearer ${await authStorage.getAccessToken()}`
