@@ -42,7 +42,13 @@ const Section = ({ title, completed, blocked, onPress }: Props) => {
 	}, [completed, blocked, scaleAnim]);
 
 	return (
-		<Pressable onPress={onPress} disabled={blocked}>
+		<Pressable
+			onPress={onPress}
+			disabled={blocked}
+			accessible={true}
+			accessibilityLabel={title}
+			accessibilityHint={blocked ? 'Esta sección está bloqueada' : 'Presiona para entrar a la sección'}
+		>
 			<Animated.View
 				style={[
 					getStyles(theme, completed, blocked).container,

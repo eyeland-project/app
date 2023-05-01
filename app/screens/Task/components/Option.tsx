@@ -31,7 +31,12 @@ const Option = ({ text, onPress, containerStyle, textStyle }: Props) => {
 	const textStyles = StyleSheet.flatten([styles.text, textStyle]);
 
 	return (
-		<Pressable style={containerStyles} onPress={onPress}>
+		<Pressable
+			style={containerStyles}
+			onPress={onPress}
+			accessible={true}
+			accessibilityHint={'Responder ' + text}
+		>
 			<Text style={textStyles}>{text}</Text>
 		</Pressable>
 	);

@@ -112,7 +112,11 @@ const AudioMultipleChoice = ({ route }: Props) => {
 		<>
 			<View style={styles.container}>
 				<Instructions text="Selecciona la opción correcta" />
-				<Pressable onPress={onPressPlayAudio}>
+				<Pressable
+					onPress={onPressPlayAudio}
+					accessible={true}
+					accessibilityHint="Reproduce el audio de la pregunta"
+				>
 					{
 						currentPlatform !== 'web' ? (
 							<LottieView

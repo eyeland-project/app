@@ -61,8 +61,8 @@ const getStyles = (theme: Theme, selected: boolean, right: boolean) =>
 			backgroundColor: !selected
 				? theme.colors.black
 				: right
-				? theme.colors.green
-				: theme.colors.red,
+					? theme.colors.green
+					: theme.colors.red,
 			width: '45%',
 			paddingVertical: 10,
 			marginHorizontal: 5,

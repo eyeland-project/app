@@ -156,6 +156,7 @@ const AudioSpeaking = ({ route }: Props) => {
             <Pressable
                 style={styles.playerContainer}
                 onPress={onPressPlayAudio}
+                accessibilityLabel="Reproducir audio"
             >
                 <AntDesign
                     name="caretright"

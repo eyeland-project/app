@@ -32,6 +32,7 @@ const AnswerBox = ({ answerList, onAnswerPress }: Props) => {
 							onAnswerPress(index);
 						}}
 						key={index}
+						inAnswerBox={true}
 					/>
 				))
 			) : (
