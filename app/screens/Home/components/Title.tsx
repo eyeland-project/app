@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 import Pressable from '@components/Pressable';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -25,9 +25,7 @@ const Title = ({ text }: TitleProps) => {
 			accessibilityLabel={`Titulo y boton para cerrar sesión`}
 			accessibilityRole="header"
 		>
-			<Text style={styles.text} accessible={false}>
-				{text}
-			</Text>
+			<Image source={require('@icons/appIcon.png')} style={styles.logo} resizeMode='center' />
 			<Pressable
 				onPress={() => {
 					authStorage.removeAccessToken();
@@ -36,6 +34,7 @@ const Title = ({ text }: TitleProps) => {
 						routes: [{ name: 'Login' }]
 					});
 				}}
+				style={styles.button}
 				accessible={true}
 				accessibilityLabel="Cerrar sesión"
 				accessibilityHint="Presiona para cerrar sesión"
@@ -44,7 +43,7 @@ const Title = ({ text }: TitleProps) => {
 				<MaterialCommunityIcons
 					name="logout"
 					size={30}
-					color={theme.colors.secondary}
+					color={theme.colors.white}
 					accessible={false}
 				/>
 			</Pressable>
@@ -55,7 +54,7 @@ const Title = ({ text }: TitleProps) => {
 const getStyles = (theme: Theme) =>
 	StyleSheet.create({
 		container: {
-			backgroundColor: theme.colors.primary,
+			backgroundColor: theme.colors.white,
 			paddingHorizontal: 20,
 			justifyContent: 'space-between',
 			flexDirection: 'row',
@@ -66,6 +65,16 @@ const getStyles = (theme: Theme) =>
 			color: theme.colors.black,
 			fontSize: theme.fontSize.xxxl,
 			fontFamily: theme.fontWeight.bold
+		},
+		logo: {
+			width: 50,
+			height: 50
+		},
+		button: {
+			padding: 8,
+			borderRadius: theme.borderRadius.medium,
+			backgroundColor: theme.colors.darkGreen,
+			...theme.shadow
 		}
 	});
 

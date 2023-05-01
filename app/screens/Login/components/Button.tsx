@@ -22,7 +22,7 @@ const Button = ({ title, ...props }: ButtonProps) => {
 const getStyles = (theme: Theme) =>
 	StyleSheet.create({
 		button: {
-			backgroundColor: theme.colors.secondary,
+			backgroundColor: theme.colors.darkGreen,
 			borderRadius: theme.borderRadius.medium,
 			padding: 10,
 			width: '100%',
@@ -34,7 +34,7 @@ const getStyles = (theme: Theme) =>
 		},
 		text: {
 			color: theme.colors.white,
-			fontSize: theme.fontSize.small,
+			fontSize: theme.fontSize.medium,
 			fontFamily: theme.fontWeight.bold,
 			letterSpacing: theme.spacing.medium
 		}

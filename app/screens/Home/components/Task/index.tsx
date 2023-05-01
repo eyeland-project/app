@@ -9,6 +9,8 @@ import Button from './Button';
 import useTheme from '@hooks/useTheme';
 import { Theme } from '@theme';
 
+import { hexToRgbA } from '@app/core/utils/hexToRgba';
+
 interface TaskProps {
 	id: number;
 	order: number;
@@ -36,14 +38,12 @@ const Task = ({
 		<View
 			style={[styles.card, completed && styles.cardCompleted]}
 			accessible={true}
-			accessibilityLabel={`${order}. ${name}. ${description}. ${
-				blocked ? 'Bloqueado' : 'Disponible'
-			}`}
-			accessibilityHint={`${
-				blocked
-					? 'Esta tarea está bloqueada.'
-					: 'Presione el boton de comenzar para iniciar la tarea.'
-			}`}
+			accessibilityLabel={`${order}. ${name}. ${description}. ${blocked ? 'Bloqueado' : 'Disponible'
+				}`}
+			accessibilityHint={`${blocked
+				? 'Esta tarea está bloqueada.'
+				: 'Presione el boton de comenzar para iniciar la tarea.'
+				}`}
 		>
 			<ImageBackground
 				source={image}
@@ -52,12 +52,8 @@ const Task = ({
 			>
 				<LinearGradient
 					colors={[
-						theme.colors.white === '#fff'
-							? 'rgba(255,255,255,0.9)'
-							: 'rgba(0,0,0,0.9)',
-						theme.colors.white === '#fff'
-							? 'rgba(255,255,255,0.4)'
-							: 'rgba(0,0,0,0.4)'
+						hexToRgbA(theme.colors.white, 0.9),
+						hexToRgbA(theme.colors.white, 0.4)
 					]}
 					style={styles.gradient}
 					start={[1, 1]}

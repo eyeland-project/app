@@ -63,7 +63,7 @@ const getStyles = (theme: Theme) =>
 	StyleSheet.create({
 		container: {
 			flex: 1,
-			backgroundColor: theme.colors.primary
+			backgroundColor: theme.colors.white
 		},
 		animation: {
 			width: 200,

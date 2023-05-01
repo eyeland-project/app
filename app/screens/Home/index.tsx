@@ -6,14 +6,16 @@ import ErrorScreen from '@components/ErrorScreen';
 
 import { useCallback } from 'react';
 import useTheme from '@hooks/useTheme';
-import useTasks from '@app/core/hooks/Task/useTasks';
+import useTasks from '@hooks/Task/useTasks';
 import { useFocusEffect } from '@react-navigation/native';
+import useMediaQuery from '@hooks/useMediaQuery';
 
 import { Theme } from '@theme';
 
 const Home = () => {
 	const theme = useTheme();
 	const { loading, error, data, getTasks } = useTasks();
+	const { isPhone, isTablet, isDesktop } = useMediaQuery();
 	const styles = getStyles(theme);
 
 	const initTasks = async () => {
@@ -77,7 +79,7 @@ const Home = () => {
 const getStyles = (theme: Theme) =>
 	StyleSheet.create({
 		container: {
-			backgroundColor: theme.colors.primary,
+			backgroundColor: theme.colors.white,
 			height: '100%'
 		},
 		separator: {
