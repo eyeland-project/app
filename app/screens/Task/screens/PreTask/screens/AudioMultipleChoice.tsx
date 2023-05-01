@@ -130,7 +130,7 @@ const AudioMultipleChoice = ({ route }: Props) => {
 								name="sound"
 								size={100}
 								color={theme.colors.black}
-								style={styles.animation}
+								style={[styles.animation, { alignSelf: 'center' }]}
 							/>
 						)
 					}

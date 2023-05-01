@@ -96,20 +96,20 @@ const MultipleChoice = ({ route }: Props) => {
 				<Instructions text="Selecciona la opción correcta" />
 				<Text style={styles.question}>{question.content}</Text>
 				<View style={styles.imageContainer}>
-					{loadingImage && <ActivityIndicator size="large" color={theme.colors.black} />}
-					{errorImage && <Text style={styles.errorMessage}>Un error inesperado ha ocurrido</Text>}
+					{/* {loadingImage && <ActivityIndicator size="large" color={theme.colors.black} />}
+					{errorImage && <Text style={styles.errorMessage}>Un error inesperado ha ocurrido</Text>} */}
 					<Image
 						style={styles.image}
 						source={{ uri: question.imgUrl }}
 						resizeMode="contain"
 						accessible
 						accessibilityLabel={question.imgAlt}
-						onLoadStart={() => setLoadingImage(true)}
-						onLoadEnd={() => setLoadingImage(false)}
-						onError={() => {
-							setLoadingImage(false);
-							setErrorImage(true);
-						}}
+					// onLoadStart={() => setLoadingImage(true)}
+					// onLoadEnd={() => setLoadingImage(false)}
+					// onError={() => {
+					// 	setLoadingImage(false);
+					// 	setErrorImage(true);
+					// }}
 					/>
 				</View>
 

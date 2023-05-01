@@ -100,18 +100,18 @@ const FlipCard = ({
 						</View>
 					) : (
 						<View>
-							{loadingImage && <ActivityIndicator size="large" color={theme.colors.black} />}
-							{errorImage && <Text style={styles.errorMessage}>Un error inesperado ha ocurrido</Text>}
+							{/* {loadingImage && <ActivityIndicator size="large" color={theme.colors.black} />}
+							{errorImage && <Text style={styles.errorMessage}>Un error inesperado ha ocurrido</Text>} */}
 							<Image
 								style={styles.image}
 								source={{ uri: question.imgUrl }}
 								resizeMode="cover"
-								onLoadStart={() => setLoadingImage(true)}
-								onLoadEnd={() => setLoadingImage(false)}
-								onError={() => {
-									setLoadingImage(false);
-									setErrorImage(true);
-								}}
+								// onLoadStart={() => setLoadingImage(true)}
+								// onLoadEnd={() => setLoadingImage(false)}
+								// onError={() => {
+								// 	setLoadingImage(false);
+								// 	setErrorImage(true);
+								// }}
 								accessible={true}
 								accessibilityLabel={
 									question.imgAlt +
