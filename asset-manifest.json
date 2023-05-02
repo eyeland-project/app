@@ -1,7 +1,7 @@
 {
   "files": {
-    "app.js": "/EyelandApp/static/js/app.c0b0a853.chunk.js",
-    "app.js.map": "/EyelandApp/static/js/app.c0b0a853.chunk.js.map",
+    "app.js": "/EyelandApp/static/js/app.5a57abab.chunk.js",
+    "app.js.map": "/EyelandApp/static/js/app.5a57abab.chunk.js.map",
     "runtime~app.js": "/EyelandApp/static/js/runtime~app.8a586a06.js",
     "runtime~app.js.map": "/EyelandApp/static/js/runtime~app.8a586a06.js.map",
     "static/js/2.59ca5592.chunk.js": "/EyelandApp/static/js/2.59ca5592.chunk.js",
@@ -56,6 +56,6 @@
   "entrypoints": [
     "static/js/runtime~app.8a586a06.js",
     "static/js/2.59ca5592.chunk.js",
-    "static/js/app.c0b0a853.chunk.js"
+    "static/js/app.5a57abab.chunk.js"
   ]
 }
