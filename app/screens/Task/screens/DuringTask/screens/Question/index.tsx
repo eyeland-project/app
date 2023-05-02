@@ -17,6 +17,8 @@ import useTaskContext from '@app/core/hooks/Task/useTaskContext';
 import { SocketEvents } from '@enums/SocketEvents.enum';
 
 import { Theme } from '@theme';
+import { DuringTask } from '@app/shared/interfaces/DuringTask.interface';
+import { DuringTaskQuestion } from '@app/shared/interfaces/DuringTaskQuestion.interface';
 
 interface Props {
 	route: any;
@@ -80,35 +82,33 @@ const Question = ({ route }: Props) => {
 			navigateNextQuestion();
 	};
 
-	const navigateNextQuestion = () => {
-		if (data) {
-			if (data.questionOrder === numQuestions) {
-				navigation.reset({
-					index: 1,
-					routes: [{ name: 'FinalScore' }]
-				});
-			} else {
-				navigation.pop();
-				navigation.push('Question', {
-					taskOrder,
-				});
-			}
+	const navigateNextQuestion = (nextQuestion?: number) => {
+		if ((data && data.questionOrder === numQuestions) || (nextQuestion && nextQuestion + 1 === numQuestions)) {
+			navigation.reset({
+				index: 1,
+				routes: [{ name: 'FinalScore' }]
+			});
+		} else {
+			navigation.pop();
+			navigation.push('Question', {
+				taskOrder,
+			});
 		}
 	};
 
-	const initQuestion = async () => {
-		const { questionOrder } = await getDuringTaskQuestion({ taskOrder });
-		if (numQuestions) setProgress(questionOrder / numQuestions)
-		startTimer();
-	};
-
 	useEffect(() => {
+		const initQuestion = async () => {
+			const { questionOrder } = await getDuringTaskQuestion({ taskOrder });
+			if (numQuestions) setProgress(questionOrder / numQuestions)
+			startTimer();
+		};
+
 		initQuestion();
 
 		socket.once(
 			SocketEvents.teamStudentAnswer,
-			async () => {
-				navigateNextQuestion();
+			(data: { correct: boolean, nextQuestion: number }) => {
+				navigateNextQuestion(data.nextQuestion)
 			}
 		);
 
@@ -148,18 +148,18 @@ const Question = ({ route }: Props) => {
 				imgAlt={data.imgAlt}
 			/>
 			<View style={styles.imageContainer} accessible={true} accessibilityLabel={'Imagen de la pregunta'} accessibilityHint={`Super hearing: ${data.imgAlt}`}>
-				{loadingImage && <ActivityIndicator size="large" color={theme.colors.white} />}
-				{errorImage && <Text style={styles.errorMessage}>Un error inesperado ha ocurrido</Text>}
+				{/* {loadingImage && <ActivityIndicator size="large" color={theme.colors.white} />}
+				{errorImage && <Text style={styles.errorMessage}>Un error inesperado ha ocurrido</Text>} */}
 				<Image
 					style={styles.image}
 					source={{ uri: `${data.imgUrl}?t=${data.id}` }}
 					resizeMode="contain"
-					onLoadStart={() => setLoadingImage(true)}
-					onLoadEnd={() => setLoadingImage(false)}
-					onError={() => {
-						setLoadingImage(false);
-						setErrorImage(true);
-					}}
+				// onLoadStart={() => setLoadingImage(true)}
+				// onLoadEnd={() => setLoadingImage(false)}
+				// onError={() => {
+				// 	setLoadingImage(false);
+				// 	setErrorImage(true);
+				// }}
 				/>
 			</View>
 
