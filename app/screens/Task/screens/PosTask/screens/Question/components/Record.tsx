@@ -98,7 +98,7 @@ const getStyles = (theme: Theme, blocked: boolean) =>
 		containerPulse: {
 			backgroundColor: blocked
 				? hexToRgbA(theme.colors.gray, 0.8)
-				: hexToRgbA(theme.colors.orange, 0.5),
+				: hexToRgbA(theme.colors.darkGreen, 0.5),
 			width: 180,
 			height: 180,
 			borderRadius: theme.borderRadius.full,
@@ -106,7 +106,7 @@ const getStyles = (theme: Theme, blocked: boolean) =>
 			alignItems: 'center'
 		},
 		container: {
-			backgroundColor: blocked ? theme.colors.gray : theme.colors.orange,
+			backgroundColor: blocked ? theme.colors.gray : theme.colors.darkGreen,
 			borderRadius: theme.borderRadius.full,
 			width: 150,
 			height: 150,

@@ -44,7 +44,7 @@ const WaitingBegin = ({ route }: Props) => {
 		getData();
 
 		socket.on(SocketEvents.sessionTeacherStart, () => {
-			if (numQuestions) setProgress(1 / numQuestions);
+			// if (numQuestions) setProgress(1 / numQuestions);
 			navigation.navigate('Question', { taskOrder, questionOrder: 1 });
 		});
 
@@ -81,7 +81,7 @@ const WaitingBegin = ({ route }: Props) => {
 			<Text
 				style={styles.description}
 				accessible
-				accessibilityLabel="Avanza respondiendo a las preguntas con ayuda de tus amigos. El primer equipo en llegar a la meta gana."
+				accessibilityLabel="Avanza respondiendo a las preguntas con ayuda de tus amigos. Si te equivocas esa pregunta te volverá a salir al final. El primer equipo en llegar a la meta gana."
 			>
 				Avanza respondiendo a las preguntas con ayuda de tus amigos. El
 				primer equipo en llegar a la meta gana.

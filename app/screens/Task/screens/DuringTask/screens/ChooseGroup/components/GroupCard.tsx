@@ -109,7 +109,7 @@ const getStyles = (theme: Theme) =>
 			letterSpacing: theme.spacing.medium
 		},
 		button: {
-			backgroundColor: theme.colors.black,
+			backgroundColor: theme.colors.darkGreen,
 			borderRadius: theme.borderRadius.full,
 			padding: 10,
 			paddingHorizontal: 20,

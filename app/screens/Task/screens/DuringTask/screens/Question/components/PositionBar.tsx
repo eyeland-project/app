@@ -33,7 +33,7 @@ const PositionBar = ({ groupName, position }: Props) => {
 const getStyles = (theme: Theme) =>
 	StyleSheet.create({
 		container: {
-			backgroundColor: theme.colors.yellow,
+			backgroundColor: theme.colors.darkGreen,
 			flexDirection: 'row',
 			justifyContent: 'space-between',
 			alignItems: 'center',
@@ -47,13 +47,13 @@ const getStyles = (theme: Theme) =>
 			fontSize: theme.fontSize.xl,
 			fontFamily: theme.fontWeight.bold,
 			letterSpacing: theme.spacing.medium,
-			color: theme.colors.black,
+			color: theme.colors.white,
 			marginLeft: 20,
 			marginTop: 10,
 			marginBottom: 5
 		},
 		positionContainer: {
-			backgroundColor: theme.colors.green,
+			backgroundColor: theme.colors.bluerGreen,
 			flexDirection: 'row',
 			justifyContent: 'center',
 			alignItems: 'center',

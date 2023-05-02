@@ -82,24 +82,26 @@ const Question = ({ route }: Props) => {
 			navigateNextQuestion();
 	};
 
-	const navigateNextQuestion = (nextQuestion?: number) => {
-		if ((data && data.questionOrder === numQuestions) || (nextQuestion && nextQuestion + 1 === numQuestions)) {
+	const navigateNextQuestion = () => {
+		navigation.pop();
+		navigation.push('Question', {
+			taskOrder,
+		});
+
+	};
+
+	useEffect(() => {
+		if (error === 'Recurso no encontrado') {
 			navigation.reset({
 				index: 1,
 				routes: [{ name: 'FinalScore' }]
 			});
-		} else {
-			navigation.pop();
-			navigation.push('Question', {
-				taskOrder,
-			});
 		}
-	};
+	}, [error]);
 
 	useEffect(() => {
 		const initQuestion = async () => {
 			const { questionOrder } = await getDuringTaskQuestion({ taskOrder });
-			if (numQuestions) setProgress(questionOrder / numQuestions)
 			startTimer();
 		};
 
@@ -108,7 +110,7 @@ const Question = ({ route }: Props) => {
 		socket.once(
 			SocketEvents.teamStudentAnswer,
 			(data: { correct: boolean, nextQuestion: number }) => {
-				navigateNextQuestion(data.nextQuestion)
+				navigateNextQuestion()
 			}
 		);
 

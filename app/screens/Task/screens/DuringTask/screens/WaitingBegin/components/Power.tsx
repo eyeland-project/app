@@ -4,6 +4,7 @@ import Pressable from '@components/Pressable';
 import { Ionicons } from '@expo/vector-icons';
 
 import useTheme from '@hooks/useTheme';
+import useMediaQuery from '@hooks/useMediaQuery';
 import React, { useState, useEffect } from 'react';
 
 import { Theme } from '@theme';
@@ -20,7 +21,8 @@ const Power = ({ power, blockReRoll, onReRoll, loading }: Props) => {
 	const [title, setTitle] = useState('');
 	const [description, setDescription] = useState('');
 	const [image, setImage] = useState<any>(null);
-	const styles = getStyles(theme);
+	const { isPhone } = useMediaQuery();
+	const styles = getStyles(theme, isPhone);
 
 	useEffect(() => {
 		switch (power) {
@@ -86,20 +88,23 @@ const Power = ({ power, blockReRoll, onReRoll, loading }: Props) => {
 	);
 };
 
-const getStyles = (theme: Theme) =>
+const getStyles = (theme: Theme, isPhone: boolean) =>
 	StyleSheet.create({
 		container: {
 			flexDirection: 'row',
 			marginHorizontal: 20,
-			alignItems: 'center'
+			alignItems: 'center',
+			alignSelf: 'flex-start',
+			// justifyContent: 'space-between',
 		},
 		iconContainer: {
-			backgroundColor: theme.colors.black,
+			backgroundColor: theme.colors.darkGreen,
 			width: 45,
 			height: 45,
 			borderRadius: theme.borderRadius.full,
 			justifyContent: 'center',
 			alignItems: 'center',
+			marginStart: !isPhone ? 10 : 0,
 			...theme.shadow
 		},
 		title: {
