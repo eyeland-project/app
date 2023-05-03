@@ -55,7 +55,7 @@ const DuringTask = ({ route }: Props) => {
 				setIsSessionStarted(response.session);
 			}
 		);
-		socket.once(SocketEvents.sessionTeacherEnd, () => {
+		socket.once(SocketEvents.SESSION_TEACHER_END, () => {
 			navigation.navigate('Introduction', {
 				taskOrder: route.params.taskOrder
 			});

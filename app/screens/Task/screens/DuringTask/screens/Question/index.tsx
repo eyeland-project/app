@@ -108,14 +108,14 @@ const Question = ({ route }: Props) => {
 		initQuestion();
 
 		socket.once(
-			SocketEvents.teamStudentAnswer,
+			SocketEvents.TEAM_STUDENT_ANSWER,
 			(data: { correct: boolean, nextQuestion: number }) => {
 				navigateNextQuestion()
 			}
 		);
 
 		socket.on(
-			SocketEvents.courseLeaderboardUpdate,
+			SocketEvents.COURSE_LEADERBOARD_UPDATE,
 			(
 				data: {
 					id: number;
@@ -133,7 +133,7 @@ const Question = ({ route }: Props) => {
 		);
 
 		return () => {
-			socket.off(SocketEvents.teamStudentAnswer);
+			socket.off(SocketEvents.TEAM_STUDENT_ANSWER);
 		};
 	}, []);
 

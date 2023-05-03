@@ -26,19 +26,19 @@ const Power = ({ power, blockReRoll, onReRoll, loading }: Props) => {
 
 	useEffect(() => {
 		switch (power) {
-			case PowerEnum.MemoryPro:
+			case PowerEnum.MEMORY_PRO:
 				setTitle('Memory Pro');
 				setDescription(
 					'Puede recordar la traducción de los sustantivos.'
 				);
 				setImage(require('@images/memoryPro.png'));
 				break;
-			case PowerEnum.SuperHearing:
+			case PowerEnum.SUPER_HEARING:
 				setTitle('Super hearing');
 				setDescription('Puede recordar lo que el guía dijo.');
 				setImage(require('@images/superHearing.png'));
 				break;
-			case PowerEnum.SuperRadar:
+			case PowerEnum.SUPER_RADAR:
 				setTitle('Super radar');
 				setDescription(
 					'Puede recordar la traducción de las preposiciones.'

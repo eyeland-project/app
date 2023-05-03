@@ -21,7 +21,7 @@ const Complete = () => {
 	const onButtonPress = () => {
 		navigation.reset({
 			index: 0,
-			routes: [{ name: 'Introduction', params: { taskOrder } }]
+			routes: [{ name: 'Home' }]
 		});
 	};
 

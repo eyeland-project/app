@@ -39,7 +39,7 @@ const Question = ({ route }: Props) => {
 
 	const handleOnPress = async () => {
 		if (recording) {
-			await stopRecording(500);
+			await stopRecording(5000);
 		} else {
 			await startRecording();
 		}

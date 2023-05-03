@@ -43,21 +43,21 @@ const WaitingBegin = ({ route }: Props) => {
 		resetContext();
 		getData();
 
-		socket.on(SocketEvents.sessionTeacherStart, () => {
+		socket.on(SocketEvents.SESSION_TEACHER_START, () => {
 			// if (numQuestions) setProgress(1 / numQuestions);
 			navigation.navigate('Question', { taskOrder, questionOrder: 1 });
 		});
 
 		socket.on(
-			SocketEvents.teamStudentUpdate,
+			SocketEvents.TEAM_STUDENT_UPDATE,
 			(data: { power: PowerEnum }) => {
 				setPower(data.power);
 			}
 		);
 
 		return () => {
-			socket.off(SocketEvents.sessionTeacherStart);
-			socket.off(SocketEvents.teamStudentUpdate);
+			socket.off(SocketEvents.SESSION_TEACHER_START);
+			socket.off(SocketEvents.TEAM_STUDENT_UPDATE);
 		};
 	}, []);
 

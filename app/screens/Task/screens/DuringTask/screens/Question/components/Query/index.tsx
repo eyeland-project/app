@@ -21,7 +21,7 @@ const Query = ({
 	imgAlt
 }: Props) => {
 	switch (power) {
-		case Power.MemoryPro:
+		case Power.MEMORY_PRO:
 			return (
 				<MemoryProView
 					text={text}
@@ -29,7 +29,7 @@ const Query = ({
 				/>
 			);
 
-		case Power.SuperRadar:
+		case Power.SUPER_RADAR:
 			return (
 				<SuperRadarView
 					text={text}
@@ -37,7 +37,7 @@ const Query = ({
 				/>
 			);
 
-		case Power.SuperHearing:
+		case Power.SUPER_HEARING:
 			return <SuperHearing text={text} imgAlt={imgAlt} />;
 
 		default:

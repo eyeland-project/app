@@ -22,7 +22,7 @@ const WaitingActive = ({ route }: { route: any }) => {
 
 	useEffect(() => {
 		resetContext();
-		socket.once(SocketEvents.sessionTeacherCreate, () => {
+		socket.once(SocketEvents.SESSION_TEACHER_CREATE, () => {
 			navigation.navigate('ChooseGroup', { taskOrder: taskOrder });
 		});
 	}, []);

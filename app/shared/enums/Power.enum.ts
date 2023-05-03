@@ -1,5 +1,5 @@
 export enum Power {
-	MemoryPro = 'memory_pro',
-	SuperRadar = 'super_radar',
-	SuperHearing = 'super_hearing'
+	MEMORY_PRO = 'memory_pro',
+	SUPER_RADAR = 'super_radar',
+	SUPER_HEARING = 'super_hearing'
 }

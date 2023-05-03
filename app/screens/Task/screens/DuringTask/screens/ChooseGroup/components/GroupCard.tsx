@@ -24,11 +24,11 @@ const GroupCard = ({ id, name, members, taskOrder }: Props) => {
 
 	const getPower = (power: Power) => {
 		switch (power) {
-			case Power.MemoryPro:
+			case Power.MEMORY_PRO:
 				return 'Memory Pro';
-			case Power.SuperHearing:
+			case Power.SUPER_HEARING:
 				return 'Super Hearing';
-			case Power.SuperRadar:
+			case Power.SUPER_RADAR:
 				return 'Super Radar';
 			default:
 				return 'Desconocido';

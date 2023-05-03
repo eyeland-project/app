@@ -1,9 +1,9 @@
 export enum SocketEvents {
-	sessionTeacherCreate = 'session:teacher:create',
-	sessionTeacherStart = 'session:teacher:start',
-	sessionTeacherEnd = 'session:teacher:end',
-	teamsStudentUpdate = 'teams:student:update',
-	teamStudentUpdate = 'team:student:update',
-	teamStudentAnswer = 'team:student:answer',
-	courseLeaderboardUpdate = 'course:leaderboard:update'
+	SESSION_TEACHER_CREATE = 'session:teacher:create',
+	SESSION_TEACHER_START = 'session:teacher:start',
+	SESSION_TEACHER_END = 'session:teacher:end',
+	TEAMS_STUDENT_UPDATE = 'teams:student:update',
+	TEAM_STUDENT_UPDATE = 'team:student:update',
+	TEAM_STUDENT_ANSWER = 'team:student:answer',
+	COURSE_LEADERBOARD_UPDATE = 'course:leaderboard:update'
 }
