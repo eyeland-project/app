@@ -38,7 +38,7 @@ const getStyles = (theme: Theme) =>
 			justifyContent: 'space-between',
 			alignItems: 'center',
 			borderRadius: theme.borderRadius.full,
-			marginBottom: 20,
+			// marginBottom: 10,
 			marginHorizontal: 20,
 			borderColor: theme.colors.black,
 			borderWidth: 1

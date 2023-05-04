@@ -70,7 +70,7 @@ const getStyles = (theme: Theme) =>
 		container: {
 			marginHorizontal: 20,
 			flexDirection: 'row',
-			marginTop: 10,
+			// marginTop: 10,
 			flexWrap: 'wrap',
 			alignItems: 'center',
 		},

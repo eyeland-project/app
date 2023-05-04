@@ -1,8 +1,9 @@
-import { View, StyleSheet, Image, ActivityIndicator, Text } from 'react-native';
+import { View, StyleSheet, Image, Text } from 'react-native';
 import Query from './components/Query';
 import Option from '@screens/Task/components/Option';
 import Placeholder from './components/Placeholder';
 import PositionBar from './components/PositionBar';
+import History from './components/History';
 
 import { useState, useEffect } from 'react';
 import useTheme from '@hooks/useTheme';
@@ -11,14 +12,10 @@ import useTime from '@hooks/useTime';
 import useDuringTaskQuestion from '@app/core/hooks/Task/DurinTask/useDuringTaskQuestion';
 import { useDuringTaskContext } from '@app/core/hooks/Task/DurinTask/useDuringTaskContext';
 import { useNavigation } from '@react-navigation/native';
-import useDuringTask from '@app/core/hooks/Task/DurinTask/useDuringTask';
-import useTaskContext from '@app/core/hooks/Task/useTaskContext';
 
 import { SocketEvents } from '@enums/SocketEvents.enum';
 
 import { Theme } from '@theme';
-import { DuringTask } from '@app/shared/interfaces/DuringTask.interface';
-import { DuringTaskQuestion } from '@app/shared/interfaces/DuringTaskQuestion.interface';
 
 interface Props {
 	route: any;
@@ -30,8 +27,6 @@ const Question = ({ route }: Props) => {
 	const navigation = useNavigation<any>();
 	const [containerStyleOptions, setContainerStyleOptions] = useState([{}]);
 	const [textStyleOptions, setTextStyleOptions] = useState([{}]);
-	const [loadingImage, setLoadingImage] = useState(true);
-	const [errorImage, setErrorImage] = useState(false);
 	const { time, startTimer, stopTimer } = useTime();
 	const {
 		data,
@@ -40,9 +35,8 @@ const Question = ({ route }: Props) => {
 		getDuringTaskQuestion,
 		sendDuringTaskAnswer
 	} = useDuringTaskQuestion();
-	const { power, socket, team, position, setPosition, numQuestions } =
+	const { power, socket, team, position, setPosition } =
 		useDuringTaskContext();
-	const { setProgress } = useTaskContext();
 	const playSoundSuccess = usePlaySound(require('@sounds/success.wav'));
 	const playSoundWrong = usePlaySound(require('@sounds/wrong.wav'));
 	const styles = getStyles(theme);
@@ -101,17 +95,14 @@ const Question = ({ route }: Props) => {
 
 	useEffect(() => {
 		const initQuestion = async () => {
-			const { questionOrder } = await getDuringTaskQuestion({ taskOrder });
+			await getDuringTaskQuestion({ taskOrder });
 			startTimer();
 		};
 
 		initQuestion();
 
 		socket.once(
-			SocketEvents.TEAM_STUDENT_ANSWER,
-			(data: { correct: boolean, nextQuestion: number }) => {
-				navigateNextQuestion()
-			}
+			SocketEvents.TEAM_STUDENT_ANSWER, () => { navigateNextQuestion() }
 		);
 
 		socket.on(
@@ -139,11 +130,17 @@ const Question = ({ route }: Props) => {
 
 	if (loading || !data) return <Placeholder />;
 
+	const question = data.content.indexOf('\\') > -1 ? data.content.split('\\')[1] : data.content;
+	const history = data.content.indexOf('\\') > -1 ? data.content.split('\\')[0] : null;
+
 	return (
 		<View style={styles.container}>
 			<PositionBar groupName={team?.name} position={position} />
+			{
+				history ? <History history={history} /> : <View style={{ height: 20 }} />
+			}
 			<Query
-				text={data.content}
+				text={question}
 				power={power}
 				nounTranslations={data.nounTranslation}
 				prepositionTranslations={data.prepositionTranslation}

@@ -65,9 +65,9 @@ const ChooseGroup = ({ route }: any) => {
                 (group) =>
                     group.taskOrder === taskOrder || group.taskOrder === null
             )}
-            renderItem={({ item }) => (
+            renderItem={({ item, index }) => (
                 <GroupCard
-                    key={item.id}
+                    key={index}
                     id={item.code}
                     name={item.name}
                     members={item.students}
