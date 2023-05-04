@@ -1,4 +1,4 @@
-import { View, StyleSheet, Image, Text } from 'react-native';
+import { View, StyleSheet, Image, ToastAndroid } from 'react-native';
 import Query from './components/Query';
 import Option from '@screens/Task/components/Option';
 import Placeholder from './components/Placeholder';
@@ -105,6 +105,13 @@ const Question = ({ route }: Props) => {
 			SocketEvents.TEAM_STUDENT_ANSWER, () => { navigateNextQuestion() }
 		);
 
+		socket.once(
+			SocketEvents.TEAM_STUDENT_LEAVE, (data: { name: string }) => {
+				ToastAndroid.show(`El usuario ${data.name} se ha perdido durante el paseo`, ToastAndroid.SHORT);
+				navigateNextQuestion()
+			}
+		);
+		''
 		socket.on(
 			SocketEvents.COURSE_LEADERBOARD_UPDATE,
 			(

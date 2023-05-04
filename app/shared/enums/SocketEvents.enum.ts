@@ -5,5 +5,6 @@ export enum SocketEvents {
 	TEAMS_STUDENT_UPDATE = 'teams:student:update',
 	TEAM_STUDENT_UPDATE = 'team:student:update',
 	TEAM_STUDENT_ANSWER = 'team:student:answer',
-	COURSE_LEADERBOARD_UPDATE = 'course:leaderboard:update'
+	COURSE_LEADERBOARD_UPDATE = 'course:leaderboard:update',
+	TEAM_STUDENT_LEAVE = 'team:student:leave'
 }
