@@ -1,3 +1,4 @@
+import { ToastAndroid } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { socket } from '@listeners/socket';
@@ -16,7 +17,6 @@ import Question from './screens/Question';
 import FinalScore from './screens/FinalScore';
 
 import useDuringTask from '@hooks/Task/DurinTask/useDuringTask';
-import useTaskContext from '@hooks/Task/useTaskContext';
 
 import { DuringTaskContext } from '@contexts/DuringTaskContext';
 
@@ -37,7 +37,6 @@ const DuringTask = ({ route }: Props) => {
 	const [power, setPower] = useState<Power | null>(null);
 	const [position, setPosition] = useState<number | null>(1);
 	const [numQuestions, setNumQuestions] = useState<number | null>(null);
-	const { setProgress } = useTaskContext();
 	const { getDuringTask } = useDuringTask();
 	const navigation = useNavigation<any>();
 
@@ -51,8 +50,16 @@ const DuringTask = ({ route }: Props) => {
 		socket.emit(
 			'join',
 			await authStorage.getAccessToken(),
-			(response: { session: boolean }) => {
-				setIsSessionStarted(response.session);
+			(response: { session?: boolean, error?: { message: string } }) => {
+				if (response.session) setIsSessionStarted(response.session);
+				if (response.error && response.error.message === "error:already_connected") {
+					authStorage.removeAccessToken();
+					ToastAndroid.show("Ya hay una sesión activa, lo siento, debemos desloguearte", ToastAndroid.LONG);
+					navigation.reset({
+						index: 0,
+						routes: [{ name: 'Login' }]
+					});
+				}
 			}
 		);
 		socket.once(SocketEvents.SESSION_TEACHER_END, () => {
