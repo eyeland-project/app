@@ -3,6 +3,7 @@ import { PosTaskQuestionType } from "../enums/PosTaskQuestion.enum";
 
 export interface PosTaskQuestion {
 	id: number;
+	questionOrder: number;
 	content: string;
 	imgAlt: string;
 	imgUrl: string;

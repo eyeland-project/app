@@ -1,38 +1,35 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, AccessibilityInfo } from 'react-native';
 import Record from './components/Record';
 import QuestionComponent from './components/Question';
 import Title from './components/Title';
-import Placeholder from './components/Placeholder';
-
 
 import { useEffect, useState } from 'react';
 import useTheme from '@hooks/useTheme';
 import useRecord from '@app/core/hooks/Task/PosTask/useRecord';
-import { useNavigation } from '@react-navigation/native';
-import usePosTaskQuestion from '@app/core/hooks/Task/PosTask/usePosTaskQuestion';
 import useTime from '@hooks/useTime';
 import useTaskContext from '@app/core/hooks/Task/useTaskContext';
-import { usePosTaskContext } from '@app/core/hooks/Task/PosTask/usePosTaskContext';
+import useTextToSpeech from '@app/core/hooks/useTextToSpeech';
 
 import { Theme } from '@theme';
+import { PosTaskQuestion } from '@app/shared/interfaces/PosTaskQuestion.interface';
+import usePosTask from '@app/core/hooks/Task/PosTask/usePosTask';
 
 interface Props {
 	route: any;
 }
 
 const SelectAndSpeaking = ({ route }: Props) => {
-	const { taskOrder, questionOrder } = route.params;
-	const theme = useTheme();
+	const { question } = route.params as { question: PosTaskQuestion };
 	const { recording, done, finished, startRecording, stopRecording, audioUri } =
 		useRecord();
 	const [duration, setDuration] = useState<number | null>(null);
 	const [answered, setAnswered] = useState(false);
 	const [idOptionSelected, setIdOptionSelected] = useState<number>(1);
-	const navigation = useNavigation<any>();
-	const { data, getPosTaskQuestion, sendPosTaskAnswer } = usePosTaskQuestion();
+	const { taskOrder } = useTaskContext();
+	const { speak } = useTextToSpeech();
+	const { nextQuestion, sendPosTaskAnswer } = usePosTask();
 	const { startTimer, stopTimer, time } = useTime();
-	const { setProgress } = useTaskContext();
-	const { numQuestions } = usePosTaskContext();
+	const theme = useTheme();
 	const styles = getStyles(theme);
 
 	const handleOnPress = async () => {
@@ -55,31 +52,14 @@ const SelectAndSpeaking = ({ route }: Props) => {
 
 				await sendPosTaskAnswer({
 					taskOrder,
-					questionOrder,
-					body: { answerSeconds: time, idOption: idOptionSelected, audioUri }
+					questionOrder: question.questionOrder,
+					body: {
+						idOption: idOptionSelected,
+						answerSeconds: time,
+						audioUri,
+					}
 				});
-
-				if (questionOrder === numQuestions) {
-					navigation.reset({
-						index: 1,
-						routes: [{ name: 'Complete' }]
-					});
-				} else {
-					if (numQuestions)
-						setProgress((questionOrder + 1) / numQuestions);
-					navigation.reset({
-						index: 1,
-						routes: [
-							{
-								name: 'Question',
-								params: {
-									taskOrder: taskOrder,
-									questionOrder: questionOrder + 1
-								}
-							}
-						]
-					});
-				}
+				nextQuestion();
 			}
 		};
 
@@ -87,12 +67,9 @@ const SelectAndSpeaking = ({ route }: Props) => {
 	}, [done]);
 
 	useEffect(() => {
-		const initQuestion = async () => {
-			await getPosTaskQuestion({ taskOrder, questionOrder });
-			startTimer();
-		};
-
-		initQuestion();
+		AccessibilityInfo.announceForAccessibility(question.content);
+		speak(question.content, 'en');
+		startTimer();
 	}, []);
 
 	useEffect(() => {
@@ -110,12 +87,10 @@ const SelectAndSpeaking = ({ route }: Props) => {
 		};
 	}, [recording]);
 
-	if (!data) return <Placeholder />;
-
 	return (
 		<View style={styles.container}>
 			<QuestionComponent
-				question={data}
+				question={question}
 				setAnswered={setAnswered}
 				setIdOptionSelected={setIdOptionSelected}
 				answered={answered}

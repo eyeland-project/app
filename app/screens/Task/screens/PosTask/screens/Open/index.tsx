@@ -1,5 +1,4 @@
-import { View, Text, StyleSheet, TextInput } from 'react-native'
-import Placeholder from './components/Placeholder'
+import { View, Text, StyleSheet, TextInput, AccessibilityInfo } from 'react-native'
 import History from '@app/screens/Task/components/History'
 import Title from './components/Title'
 import * as Haptics from 'expo-haptics';
@@ -11,13 +10,16 @@ import Option from '@app/screens/Task/components/Option';
 import Modal from '@app/screens/Task/components/Modal';
 
 import useTheme from '@app/core/hooks/useTheme'
+import useTextToSpeech from '@app/core/hooks/useTextToSpeech';
 import useRecord from '@app/core/hooks/Task/PosTask/useRecord';
 import usePlaySound from '@app/core/hooks/usePlaySound';
+import usePosTask from '@app/core/hooks/Task/PosTask/usePosTask';
+import { useEffect, useState } from 'react'
+import useTaskContext from '@app/core/hooks/Task/useTaskContext';
+import useTime from '@app/core/hooks/useTime'
 
 import { Theme } from '@app/theme'
-import usePosTaskQuestion from '@app/core/hooks/Task/PosTask/usePosTaskQuestion'
-import { useEffect, useState } from 'react'
-import useTime from '@app/core/hooks/useTime'
+import { PosTaskQuestion } from '@app/shared/interfaces/PosTaskQuestion.interface';
 
 interface Props {
     route: any;
@@ -35,8 +37,7 @@ const CONFIRM_TEXT_STYLE_DEFAULT = (theme: Theme) => {
 };
 
 const Open = ({ route }: Props) => {
-    const { taskOrder, questionOrder } = route.params;
-    const { data, getPosTaskQuestion, sendPosTaskAnswer } = usePosTaskQuestion();
+    const { question } = route.params as { question: PosTaskQuestion };
     const [duration, setDuration] = useState<number | null>(null);
     const { startTimer, stopTimer, time } = useTime();
     const theme = useTheme()
@@ -44,6 +45,9 @@ const Open = ({ route }: Props) => {
     const [confirmTextStyle, setConfirmTextStyle] = useState(
         CONFIRM_TEXT_STYLE_DEFAULT(theme)
     );
+    const { speak } = useTextToSpeech();
+    const { taskOrder } = useTaskContext();
+    const { nextQuestion, sendPosTaskAnswer } = usePosTask();
     const playSoundSuccess = usePlaySound(require('@sounds/success.wav'));
     const playSoundWrong = usePlaySound(require('@sounds/wrong.wav'));
     const [answerType, setAnswerType] = useState<AnswerType>();
@@ -60,8 +64,7 @@ const Open = ({ route }: Props) => {
         if (textArea.length > 0) {
             playSoundSuccess();
             setConfirmContainerStyle({ backgroundColor: theme.colors.green });
-            // TODO - send anwer to server
-            // TODO - next question
+            sendAnswer();
         } else {
             playSoundWrong();
             setConfirmContainerStyle({ backgroundColor: theme.colors.red });
@@ -94,13 +97,28 @@ const Open = ({ route }: Props) => {
         setDuration(status?.durationMillis ?? null);
     };
 
-    useEffect(() => {
-        const initQuestion = async () => {
-            await getPosTaskQuestion({ taskOrder, questionOrder });
-            startTimer();
-        };
+    const sendAnswer = async () => {
+        stopTimer();
+        await sendPosTaskAnswer({
+            taskOrder,
+            questionOrder: question.questionOrder,
+            body: {
+                answerSeconds: time,
+                audioUri,
+                text: textArea
+            }
+        });
+        nextQuestion();
+    };
 
-        initQuestion();
+    useEffect(() => {
+        if (done) sendAnswer();
+    }, [done]);
+
+    useEffect(() => {
+        AccessibilityInfo.announceForAccessibility(question.content);
+        speak(question.content, 'en');
+        startTimer();
     }, [])
 
     useEffect(() => {
@@ -118,13 +136,12 @@ const Open = ({ route }: Props) => {
         };
     }, [recording]);
 
-    if (!data) return <Placeholder />;
 
     return (
         <>
             <View style={styles.container}>
-                <History history={data.content} character={data.character} />
-                <Title hint={data.hint} />
+                <History history={question.content} character={question.character} />
+                <Title hint={question.hint} />
                 {
                     answerType ? (
                         answerType === AnswerType.TEXT ? (

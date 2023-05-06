@@ -66,12 +66,11 @@ const usePosTaskQuestion = () => {
 					const audioBlob = await response.blob();
 					formData.append('audio', audioBlob, 'audio.m4a');
 				} else {
-					type putoTypescript = any;
 					formData.append('audio', {
 						uri: inputs.body.audioUri,
 						type: 'audio/m4a',
 						name: 'audio.m4a'
-					} as putoTypescript);
+					} as any);
 				}
 
 				formData.append('idOption', inputs.body.idOption.toString());

@@ -2,16 +2,29 @@ import {
 	Dispatch,
 	SetStateAction,
 	createContext,
-	useEffect,
 	useState
 } from 'react';
 import { PosTask } from '@interfaces/PosTask.interface';
 
-import usePosTask from '../hooks/Task/PosTask/usePosTask';
-import useTaskContext from '../hooks/Task/useTaskContext';
-
 interface PosTaskValues {
-	numQuestions: number | null;
+	data: PosTask | null;
+	setData: Dispatch<SetStateAction<PosTask | null>>;
+	index: number;
+	setIndex: Dispatch<SetStateAction<number>>;
 }
 
 export const PosTaskContext = createContext<PosTaskValues | null>(null);
+
+
+const PosTaskProvider = ({ children }: { children: React.ReactNode }) => {
+	const [data, setData] = useState<PosTask | null>(null);
+	const [index, setIndex] = useState<number>(0);
+
+	return (
+		<PosTaskContext.Provider value={{ data, setData, index, setIndex }}>
+			{children}
+		</PosTaskContext.Provider>
+	);
+};
+
+export default PosTaskProvider;

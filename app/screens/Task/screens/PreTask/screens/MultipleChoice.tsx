@@ -2,10 +2,8 @@ import {
 	View,
 	Text,
 	StyleSheet,
-	ImageBackground,
 	AccessibilityInfo,
 	Image,
-	ActivityIndicator
 } from 'react-native';
 import Instructions from '../components/Instructions';
 import Option from '@screens/Task/components/Option';
@@ -34,11 +32,11 @@ const MultipleChoice = ({ route }: Props) => {
 	const [optionIndex, setOptionIndex] = useState<number>(0);
 	const [loadingImage, setLoadingImage] = useState(true);
 	const [errorImage, setErrorImage] = useState(false);
-	const theme = useTheme();
 	const playSoundSuccess = usePlaySound(require('@sounds/success.wav'));
 	const playSoundWrong = usePlaySound(require('@sounds/wrong.wav'));
 	const { nextQuestion } = usePreTask();
 	const { speak } = useTextToSpeech();
+	const theme = useTheme();
 	const styles = getStyles(theme);
 
 	const onPressOption = (index: number, correct: boolean) => {

@@ -3,9 +3,9 @@ import useAuthStorage from '../../useAuthStorage';
 import axios from 'axios';
 
 import { environment } from '@environments/environment';
+import { errorHandler } from '../../../utils/errorHandler';
 
 import { PreTask } from '@interfaces/PreTask.interface';
-import { errorHandler } from '../../../utils/errorHandler';
 import { PreTaskTypeQuestion } from '@enums/PreTaskTypeQuestion.enum';
 import { PreTaskQuestion } from '@interfaces/PreTaskQuestion.interface';
 
