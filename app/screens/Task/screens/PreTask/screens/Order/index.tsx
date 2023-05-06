@@ -47,6 +47,7 @@ const Order = ({ route }: Props) => {
 	const { speak } = useTextToSpeech();
 	const { nextQuestion } = usePreTask();
 	const styles = getStyles(theme);
+
 	const correctOrder = question.options
 		.filter((option) => option.correct)[0]
 		.content.split(' ');

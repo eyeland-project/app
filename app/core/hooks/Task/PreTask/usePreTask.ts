@@ -125,6 +125,12 @@ const usePreTask = () => {
 				case PreTaskTypeQuestion.AUDIO_SPEAKING:
 					name = 'AudioSpeaking';
 					break;
+				case PreTaskTypeQuestion.ORDER_A_WORD:
+					name = 'OrderAWord';
+					break;
+				case PreTaskTypeQuestion.ORDER_A_WORD_AUDIO:
+					name = 'AudioOrderAWord';
+					break;
 				default:
 					console.error('No question type found');
 					break;

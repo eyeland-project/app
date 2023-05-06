@@ -9,6 +9,8 @@ import Order from './screens/Order';
 import AudioMultipleChoice from './screens/AudioMultipleChoice';
 import AudioOrder from './screens/AudioOrder';
 import AudioSpeaking from './screens/AudioSpeaking';
+import OrderAWord from './screens/OrderAWord';
+import AudioOrderAWord from './screens/AudioOrderAWord';
 import Complete from './screens/Complete';
 
 import PreTaskProvider from '@contexts/PreTaskContext';
@@ -28,7 +30,7 @@ const PreTask = ({ route }: Props) => {
 
 	return (
 		<PreTaskProvider>
-			<Stack.Navigator>
+			<Stack.Navigator initialRouteName='OrderAWord'>
 				<Stack.Screen
 					name="Loading"
 					options={{
@@ -108,6 +110,26 @@ const PreTask = ({ route }: Props) => {
 						question: null
 					}}
 					component={AudioSpeaking}
+				/>
+				<Stack.Screen
+					name="OrderAWord"
+					options={{
+						...optionsPrimary
+					}}
+					initialParams={{
+						question: null
+					}}
+					component={OrderAWord}
+				/>
+				<Stack.Screen
+					name="AudioOrderAWord"
+					options={{
+						...optionsPrimary
+					}}
+					initialParams={{
+						question: null
+					}}
+					component={AudioOrderAWord}
 				/>
 				<Stack.Screen
 					name="Complete"
