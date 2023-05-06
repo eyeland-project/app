@@ -2,7 +2,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 
 import Complete from './screens/Complete';
-import Question from './screens/Question';
+import SelectAndSpeaking from './screens/SelectAndSpeaking';
+import Open from './screens/Open';
 
 import { PosTaskContext } from '@contexts/PosTaskContext';
 
@@ -39,9 +40,9 @@ const PosTask = ({ route }: Props) => {
 
 	return (
 		<PosTaskContext.Provider value={{ numQuestions }}>
-			<Stack.Navigator>
+			<Stack.Navigator initialRouteName='Open'>
 				<Stack.Screen
-					name="Question"
+					name="SelectAndSpeaking"
 					options={{
 						...optionsPrimary
 					}}
@@ -49,7 +50,18 @@ const PosTask = ({ route }: Props) => {
 						taskOrder: route.params.taskOrder,
 						questionOrder: route.params.questionOrder
 					}}
-					component={Question}
+					component={SelectAndSpeaking}
+				/>
+				<Stack.Screen
+					name="Open"
+					options={{
+						...optionsPrimary
+					}}
+					initialParams={{
+						taskOrder: route.params.taskOrder,
+						questionOrder: route.params.questionOrder
+					}}
+					component={Open}
 				/>
 				<Stack.Screen
 					name="Complete"

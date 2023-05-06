@@ -4,11 +4,11 @@ import QuestionComponent from './components/Question';
 import Title from './components/Title';
 import Placeholder from './components/Placeholder';
 
+
 import { useEffect, useState } from 'react';
 import useTheme from '@hooks/useTheme';
 import useRecord from '@app/core/hooks/Task/PosTask/useRecord';
 import { useNavigation } from '@react-navigation/native';
-import usePosTask from '@app/core/hooks/Task/PosTask/usePosTask';
 import usePosTaskQuestion from '@app/core/hooks/Task/PosTask/usePosTaskQuestion';
 import useTime from '@hooks/useTime';
 import useTaskContext from '@app/core/hooks/Task/useTaskContext';
@@ -20,7 +20,7 @@ interface Props {
 	route: any;
 }
 
-const Question = ({ route }: Props) => {
+const SelectAndSpeaking = ({ route }: Props) => {
 	const { taskOrder, questionOrder } = route.params;
 	const theme = useTheme();
 	const { recording, done, finished, startRecording, stopRecording, audioUri } =
@@ -29,12 +29,10 @@ const Question = ({ route }: Props) => {
 	const [answered, setAnswered] = useState(false);
 	const [idOptionSelected, setIdOptionSelected] = useState<number>(1);
 	const navigation = useNavigation<any>();
-	const { data, loading, error, getPosTaskQuestion, sendPosTaskAnswer } =
-		usePosTaskQuestion();
+	const { data, getPosTaskQuestion, sendPosTaskAnswer } = usePosTaskQuestion();
 	const { startTimer, stopTimer, time } = useTime();
-	const { setIcon, setProgress } = useTaskContext();
+	const { setProgress } = useTaskContext();
 	const { numQuestions } = usePosTaskContext();
-	const { data: generalData, getPosTask } = usePosTask();
 	const styles = getStyles(theme);
 
 	const handleOnPress = async () => {
@@ -92,11 +90,10 @@ const Question = ({ route }: Props) => {
 		const initQuestion = async () => {
 			await getPosTaskQuestion({ taskOrder, questionOrder });
 			startTimer();
-			setIcon('closecircle');
 		};
 
 		initQuestion();
-	}, [questionOrder]);
+	}, []);
 
 	useEffect(() => {
 		let intervalId: NodeJS.Timeout | null = null;
@@ -168,4 +165,4 @@ const getStyles = (theme: Theme) =>
 		}
 	});
 
-export default Question;
+export default SelectAndSpeaking;

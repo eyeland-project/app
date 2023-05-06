@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet } from 'react-native';
 import Pressable from '@components/Pressable';
 import Option from './Option';
+import History from '@screens/Task/components/History';
 
 import useTheme from '@hooks/useTheme';
 
@@ -26,7 +27,8 @@ const Question = ({
 
 	return (
 		<View>
-			<Text style={styles.question}>{question.content}</Text>
+			<History character={question.character} history={question.content} />
+			{/* <Text style={styles.question}>{question.content}</Text> */}
 			<View style={styles.optionsContainer}>
 				{question.options.slice(0, 2).map((option) => (
 					<Option

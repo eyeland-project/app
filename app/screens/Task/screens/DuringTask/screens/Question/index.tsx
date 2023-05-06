@@ -3,7 +3,7 @@ import Query from './components/Query';
 import Option from '@screens/Task/components/Option';
 import Placeholder from './components/Placeholder';
 import PositionBar from './components/PositionBar';
-import History from './components/History';
+import History from '../../../../components/History';
 
 import { useState, useEffect } from 'react';
 import useTheme from '@hooks/useTheme';
