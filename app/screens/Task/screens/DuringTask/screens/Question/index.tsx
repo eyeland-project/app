@@ -16,6 +16,7 @@ import { useNavigation } from '@react-navigation/native';
 import { SocketEvents } from '@enums/SocketEvents.enum';
 
 import { Theme } from '@theme';
+import { Character } from '@app/shared/enums/Character.enum';
 
 interface Props {
 	route: any;
@@ -144,7 +145,7 @@ const Question = ({ route }: Props) => {
 		<View style={styles.container}>
 			<PositionBar groupName={team?.name} position={position} />
 			{
-				history ? <History history={history} /> : <View style={{ height: 20 }} />
+				history ? <History history={history} character={data.character} /> : <View style={{ height: 20 }} />
 			}
 			<Query
 				text={question}

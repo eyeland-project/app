@@ -2,25 +2,41 @@ import { View, Text, StyleSheet, Platform } from 'react-native'
 import LottieView from 'lottie-react-native';
 
 import useTheme from '@app/core/hooks/useTheme'
-import useMediaQuery from '@app/core/hooks/useMediaQuery';
+import { Character } from '@app/shared/enums/Character.enum';
 
 import { Theme } from '@theme'
 
 interface Props {
-    history: string
+    history: string,
+    character: Character,
 }
 
-const History = ({ history }: Props) => {
+const History = ({ history, character }: Props) => {
     const theme = useTheme()
     const isWeb = Platform.OS === 'web'
-    const styles = getStyles(theme, isWeb)
+    const styles = getStyles(theme, isWeb, character)
+
+    const getPerson = () => {
+        switch (character) {
+            case Character.ALEX:
+                return require('@animations/alex.json')
+            case Character.BETO:
+                return require('@animations/beto.json')
+            case Character.CHUCHO:
+                return require('@animations/chucho.json')
+            case Character.VALERY:
+                return require('@animations/valery.json')
+            default:
+                return require('@animations/alex.json')
+        }
+    }
 
     return (
         <View style={styles.history}>
             {
                 !isWeb && (
                     <LottieView
-                        source={require('@animations/person.json')}
+                        source={getPerson()}
                         autoPlay
                         loop
                         style={styles.person}
@@ -37,18 +53,19 @@ const History = ({ history }: Props) => {
     )
 }
 
-const getStyles = (theme: Theme, isWeb: boolean) => StyleSheet.create({
+const getStyles = (theme: Theme, isWeb: boolean, character: Character) => StyleSheet.create({
     history: {
         flexDirection: 'row',
-        alignItems: 'center',
+        // alignItems: 'center',
         justifyContent: 'center',
-        marginEnd: 20,
+        marginEnd: 40,
+        marginBottom: 10,
         marginStart: isWeb ? 20 : 0,
     },
     person: {
         width: 110,
         height: 110,
-        // marginLeft: 10,
+        marginLeft: character === Character.CHUCHO ? 10 : 0,
     },
     dialog: {
         flex: 1,
@@ -58,6 +75,7 @@ const getStyles = (theme: Theme, isWeb: boolean) => StyleSheet.create({
         padding: 15,
         marginTop: 20,
         marginBottom: 20,
+        marginLeft: character !== Character.CHUCHO ? 20 : 0,
     },
     dialogTriangle: {
         width: 0,

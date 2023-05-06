@@ -1,3 +1,4 @@
+import { Character } from "../enums/Character.enum";
 export interface DuringTaskQuestion {
 	id: number;
 	content: string;
@@ -6,6 +7,7 @@ export interface DuringTaskQuestion {
 	imgAlt: string;
 	imgUrl: string;
 	audioUrl: string;
+	character: Character;
 	videoUrl: string;
 	nounTranslation: string[];
 	prepositionTranslation: string[];
