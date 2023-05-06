@@ -183,7 +183,8 @@ const getStyles = (theme: Theme) =>
             marginHorizontal: 20,
             height: 200,
             borderRadius: theme.borderRadius.medium,
-            overflow: 'hidden'
+            overflow: 'hidden',
+            marginBottom: 20
         },
         image: {
             width: '100%',
