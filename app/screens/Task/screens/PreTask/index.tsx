@@ -30,7 +30,7 @@ const PreTask = ({ route }: Props) => {
 
 	return (
 		<PreTaskProvider>
-			<Stack.Navigator initialRouteName='OrderAWord'>
+			<Stack.Navigator>
 				<Stack.Screen
 					name="Loading"
 					options={{
