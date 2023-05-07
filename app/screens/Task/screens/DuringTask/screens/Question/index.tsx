@@ -1,11 +1,14 @@
-import { View, StyleSheet, Image, ToastAndroid } from 'react-native';
+import { View, StyleSheet, Image, ToastAndroid, Platform } from 'react-native';
 import Query from './components/Query';
 import Option from '@screens/Task/components/Option';
 import Placeholder from './components/Placeholder';
 import PositionBar from './components/PositionBar';
 import History from '../../../../components/History';
+import LottieView from 'lottie-react-native';
+import { AntDesign } from '@expo/vector-icons';
 
-import { useState, useEffect } from 'react';
+import useMediaQuery from '@app/core/hooks/useMediaQuery';
+import { useState, useEffect, useRef } from 'react';
 import useTheme from '@hooks/useTheme';
 import usePlaySound from '@hooks/usePlaySound';
 import useTime from '@hooks/useTime';
@@ -17,6 +20,7 @@ import { SocketEvents } from '@enums/SocketEvents.enum';
 
 import { Theme } from '@theme';
 import { Character } from '@app/shared/enums/Character.enum';
+import Pressable from '@app/shared/components/Pressable';
 
 interface Props {
 	route: any;
@@ -36,8 +40,11 @@ const Question = ({ route }: Props) => {
 		getDuringTaskQuestion,
 		sendDuringTaskAnswer
 	} = useDuringTaskQuestion();
-	const { power, socket, team, position, setPosition } =
-		useDuringTaskContext();
+	const playSoundAnimal = usePlaySound({ uri: data?.audioUrl });
+	const animationsRef = useRef<LottieView[]>([]);
+	const { power, socket, team, position, setPosition } = useDuringTaskContext();
+	const currentPlatform = Platform.OS;
+	const { isPhone, isTablet, isDesktop } = useMediaQuery();
 	const playSoundSuccess = usePlaySound(require('@sounds/success.wav'));
 	const playSoundWrong = usePlaySound(require('@sounds/wrong.wav'));
 	const styles = getStyles(theme);
@@ -83,6 +90,10 @@ const Question = ({ route }: Props) => {
 			taskOrder,
 		});
 
+	};
+
+	const onPressPlayAudio = () => {
+		if (data?.audioUrl) playSoundAnimal();
 	};
 
 	useEffect(() => {
@@ -170,6 +181,42 @@ const Question = ({ route }: Props) => {
 				/>
 			</View>
 
+			{
+				data.audioUrl && (
+					<Pressable
+						style={styles.playerContainer}
+						onPress={onPressPlayAudio}
+					>
+						<AntDesign
+							name="caretright"
+							size={30}
+							color={theme.colors.black}
+						/>
+						<View style={styles.animationContainer}>
+							{
+								currentPlatform !== 'web' && (
+									[...Array(isPhone ? 4 : isTablet ? 8 : 16)].map((_, index) => {
+										return (
+											<LottieView
+												key={index}
+												ref={(animation) => {
+													if (animation)
+														animationsRef.current[index] =
+															animation;
+												}}
+												source={require('@animations/audioWave.json')}
+												loop={false}
+												style={styles.animation}
+											/>
+										);
+									})
+								)
+							}
+						</View>
+					</Pressable>
+				)
+			}
+
 			<View style={styles.optionsContainer}>
 				<Option
 					text={data.options[0].content}
@@ -227,6 +274,24 @@ const getStyles = (theme: Theme) =>
 			textAlign: 'center',
 			marginTop: 20
 		},
+		playerContainer: {
+			height: 55,
+			backgroundColor: theme.colors.white,
+			borderRadius: theme.borderRadius.medium,
+			marginBottom: 20,
+			marginHorizontal: 20,
+			paddingHorizontal: 10,
+			flexDirection: 'row',
+			justifyContent: 'space-between',
+			alignItems: 'center',
+			...theme.shadow
+		},
+		animationContainer: {
+			flexDirection: 'row'
+		},
+		animation: {
+			height: 72
+		}
 	});
 
 export default Question;
