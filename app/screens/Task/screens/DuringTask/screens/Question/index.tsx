@@ -19,7 +19,6 @@ import { useNavigation } from '@react-navigation/native';
 import { SocketEvents } from '@enums/SocketEvents.enum';
 
 import { Theme } from '@theme';
-import { Character } from '@app/shared/enums/Character.enum';
 import Pressable from '@app/shared/components/Pressable';
 
 interface Props {
@@ -161,8 +160,8 @@ const Question = ({ route }: Props) => {
 			<Query
 				text={question}
 				power={power}
-				nounTranslations={data.nounTranslation}
-				prepositionTranslations={data.prepositionTranslation}
+				nounTranslations={data.memoryPro}
+				prepositionTranslations={data.superRadar}
 				imgAlt={data.imgAlt}
 			/>
 			<View style={styles.imageContainer} accessible={true} accessibilityLabel={'Imagen de la pregunta'} accessibilityHint={`Super hearing: ${data.imgAlt}`}>

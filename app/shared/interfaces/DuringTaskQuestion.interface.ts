@@ -9,8 +9,8 @@ export interface DuringTaskQuestion {
 	audioUrl: string;
 	character: Character;
 	videoUrl: string;
-	nounTranslation: string[];
-	prepositionTranslation: string[];
+	memoryPro: string[];
+	superRadar: string[];
 	options: {
 		id: number;
 		content: string;
