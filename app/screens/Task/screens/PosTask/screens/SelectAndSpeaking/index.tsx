@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, AccessibilityInfo } from 'react-native';
+import { View, Text, StyleSheet, AccessibilityInfo, ScrollView } from 'react-native';
 import Record from './components/Record';
 import QuestionComponent from './components/Question';
 import Title from './components/Title';
@@ -86,7 +86,7 @@ const SelectAndSpeaking = ({ route }: Props) => {
 	}, [recording]);
 
 	return (
-		<View style={styles.container}>
+		<ScrollView style={styles.container}>
 			<QuestionComponent
 				question={question}
 				setAnswered={setAnswered}
@@ -110,7 +110,7 @@ const SelectAndSpeaking = ({ route }: Props) => {
 				</Text>
 			</View>
 			<View></View>
-		</View>
+		</ScrollView>
 	);
 };
 

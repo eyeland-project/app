@@ -88,7 +88,7 @@ const getStyles = (theme: Theme) =>
 			height: 'auto',
 			borderRadius: theme.borderRadius.medium,
 			paddingHorizontal: 10,
-			paddingVertical: 5
+			paddingVertical: 5,
 		},
 		triangle: {
 			position: 'absolute',

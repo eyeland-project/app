@@ -264,7 +264,7 @@ const getStyles = (theme: Theme) =>
 			height: '100%'
 		},
 		optionsContainer: {
-			marginTop: 40
+			marginTop: 20
 		},
 		errorMessage: {
 			fontSize: theme.fontSize.large,
@@ -276,10 +276,11 @@ const getStyles = (theme: Theme) =>
 		},
 		playerContainer: {
 			height: 55,
+			marginTop: -60,
 			backgroundColor: theme.colors.white,
 			borderRadius: theme.borderRadius.medium,
 			marginBottom: 20,
-			marginHorizontal: 20,
+			marginHorizontal: 25,
 			paddingHorizontal: 10,
 			flexDirection: 'row',
 			justifyContent: 'space-between',

@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TextInput, AccessibilityInfo } from 'react-native'
+import { View, Text, StyleSheet, TextInput, AccessibilityInfo, ScrollView } from 'react-native'
 import History from '@app/screens/Task/components/History'
 import Title from './components/Title'
 import * as Haptics from 'expo-haptics';
@@ -137,84 +137,86 @@ const Open = ({ route }: Props) => {
 
     return (
         <>
-            <View style={styles.container}>
+            <ScrollView style={styles.container}>
                 <History history={question.content} character={question.character} />
-                <Title hint={question.hint} />
-                {
-                    answerType ? (
-                        answerType === AnswerType.TEXT ? (
-                            <View style={styles.writeContainer}>
-                                <TextInput
-                                    multiline={true}
-                                    numberOfLines={4}
-                                    onChangeText={(text) => setTextArea(text)}
-                                    value={textArea}
-                                    style={styles.textArea}
-                                />
-                                <View>
-                                    <Option
-                                        text="Confirmar"
-                                        onPress={() => {
-                                            onPressConfirm();
-                                        }}
-                                        containerStyle={confirmContainerStyle}
-                                        textStyle={confirmTextStyle}
+                <View style={{ flexDirection: 'column-reverse' }}>
+                    {
+                        answerType ? (
+                            answerType === AnswerType.TEXT ? (
+                                <View style={styles.writeContainer}>
+                                    <TextInput
+                                        multiline={true}
+                                        numberOfLines={4}
+                                        onChangeText={(text) => setTextArea(text)}
+                                        value={textArea}
+                                        style={styles.textArea}
                                     />
-                                    <View style={styles.safeSpace} />
+                                    <View>
+                                        <Option
+                                            text="Confirmar"
+                                            onPress={() => {
+                                                onPressConfirm();
+                                            }}
+                                            containerStyle={confirmContainerStyle}
+                                            textStyle={confirmTextStyle}
+                                        />
+                                        <View style={styles.safeSpace} />
+                                    </View>
                                 </View>
-                            </View>
+                            ) : (
+                                <View style={styles.recordContainer}>
+                                    <Record
+                                        blocked={false}
+                                        recording={recording}
+                                        done={done}
+                                        finished={finished}
+                                        onPress={handleOnPress}
+                                    />
+                                    <Text style={styles.subtitle}>
+                                        {recording &&
+                                            `Grabando... ${Math.floor(
+                                                (duration as number) / 1000
+                                            )} segundos`}
+                                    </Text>
+                                </View>
+                            )
                         ) : (
-                            <View style={styles.recordContainer}>
-                                <Record
-                                    blocked={false}
-                                    recording={recording}
-                                    done={done}
-                                    finished={finished}
-                                    onPress={handleOnPress}
-                                />
-                                <Text style={styles.subtitle}>
-                                    {recording &&
-                                        `Grabando... ${Math.floor(
-                                            (duration as number) / 1000
-                                        )} segundos`}
-                                </Text>
+                            <View style={styles.answerContainer}>
+                                <Pressable
+                                    style={styles.chooseButton}
+                                    accessible={true}
+                                    accessibilityLabel="Responder con voz"
+                                    accessibilityHint="Presiona para responder con voz"
+                                    accessibilityRole="button"
+                                    onPress={() => putAnswerType(AnswerType.VOICE)}
+                                >
+                                    <FontAwesome5
+                                        name='microphone'
+                                        size={60}
+                                        color={'white'}
+                                        accessible={false}
+                                    />
+                                </Pressable>
+                                <Pressable
+                                    style={styles.chooseButton}
+                                    accessible={true}
+                                    accessibilityLabel="Responder con texto"
+                                    accessibilityHint="Presiona para responder con texto"
+                                    accessibilityRole="button"
+                                    onPress={() => putAnswerType(AnswerType.TEXT)}
+                                >
+                                    <Entypo
+                                        name="pencil"
+                                        size={60}
+                                        color="white"
+                                    />
+                                </Pressable>
                             </View>
                         )
-                    ) : (
-                        <View style={styles.answerContainer}>
-                            <Pressable
-                                style={styles.chooseButton}
-                                accessible={true}
-                                accessibilityLabel="Responder con voz"
-                                accessibilityHint="Presiona para responder con voz"
-                                accessibilityRole="button"
-                                onPress={() => putAnswerType(AnswerType.VOICE)}
-                            >
-                                <FontAwesome5
-                                    name='microphone'
-                                    size={60}
-                                    color={'white'}
-                                    accessible={false}
-                                />
-                            </Pressable>
-                            <Pressable
-                                style={styles.chooseButton}
-                                accessible={true}
-                                accessibilityLabel="Responder con texto"
-                                accessibilityHint="Presiona para responder con texto"
-                                accessibilityRole="button"
-                                onPress={() => putAnswerType(AnswerType.TEXT)}
-                            >
-                                <Entypo
-                                    name="pencil"
-                                    size={60}
-                                    color="white"
-                                />
-                            </Pressable>
-                        </View>
-                    )
-                }
-            </View>
+                    }
+                    <Title hint={question.hint} />
+                </View>
+            </ScrollView>
             <Modal
                 showModal={showModal}
                 closeModal={() => {
@@ -276,6 +278,7 @@ const getStyles = (theme: Theme) =>
             textAlignVertical: 'top',
             textAlign: 'left',
             fontSize: theme.fontSize.medium,
+            color: theme.colors.black,
             fontFamily: theme.fontWeight.regular,
             letterSpacing: theme.spacing.medium,
         },

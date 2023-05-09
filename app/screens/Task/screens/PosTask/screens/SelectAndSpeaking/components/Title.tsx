@@ -52,7 +52,7 @@ const Title = () => {
 							<Text style={{ color: theme.colors.red }}>
 								Recuerda:
 							</Text>{' '}
-							El audio debe durar más de 20 segundos
+							El audio debe durar más de 5 segundos
 						</Text>
 					</View>
 				)}
