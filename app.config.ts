@@ -19,6 +19,9 @@ const config: ExpoConfig = {
 			foregroundImage: './assets/adaptive-icon.png'
 		}
 	},
+	web: {
+		favicon: './assets/icons/appIcon.png'
+	},
 	extra: {
 		eas: {
 			projectId: '02601ea0-08c9-4e35-ad4e-9e6778900455'
