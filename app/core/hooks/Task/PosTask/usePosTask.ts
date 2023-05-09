@@ -161,9 +161,34 @@ const usePosTask = () => {
 		}, 250);
 	};
 
+	const setPosTaskComplete = useCallback(async (inputs: { taskOrder: number }) => {
+		setError(null);
+		setLoading(true);
+		try {
+			const response = await axios.post(
+				`${environment.apiUrl}/tasks/${inputs.taskOrder}/postask/complete`,
+				{},
+				{
+					headers: {
+						Authorization: `Bearer ${await authStorage.getAccessToken()}`
+					}
+				}
+			);
+
+			if (response.status === 200) {
+				setLoading(false);
+				return response.data;
+			} else {
+				throw new Error(response.data);
+			}
+		} catch (err: any) {
+			setLoading(false);
+			setError(errorHandler(err, errors));
+		}
+	}, []);
 
 
-	return { loading, error, data, getPosTask, sendPosTaskAnswer, nextQuestion };
+	return { loading, error, data, getPosTask, setPosTaskComplete, sendPosTaskAnswer, nextQuestion };
 };
 
 export default usePosTask;

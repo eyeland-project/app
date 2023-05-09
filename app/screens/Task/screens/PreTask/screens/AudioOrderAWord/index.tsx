@@ -62,7 +62,7 @@ const AudioOrderAWord = ({ route }: Props) => {
 
     const onPressConfirm = () => {
         const isCorrect = answerList.every(
-            (answer, index) => answer === correctOrder[index]
+            (answer, index) => answer.toLowerCase() === correctOrder[index].toLowerCase()
         );
 
         if (isCorrect) {

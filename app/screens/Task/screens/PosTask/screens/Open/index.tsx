@@ -116,8 +116,6 @@ const Open = ({ route }: Props) => {
     }, [done]);
 
     useEffect(() => {
-        AccessibilityInfo.announceForAccessibility(question.content);
-        speak(question.content, 'en');
         startTimer();
     }, [])
 

@@ -92,7 +92,7 @@ const getStyles = (theme: Theme, isWeb: boolean, character: Character) => StyleS
         transform: [
             { rotate: '-90deg' }
         ],
-        bottom: 5,
+        top: 5,
         left: -15,
     },
     text: {

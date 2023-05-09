@@ -1,4 +1,4 @@
-import { View, StyleSheet, Image, ToastAndroid, Platform } from 'react-native';
+import { View, StyleSheet, Image, ToastAndroid, Platform, ScrollView } from 'react-native';
 import Query from './components/Query';
 import Option from '@screens/Task/components/Option';
 import Placeholder from './components/Placeholder';
@@ -152,7 +152,7 @@ const Question = ({ route }: Props) => {
 	const history = data.content.indexOf('\\') > -1 ? data.content.split('\\')[0] : null;
 
 	return (
-		<View style={styles.container}>
+		<ScrollView style={styles.container}>
 			<PositionBar groupName={team?.name} position={position} />
 			{
 				history ? <History history={history} character={data.character} /> : <View style={{ height: 20 }} />
@@ -242,7 +242,8 @@ const Question = ({ route }: Props) => {
 					textStyle={textStyleOptions[1]}
 				/>
 			</View>
-		</View>
+			<View style={{ height: 80 }} />
+		</ScrollView>
 	);
 };
 

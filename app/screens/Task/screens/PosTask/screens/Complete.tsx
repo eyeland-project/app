@@ -3,16 +3,18 @@ import LottieView from 'lottie-react-native';
 import Option from '@screens/Task/components/Option';
 
 import { useEffect } from 'react';
-import useTaskContext from '@app/core/hooks/Task/useTaskContext';
+import useTaskContext from '@hooks/Task/useTaskContext';
 import useTheme from '@hooks/useTheme';
 import { useNavigation } from '@react-navigation/native';
-import usePlaySound from '@app/core/hooks/usePlaySound';
+import usePlaySound from '@hooks/usePlaySound';
+import usePosTask from '@hooks/Task/PosTask/usePosTask';
 
 import { Theme } from '@theme';
 
 const Complete = () => {
 	const theme = useTheme();
 	const { taskOrder } = useTaskContext();
+	const { setPosTaskComplete } = usePosTask();
 	const navigation = useNavigation<any>();
 	const playSoundSuccess = usePlaySound(require('@sounds/complete.wav'));
 	const styles = getStyles(theme);
@@ -26,6 +28,7 @@ const Complete = () => {
 	};
 
 	useEffect(() => {
+		setPosTaskComplete({ taskOrder });
 		playSoundSuccess();
 	}, []);
 

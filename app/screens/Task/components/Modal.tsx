@@ -64,6 +64,7 @@ const getStyles = (theme: Theme) =>
 			backgroundColor: theme.colors.white,
 			borderRadius: theme.borderRadius.medium,
 			paddingHorizontal: 20,
+			marginHorizontal: 20,
 			paddingVertical: 10
 		},
 		modalTitleText: {
