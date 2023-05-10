@@ -31,6 +31,7 @@ const Question = ({ route }: Props) => {
 	const navigation = useNavigation<any>();
 	const [containerStyleOptions, setContainerStyleOptions] = useState([{}]);
 	const [textStyleOptions, setTextStyleOptions] = useState([{}]);
+	const [answered, setAnswered] = useState(false);
 	const { time, startTimer, stopTimer } = useTime();
 	const {
 		data,
@@ -53,6 +54,9 @@ const Question = ({ route }: Props) => {
 		correct: boolean,
 		id: number
 	) => {
+		if (answered) return;
+
+		setAnswered(true);
 		const newContainerStyleOptions = [...containerStyleOptions];
 		const newTextStyleOptions = [...textStyleOptions];
 

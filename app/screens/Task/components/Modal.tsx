@@ -23,19 +23,35 @@ const Modal = ({ showModal, correct, closeModal, help }: Props) => {
 			transparent={true}
 			visible={showModal}
 			onRequestClose={closeModal}
+			accessible={true}
+			accessibilityLabel="Retroalimentación"
 		>
 			<View style={styles.modalContainer}>
 				<View style={styles.modalView}>
-					<Text style={styles.modalTitleText}>
-						{correct
-							? '¡Respuesta correcta! '
-							: '¡Respuesta incorrecta!'}
+					<Text
+						style={styles.modalTitleText}
+						accessible={true}
+						accessibilityLabel={correct ? 'Respuesta correcta' : 'Respuesta incorrecta'}
+					>
+						{correct ? '¡Respuesta correcta! ' : '¡Respuesta incorrecta!'}
 					</Text>
 					<View style={styles.helpContainer}>
 						<View style={styles.iconContainer}>
-							<Text style={styles.iconText}>Ayuda:</Text>
+							<Text
+								style={styles.iconText}
+								accessible={true}
+								accessibilityLabel="Ayuda"
+							>
+								Ayuda:
+							</Text>
 						</View>
-						<Text style={styles.helpText}>{help}</Text>
+						<Text
+							style={styles.helpText}
+							accessible={true}
+							accessibilityLabel={`Texto de ayuda: ${help}`}
+						>
+							{help}
+						</Text>
 					</View>
 					<Option
 						text="Reintentar"
