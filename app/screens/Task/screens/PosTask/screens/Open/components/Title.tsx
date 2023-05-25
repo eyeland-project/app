@@ -25,8 +25,8 @@ const Title = ({ hint }: Props) => {
 
 	return (
 		<View style={styles.titleContainer}>
-			<Text style={styles.title} accessibilityLabel="Grabación">
-				Grabación
+			<Text style={styles.title} accessibilityLabel="Respuesta">
+				Repuesta
 			</Text>
 			{
 				hint && (

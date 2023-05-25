@@ -16,28 +16,29 @@ interface Props {
     blocked: boolean;
     minimumTime: number;
     setRecorded: (recorded: boolean) => void;
+    setRecording: (recording: string) => void;
 }
 
-function Record({ blocked, minimumTime, setRecorded }: Props) {
+function Record({ blocked, minimumTime, setRecorded, setRecording }: Props) {
     const theme = useTheme();
     const styles = getStyles(theme, blocked);
-    const { recording, done, finished, startRecording, stopRecording, reset } = useRecord();
+    const { recording, done, finished, startRecording, stopRecording, reset, playAudio, audioUri, playingAudio } = useRecord();
     const [duration, setDuration] = useState<number | null>(null);
     const scaleValue = useRef(new Animated.Value(1)).current;
 
     const accessibilityLabel = useMemo(() => {
-        if (blocked) return 'Debes contestar la pregunta primero';
+        if (blocked) { return 'Debes contestar la pregunta primero' };
         if (recording) return 'Detener grabación';
         if (done) return 'Repita la grabación';
         if (finished) return 'Finalizado';
         return 'Iniciar grabación';
     }, [blocked, recording, done, finished])
 
-    const handleOnPress = () => {
+    const handleOnPress = async () => {
         if (recording) {
             stopRecording(minimumTime);
         } else if (done) {
-            // TODO - Repetir grabación
+            playAudio();
         } else {
             startRecording();
         }
@@ -57,6 +58,7 @@ function Record({ blocked, minimumTime, setRecorded }: Props) {
         let intervalId: NodeJS.Timeout | null = null;
 
         if (recording) {
+            ToastAndroid.show('Grabando', ToastAndroid.SHORT);
             getTime();
             intervalId = setInterval(() => {
                 getTime();
@@ -71,7 +73,7 @@ function Record({ blocked, minimumTime, setRecorded }: Props) {
     }, [recording]);
 
     useEffect(() => {
-        if (recording) {
+        if (recording || playingAudio) {
             Animated.loop(
                 Animated.sequence([
                     Animated.timing(scaleValue, {
@@ -89,11 +91,12 @@ function Record({ blocked, minimumTime, setRecorded }: Props) {
         } else {
             scaleValue.setValue(1);
         }
-    }, [recording, scaleValue]);
+    }, [recording, scaleValue, playingAudio]);
 
     useEffect(() => {
         if (done) {
             setRecorded(true);
+            setRecording(audioUri);
         } else {
             setRecorded(false);
         }
@@ -102,7 +105,7 @@ function Record({ blocked, minimumTime, setRecorded }: Props) {
     return (
         <View>
             <View style={styles.row}>
-                <View style={{ marginRight: 80 }}></View>
+                <View style={{ marginRight: 55 }}></View>
                 <Animated.View
                     style={[
                         getStyles(theme, blocked).containerPulse,

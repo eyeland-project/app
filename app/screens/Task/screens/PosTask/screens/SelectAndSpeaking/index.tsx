@@ -1,14 +1,13 @@
-import { View, Text, StyleSheet, AccessibilityInfo, ScrollView } from 'react-native';
-import Record from './components/Record';
+import { View, StyleSheet, ScrollView, ToastAndroid } from 'react-native';
+import Record from '@app/screens/Task/components/Record';
 import QuestionComponent from './components/Question';
+import Option from '@app/screens/Task/components/Option';
 import Title from './components/Title';
 
 import { useEffect, useState } from 'react';
 import useTheme from '@hooks/useTheme';
-import useRecord from '@app/core/hooks/Task/PosTask/useRecord';
 import useTime from '@hooks/useTime';
 import useTaskContext from '@app/core/hooks/Task/useTaskContext';
-import useTextToSpeech from '@app/core/hooks/useTextToSpeech';
 
 import { Theme } from '@theme';
 import { PosTaskQuestion } from '@app/shared/interfaces/PosTaskQuestion.interface';
@@ -20,70 +19,42 @@ interface Props {
 
 const SelectAndSpeaking = ({ route }: Props) => {
 	const { question } = route.params as { question: PosTaskQuestion };
-	const { recording, done, finished, startRecording, stopRecording, audioUri } =
-		useRecord();
-	const [duration, setDuration] = useState<number | null>(null);
 	const [answered, setAnswered] = useState(false);
 	const [idOptionSelected, setIdOptionSelected] = useState<number>(1);
 	const { taskOrder } = useTaskContext();
-	const { speak } = useTextToSpeech();
 	const { nextQuestion, sendPosTaskAnswer } = usePosTask();
 	const { startTimer, stopTimer, time } = useTime();
+	const [recorded, setRecorded] = useState(false);
+	const [recording, setRecording] = useState<string>();
 	const theme = useTheme();
 	const styles = getStyles(theme);
 
-	const handleOnPress = async () => {
-		if (recording) {
-			await stopRecording(5000);
-		} else {
-			await startRecording();
-		}
-	};
+	const handlePressConfirm = async () => {
+		if (!answered) return;
+		if (!recorded) return;
 
-	const getTime = async () => {
-		const status = await recording?.getStatusAsync();
-		setDuration(status?.durationMillis ?? null);
-	};
+		await sendPosTaskAnswer({
+			taskOrder,
+			questionOrder: question.questionOrder,
+			body: {
+				idOption: idOptionSelected,
+				answerSeconds: time,
+				audioUri: recording,
+			}
+		});
+		nextQuestion();
+
+	}
 
 	useEffect(() => {
-		const sendAnswer = async () => {
-			if (done) {
-				stopTimer();
-
-				await sendPosTaskAnswer({
-					taskOrder,
-					questionOrder: question.questionOrder,
-					body: {
-						idOption: idOptionSelected,
-						answerSeconds: time,
-						audioUri,
-					}
-				});
-				nextQuestion();
-			}
-		};
-
-		sendAnswer();
-	}, [done]);
+		if (answered) {
+			ToastAndroid.show('Pregunta contestada, ahora debes grabarte diciendo la pregunta y la respuesta', ToastAndroid.SHORT);
+		}
+	}, [answered]);
 
 	useEffect(() => {
 		startTimer();
 	}, []);
-
-	useEffect(() => {
-		let intervalId: NodeJS.Timeout | null = null;
-		if (recording) {
-			getTime();
-			intervalId = setInterval(() => {
-				getTime();
-			}, 1000);
-		}
-		return () => {
-			if (intervalId) {
-				clearInterval(intervalId);
-			}
-		};
-	}, [recording]);
 
 	return (
 		<ScrollView style={styles.container}>
@@ -97,19 +68,24 @@ const SelectAndSpeaking = ({ route }: Props) => {
 			<View style={styles.secondaryContainer}>
 				<Record
 					blocked={!answered}
-					recording={recording}
-					done={done}
-					finished={finished}
-					onPress={handleOnPress}
+					minimumTime={5000}
+					setRecorded={setRecorded}
+					setRecording={setRecording}
 				/>
-				<Text style={styles.subtitle}>
-					{recording &&
-						`Grabando... ${Math.floor(
-							(duration as number) / 1000
-						)} segundos`}
-				</Text>
 			</View>
-			<View></View>
+			{recorded && (
+				<View>
+					<Option
+						text="Confirmar"
+						onPress={() => {
+							handlePressConfirm();
+						}}
+						containerStyle={{}}
+						textStyle={{}}
+					/>
+					<View style={styles.safeSpace} />
+				</View>
+			)}
 		</ScrollView>
 	);
 };
@@ -135,6 +111,9 @@ const getStyles = (theme: Theme) =>
 			backgroundColor: theme.colors.white,
 			justifyContent: 'center',
 			alignItems: 'center'
+		},
+		safeSpace: {
+			height: 80
 		}
 	});
 

@@ -1,17 +1,16 @@
-import { View, Text, StyleSheet, TextInput, AccessibilityInfo, ScrollView } from 'react-native'
+import { View, Text, StyleSheet, TextInput, ScrollView } from 'react-native'
 import History from '@app/screens/Task/components/History'
 import Title from './components/Title'
 import * as Haptics from 'expo-haptics';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import Pressable from '@app/shared/components/Pressable'
-import Record from './components/Record';
+import Record from '@app/screens/Task/components/Record';
 import Option from '@app/screens/Task/components/Option';
 import Modal from '@app/screens/Task/components/Modal';
 
 import useTheme from '@app/core/hooks/useTheme'
 import useTextToSpeech from '@app/core/hooks/useTextToSpeech';
-import useRecord from '@app/core/hooks/Task/PosTask/useRecord';
 import usePlaySound from '@app/core/hooks/usePlaySound';
 import usePosTask from '@app/core/hooks/Task/PosTask/usePosTask';
 import { useEffect, useState } from 'react'
@@ -45,6 +44,8 @@ const Open = ({ route }: Props) => {
     const [confirmTextStyle, setConfirmTextStyle] = useState(
         CONFIRM_TEXT_STYLE_DEFAULT(theme)
     );
+    const [recording, setRecording] = useState<string>();
+    const [recorded, setRecorded] = useState(false);
     const { speak } = useTextToSpeech();
     const { taskOrder } = useTaskContext();
     const { nextQuestion, sendPosTaskAnswer } = usePosTask();
@@ -53,24 +54,30 @@ const Open = ({ route }: Props) => {
     const [answerType, setAnswerType] = useState<AnswerType>();
     const [textArea, setTextArea] = useState<string>('');
     const [showModal, setShowModal] = useState(false);
-    const { recording, done, finished, startRecording, stopRecording, audioUri } = useRecord();
     const styles = getStyles(theme)
 
     const putAnswerType = (type: AnswerType) => {
         setAnswerType(type);
+        if (type === AnswerType.TEXT) setRecorded(true);
     }
 
     const onPressConfirm = () => {
-        if (textArea.length > 0) {
+        if (answerType === AnswerType.TEXT) {
+            if (textArea.length > 0) {
+                playSoundSuccess();
+                setConfirmContainerStyle({ backgroundColor: theme.colors.green });
+                sendAnswer();
+            } else {
+                playSoundWrong();
+                setConfirmContainerStyle({ backgroundColor: theme.colors.red });
+                Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+                setShowModal(true);
+                resetStates();
+            }
+        } else {
             playSoundSuccess();
             setConfirmContainerStyle({ backgroundColor: theme.colors.green });
             sendAnswer();
-        } else {
-            playSoundWrong();
-            setConfirmContainerStyle({ backgroundColor: theme.colors.red });
-            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-            setShowModal(true);
-            resetStates();
         }
     };
 
@@ -84,19 +91,6 @@ const Open = ({ route }: Props) => {
         setShowModal(false);
     };
 
-    const handleOnPress = async () => {
-        if (recording) {
-            await stopRecording(5000);
-        } else {
-            await startRecording();
-        }
-    };
-
-    const getTime = async () => {
-        const status = await recording?.getStatusAsync();
-        setDuration(status?.durationMillis ?? null);
-    };
-
     const sendAnswer = async () => {
         stopTimer();
         await sendPosTaskAnswer({
@@ -104,7 +98,7 @@ const Open = ({ route }: Props) => {
             questionOrder: question.questionOrder,
             body: {
                 answerSeconds: time,
-                audioUri,
+                audioUri: recording,
                 text: textArea
             }
         });
@@ -112,28 +106,8 @@ const Open = ({ route }: Props) => {
     };
 
     useEffect(() => {
-        if (done) sendAnswer();
-    }, [done]);
-
-    useEffect(() => {
         startTimer();
     }, [])
-
-    useEffect(() => {
-        let intervalId: NodeJS.Timeout | null = null;
-        if (recording) {
-            getTime();
-            intervalId = setInterval(() => {
-                getTime();
-            }, 1000);
-        }
-        return () => {
-            if (intervalId) {
-                clearInterval(intervalId);
-            }
-        };
-    }, [recording]);
-
 
     return (
         <>
@@ -142,44 +116,47 @@ const Open = ({ route }: Props) => {
                 <View style={{ flexDirection: 'column-reverse' }}>
                     {
                         answerType ? (
-                            answerType === AnswerType.TEXT ? (
-                                <View style={styles.writeContainer}>
-                                    <TextInput
-                                        multiline={true}
-                                        numberOfLines={4}
-                                        onChangeText={(text) => setTextArea(text)}
-                                        value={textArea}
-                                        style={styles.textArea}
-                                    />
-                                    <View>
-                                        <Option
-                                            text="Confirmar"
-                                            onPress={() => {
-                                                onPressConfirm();
-                                            }}
-                                            containerStyle={confirmContainerStyle}
-                                            textStyle={confirmTextStyle}
-                                        />
-                                        <View style={styles.safeSpace} />
-                                    </View>
-                                </View>
-                            ) : (
-                                <View style={styles.recordContainer}>
-                                    <Record
-                                        blocked={false}
-                                        recording={recording}
-                                        done={done}
-                                        finished={finished}
-                                        onPress={handleOnPress}
-                                    />
-                                    <Text style={styles.subtitle}>
-                                        {recording &&
-                                            `Grabando... ${Math.floor(
-                                                (duration as number) / 1000
-                                            )} segundos`}
-                                    </Text>
-                                </View>
-                            )
+                            <>
+                                {
+                                    recorded && (
+                                        <View>
+                                            <Option
+                                                text="Confirmar"
+                                                onPress={() => {
+                                                    onPressConfirm();
+                                                }}
+                                                containerStyle={confirmContainerStyle}
+                                                textStyle={confirmTextStyle}
+                                            />
+                                            <View style={styles.safeSpace} />
+                                        </View>
+                                    )
+                                }
+                                {
+                                    answerType === AnswerType.TEXT ? (
+                                        <View style={styles.writeContainer}>
+                                            <TextInput
+                                                multiline={true}
+                                                numberOfLines={4}
+                                                onChangeText={(text) => setTextArea(text)}
+                                                value={textArea}
+                                                style={styles.textArea}
+                                            />
+                                        </View>
+                                    ) : (
+                                        <View style={styles.recordContainer}>
+                                            <Record
+                                                blocked={false}
+                                                minimumTime={5000}
+                                                setRecorded={setRecorded}
+                                                setRecording={setRecording}
+                                            />
+                                        </View>
+                                    )
+
+
+                                }
+                            </>
                         ) : (
                             <View style={styles.answerContainer}>
                                 <Pressable

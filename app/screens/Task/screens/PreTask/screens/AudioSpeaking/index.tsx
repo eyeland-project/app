@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, AccessibilityInfo, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, AccessibilityInfo } from 'react-native';
 import Record from '@screens/Task/components/Record';
 import AudioPlayer from '@screens/Task/components/AudioPlayer';
 import Option from '@app/screens/Task/components/Option';
@@ -63,6 +63,7 @@ const AudioSpeaking = ({ route }: Props) => {
                         blocked={false}
                         minimumTime={1000}
                         setRecorded={setRecorded}
+                        setRecording={() => { }}
                     />
                 </View>
             </View>
@@ -114,7 +115,7 @@ const getStyles = (theme: Theme) =>
             marginRight: 10,
             marginHorizontal: 20,
             marginTop: 30,
-            marginBottom: 100,
+            marginBottom: 50,
         },
         question: {
             fontSize: theme.fontSize.xxl,

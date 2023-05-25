@@ -1,5 +1,5 @@
 import { Audio } from 'expo-av';
-import { AppState } from 'react-native';
+import { AppState, ToastAndroid } from 'react-native';
 
 import { useState } from 'react';
 import usePlaySound from '../../usePlaySound';
@@ -9,6 +9,8 @@ const useRecord = () => {
 	const [finished, setFinished] = useState(false);
 	const [done, setDone] = useState(false);
 	const [audioUri, setAudioUri] = useState<string>('');
+	const [playingAudio, setPlayingAudio] = useState(false);
+
 	const playSoundStartRecording = usePlaySound(
 		require('@sounds/startRecording.wav')
 	);
@@ -50,6 +52,7 @@ const useRecord = () => {
 		});
 		setFinished(true);
 		setRecording(undefined);
+		let message = '';
 		if (
 			recording?._finalDurationMillis &&
 			recording?._finalDurationMillis >= minimumDuration
@@ -60,13 +63,36 @@ const useRecord = () => {
 			if (uri) {
 				setAudioUri(uri);
 				setDone(true);
-				return uri;
+				message = 'Grabación finalizada con éxito';
 			}
 		} else {
 			playSoundFailRecording();
+			message = 'Grabación incorrecta, Intenta nuevamente';
 			setTimeout(() => {
 				setFinished(false);
 			}, 1500);
+		}
+		ToastAndroid.show(message, ToastAndroid.SHORT);
+	}
+
+
+	function playAudio() {
+		if (audioUri) {
+			console.log('Playing audio..');
+
+			setPlayingAudio(true);
+			Audio.Sound.createAsync(
+				{ uri: audioUri },
+				{ shouldPlay: true }
+			).then(({ sound }) => {
+				sound.setOnPlaybackStatusUpdate(playbackStatus => {
+					if (playbackStatus.isLoaded && playbackStatus.didJustFinish) {
+						// The playback has just finished
+						setPlayingAudio(false);
+					}
+				});
+				sound.playAsync();
+			});
 		}
 	}
 
@@ -76,7 +102,7 @@ const useRecord = () => {
 		setAudioUri('');
 	}
 
-	return { recording, finished, done, startRecording, stopRecording, audioUri, reset };
+	return { recording, finished, done, startRecording, stopRecording, audioUri, reset, playAudio, playingAudio };
 };
 
 export default useRecord;
