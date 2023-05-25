@@ -1,20 +1,17 @@
-import { View, StyleSheet, AccessibilityInfo, Platform } from 'react-native';
+import { View, StyleSheet, AccessibilityInfo } from 'react-native';
 import Instructions from '../../components/Instructions';
 import OptionTask from '@screens/Task/components/Option';
 import * as Haptics from 'expo-haptics';
 import Option from './components/Option';
 import AnswerBox from './components/AnswerBox';
 import Modal from '@screens/Task/components/Modal';
-import LottieView from 'lottie-react-native';
-import Pressable from '@components/Pressable';
-import { AntDesign } from '@expo/vector-icons';
+import AudioPlayer from '@app/screens/Task/components/AudioPlayer';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import useTheme from '@hooks/useTheme';
 import usePlaySound from '@hooks/usePlaySound';
 import usePreTask from '@hooks/Task/PreTask/usePreTask';
 import useTextToSpeech from '@hooks/useTextToSpeech';
-import useMediaQuery from '@hooks/useMediaQuery';
 
 import { Theme } from '@theme';
 import { PreTaskQuestion } from '@interfaces/PreTaskQuestion.interface';
@@ -51,9 +48,6 @@ const AudioOrder = ({ route }: Props) => {
 	const { speak: speakOption, playing: playingOption } = useTextToSpeech();
 	const { speak: speakQuestion, playing: playingQuestion } = useTextToSpeech();
 	const { nextQuestion } = usePreTask();
-	const animationsRef = useRef<LottieView[]>([]);
-	const currentPlatform = Platform.OS;
-	const { isPhone, isTablet, isDesktop } = useMediaQuery();
 	const styles = getStyles(theme);
 	const correctOrder = question.options
 		.filter((option) => option.correct)[0]
@@ -96,21 +90,8 @@ const AudioOrder = ({ route }: Props) => {
 		}
 	};
 
-	const onPressPlayAudio = () => {
-		speakQuestion(question.content, 'en');
-	};
-
 	const closeModal = () => {
 		setShowModal(false);
-	};
-
-	const toggleAnimation = () => {
-		if (playingQuestion) {
-			animationsRef.current?.forEach((animation) => animation.play());
-		} else {
-			animationsRef.current?.forEach((animation) => animation.pause());
-			animationsRef.current?.forEach((animation) => animation.reset());
-		}
 	};
 
 	const onAnswerPress = (index: number) => {
@@ -126,47 +107,14 @@ const AudioOrder = ({ route }: Props) => {
 		speakQuestion(question.content, 'en');
 	}, []);
 
-	useEffect(() => {
-		toggleAnimation();
-	}, [playingQuestion]);
-
 	return (
 		<>
 			<View style={styles.container}>
 				<View>
 					<Instructions text="Escucha y selecciona las palabras en el orden correcto" />
-					<Pressable
-						style={styles.playerContainer}
-						onPress={onPressPlayAudio}
-					>
-						<AntDesign
-							name="caretright"
-							size={30}
-							color={theme.colors.black}
-						/>
-						<View style={styles.animationContainer}>
-							{
-								currentPlatform !== 'web' && (
-									[...Array(isPhone ? 4 : isTablet ? 8 : 16)].map((_, index) => {
-										return (
-											<LottieView
-												key={index}
-												ref={(animation) => {
-													if (animation)
-														animationsRef.current[index] =
-															animation;
-												}}
-												source={require('@animations/audioWave.json')}
-												loop={false}
-												style={styles.animation}
-											/>
-										);
-									})
-								)
-							}
-						</View>
-					</Pressable>
-					{/* <Text style={styles.question}>{question.content}</Text> */}
+					<AudioPlayer
+						textToSpeech={question.content}
+					/>
 					<AnswerBox
 						answerList={answerList}
 						onAnswerPress={onAnswerPress}

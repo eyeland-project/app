@@ -70,7 +70,13 @@ const useRecord = () => {
 		}
 	}
 
-	return { recording, finished, done, startRecording, stopRecording, audioUri };
+	function reset() {
+		setFinished(false);
+		setDone(false);
+		setAudioUri('');
+	}
+
+	return { recording, finished, done, startRecording, stopRecording, audioUri, reset };
 };
 
 export default useRecord;

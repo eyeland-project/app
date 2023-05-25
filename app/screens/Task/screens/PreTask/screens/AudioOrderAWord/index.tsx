@@ -1,14 +1,13 @@
-import { View, Text, StyleSheet, AccessibilityInfo, Image, Platform } from 'react-native';
+import { View, Text, StyleSheet, AccessibilityInfo, Image } from 'react-native';
 import Instructions from '../../components/Instructions';
 import OptionTask from '@screens/Task/components/Option';
 import * as Haptics from 'expo-haptics';
 import Option from './components/Option';
 import AnswerBox from './components/AnswerBox';
+import AudioPlayer from '@app/screens/Task/components/AudioPlayer';
 import Modal from '@screens/Task/components/Modal';
-import { AntDesign } from '@expo/vector-icons';
-import LottieView from 'lottie-react-native';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import useTheme from '@hooks/useTheme';
 import usePlaySound from '@hooks/usePlaySound';
 import usePreTask from '@app/core/hooks/Task/PreTask/usePreTask';
@@ -18,8 +17,6 @@ import { Theme } from '@theme';
 import { PreTaskQuestion } from '@interfaces/PreTaskQuestion.interface';
 
 import { shuffleList } from '@utils/shuffleList';
-import Pressable from '@app/shared/components/Pressable';
-import useMediaQuery from '@app/core/hooks/useMediaQuery';
 
 interface Props {
     route: any;
@@ -43,16 +40,12 @@ const AudioOrderAWord = ({ route }: Props) => {
     const [confirmTextStyle, setConfirmTextStyle] = useState(
         CONFIRM_TEXT_STYLE_DEFAULT(theme)
     );
-    const animationsRef = useRef<LottieView[]>([]);
-    const currentPlatform = Platform.OS;
-    const { speak: speakQuestion, playing: playingQuestion } = useTextToSpeech();
     const [optionsList, setOptionsList] = useState([] as string[]);
     const [answerList, setAnswerList] = useState([] as string[]);
     const [showModal, setShowModal] = useState(false);
     const playSoundSuccess = usePlaySound(require('@sounds/success.wav'));
     const playSoundWrong = usePlaySound(require('@sounds/wrong.wav'));
     const { speak } = useTextToSpeech();
-    const { isPhone, isTablet, isDesktop } = useMediaQuery();
     const { nextQuestion } = usePreTask();
     const styles = getStyles(theme);
 
@@ -107,20 +100,6 @@ const AudioOrderAWord = ({ route }: Props) => {
         }
     };
 
-    const onPressPlayAudio = () => {
-        speakQuestion(question.content, 'en');
-    };
-
-    const toggleAnimation = () => {
-        if (playingQuestion) {
-            animationsRef.current?.forEach((animation) => animation.play());
-        } else {
-            animationsRef.current?.forEach((animation) => animation.pause());
-            animationsRef.current?.forEach((animation) => animation.reset());
-        }
-    };
-
-
     useEffect(() => {
         setOptionsList(shuffleList(correctOrder));
         setAnswerList([]);
@@ -128,63 +107,23 @@ const AudioOrderAWord = ({ route }: Props) => {
         speak(question.content, 'en');
     }, []);
 
-    useEffect(() => {
-        toggleAnimation();
-    }, [playingQuestion]);
-
     return (
         <>
             <View style={styles.container}>
                 <View>
                     <Instructions text="Describe la imagen ordenando las letras." />
                     <View style={styles.imageContainer}>
-                        {/* {loadingImage && <ActivityIndicator size="large" color={theme.colors.black} />}
-					{errorImage && <Text style={styles.errorMessage}>Un error inesperado ha ocurrido</Text>} */}
                         <Image
                             style={styles.image}
                             source={{ uri: question.imgUrl }}
                             resizeMode="contain"
                             accessible
                             accessibilityLabel={question.imgAlt}
-                        // onLoadStart={() => setLoadingImage(true)}
-                        // onLoadEnd={() => setLoadingImage(false)}
-                        // onError={() => {
-                        // 	setLoadingImage(false);
-                        // 	setErrorImage(true);
-                        // }}
                         />
                     </View>
-                    <Pressable
-                        style={styles.playerContainer}
-                        onPress={onPressPlayAudio}
-                    >
-                        <AntDesign
-                            name="caretright"
-                            size={30}
-                            color={theme.colors.black}
-                        />
-                        <View style={styles.animationContainer}>
-                            {
-                                currentPlatform !== 'web' && (
-                                    [...Array(isPhone ? 4 : isTablet ? 8 : 16)].map((_, index) => {
-                                        return (
-                                            <LottieView
-                                                key={index}
-                                                ref={(animation) => {
-                                                    if (animation)
-                                                        animationsRef.current[index] =
-                                                            animation;
-                                                }}
-                                                source={require('@animations/audioWave.json')}
-                                                loop={false}
-                                                style={styles.animation}
-                                            />
-                                        );
-                                    })
-                                )
-                            }
-                        </View>
-                    </Pressable>
+                    <AudioPlayer
+                        textToSpeech={question.content}
+                    />
                     <AnswerBox
                         answerList={answerList}
                         onAnswerPress={onAnswerPress}

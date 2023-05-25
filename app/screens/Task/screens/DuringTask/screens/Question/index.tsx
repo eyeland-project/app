@@ -4,8 +4,7 @@ import Option from '@screens/Task/components/Option';
 import Placeholder from './components/Placeholder';
 import PositionBar from './components/PositionBar';
 import History from '../../../../components/History';
-import LottieView from 'lottie-react-native';
-import { AntDesign } from '@expo/vector-icons';
+import AudioPlayer from '@app/screens/Task/components/AudioPlayer';
 
 import useMediaQuery from '@app/core/hooks/useMediaQuery';
 import { useState, useEffect, useRef } from 'react';
@@ -41,7 +40,6 @@ const Question = ({ route }: Props) => {
 		sendDuringTaskAnswer
 	} = useDuringTaskQuestion();
 	const playSoundAnimal = usePlaySound({ uri: data?.audioUrl });
-	const animationsRef = useRef<LottieView[]>([]);
 	const { power, socket, team, position, setPosition } = useDuringTaskContext();
 	const currentPlatform = Platform.OS;
 	const { isPhone, isTablet, isDesktop } = useMediaQuery();
@@ -169,54 +167,18 @@ const Question = ({ route }: Props) => {
 				imgAlt={data.imgAlt}
 			/>
 			<View style={styles.imageContainer} accessible={true} accessibilityLabel={'Imagen de la pregunta'} accessibilityHint={`Super hearing: ${data.imgAlt}`}>
-				{/* {loadingImage && <ActivityIndicator size="large" color={theme.colors.white} />}
-				{errorImage && <Text style={styles.errorMessage}>Un error inesperado ha ocurrido</Text>} */}
 				<Image
 					style={styles.image}
 					source={{ uri: `${data.imgUrl}?t=${data.id}` }}
 					resizeMode="contain"
-				// onLoadStart={() => setLoadingImage(true)}
-				// onLoadEnd={() => setLoadingImage(false)}
-				// onError={() => {
-				// 	setLoadingImage(false);
-				// 	setErrorImage(true);
-				// }}
 				/>
 			</View>
 
 			{
 				data.audioUrl && (
-					<Pressable
-						style={styles.playerContainer}
-						onPress={onPressPlayAudio}
-					>
-						<AntDesign
-							name="caretright"
-							size={30}
-							color={theme.colors.black}
-						/>
-						<View style={styles.animationContainer}>
-							{
-								currentPlatform !== 'web' && (
-									[...Array(isPhone ? 4 : isTablet ? 8 : 16)].map((_, index) => {
-										return (
-											<LottieView
-												key={index}
-												ref={(animation) => {
-													if (animation)
-														animationsRef.current[index] =
-															animation;
-												}}
-												source={require('@animations/audioWave.json')}
-												loop={false}
-												style={styles.animation}
-											/>
-										);
-									})
-								)
-							}
-						</View>
-					</Pressable>
+					<AudioPlayer
+						source={{ uri: data.audioUrl }}
+					/>
 				)
 			}
 
