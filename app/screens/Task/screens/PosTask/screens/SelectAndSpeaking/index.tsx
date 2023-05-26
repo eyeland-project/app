@@ -3,6 +3,7 @@ import Record from '@app/screens/Task/components/Record';
 import QuestionComponent from './components/Question';
 import Option from '@app/screens/Task/components/Option';
 import Title from './components/Title';
+import LoadingModal from '@app/screens/Task/components/LoadingModal';
 
 import { useEffect, useState } from 'react';
 import useTheme from '@hooks/useTheme';
@@ -13,24 +14,38 @@ import useRecord from '@app/core/hooks/Task/PosTask/useRecord';
 import { Theme } from '@theme';
 import { PosTaskQuestion } from '@app/shared/interfaces/PosTaskQuestion.interface';
 import usePosTask from '@app/core/hooks/Task/PosTask/usePosTask';
+import usePlaySound from '@app/core/hooks/usePlaySound';
 
 interface Props {
 	route: any;
 }
 
+const CONFIRM_TEXT_STYLE_DEFAULT = (theme: Theme) => {
+	return {
+		fontFamily: theme.fontWeight.regular,
+		fontSize: theme.fontSize.xl
+	};
+};
+
 const SelectAndSpeaking = ({ route }: Props) => {
 	const { question } = route.params as { question: PosTaskQuestion };
+	const theme = useTheme();
+	const styles = getStyles(theme);
 	const [answered, setAnswered] = useState(false);
 	const [idOptionSelected, setIdOptionSelected] = useState<number>(1);
 	const { taskOrder } = useTaskContext();
-	const { nextQuestion, sendPosTaskAnswer } = usePosTask();
+	const { nextQuestion, sendPosTaskAnswer, loading } = usePosTask();
 	const { startTimer, stopTimer, time } = useTime();
+	const [confirmContainerStyle, setConfirmContainerStyle] = useState({});
+	const [confirmTextStyle, setConfirmTextStyle] = useState(
+		CONFIRM_TEXT_STYLE_DEFAULT(theme)
+	);
+	const playSoundSuccess = usePlaySound(require('@sounds/success.wav'));
 	const { stopAudio } = useRecord();
 	const [recorded, setRecorded] = useState(false);
 	const [hasConfirm, setHasConfirm] = useState(false);
 	const [recording, setRecording] = useState<string>();
-	const theme = useTheme();
-	const styles = getStyles(theme);
+
 
 	const handlePressConfirm = async () => {
 		if (hasConfirm) return;
@@ -38,6 +53,8 @@ const SelectAndSpeaking = ({ route }: Props) => {
 		if (!recorded) return;
 
 		setHasConfirm(true);
+		playSoundSuccess();
+		setConfirmContainerStyle({ backgroundColor: theme.colors.green });
 		stopAudio();
 		await sendPosTaskAnswer({
 			taskOrder,
@@ -63,36 +80,42 @@ const SelectAndSpeaking = ({ route }: Props) => {
 	}, []);
 
 	return (
-		<ScrollView style={styles.container}>
-			<QuestionComponent
-				question={question}
-				setAnswered={setAnswered}
-				setIdOptionSelected={setIdOptionSelected}
-				answered={answered}
-			/>
-			<Title />
-			<View style={styles.secondaryContainer}>
-				<Record
-					blocked={!answered}
-					minimumTime={5000}
-					setRecorded={setRecorded}
-					setRecording={setRecording}
+		<>
+			<ScrollView style={styles.container}>
+				<QuestionComponent
+					question={question}
+					setAnswered={setAnswered}
+					setIdOptionSelected={setIdOptionSelected}
+					answered={answered}
 				/>
-			</View>
-			{recorded && (
-				<View>
-					<Option
-						text="Confirmar"
-						onPress={() => {
-							handlePressConfirm();
-						}}
-						containerStyle={{}}
-						textStyle={{}}
+				<Title />
+				<View style={styles.secondaryContainer}>
+					<Record
+						blocked={!answered}
+						minimumTime={5000}
+						setRecorded={setRecorded}
+						setRecording={setRecording}
 					/>
-					<View style={styles.safeSpace} />
 				</View>
-			)}
-		</ScrollView>
+				{recorded && (
+					<View>
+						<Option
+							text="Confirmar"
+							onPress={() => {
+								handlePressConfirm();
+							}}
+							containerStyle={confirmContainerStyle}
+							textStyle={confirmTextStyle}
+						/>
+						<View style={styles.safeSpace} />
+					</View>
+				)}
+			</ScrollView>
+			<LoadingModal
+				showModal={loading}
+				closeModal={() => { }}
+			/>
+		</>
 	);
 };
 

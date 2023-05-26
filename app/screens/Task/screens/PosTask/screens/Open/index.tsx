@@ -8,6 +8,7 @@ import Pressable from '@app/shared/components/Pressable'
 import Record from '@app/screens/Task/components/Record';
 import Option from '@app/screens/Task/components/Option';
 import Modal from '@app/screens/Task/components/Modal';
+import LoadingModal from '@app/screens/Task/components/LoadingModal';
 
 import useTheme from '@app/core/hooks/useTheme'
 import usePlaySound from '@app/core/hooks/usePlaySound';
@@ -47,7 +48,7 @@ const Open = ({ route }: Props) => {
     const [recording, setRecording] = useState<string>();
     const [recorded, setRecorded] = useState(false);
     const { taskOrder } = useTaskContext();
-    const { nextQuestion, sendPosTaskAnswer } = usePosTask();
+    const { nextQuestion, sendPosTaskAnswer, loading } = usePosTask();
     const playSoundSuccess = usePlaySound(require('@sounds/success.wav'));
     const playSoundWrong = usePlaySound(require('@sounds/wrong.wav'));
     const [answerType, setAnswerType] = useState<AnswerType>();
@@ -209,6 +210,10 @@ const Open = ({ route }: Props) => {
                     closeModal();
                 }}
                 help={'No puedes dejar el campo vacío'}
+            />
+            <LoadingModal
+                showModal={loading}
+                closeModal={() => { }}
             />
         </>
     )

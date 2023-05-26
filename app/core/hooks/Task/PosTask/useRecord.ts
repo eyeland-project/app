@@ -127,8 +127,12 @@ const useRecord = () => {
 		}
 	}
 
-	function reset() {
+	function deleteRecording() {
 		AccessibilityInfo.announceForAccessibility('Grabación eliminada');
+		reset();
+	};
+
+	function reset() {
 		setIsFinished(false);
 		setIsDone(false);
 		setAudioUri('');
@@ -143,7 +147,7 @@ const useRecord = () => {
 		}
 	}
 
-	return { startRecording, stopRecording, reset, playAudio, stopAudio };
+	return { startRecording, stopRecording, reset, playAudio, stopAudio, deleteRecording };
 };
 
 

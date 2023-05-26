@@ -4,7 +4,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 
 
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import useRecord from '@app/core/hooks/Task/PosTask/useRecord';
 import useRecordContext from '@app/core/hooks/useRecordContext';
 import useTheme from '@app/core/hooks/useTheme';
@@ -12,6 +12,7 @@ import useTheme from '@app/core/hooks/useTheme';
 import { hexToRgbA } from '@app/core/utils/hexToRgba';
 
 import { Theme } from '@app/theme';
+import useDebounce from '@app/core/hooks/useDebounce';
 
 interface Props {
     blocked: boolean;
@@ -23,7 +24,7 @@ interface Props {
 function Record({ blocked, minimumTime, setRecorded, setRecording }: Props) {
     const theme = useTheme();
     const styles = getStyles(theme, blocked);
-    const { startRecording, stopRecording, reset, playAudio, stopAudio } = useRecord();
+    const { startRecording, stopRecording, reset, playAudio, stopAudio, deleteRecording } = useRecord();
     const { recording, isDone, isFinished, audioUri, isPlayingAudio } = useRecordContext();
     const [duration, setDuration] = useState<number | null>(null);
     const scaleValue = useRef(new Animated.Value(1)).current;
@@ -36,7 +37,7 @@ function Record({ blocked, minimumTime, setRecorded, setRecording }: Props) {
         return 'Iniciar grabación';
     }, [blocked, recording, isDone, isFinished])
 
-    const handleOnPress = async () => {
+    const handleOnPress = useCallback(async () => {
         if (recording) {
             stopRecording(minimumTime);
         } else if (isDone) {
@@ -44,16 +45,18 @@ function Record({ blocked, minimumTime, setRecorded, setRecording }: Props) {
         } else {
             startRecording();
         }
-    };
+    }, [recording, isDone]);
+
+    const debouncedHandleOnPress = useDebounce(handleOnPress, 300);
 
     const getTime = async () => {
         const status = await recording?.getStatusAsync();
         setDuration(status?.durationMillis ?? null);
     };
 
-    const deleteRecording = () => {
+    const handleDeleteRecording = () => {
         setDuration(null);
-        reset();
+        deleteRecording();
     };
 
     useEffect(() => {
@@ -127,7 +130,7 @@ function Record({ blocked, minimumTime, setRecorded, setRecording }: Props) {
                                     '¡Debes contestar la pregunta primero!',
                                     ToastAndroid.SHORT
                                 )
-                                : handleOnPress();
+                                : debouncedHandleOnPress();
                         }}
                         accessibilityLabel={accessibilityLabel}
                         accessibilityRole="button"
@@ -154,7 +157,7 @@ function Record({ blocked, minimumTime, setRecorded, setRecording }: Props) {
                     <View style={styles.deleteContainer}>
                         <Pressable
                             style={styles.deleteButton}
-                            onPress={deleteRecording}
+                            onPress={handleDeleteRecording}
                             accessibilityLabel="Borrar grabación"
                             accessibilityRole="button"
                         >

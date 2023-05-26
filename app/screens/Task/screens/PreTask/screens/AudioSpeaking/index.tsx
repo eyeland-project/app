@@ -12,10 +12,18 @@ import useRecord from '@app/core/hooks/Task/PosTask/useRecord';
 import { Theme } from '@theme';
 import { PreTaskQuestion } from '@interfaces/PreTaskQuestion.interface';
 import Instructions from '../../components/Instructions';
+import usePlaySound from '@app/core/hooks/usePlaySound';
 
 interface Props {
     route: any;
 }
+
+const CONFIRM_TEXT_STYLE_DEFAULT = (theme: Theme) => {
+    return {
+        fontFamily: theme.fontWeight.regular,
+        fontSize: theme.fontSize.xl
+    };
+};
 
 const AudioSpeaking = ({ route }: Props) => {
     const { question } = route.params as { question: PreTaskQuestion, taskOrder: number };
@@ -28,8 +36,15 @@ const AudioSpeaking = ({ route }: Props) => {
     const { speak } = useTextToSpeech();
     const [recorded, setRecorded] = useState(false);
     const [hasConfirm, setHasConfirm] = useState(false);
+    const [confirmContainerStyle, setConfirmContainerStyle] = useState({});
+    const [confirmTextStyle, setConfirmTextStyle] = useState(
+        CONFIRM_TEXT_STYLE_DEFAULT(theme)
+    );
+    const playSoundSuccess = usePlaySound(require('@sounds/success.wav'));
 
     const handlePressConfirm = () => {
+        playSoundSuccess();
+        setConfirmContainerStyle({ backgroundColor: theme.colors.green });
         setHasConfirm(true);
     };
 
@@ -85,8 +100,8 @@ const AudioSpeaking = ({ route }: Props) => {
                             onPress={() => {
                                 handlePressConfirm();
                             }}
-                            containerStyle={{}}
-                            textStyle={{}}
+                            containerStyle={confirmContainerStyle}
+                            textStyle={confirmTextStyle}
                         />
                         <View style={styles.safeSpace} />
                     </View>
