@@ -4,6 +4,7 @@ import {
 	StyleSheet,
 	AccessibilityInfo,
 	Image,
+	ScrollView
 } from 'react-native';
 import Instructions from '../components/Instructions';
 import Option from '@screens/Task/components/Option';
@@ -30,8 +31,6 @@ const MultipleChoice = ({ route }: Props) => {
 	const [textStyleOptions, setTextStyleOptions] = useState([{}]);
 	const [showModal, setShowModal] = useState(false);
 	const [optionIndex, setOptionIndex] = useState<number>(0);
-	const [loadingImage, setLoadingImage] = useState(true);
-	const [errorImage, setErrorImage] = useState(false);
 	const playSoundSuccess = usePlaySound(require('@sounds/success.wav'));
 	const playSoundWrong = usePlaySound(require('@sounds/wrong.wav'));
 	const { nextQuestion } = usePreTask();
@@ -90,24 +89,16 @@ const MultipleChoice = ({ route }: Props) => {
 
 	return (
 		<>
-			<View style={styles.container}>
+			<ScrollView style={styles.container}>
 				<Instructions text="Selecciona la opción correcta" />
 				<Text style={styles.question}>{question.content}</Text>
 				<View style={styles.imageContainer}>
-					{/* {loadingImage && <ActivityIndicator size="large" color={theme.colors.black} />}
-					{errorImage && <Text style={styles.errorMessage}>Un error inesperado ha ocurrido</Text>} */}
 					<Image
 						style={styles.image}
 						source={{ uri: question.imgUrl }}
 						resizeMode="contain"
 						accessible
 						accessibilityLabel={question.imgAlt}
-					// onLoadStart={() => setLoadingImage(true)}
-					// onLoadEnd={() => setLoadingImage(false)}
-					// onError={() => {
-					// 	setLoadingImage(false);
-					// 	setErrorImage(true);
-					// }}
 					/>
 				</View>
 
@@ -124,7 +115,7 @@ const MultipleChoice = ({ route }: Props) => {
 						/>
 					))}
 				</View>
-			</View>
+			</ScrollView>
 			<Modal
 				showModal={showModal}
 				closeModal={closeModal}

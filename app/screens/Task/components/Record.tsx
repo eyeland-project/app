@@ -6,6 +6,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 import useRecord from '@app/core/hooks/Task/PosTask/useRecord';
+import useRecordContext from '@app/core/hooks/useRecordContext';
 import useTheme from '@app/core/hooks/useTheme';
 
 import { hexToRgbA } from '@app/core/utils/hexToRgba';
@@ -22,22 +23,23 @@ interface Props {
 function Record({ blocked, minimumTime, setRecorded, setRecording }: Props) {
     const theme = useTheme();
     const styles = getStyles(theme, blocked);
-    const { recording, done, finished, startRecording, stopRecording, reset, playAudio, audioUri, playingAudio } = useRecord();
+    const { startRecording, stopRecording, reset, playAudio, stopAudio } = useRecord();
+    const { recording, isDone, isFinished, audioUri, isPlayingAudio } = useRecordContext();
     const [duration, setDuration] = useState<number | null>(null);
     const scaleValue = useRef(new Animated.Value(1)).current;
 
     const accessibilityLabel = useMemo(() => {
         if (blocked) { return 'Debes contestar la pregunta primero' };
         if (recording) return 'Detener grabación';
-        if (done) return 'Repita la grabación';
-        if (finished) return 'Finalizado';
+        if (isDone) return 'Reproduce la grabación';
+        if (isFinished) return 'Finalizado';
         return 'Iniciar grabación';
-    }, [blocked, recording, done, finished])
+    }, [blocked, recording, isDone, isFinished])
 
     const handleOnPress = async () => {
         if (recording) {
             stopRecording(minimumTime);
-        } else if (done) {
+        } else if (isDone) {
             playAudio();
         } else {
             startRecording();
@@ -58,7 +60,6 @@ function Record({ blocked, minimumTime, setRecorded, setRecording }: Props) {
         let intervalId: NodeJS.Timeout | null = null;
 
         if (recording) {
-            ToastAndroid.show('Grabando', ToastAndroid.SHORT);
             getTime();
             intervalId = setInterval(() => {
                 getTime();
@@ -73,7 +74,7 @@ function Record({ blocked, minimumTime, setRecorded, setRecording }: Props) {
     }, [recording]);
 
     useEffect(() => {
-        if (recording || playingAudio) {
+        if (recording || isPlayingAudio) {
             Animated.loop(
                 Animated.sequence([
                     Animated.timing(scaleValue, {
@@ -91,16 +92,22 @@ function Record({ blocked, minimumTime, setRecorded, setRecording }: Props) {
         } else {
             scaleValue.setValue(1);
         }
-    }, [recording, scaleValue, playingAudio]);
+    }, [recording, scaleValue, isPlayingAudio]);
 
     useEffect(() => {
-        if (done) {
+        if (isDone && audioUri) {
             setRecorded(true);
             setRecording(audioUri);
         } else {
             setRecorded(false);
         }
-    }, [done]);
+    }, [isDone]);
+
+    useEffect(() => {
+        stopRecording(99999999);
+        stopAudio();
+        reset();
+    }, []);
 
     return (
         <View>
@@ -131,9 +138,9 @@ function Record({ blocked, minimumTime, setRecorded, setRecording }: Props) {
                                     ? 'microphone-slash'
                                     : recording
                                         ? 'stop'
-                                        : done
+                                        : isDone
                                             ? 'play'
-                                            : finished
+                                            : isFinished
                                                 ? 'exclamation'
                                                 : 'microphone'
                             }
@@ -143,7 +150,7 @@ function Record({ blocked, minimumTime, setRecorded, setRecording }: Props) {
                         />
                     </Pressable>
                 </Animated.View>
-                {done && (
+                {isDone && (
                     <View style={styles.deleteContainer}>
                         <Pressable
                             style={styles.deleteButton}

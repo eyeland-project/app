@@ -10,15 +10,16 @@ import Option from '@app/screens/Task/components/Option';
 import Modal from '@app/screens/Task/components/Modal';
 
 import useTheme from '@app/core/hooks/useTheme'
-import useTextToSpeech from '@app/core/hooks/useTextToSpeech';
 import usePlaySound from '@app/core/hooks/usePlaySound';
 import usePosTask from '@app/core/hooks/Task/PosTask/usePosTask';
 import { useEffect, useState } from 'react'
 import useTaskContext from '@app/core/hooks/Task/useTaskContext';
 import useTime from '@app/core/hooks/useTime'
+import useRecord from '@app/core/hooks/Task/PosTask/useRecord';
 
 import { Theme } from '@app/theme'
 import { PosTaskQuestion } from '@app/shared/interfaces/PosTaskQuestion.interface';
+import { set } from 'react-hook-form';
 
 interface Props {
     route: any;
@@ -37,7 +38,6 @@ const CONFIRM_TEXT_STYLE_DEFAULT = (theme: Theme) => {
 
 const Open = ({ route }: Props) => {
     const { question } = route.params as { question: PosTaskQuestion };
-    const [duration, setDuration] = useState<number | null>(null);
     const { startTimer, stopTimer, time } = useTime();
     const theme = useTheme()
     const [confirmContainerStyle, setConfirmContainerStyle] = useState({});
@@ -46,7 +46,6 @@ const Open = ({ route }: Props) => {
     );
     const [recording, setRecording] = useState<string>();
     const [recorded, setRecorded] = useState(false);
-    const { speak } = useTextToSpeech();
     const { taskOrder } = useTaskContext();
     const { nextQuestion, sendPosTaskAnswer } = usePosTask();
     const playSoundSuccess = usePlaySound(require('@sounds/success.wav'));
@@ -54,6 +53,8 @@ const Open = ({ route }: Props) => {
     const [answerType, setAnswerType] = useState<AnswerType>();
     const [textArea, setTextArea] = useState<string>('');
     const [showModal, setShowModal] = useState(false);
+    const [hasConfirm, setHasConfirm] = useState(false);
+    const { stopAudio } = useRecord();
     const styles = getStyles(theme)
 
     const putAnswerType = (type: AnswerType) => {
@@ -62,23 +63,7 @@ const Open = ({ route }: Props) => {
     }
 
     const onPressConfirm = () => {
-        if (answerType === AnswerType.TEXT) {
-            if (textArea.length > 0) {
-                playSoundSuccess();
-                setConfirmContainerStyle({ backgroundColor: theme.colors.green });
-                sendAnswer();
-            } else {
-                playSoundWrong();
-                setConfirmContainerStyle({ backgroundColor: theme.colors.red });
-                Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-                setShowModal(true);
-                resetStates();
-            }
-        } else {
-            playSoundSuccess();
-            setConfirmContainerStyle({ backgroundColor: theme.colors.green });
-            sendAnswer();
-        }
+        setHasConfirm(true);
     };
 
     const resetStates = () => {
@@ -104,6 +89,30 @@ const Open = ({ route }: Props) => {
         });
         nextQuestion();
     };
+
+    useEffect(() => {
+        if (hasConfirm) {
+            if (answerType === AnswerType.TEXT) {
+                if (textArea.length > 0) {
+                    playSoundSuccess();
+                    setConfirmContainerStyle({ backgroundColor: theme.colors.green });
+                    sendAnswer();
+                } else {
+                    playSoundWrong();
+                    setConfirmContainerStyle({ backgroundColor: theme.colors.red });
+                    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+                    setHasConfirm(false);
+                    setShowModal(true);
+                    resetStates();
+                }
+            } else {
+                stopAudio();
+                playSoundSuccess();
+                setConfirmContainerStyle({ backgroundColor: theme.colors.green });
+                sendAnswer();
+            }
+        }
+    }, [hasConfirm])
 
     useEffect(() => {
         startTimer();

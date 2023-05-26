@@ -14,6 +14,7 @@ import { useState, useEffect } from 'react';
 import { ThemeProvider } from '@contexts/ThemeContext';
 import { AuthStorageContext } from '@contexts/AuthStorageContext';
 import { TaskProvider } from '@contexts/TaskContext';
+import { RecordProvider } from '@app/core/contexts/RecordContext';
 
 import Accessibility from '@components/AccessibilityMenu';
 import SafeAreaViewAndroid from '@components/SafeAreaViewAndroid';
@@ -63,61 +64,63 @@ export default function App() {
 			<StatusBar />
 			<SafeAreaView style={SafeAreaViewAndroid.AndroidSafeArea}>
 				<AuthStorageContext.Provider value={authStorage}>
-					<TaskProvider>
-						<ThemeProvider>
-							<NavigationContainer>
-								<Stack.Navigator>
-									{!isLogged ? (
-										<>
-											<Stack.Screen
-												name="Login"
-												component={Login}
-												options={{
-													...optionsPrimary
-												}}
-											/>
-											<Stack.Screen
-												name="Home"
-												component={Home}
-												options={{
-													...optionsPrimary
-												}}
-											/>
-										</>
-									) : (
-										<>
-											<Stack.Screen
-												name="Home"
-												component={Home}
-												options={{
-													...optionsPrimary
-												}}
-											/>
-											<Stack.Screen
-												name="Login"
-												component={Login}
-												options={{
-													...optionsPrimary
-												}}
-											/>
-										</>
-									)}
+					<RecordProvider>
+						<TaskProvider>
+							<ThemeProvider>
+								<NavigationContainer>
+									<Stack.Navigator>
+										{!isLogged ? (
+											<>
+												<Stack.Screen
+													name="Login"
+													component={Login}
+													options={{
+														...optionsPrimary
+													}}
+												/>
+												<Stack.Screen
+													name="Home"
+													component={Home}
+													options={{
+														...optionsPrimary
+													}}
+												/>
+											</>
+										) : (
+											<>
+												<Stack.Screen
+													name="Home"
+													component={Home}
+													options={{
+														...optionsPrimary
+													}}
+												/>
+												<Stack.Screen
+													name="Login"
+													component={Login}
+													options={{
+														...optionsPrimary
+													}}
+												/>
+											</>
+										)}
 
-									<Stack.Screen
-										name="Task"
-										component={Task}
-										options={{
-											...optionsPrimary
-										}}
-										initialParams={{
-											taskOrder: 0
-										}}
-									/>
-								</Stack.Navigator>
-								<Accessibility />
-							</NavigationContainer>
-						</ThemeProvider>
-					</TaskProvider>
+										<Stack.Screen
+											name="Task"
+											component={Task}
+											options={{
+												...optionsPrimary
+											}}
+											initialParams={{
+												taskOrder: 0
+											}}
+										/>
+									</Stack.Navigator>
+									<Accessibility />
+								</NavigationContainer>
+							</ThemeProvider>
+						</TaskProvider>
+					</RecordProvider>
 				</AuthStorageContext.Provider>
 			</SafeAreaView>
 		</>

@@ -13,7 +13,11 @@ const Keywords = ({ keywords }: Props) => {
 	const styles = getStyles(theme);
 
 	return (
-		<View style={styles.container}>
+		<View
+			style={styles.container}
+			accessible={true}
+			accessibilityLabel={'Palabras clave: ' + keywords.join(' ')}
+		>
 			<Text style={styles.text}>
 				{keywords.map((keyword, index) => {
 					return index === keywords.length - 1

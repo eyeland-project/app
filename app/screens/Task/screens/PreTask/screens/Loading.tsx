@@ -76,8 +76,7 @@ const getStyles = (theme: Theme) =>
 		animation: {
 			width: 200,
 			height: 200,
-			alignSelf: 'center',
-			// justifyContent: 'center',
+			alignSelf: 'center'
 		}
 	});
 

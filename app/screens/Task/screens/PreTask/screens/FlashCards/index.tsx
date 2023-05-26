@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, StyleSheet, Animated } from 'react-native';
+import { View, StyleSheet, Animated, ScrollView } from 'react-native';
 import Instructions from '../../components/Instructions';
 import * as Haptics from 'expo-haptics';
 import FlipCard from './components/FlipCard';
@@ -184,7 +184,7 @@ const FlashCards = ({ route }: Props) => {
 	if (optionsQuestionShuffled.length === 0) return null;
 
 	return (
-		<>
+		<ScrollView style={styles.scroll}>
 			<View
 				style={styles.container}
 				accessible={true}
@@ -232,12 +232,15 @@ const FlashCards = ({ route }: Props) => {
 				showModal={showModal}
 				help={feedback}
 			/>
-		</>
+		</ScrollView>
 	);
 };
 
 const getStyles = (theme: Theme) =>
 	StyleSheet.create({
+		scroll: {
+			backgroundColor: theme.colors.white,
+		},
 		container: {
 			backgroundColor: theme.colors.white,
 			height: '100%'

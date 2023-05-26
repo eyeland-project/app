@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import useTheme from '@hooks/useTheme';
 import useTime from '@hooks/useTime';
 import useTaskContext from '@app/core/hooks/Task/useTaskContext';
+import useRecord from '@app/core/hooks/Task/PosTask/useRecord';
 
 import { Theme } from '@theme';
 import { PosTaskQuestion } from '@app/shared/interfaces/PosTaskQuestion.interface';
@@ -24,15 +25,20 @@ const SelectAndSpeaking = ({ route }: Props) => {
 	const { taskOrder } = useTaskContext();
 	const { nextQuestion, sendPosTaskAnswer } = usePosTask();
 	const { startTimer, stopTimer, time } = useTime();
+	const { stopAudio } = useRecord();
 	const [recorded, setRecorded] = useState(false);
+	const [hasConfirm, setHasConfirm] = useState(false);
 	const [recording, setRecording] = useState<string>();
 	const theme = useTheme();
 	const styles = getStyles(theme);
 
 	const handlePressConfirm = async () => {
+		if (hasConfirm) return;
 		if (!answered) return;
 		if (!recorded) return;
 
+		setHasConfirm(true);
+		stopAudio();
 		await sendPosTaskAnswer({
 			taskOrder,
 			questionOrder: question.questionOrder,

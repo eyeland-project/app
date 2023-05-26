@@ -2,10 +2,9 @@ import {
 	View,
 	Text,
 	StyleSheet,
-	ImageBackground,
 	Image,
 	AccessibilityInfo,
-	ActivityIndicator
+	ScrollView
 } from 'react-native';
 import Instructions from '../components/Instructions';
 import Option from '@screens/Task/components/Option';
@@ -32,8 +31,6 @@ const FillBlank = ({ route }: Props) => {
 	const [textStyleOptions, setTextStyleOptions] = useState([{}]);
 	const [blank, setBlank] = useState('       ');
 	const [showModal, setShowModal] = useState(false);
-	const [loadingImage, setLoadingImage] = useState(true);
-	const [errorImage, setErrorImage] = useState(false);
 	const [optionIndex, setOptionIndex] = useState<number>(0);
 	const theme = useTheme();
 	const playSoundSuccess = usePlaySound(require('@sounds/success.wav'));
@@ -99,7 +96,7 @@ const FillBlank = ({ route }: Props) => {
 
 	return (
 		<>
-			<View style={styles.container}>
+			<ScrollView style={styles.container}>
 				<Instructions text="Selecciona la opción correcta para completar la frase" />
 				<Text style={styles.question}>
 					{questionList[0]}
@@ -137,7 +134,7 @@ const FillBlank = ({ route }: Props) => {
 						/>
 					))}
 				</View>
-			</View>
+			</ScrollView>
 			<Modal
 				showModal={showModal}
 				closeModal={closeModal}

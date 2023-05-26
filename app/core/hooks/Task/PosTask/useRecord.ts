@@ -1,15 +1,29 @@
 import { Audio } from 'expo-av';
-import { AppState, ToastAndroid } from 'react-native';
+import { AppState, AccessibilityInfo } from 'react-native';
 
-import { useState } from 'react';
+import { useContext } from 'react';
 import usePlaySound from '../../usePlaySound';
+import useRecordContext from '../../useRecordContext';
+import Record from '@app/screens/Task/components/Record';
+import { set } from 'react-hook-form';
 
 const useRecord = () => {
-	const [recording, setRecording] = useState<Audio.Recording>();
-	const [finished, setFinished] = useState(false);
-	const [done, setDone] = useState(false);
-	const [audioUri, setAudioUri] = useState<string>('');
-	const [playingAudio, setPlayingAudio] = useState(false);
+	const {
+		recording,
+		setRecording,
+		isRecording,
+		setIsRecording,
+		isFinished,
+		setIsFinished,
+		isDone,
+		setIsDone,
+		audioUri,
+		setAudioUri,
+		isPlayingAudio,
+		setIsPlayingAudio,
+		sound,
+		setSound
+	} = useRecordContext();
 
 	const playSoundStartRecording = usePlaySound(
 		require('@sounds/startRecording.wav')
@@ -24,20 +38,23 @@ const useRecord = () => {
 
 	async function startRecording() {
 		try {
-			if (AppState.currentState !== 'active') {
-				console.log("App is in the background, can't start recording");
+			if (AppState.currentState !== 'active' || isRecording) {
+				console.log("App is in the background or another recording is active, can't start recording");
 				return;
 			}
+
 			await Audio.requestPermissionsAsync();
 			await Audio.setAudioModeAsync({
 				allowsRecordingIOS: true,
 				playsInSilentModeIOS: true
 			});
 			playSoundStartRecording();
-			const { recording } = await Audio.Recording.createAsync(
+			const { recording: recordingTemp } = await Audio.Recording.createAsync(
 				Audio.RecordingOptionsPresets.HIGH_QUALITY
 			);
-			setRecording(recording);
+			AccessibilityInfo.announceForAccessibility('Grabando, presiona el botón nuevamente para detener la grabación');
+			setRecording(recordingTemp);
+			setIsRecording(true);
 		} catch (err) {
 			console.error('Failed to start recording', err);
 		}
@@ -46,63 +63,99 @@ const useRecord = () => {
 	async function stopRecording(minimumDuration: number) {
 		console.log('Stopping recording..');
 		playSoundStopRecording();
-		await (recording as Audio.Recording).stopAndUnloadAsync();
-		await Audio.setAudioModeAsync({
-			allowsRecordingIOS: false
-		});
-		setFinished(true);
-		setRecording(undefined);
-		let message = '';
-		if (
-			recording?._finalDurationMillis &&
-			recording?._finalDurationMillis >= minimumDuration
-		) {
-			playSoundSuccessRecording();
-			const uri = (recording as Audio.Recording).getURI();
-			console.log('Recording stopped and stored at', uri);
-			if (uri) {
-				setAudioUri(uri);
-				setDone(true);
-				message = 'Grabación finalizada con éxito';
-			}
-		} else {
-			playSoundFailRecording();
-			message = 'Grabación incorrecta, Intenta nuevamente';
-			setTimeout(() => {
-				setFinished(false);
-			}, 1500);
+
+		if (!recording) {
+			console.warn('Can\'t stop recording, as there is no recording object');
+			return;
 		}
-		ToastAndroid.show(message, ToastAndroid.SHORT);
+
+		try {
+			await (recording as Audio.Recording).stopAndUnloadAsync();
+			await Audio.setAudioModeAsync({
+				allowsRecordingIOS: false
+			});
+			setIsRecording(false);
+			setIsFinished(true);
+			setRecording(undefined);
+
+			if (
+				recording?._finalDurationMillis &&
+				recording?._finalDurationMillis >= minimumDuration
+			) {
+				const uri = (recording as Audio.Recording).getURI();
+				console.log('Recording stopped and stored at', uri);
+				if (uri) {
+					setAudioUri(uri);
+					setIsDone(true);
+					AccessibilityInfo.announceForAccessibility('Grabación finalizada con éxito, presiona el botón nuevamente para reproducir la grabación');
+				}
+			} else {
+				setTimeout(() => {
+					setIsFinished(false);
+				}, 1500);
+				AccessibilityInfo.announceForAccessibility('Grabación incorrecta, Intenta nuevamente');
+			}
+		} catch (err) {
+			console.error('Failed to stop recording', err);
+		}
 	}
 
-
-	function playAudio() {
-		if (audioUri) {
+	async function playAudio() {
+		if (sound) stopAudio();
+		if (audioUri && !isPlayingAudio) {
 			console.log('Playing audio..');
 
-			setPlayingAudio(true);
-			Audio.Sound.createAsync(
-				{ uri: audioUri },
-				{ shouldPlay: true }
-			).then(({ sound }) => {
+			setIsPlayingAudio(true);
+			try {
+				const { sound } = await Audio.Sound.createAsync(
+					{ uri: audioUri },
+					{ shouldPlay: true }
+				);
+
 				sound.setOnPlaybackStatusUpdate(playbackStatus => {
 					if (playbackStatus.isLoaded && playbackStatus.didJustFinish) {
-						// The playback has just finished
-						setPlayingAudio(false);
+						setIsPlayingAudio(false);
 					}
 				});
-				sound.playAsync();
-			});
+
+				setSound(sound);
+				await sound.playAsync();
+			} catch (err) {
+				console.error('Failed to play audio', err);
+				setIsPlayingAudio(false);
+			}
 		}
 	}
 
 	function reset() {
-		setFinished(false);
-		setDone(false);
+		AccessibilityInfo.announceForAccessibility('Grabación eliminada');
+		setIsFinished(false);
+		setIsDone(false);
 		setAudioUri('');
+		setIsRecording(false);
 	}
 
-	return { recording, finished, done, startRecording, stopRecording, audioUri, reset, playAudio, playingAudio };
+	async function stopAudio() {
+		if (sound) {
+			await sound.stopAsync();
+			setSound(undefined);
+			setIsPlayingAudio(false);
+		}
+	}
+
+	return { startRecording, stopRecording, reset, playAudio, stopAudio };
 };
 
+
 export default useRecord;
+
+
+
+
+
+
+// 	//TODo make function to stop audio
+
+
+
+// export default useRecord;

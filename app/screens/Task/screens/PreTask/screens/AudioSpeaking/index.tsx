@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, AccessibilityInfo } from 'react-native';
+import { View, Text, StyleSheet, AccessibilityInfo, ScrollView } from 'react-native';
 import Record from '@screens/Task/components/Record';
 import AudioPlayer from '@screens/Task/components/AudioPlayer';
 import Option from '@app/screens/Task/components/Option';
@@ -7,6 +7,7 @@ import React, { useEffect, useState } from 'react';
 import useTheme from '@hooks/useTheme';
 import usePreTask from '@hooks/Task/PreTask/usePreTask';
 import useTextToSpeech from '@hooks/useTextToSpeech';
+import useRecord from '@app/core/hooks/Task/PosTask/useRecord';
 
 import { Theme } from '@theme';
 import { PreTaskQuestion } from '@interfaces/PreTaskQuestion.interface';
@@ -21,14 +22,23 @@ const AudioSpeaking = ({ route }: Props) => {
     const theme = useTheme();
     const styles = getStyles(theme);
     const words = question.content.split(' ');
+    const { stopAudio } = useRecord();
 
     const { nextQuestion } = usePreTask();
     const { speak } = useTextToSpeech();
     const [recorded, setRecorded] = useState(false);
+    const [hasConfirm, setHasConfirm] = useState(false);
 
     const handlePressConfirm = () => {
-        nextQuestion();
+        setHasConfirm(true);
     };
+
+    useEffect(() => {
+        if (hasConfirm) {
+            stopAudio();
+            nextQuestion();
+        }
+    }, [hasConfirm]);
 
     useEffect(() => {
         AccessibilityInfo.announceForAccessibility(question.content);
@@ -36,56 +46,61 @@ const AudioSpeaking = ({ route }: Props) => {
     }, []);
 
     return (
-        <View style={styles.container}>
-            <View>
-                <Instructions text='Grábate diciendo la frase' />
-                <Text style={styles.question}>
-                    {
-                        words.map((word, index) => {
-                            return (
-                                <Text
-                                    key={index}
-                                >
-                                    {word}{' '}
-                                </Text>
-                            );
-                        })
-                    }
-                </Text>
-                <AudioPlayer
-                    textToSpeech={question.content}
-                />
-                <Text style={styles.title} accessibilityLabel="Grabación">
-                    Grabación
-                </Text>
-                <View style={styles.secondaryContainer}>
-                    <Record
-                        blocked={false}
-                        minimumTime={1000}
-                        setRecorded={setRecorded}
-                        setRecording={() => { }}
-                    />
-                </View>
-            </View>
-            {recorded && (
+        <ScrollView style={styles.scroll}>
+            <View style={styles.container}>
                 <View>
-                    <Option
-                        text="Confirmar"
-                        onPress={() => {
-                            handlePressConfirm();
-                        }}
-                        containerStyle={{}}
-                        textStyle={{}}
+                    <Instructions text='Grábate diciendo la frase' />
+                    <Text style={styles.question}>
+                        {
+                            words.map((word, index) => {
+                                return (
+                                    <Text
+                                        key={index}
+                                    >
+                                        {word}{' '}
+                                    </Text>
+                                );
+                            })
+                        }
+                    </Text>
+                    <AudioPlayer
+                        textToSpeech={question.content}
                     />
-                    <View style={styles.safeSpace} />
+                    <Text style={styles.title} accessibilityLabel="Grabación">
+                        Grabación
+                    </Text>
+                    <View style={styles.secondaryContainer}>
+                        <Record
+                            blocked={false}
+                            minimumTime={1000}
+                            setRecorded={setRecorded}
+                            setRecording={() => { }}
+                        />
+                    </View>
                 </View>
-            )}
-        </View>
+                {recorded && (
+                    <View>
+                        <Option
+                            text="Confirmar"
+                            onPress={() => {
+                                handlePressConfirm();
+                            }}
+                            containerStyle={{}}
+                            textStyle={{}}
+                        />
+                        <View style={styles.safeSpace} />
+                    </View>
+                )}
+            </View>
+        </ScrollView>
     );
 }
 
 const getStyles = (theme: Theme) =>
     StyleSheet.create({
+        scroll: {
+            backgroundColor: theme.colors.white
+        },
         container: {
             backgroundColor: theme.colors.white,
             height: '100%',
