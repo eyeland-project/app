@@ -1,4 +1,4 @@
-import { View, Text, Modal as ModalNative, StyleSheet } from 'react-native';
+import { View, Text, Modal as ModalNative, StyleSheet, Platform } from 'react-native';
 import React from 'react';
 import LottieView from 'lottie-react-native';
 
@@ -15,6 +15,7 @@ interface Props {
 const LoadingModal = ({ showModal, closeModal }: Props) => {
     const theme = useTheme();
     const styles = getStyles(theme);
+    const currentPlatform = Platform.OS;
 
     return (
         <ModalNative
@@ -27,12 +28,16 @@ const LoadingModal = ({ showModal, closeModal }: Props) => {
         >
             <View style={styles.modalContainer}>
                 <View style={styles.modalView}>
-                    <LottieView
-                        source={require('@assets/animations/waitingPigeon.json')}
-                        autoPlay
-                        loop
-                        style={{ width: 150, height: 150 }}
-                    />
+                    {
+                        currentPlatform !== 'web' && (
+                            <LottieView
+                                source={require('@assets/animations/waitingPigeon.json')}
+                                autoPlay
+                                loop
+                                style={{ width: 150, height: 150 }}
+                            />
+                        )
+                    }
                     <Text style={styles.modalTitleText}>
                         Cargando...
                     </Text>
