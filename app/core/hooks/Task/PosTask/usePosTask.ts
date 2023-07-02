@@ -1,18 +1,16 @@
-import { useState, useCallback } from 'react';
-import useAuthStorage from '../../useAuthStorage';
-import axios from 'axios';
+import { useCallback, useState } from 'react';
 
-import { errorHandler } from '../../../utils/errorHandler';
-import { environment } from '@environments/environment';
-
+import { Platform } from 'react-native';
 import { PosTask } from '@interfaces/PosTask.interface';
-import { PosTaskQuestionType } from '@app/shared/enums/PosTaskQuestion.enum';
 import { PosTaskQuestion } from '@app/shared/interfaces/PosTaskQuestion.interface';
-
+import { PosTaskQuestionType } from '@app/shared/enums/PosTaskQuestion.enum';
+import axios from 'axios';
+import { environment } from '@environments/environment';
+import { errorHandler } from '../../../utils/errorHandler';
+import useAuthStorage from '../../useAuthStorage';
 import { useNavigation } from '@react-navigation/native';
 import { usePosTaskContext } from './usePosTaskContext';
 import useTaskContext from '../useTaskContext';
-import { Platform } from 'react-native';
 
 const errors: Map<number, string> = new Map([
 	[400, 'Recurso no encontrado'],
@@ -68,7 +66,7 @@ const usePosTask = () => {
 				answerSeconds: number;
 				text?: string;
 				audioUri?: string;
-			}
+			};
 		}) => {
 			setError(null);
 			setLoading(true);
@@ -90,8 +88,14 @@ const usePosTask = () => {
 					formData.append('audio', '');
 				}
 
-				formData.append('idOption', inputs.body.idOption?.toString() || '');
-				formData.append('answerSeconds', inputs.body.answerSeconds.toString());
+				formData.append(
+					'idOption',
+					inputs.body.idOption?.toString() || ''
+				);
+				formData.append(
+					'answerSeconds',
+					inputs.body.answerSeconds.toString()
+				);
 				formData.append('text', inputs.body.text || '');
 
 				const response = await axios.post(
@@ -99,9 +103,9 @@ const usePosTask = () => {
 					formData,
 					{
 						headers: {
-							"Content-Type": "multipart/form-data",
-							Authorization: `Bearer ${await authStorage.getAccessToken()}`,
-						},
+							'Content-Type': 'multipart/form-data',
+							Authorization: `Bearer ${await authStorage.getAccessToken()}`
+						}
 					}
 				);
 
@@ -114,8 +118,9 @@ const usePosTask = () => {
 			} catch (err: any) {
 				setError(errorHandler(err, errors));
 			}
-		}
-		, [])
+		},
+		[]
+	);
 
 	const nextQuestion = () => {
 		setTimeout(() => {
@@ -139,6 +144,9 @@ const usePosTask = () => {
 				case PosTaskQuestionType.OPEN:
 					name = 'Open';
 					break;
+				case PosTaskQuestionType.FIll_BLANK:
+					name = 'FillBlank';
+					break;
 				default:
 					console.error('Invalid question type');
 					break;
@@ -161,34 +169,44 @@ const usePosTask = () => {
 		}, 250);
 	};
 
-	const setPosTaskComplete = useCallback(async (inputs: { taskOrder: number }) => {
-		setError(null);
-		setLoading(true);
-		try {
-			const response = await axios.post(
-				`${environment.apiUrl}/tasks/${inputs.taskOrder}/postask/complete`,
-				{},
-				{
-					headers: {
-						Authorization: `Bearer ${await authStorage.getAccessToken()}`
+	const setPosTaskComplete = useCallback(
+		async (inputs: { taskOrder: number }) => {
+			setError(null);
+			setLoading(true);
+			try {
+				const response = await axios.post(
+					`${environment.apiUrl}/tasks/${inputs.taskOrder}/postask/complete`,
+					{},
+					{
+						headers: {
+							Authorization: `Bearer ${await authStorage.getAccessToken()}`
+						}
 					}
+				);
+
+				if (response.status === 200) {
+					setLoading(false);
+					return response.data;
+				} else {
+					throw new Error(response.data);
 				}
-			);
-
-			if (response.status === 200) {
+			} catch (err: any) {
 				setLoading(false);
-				return response.data;
-			} else {
-				throw new Error(response.data);
+				setError(errorHandler(err, errors));
 			}
-		} catch (err: any) {
-			setLoading(false);
-			setError(errorHandler(err, errors));
-		}
-	}, []);
+		},
+		[]
+	);
 
-
-	return { loading, error, data, getPosTask, setPosTaskComplete, sendPosTaskAnswer, nextQuestion };
+	return {
+		loading,
+		error,
+		data,
+		getPosTask,
+		setPosTaskComplete,
+		sendPosTaskAnswer,
+		nextQuestion
+	};
 };
 
 export default usePosTask;

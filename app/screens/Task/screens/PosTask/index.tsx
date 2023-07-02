@@ -1,12 +1,11 @@
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
-
-import Loading from './screens/Loading';
 import Complete from './screens/Complete';
-import SelectAndSpeaking from './screens/SelectAndSpeaking';
+import FillBlank from './screens/FillBlank';
+import Loading from './screens/Loading';
+import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import Open from './screens/Open';
-
 import PosTaskProvider from '@app/core/contexts/PosTaskContext';
+import SelectAndSpeaking from './screens/SelectAndSpeaking';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 interface Props {
 	route: any;
@@ -54,6 +53,16 @@ const PosTask = ({ route }: Props) => {
 						question: null
 					}}
 					component={Open}
+				/>
+				<Stack.Screen
+					name="FillBlank"
+					options={{
+						...optionsPrimary
+					}}
+					initialParams={{
+						question: null
+					}}
+					component={FillBlank}
 				/>
 				<Stack.Screen
 					name="Complete"
