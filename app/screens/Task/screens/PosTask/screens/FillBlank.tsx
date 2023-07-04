@@ -61,21 +61,17 @@ const FillBlank = ({ route }: Props) => {
 		}
 		setContainerStyleOptions(newContainerStyleOptions);
 		setTextStyleOptions(newTextStyleOptions);
-		if (correct) {
-			setTimeout(async () => {
-				await sendPosTaskAnswer({
-					taskOrder,
-					questionOrder: question.questionOrder,
-					body: {
-						idOption: id,
-						answerSeconds: time
-					}
-				});
-				nextQuestion();
-			}, 1000);
-		} else {
-			resetContainerStyleOptions();
-		}
+		setTimeout(async () => {
+			await sendPosTaskAnswer({
+				taskOrder,
+				questionOrder: question.questionOrder,
+				body: {
+					idOption: id,
+					answerSeconds: time
+				}
+			});
+			nextQuestion();
+		}, 1000);
 	};
 
 	const playSound = (correct: boolean) => {
