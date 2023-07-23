@@ -1,11 +1,10 @@
-import { View, Text, StyleSheet, AccessibilityInfo } from 'react-native';
+import { AccessibilityInfo, StyleSheet, Text, View } from 'react-native';
+
 import { FontAwesome5 } from '@expo/vector-icons';
 import Pressable from '@components/Pressable';
-
+import { Theme } from '@theme';
 import { useState } from 'react';
 import useTheme from '@hooks/useTheme';
-
-import { Theme } from '@theme';
 
 const Title = () => {
 	const theme = useTheme();
@@ -14,7 +13,7 @@ const Title = () => {
 
 	const toggleDialog = () => {
 		AccessibilityInfo.announceForAccessibility(
-			'Grábate diciendo la pregunta y su correspondiente respuesta. Recuerda: El audio debe durar más de 5 segundos'
+			'Grábate diciendo la pregunta y su correspondiente respuesta. Recuerda: El audio debe durar más de 5 segundos y menos de 30 segundos'
 		);
 		setOpen(!open);
 	};
@@ -47,12 +46,13 @@ const Title = () => {
 						</Text>
 						<Text
 							style={styles.dialogText}
-							accessibilityLabel="Recuerda: El audio debe durar más de 20 segundos"
+							accessibilityLabel="Recuerda: El audio debe durar más de 5 segundos y menos de 30 segundos"
 						>
 							<Text style={{ color: theme.colors.red }}>
 								Recuerda:
 							</Text>{' '}
-							El audio debe durar más de 5 segundos
+							El audio debe durar más de 5 segundos y menos de 30
+							segundos
 						</Text>
 					</View>
 				)}

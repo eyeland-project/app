@@ -1,20 +1,19 @@
-import { View, StyleSheet, ScrollView, ToastAndroid } from 'react-native';
-import Record from '@app/screens/Task/components/Record';
-import QuestionComponent from './components/Question';
-import Option from '@app/screens/Task/components/Option';
-import Title from './components/Title';
-import LoadingModal from '@app/screens/Task/components/LoadingModal';
-
+import { ScrollView, StyleSheet, ToastAndroid, View } from 'react-native';
 import { useEffect, useState } from 'react';
+
+import LoadingModal from '@app/screens/Task/components/LoadingModal';
+import Option from '@app/screens/Task/components/Option';
+import { PosTaskQuestion } from '@app/shared/interfaces/PosTaskQuestion.interface';
+import QuestionComponent from './components/Question';
+import Record from '@app/screens/Task/components/Record';
+import { Theme } from '@theme';
+import Title from './components/Title';
+import usePlaySound from '@app/core/hooks/usePlaySound';
+import usePosTask from '@app/core/hooks/Task/PosTask/usePosTask';
+import useRecord from '@app/core/hooks/Task/PosTask/useRecord';
+import useTaskContext from '@app/core/hooks/Task/useTaskContext';
 import useTheme from '@hooks/useTheme';
 import useTime from '@hooks/useTime';
-import useTaskContext from '@app/core/hooks/Task/useTaskContext';
-import useRecord from '@app/core/hooks/Task/PosTask/useRecord';
-
-import { Theme } from '@theme';
-import { PosTaskQuestion } from '@app/shared/interfaces/PosTaskQuestion.interface';
-import usePosTask from '@app/core/hooks/Task/PosTask/usePosTask';
-import usePlaySound from '@app/core/hooks/usePlaySound';
 
 interface Props {
 	route: any;
@@ -46,7 +45,6 @@ const SelectAndSpeaking = ({ route }: Props) => {
 	const [hasConfirm, setHasConfirm] = useState(false);
 	const [recording, setRecording] = useState<string>();
 
-
 	const handlePressConfirm = async () => {
 		if (hasConfirm) return;
 		if (!answered) return;
@@ -62,16 +60,18 @@ const SelectAndSpeaking = ({ route }: Props) => {
 			body: {
 				idOption: idOptionSelected,
 				answerSeconds: time,
-				audioUri: recording,
+				audioUri: recording
 			}
 		});
 		nextQuestion();
-
-	}
+	};
 
 	useEffect(() => {
 		if (answered) {
-			ToastAndroid.show('Pregunta contestada, ahora debes grabarte diciendo la pregunta y la respuesta', ToastAndroid.SHORT);
+			ToastAndroid.show(
+				'Pregunta contestada, ahora debes grabarte diciendo la pregunta y la respuesta',
+				ToastAndroid.SHORT
+			);
 		}
 	}, [answered]);
 
@@ -95,6 +95,7 @@ const SelectAndSpeaking = ({ route }: Props) => {
 						minimumTime={5000}
 						setRecorded={setRecorded}
 						setRecording={setRecording}
+						maximumTime={30000}
 					/>
 				</View>
 				{recorded && (
@@ -111,10 +112,7 @@ const SelectAndSpeaking = ({ route }: Props) => {
 					</View>
 				)}
 			</ScrollView>
-			<LoadingModal
-				showModal={loading}
-				closeModal={() => { }}
-			/>
+			<LoadingModal showModal={loading} closeModal={() => {}} />
 		</>
 	);
 };
