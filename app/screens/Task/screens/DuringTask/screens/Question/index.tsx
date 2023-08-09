@@ -1,24 +1,29 @@
-import { View, StyleSheet, Image, ToastAndroid, Platform, ScrollView } from 'react-native';
-import Query from './components/Query';
+import {
+	Image,
+	Platform,
+	ScrollView,
+	StyleSheet,
+	ToastAndroid,
+	View
+} from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+
+import AudioPlayer from '@app/screens/Task/components/AudioPlayer';
+import History from '../../../../components/History';
 import Option from '@screens/Task/components/Option';
 import Placeholder from './components/Placeholder';
 import PositionBar from './components/PositionBar';
-import History from '../../../../components/History';
-import AudioPlayer from '@app/screens/Task/components/AudioPlayer';
-
-import useMediaQuery from '@app/core/hooks/useMediaQuery';
-import { useState, useEffect, useRef } from 'react';
-import useTheme from '@hooks/useTheme';
-import usePlaySound from '@hooks/usePlaySound';
-import useTime from '@hooks/useTime';
-import useDuringTaskQuestion from '@app/core/hooks/Task/DurinTask/useDuringTaskQuestion';
-import { useDuringTaskContext } from '@app/core/hooks/Task/DurinTask/useDuringTaskContext';
-import { useNavigation } from '@react-navigation/native';
-
-import { SocketEvents } from '@enums/SocketEvents.enum';
-
-import { Theme } from '@theme';
 import Pressable from '@app/shared/components/Pressable';
+import Query from './components/Query';
+import { SocketEvents } from '@enums/SocketEvents.enum';
+import { Theme } from '@theme';
+import { useDuringTaskContext } from '@app/core/hooks/Task/DurinTask/useDuringTaskContext';
+import useDuringTaskQuestion from '@app/core/hooks/Task/DurinTask/useDuringTaskQuestion';
+import useMediaQuery from '@app/core/hooks/useMediaQuery';
+import { useNavigation } from '@react-navigation/native';
+import usePlaySound from '@hooks/usePlaySound';
+import useTheme from '@hooks/useTheme';
+import useTime from '@hooks/useTime';
 
 interface Props {
 	route: any;
@@ -40,7 +45,8 @@ const Question = ({ route }: Props) => {
 		sendDuringTaskAnswer
 	} = useDuringTaskQuestion();
 	const playSoundAnimal = usePlaySound({ uri: data?.audioUrl });
-	const { power, socket, team, position, setPosition } = useDuringTaskContext();
+	const { power, socket, team, position, setPosition } =
+		useDuringTaskContext();
 	const currentPlatform = Platform.OS;
 	const { isPhone, isTablet, isDesktop } = useMediaQuery();
 	const playSoundSuccess = usePlaySound(require('@sounds/success.wav'));
@@ -76,21 +82,20 @@ const Question = ({ route }: Props) => {
 		setContainerStyleOptions(newContainerStyleOptions);
 		setTextStyleOptions(newTextStyleOptions);
 
-		if (data) await sendDuringTaskAnswer({
-			taskOrder,
-			questionOrder: data.questionOrder,
-			body: { idOption: id, answerSeconds: time }
-		}),
-
-			navigateNextQuestion();
+		if (data)
+			await sendDuringTaskAnswer({
+				taskOrder,
+				questionOrder: data.questionOrder,
+				body: { idOption: id, answerSeconds: time }
+			}),
+				navigateNextQuestion();
 	};
 
 	const navigateNextQuestion = () => {
 		navigation.pop();
 		navigation.push('Question', {
-			taskOrder,
+			taskOrder
 		});
-
 	};
 
 	const onPressPlayAudio = () => {
@@ -114,17 +119,21 @@ const Question = ({ route }: Props) => {
 
 		initQuestion();
 
-		socket.once(
-			SocketEvents.TEAM_STUDENT_ANSWER, () => { navigateNextQuestion() }
-		);
+		socket.once(SocketEvents.TEAM_STUDENT_ANSWER, () => {
+			navigateNextQuestion();
+		});
 
 		socket.once(
-			SocketEvents.TEAM_STUDENT_LEAVE, (data: { name: string }) => {
-				ToastAndroid.show(`El usuario ${data.name} se ha perdido durante el paseo`, ToastAndroid.SHORT);
-				navigateNextQuestion()
+			SocketEvents.TEAM_STUDENT_LEAVE,
+			(data: { name: string }) => {
+				ToastAndroid.show(
+					`El usuario ${data.name} se ha perdido durante el paseo`,
+					ToastAndroid.SHORT
+				);
+				navigateNextQuestion();
 			}
 		);
-		''
+		('');
 		socket.on(
 			SocketEvents.COURSE_LEADERBOARD_UPDATE,
 			(
@@ -150,15 +159,21 @@ const Question = ({ route }: Props) => {
 
 	if (loading || !data) return <Placeholder />;
 
-	const question = data.content.indexOf('\\') > -1 ? data.content.split('\\')[1] : data.content;
-	const history = data.content.indexOf('\\') > -1 ? data.content.split('\\')[0] : null;
+	const question =
+		data.content.indexOf('\\') > -1
+			? data.content.split('\\')[1]
+			: data.content;
+	const history =
+		data.content.indexOf('\\') > -1 ? data.content.split('\\')[0] : null;
 
 	return (
 		<ScrollView style={styles.container}>
 			<PositionBar groupName={team?.name} position={position} />
-			{
-				history ? <History history={history} character={data.character} /> : <View style={{ height: 20 }} />
-			}
+			{history ? (
+				<History history={history} character={data.character} />
+			) : (
+				<View style={{ height: 20 }} />
+			)}
 			<Query
 				text={question}
 				power={power}
@@ -166,7 +181,12 @@ const Question = ({ route }: Props) => {
 				prepositionTranslations={data.superRadar}
 				imgAlt={data.imgAlt}
 			/>
-			<View style={styles.imageContainer} accessible={true} accessibilityLabel={'Imagen de la pregunta'} accessibilityHint={`Super hearing: ${data.imgAlt}`}>
+			<View
+				style={styles.imageContainer}
+				accessible={true}
+				accessibilityLabel={'Imagen de la pregunta'}
+				accessibilityHint={`Super hearing: ${data.imgAlt}`}
+			>
 				<Image
 					style={styles.image}
 					source={{ uri: `${data.imgUrl}?t=${data.id}` }}
@@ -174,16 +194,21 @@ const Question = ({ route }: Props) => {
 				/>
 			</View>
 
-			{
-				data.audioUrl && (
-					<AudioPlayer
-						source={{ uri: data.audioUrl }}
-					/>
-				)
-			}
+			{data.audioUrl && <AudioPlayer source={{ uri: data.audioUrl }} />}
 
 			<View style={styles.optionsContainer}>
-				<Option
+				{data.options.map((option, index) => (
+					<Option
+						key={index}
+						text={option.content}
+						onPress={() => {
+							onPressOption(index, option.correct, option.id);
+						}}
+						containerStyle={containerStyleOptions[index]}
+						textStyle={textStyleOptions[index]}
+					/>
+				))}
+				{/* <Option
 					text={data.options[0].content}
 					onPress={() => {
 						onPressOption(
@@ -206,7 +231,7 @@ const Question = ({ route }: Props) => {
 					}}
 					containerStyle={containerStyleOptions[1]}
 					textStyle={textStyleOptions[1]}
-				/>
+				/> */}
 			</View>
 			<View style={{ height: 80 }} />
 		</ScrollView>
