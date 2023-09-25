@@ -38,12 +38,14 @@ const Task = ({
 		<View
 			style={[styles.card, completed && styles.cardCompleted]}
 			accessible={true}
-			accessibilityLabel={`${order}. ${name}. ${description}. ${blocked ? 'Bloqueado' : 'Disponible'
-				}`}
-			accessibilityHint={`${blocked
-				? 'Esta tarea está bloqueada.'
-				: 'Presione el boton de comenzar para iniciar la tarea.'
-				}`}
+			accessibilityLabel={`${order}. ${name}. ${description}. ${
+				blocked ? 'Bloqueado' : 'Disponible'
+			}`}
+			accessibilityHint={`${
+				blocked
+					? 'Esta tarea está bloqueada.'
+					: 'Presione el boton de comenzar para iniciar la tarea.'
+			}`}
 		>
 			<ImageBackground
 				source={image}

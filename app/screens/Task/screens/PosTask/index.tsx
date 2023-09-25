@@ -14,7 +14,6 @@ interface Props {
 const Stack = createNativeStackNavigator();
 
 const PosTask = ({ route }: Props) => {
-
 	const optionsPrimary: NativeStackNavigationOptions = {
 		animation: 'slide_from_right',
 		headerBackVisible: false,
@@ -23,7 +22,7 @@ const PosTask = ({ route }: Props) => {
 
 	return (
 		<PosTaskProvider>
-			<Stack.Navigator >
+			<Stack.Navigator>
 				<Stack.Screen
 					name="Loading"
 					options={{

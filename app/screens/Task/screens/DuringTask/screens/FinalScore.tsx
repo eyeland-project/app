@@ -37,22 +37,20 @@ const FinalScore = () => {
 			<View>
 				<Text style={styles.position}>{position || 0}°</Text>
 				<Text style={styles.groupName}>{team?.name || 'Ocelots'}</Text>
-				{
-					currentPlatform !== 'web' && (
-						<LottieView
-							source={require('@animations/celebration.json')}
-							autoPlay
-							loop
-							style={{
-								width: 500,
-								position: 'absolute',
-								top: -80,
-								alignItems: 'center',
-								alignSelf: 'center'
-							}}
-						/>
-					)
-				}
+				{currentPlatform !== 'web' && (
+					<LottieView
+						source={require('@animations/celebration.json')}
+						autoPlay
+						loop
+						style={{
+							width: 500,
+							position: 'absolute',
+							top: -80,
+							alignItems: 'center',
+							alignSelf: 'center'
+						}}
+					/>
+				)}
 			</View>
 			<View>
 				<Option

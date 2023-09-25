@@ -50,11 +50,17 @@ const DuringTask = ({ route }: Props) => {
 		socket.emit(
 			'join',
 			await authStorage.getAccessToken(),
-			(response: { session?: boolean, error?: { message: string } }) => {
+			(response: { session?: boolean; error?: { message: string } }) => {
 				if (response.session) setIsSessionStarted(response.session);
-				if (response.error && response.error.message === "error:already_connected") {
+				if (
+					response.error &&
+					response.error.message === 'error:already_connected'
+				) {
 					authStorage.removeAccessToken();
-					ToastAndroid.show("Ya hay una sesión activa, lo siento, debemos desloguearte", ToastAndroid.LONG);
+					ToastAndroid.show(
+						'Ya hay una sesión activa, lo siento, debemos desloguearte',
+						ToastAndroid.LONG
+					);
 					navigation.reset({
 						index: 0,
 						routes: [{ name: 'Login' }]

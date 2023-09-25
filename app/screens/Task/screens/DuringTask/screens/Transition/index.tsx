@@ -31,16 +31,14 @@ const Transition = () => {
 	return (
 		<View style={styles.container}>
 			<Person dialog={dialog} />
-			{
-				currentPlatform !== 'web' && (
-					<LottieView
-						source={require('@animations/map.json')}
-						autoPlay
-						loop={false}
-						style={styles.animation}
-					/>
-				)
-			}
+			{currentPlatform !== 'web' && (
+				<LottieView
+					source={require('@animations/map.json')}
+					autoPlay
+					loop={false}
+					style={styles.animation}
+				/>
+			)}
 		</View>
 	);
 };

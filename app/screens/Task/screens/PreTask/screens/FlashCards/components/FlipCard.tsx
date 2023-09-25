@@ -46,7 +46,6 @@ const FlipCard = ({
 	const [loadingImage, setLoadingImage] = useState(true);
 	const [errorImage, setErrorImage] = useState(false);
 
-
 	return (
 		<Pressable
 			onPress={() => {
@@ -77,25 +76,34 @@ const FlipCard = ({
 							accessible={true}
 							accessibilityLabel="Parte trasera de la tarjeta"
 						>
-							<Text style={styles.backText}>{question.content}</Text>
+							<Text style={styles.backText}>
+								{question.content}
+							</Text>
 							<Animated.View
 								style={[
 									styles.flipIndicator,
 									{
 										transform: [
 											{
-												translateY: flipIndicatorAnimation.interpolate({
-													inputRange: [0, 1],
-													outputRange: [0, -5],
-												}),
-											},
-										],
-									},
+												translateY:
+													flipIndicatorAnimation.interpolate(
+														{
+															inputRange: [0, 1],
+															outputRange: [0, -5]
+														}
+													)
+											}
+										]
+									}
 								]}
 								accessible={true}
 								accessibilityLabel="Indicador de voltear"
 							>
-								<Entypo name="arrow-with-circle-up" size={24} color="black" />
+								<Entypo
+									name="arrow-with-circle-up"
+									size={24}
+									color="black"
+								/>
 							</Animated.View>
 						</View>
 					) : (
@@ -124,18 +132,25 @@ const FlipCard = ({
 									{
 										transform: [
 											{
-												translateY: flipIndicatorAnimation.interpolate({
-													inputRange: [0, 1],
-													outputRange: [0, -5],
-												}),
-											},
-										],
-									},
+												translateY:
+													flipIndicatorAnimation.interpolate(
+														{
+															inputRange: [0, 1],
+															outputRange: [0, -5]
+														}
+													)
+											}
+										]
+									}
 								]}
 								accessible={true}
 								accessibilityLabel="Indicador de voltear"
 							>
-								<Entypo name="arrow-with-circle-up" size={24} color="white" />
+								<Entypo
+									name="arrow-with-circle-up"
+									size={24}
+									color="white"
+								/>
 							</Animated.View>
 						</View>
 					)}
@@ -168,7 +183,7 @@ const getStyles = (theme: Theme) =>
 			width: '90%',
 			alignSelf: 'center',
 			borderRadius: theme.borderRadius.medium,
-			overflow: 'hidden',
+			overflow: 'hidden'
 		},
 		flipCard: {
 			width: '100%',
@@ -176,7 +191,7 @@ const getStyles = (theme: Theme) =>
 			overflow: 'hidden',
 			borderColor: theme.colors.black,
 			height: '100%',
-			borderRadius: theme.borderRadius.medium,
+			borderRadius: theme.borderRadius.medium
 		},
 		image: {
 			width: '100%',
@@ -208,7 +223,7 @@ const getStyles = (theme: Theme) =>
 			letterSpacing: theme.spacing.medium,
 			textAlign: 'center',
 			marginTop: 20
-		},
+		}
 	});
 
 export default FlipCard;

@@ -35,34 +35,30 @@ const Complete = () => {
 	return (
 		<View style={styles.container}>
 			<View>
-				{
-					currentPlatform !== 'web' && (
-						<LottieView
-							source={require('@animations/celebration.json')}
-							autoPlay
-							loop
-							style={{
-								width: 500,
-								position: 'absolute',
-								top: -80,
-								alignItems: 'center',
-								alignSelf: 'center'
-							}}
-						/>
-					)
-				}
+				{currentPlatform !== 'web' && (
+					<LottieView
+						source={require('@animations/celebration.json')}
+						autoPlay
+						loop
+						style={{
+							width: 500,
+							position: 'absolute',
+							top: -80,
+							alignItems: 'center',
+							alignSelf: 'center'
+						}}
+					/>
+				)}
 				<Text style={styles.text}>¡Felicidades, lo lograste!</Text>
 			</View>
-			{
-				currentPlatform !== 'web' && (
-					<LottieView
-						source={require('@animations/star.json')}
-						autoPlay
-						loop={false}
-						duration={2000}
-					/>
-				)
-			}
+			{currentPlatform !== 'web' && (
+				<LottieView
+					source={require('@animations/star.json')}
+					autoPlay
+					loop={false}
+					duration={2000}
+				/>
+			)}
 			<View>
 				<Option
 					text="Volver al menú"

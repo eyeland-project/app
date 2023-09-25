@@ -54,7 +54,7 @@ const FlashCards = ({ route }: Props) => {
 		const isCorrect = optionsQuestionShuffled[optionIndex].correct;
 		const color =
 			(option === 'true' && isCorrect) ||
-				(option === 'false' && !isCorrect)
+			(option === 'false' && !isCorrect)
 				? theme.colors.green
 				: theme.colors.red;
 		const updatedContainerStyleOptions = {
@@ -239,7 +239,7 @@ const FlashCards = ({ route }: Props) => {
 const getStyles = (theme: Theme) =>
 	StyleSheet.create({
 		scroll: {
-			backgroundColor: theme.colors.white,
+			backgroundColor: theme.colors.white
 		},
 		container: {
 			backgroundColor: theme.colors.white,

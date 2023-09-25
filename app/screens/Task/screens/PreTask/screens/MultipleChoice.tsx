@@ -158,7 +158,7 @@ const getStyles = (theme: Theme) =>
 			letterSpacing: theme.spacing.medium,
 			textAlign: 'center',
 			marginTop: 20
-		},
+		}
 	});
 
 export default MultipleChoice;

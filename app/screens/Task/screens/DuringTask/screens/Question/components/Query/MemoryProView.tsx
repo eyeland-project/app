@@ -28,14 +28,16 @@ const MemoryProView = ({ text, nounTranslations }: Props) => {
 		nounTranslations.map(() => new Animated.Value(0))
 	);
 
-
 	const textFiltered = text.replace(/[\[\]]/g, '');
 	const matchResults = textFiltered.match(/{(.*?)}/g);
 
 	const getInterpolatedColor = (index: number) => {
 		return nounColors[index].interpolate({
 			inputRange: [0, 1],
-			outputRange: [hexToRgbA(theme.colors.black, 1), hexToRgbA(theme.colors.black, 0.5)],
+			outputRange: [
+				hexToRgbA(theme.colors.black, 1),
+				hexToRgbA(theme.colors.black, 0.5)
+			]
 		});
 	};
 
@@ -47,19 +49,18 @@ const MemoryProView = ({ text, nounTranslations }: Props) => {
 						Animated.timing(nounColor, {
 							toValue: 1,
 							duration: 1000,
-							useNativeDriver: false,
+							useNativeDriver: false
 						}),
 						Animated.timing(nounColor, {
 							toValue: 0,
 							duration: 1000,
-							useNativeDriver: false,
-						}),
+							useNativeDriver: false
+						})
 					])
 				).start();
 			}
 		});
 	};
-
 
 	useEffect(() => {
 		setNouns(
@@ -75,7 +76,6 @@ const MemoryProView = ({ text, nounTranslations }: Props) => {
 	useEffect(() => {
 		animateColors();
 	}, [nouns]);
-
 
 	const usePower = (index: number) => {
 		if (animating) return;
@@ -114,8 +114,8 @@ const MemoryProView = ({ text, nounTranslations }: Props) => {
 				setNouns(
 					matchResults
 						? matchResults.map((match) =>
-							match.replace(/[{}]/g, '')
-						)
+								match.replace(/[{}]/g, '')
+						  )
 						: []
 				);
 			}
@@ -145,10 +145,12 @@ const MemoryProView = ({ text, nounTranslations }: Props) => {
 									styles.noun,
 									{
 										color:
-											!showPower[index] && nouns[index] !== nounTranslations[index]
+											!showPower[index] &&
+											nouns[index] !==
+												nounTranslations[index]
 												? getInterpolatedColor(index)
-												: theme.colors.black,
-									},
+												: theme.colors.black
+									}
 								]}
 								onPress={() => handlePress(index)}
 							>
@@ -190,14 +192,14 @@ const getStyles = (theme: Theme) =>
 			fontSize: theme.fontSize.xxl,
 			color: theme.colors.black,
 			fontFamily: theme.fontWeight.regular,
-			letterSpacing: theme.spacing.medium,
+			letterSpacing: theme.spacing.medium
 		},
 		noun: {
 			position: 'relative',
 			fontSize: theme.fontSize.xxl,
 			color: theme.colors.black,
 			fontFamily: theme.fontWeight.bold,
-			letterSpacing: theme.spacing.medium,
+			letterSpacing: theme.spacing.medium
 		},
 		nounContainer: {
 			position: 'relative'

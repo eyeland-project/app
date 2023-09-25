@@ -29,16 +29,14 @@ const WaitingActive = ({ route }: { route: any }) => {
 
 	return (
 		<View style={styles.container}>
-			{
-				currentPlatform !== 'web' && (
-					<LottieView
-						source={require('@animations/waitingActive.json')}
-						autoPlay
-						loop
-						style={styles.animation}
-					/>
-				)
-			}
+			{currentPlatform !== 'web' && (
+				<LottieView
+					source={require('@animations/waitingActive.json')}
+					autoPlay
+					loop
+					style={styles.animation}
+				/>
+			)}
 			<Text
 				style={styles.text}
 				accessible

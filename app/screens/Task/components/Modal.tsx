@@ -31,9 +31,15 @@ const Modal = ({ showModal, correct, closeModal, help }: Props) => {
 					<Text
 						style={styles.modalTitleText}
 						accessible={true}
-						accessibilityLabel={correct ? 'Respuesta correcta' : 'Respuesta incorrecta'}
+						accessibilityLabel={
+							correct
+								? 'Respuesta correcta'
+								: 'Respuesta incorrecta'
+						}
 					>
-						{correct ? '¡Respuesta correcta! ' : '¡Respuesta incorrecta!'}
+						{correct
+							? '¡Respuesta correcta! '
+							: '¡Respuesta incorrecta!'}
 					</Text>
 					<View style={styles.helpContainer}>
 						<View style={styles.iconContainer}>

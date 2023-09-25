@@ -1,4 +1,10 @@
-import { View, StyleSheet, ActivityIndicator, Platform, Text } from 'react-native';
+import {
+	View,
+	StyleSheet,
+	ActivityIndicator,
+	Platform,
+	Text
+} from 'react-native';
 import ErrorScreen from '@components/ErrorScreen';
 import LottieView from 'lottie-react-native';
 
@@ -49,18 +55,20 @@ const Loading = ({ route }: { route: any }) => {
 	return (
 		<View style={styles.container}>
 			<View accessible={true} accessibilityLabel="Cargando">
-				{
-					currentPlatform !== 'web' ?
-						<LottieView
-							source={require('@animations/loading.json')}
-							autoPlay
-							loop
-							style={styles.animation}
-						/>
-						:
-						<ActivityIndicator size={50} color={theme.colors.black} style={styles.animation} />
-
-				}
+				{currentPlatform !== 'web' ? (
+					<LottieView
+						source={require('@animations/loading.json')}
+						autoPlay
+						loop
+						style={styles.animation}
+					/>
+				) : (
+					<ActivityIndicator
+						size={50}
+						color={theme.colors.black}
+						style={styles.animation}
+					/>
+				)}
 			</View>
 		</View>
 	);
@@ -71,7 +79,7 @@ const getStyles = (theme: Theme) =>
 		container: {
 			flex: 1,
 			backgroundColor: theme.colors.white,
-			justifyContent: 'center',
+			justifyContent: 'center'
 		},
 		animation: {
 			width: 200,

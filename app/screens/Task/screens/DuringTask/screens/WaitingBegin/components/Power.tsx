@@ -94,7 +94,7 @@ const getStyles = (theme: Theme, isPhone: boolean) =>
 			flexDirection: 'row',
 			marginHorizontal: 20,
 			alignItems: 'center',
-			alignSelf: 'flex-start',
+			alignSelf: 'flex-start'
 			// justifyContent: 'space-between',
 		},
 		iconContainer: {

@@ -54,7 +54,8 @@ const Order = ({ route }: Props) => {
 
 	const onPressConfirm = () => {
 		const isCorrect = answerList.every(
-			(answer, index) => answer.toLowerCase() === correctOrder[index].toLowerCase()
+			(answer, index) =>
+				answer.toLowerCase() === correctOrder[index].toLowerCase()
 		);
 
 		if (isCorrect) {

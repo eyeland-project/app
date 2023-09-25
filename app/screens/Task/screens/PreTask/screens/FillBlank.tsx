@@ -112,12 +112,12 @@ const FillBlank = ({ route }: Props) => {
 						resizeMode="contain"
 						accessible
 						accessibilityLabel={question.imgAlt}
-					// onLoadStart={() => setLoadingImage(true)}
-					// onLoadEnd={() => setLoadingImage(false)}
-					// onError={() => {
-					// 	setLoadingImage(false);
-					// 	setErrorImage(true);
-					// }}
+						// onLoadStart={() => setLoadingImage(true)}
+						// onLoadEnd={() => setLoadingImage(false)}
+						// onError={() => {
+						// 	setLoadingImage(false);
+						// 	setErrorImage(true);
+						// }}
 					/>
 				</View>
 
@@ -186,7 +186,7 @@ const getStyles = (theme: Theme) =>
 			letterSpacing: theme.spacing.medium,
 			textAlign: 'center',
 			marginTop: 20
-		},
+		}
 	});
 
 export default FillBlank;

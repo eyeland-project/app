@@ -47,7 +47,11 @@ const Section = ({ title, completed, blocked, onPress }: Props) => {
 			disabled={blocked}
 			accessible={true}
 			accessibilityLabel={title}
-			accessibilityHint={blocked ? 'Esta sección está bloqueada' : 'Presiona para entrar a la sección'}
+			accessibilityHint={
+				blocked
+					? 'Esta sección está bloqueada'
+					: 'Presiona para entrar a la sección'
+			}
 		>
 			<Animated.View
 				style={[

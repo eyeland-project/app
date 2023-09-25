@@ -102,16 +102,14 @@ const WaitingBegin = ({ route }: Props) => {
 				loading={loadingPower}
 				blockReRoll={data.students.length >= 3}
 			/>
-			{
-				currentPlatform !== 'web' && (
-					< LottieView
-						source={require('@animations/waitingBegin.json')}
-						autoPlay
-						loop
-						style={styles.animation}
-					/>
-				)
-			}
+			{currentPlatform !== 'web' && (
+				<LottieView
+					source={require('@animations/waitingBegin.json')}
+					autoPlay
+					loop
+					style={styles.animation}
+				/>
+			)}
 			<Text
 				style={styles.waitingText}
 				accessible
