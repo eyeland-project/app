@@ -84,7 +84,7 @@ const MultipleChoice = ({ route }: Props) => {
 
 	useEffect(() => {
 		AccessibilityInfo.announceForAccessibility(question.content);
-		speak(question.content, 'es');
+		speak(question.content, question.lang);
 	}, []);
 
 	return (

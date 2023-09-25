@@ -91,7 +91,7 @@ const FillBlank = ({ route }: Props) => {
 
 	useEffect(() => {
 		AccessibilityInfo.announceForAccessibility(question.content);
-		speak(question.content.split('_'));
+		speak(question.content.split('_'), question.lang);
 	}, []);
 
 	return (

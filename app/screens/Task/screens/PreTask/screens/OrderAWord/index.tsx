@@ -104,7 +104,7 @@ const OrderAWord = ({ route }: Props) => {
 		setOptionsList(shuffleList(correctOrder));
 		setAnswerList([]);
 		AccessibilityInfo.announceForAccessibility(question.content);
-		speak(question.content, 'es');
+		speak(question.content, question.lang);
 	}, []);
 
 	return (
