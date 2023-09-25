@@ -4,6 +4,7 @@ import { Link } from '@react-navigation/native';
 
 import { useEffect } from 'react';
 import useTheme from '@hooks/useTheme';
+import useImageStackStore from '@app/core/hooks/Task/DurinTask/useImageStackStore';
 import useTaskContext from '@app/core/hooks/Task/useTaskContext';
 import { useDuringTaskContext } from '@app/core/hooks/Task/DurinTask/useDuringTaskContext';
 import { useNavigation } from '@react-navigation/native';
@@ -17,11 +18,13 @@ const WaitingActive = ({ route }: { route: any }) => {
 	const { resetContext } = useTaskContext();
 	const { socket } = useDuringTaskContext();
 	const navigation = useNavigation<any>();
+	const { imageStack, clearImageStack } = useImageStackStore();
 	const styles = getStyles(theme);
 	const currentPlatform = Platform.OS;
 
 	useEffect(() => {
 		resetContext();
+		if (imageStack.length) clearImageStack();
 		socket.once(SocketEvents.SESSION_TEACHER_CREATE, () => {
 			navigation.navigate('ChooseGroup', { taskOrder: taskOrder });
 		});

@@ -1,29 +1,30 @@
 import {
 	Image,
-	Platform,
 	ScrollView,
 	StyleSheet,
 	ToastAndroid,
-	View
+	View,
+	Text
 } from 'react-native';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import AudioPlayer from '@app/screens/Task/components/AudioPlayer';
 import History from '../../../../components/History';
 import Option from '@screens/Task/components/Option';
 import Placeholder from './components/Placeholder';
 import PositionBar from './components/PositionBar';
-import Pressable from '@app/shared/components/Pressable';
+import Pressable from '@components/Pressable';
 import Query from './components/Query';
 import { SocketEvents } from '@enums/SocketEvents.enum';
 import { Theme } from '@theme';
 import { useDuringTaskContext } from '@app/core/hooks/Task/DurinTask/useDuringTaskContext';
 import useDuringTaskQuestion from '@app/core/hooks/Task/DurinTask/useDuringTaskQuestion';
-import useMediaQuery from '@app/core/hooks/useMediaQuery';
+import useImageStackStore from '@app/core/hooks/Task/DurinTask/useImageStackStore';
 import { useNavigation } from '@react-navigation/native';
 import usePlaySound from '@hooks/usePlaySound';
 import useTheme from '@hooks/useTheme';
 import useTime from '@hooks/useTime';
+import { Mechanics } from '@app/shared/enums/Mechanics.enum';
 
 interface Props {
 	route: any;
@@ -36,6 +37,7 @@ const Question = ({ route }: Props) => {
 	const [containerStyleOptions, setContainerStyleOptions] = useState([{}]);
 	const [textStyleOptions, setTextStyleOptions] = useState([{}]);
 	const [answered, setAnswered] = useState(false);
+	const [imageFormed, setImageFormed] = useState(false);
 	const { time, startTimer, stopTimer } = useTime();
 	const {
 		data,
@@ -44,11 +46,13 @@ const Question = ({ route }: Props) => {
 		getDuringTaskQuestion,
 		sendDuringTaskAnswer
 	} = useDuringTaskQuestion();
-	const playSoundAnimal = usePlaySound({ uri: data?.audioUrl });
-	const { power, socket, team, position, setPosition } =
+	// const playSoundAnimal = usePlaySound({ uri: data?.audioUrl });
+	const { power, socket, team, position, setPosition, mechanics } =
 		useDuringTaskContext();
-	const currentPlatform = Platform.OS;
-	const { isPhone, isTablet, isDesktop } = useMediaQuery();
+	const { imageStack, pushImageStack, clearImageStack } =
+		useImageStackStore();
+	// const currentPlatform = Platform.OS;
+	// const { isPhone, isTablet, isDesktop } = useMediaQuery();
 	const playSoundSuccess = usePlaySound(require('@sounds/success.wav'));
 	const playSoundWrong = usePlaySound(require('@sounds/wrong.wav'));
 	const styles = getStyles(theme);
@@ -98,16 +102,24 @@ const Question = ({ route }: Props) => {
 		});
 	};
 
-	const onPressPlayAudio = () => {
-		if (data?.audioUrl) playSoundAnimal();
+	// const onPressPlayAudio = () => {
+	// 	if (data?.audioUrl) playSoundAnimal();
+	// };
+
+	const navigateFinalScore = () => {
+		navigation.reset({
+			index: 1,
+			routes: [{ name: 'FinalScore' }]
+		});
 	};
 
 	useEffect(() => {
 		if (error === 'Recurso no encontrado') {
-			navigation.reset({
-				index: 1,
-				routes: [{ name: 'FinalScore' }]
-			});
+			if (mechanics?.includes(Mechanics.FORM_IMAGE)) {
+				setImageFormed(true);
+			} else {
+				navigateFinalScore();
+			}
 		}
 	}, [error]);
 
@@ -157,6 +169,31 @@ const Question = ({ route }: Props) => {
 		};
 	}, []);
 
+	useEffect(() => {
+		if (mechanics?.includes(Mechanics.FORM_IMAGE)) {
+			const unsubscribe = navigation.addListener(
+				'beforeRemove',
+				(e: any) => {
+					if (e.data.action.type === 'GO_BACK') {
+						clearImageStack();
+					}
+				}
+			);
+			return unsubscribe;
+		}
+	}, [navigation]);
+
+	useEffect(() => {
+		if (data) {
+			if (
+				mechanics?.includes(Mechanics.FORM_IMAGE) &&
+				!imageStack.find((elem) => elem.idQuestion === data.id)
+			) {
+				pushImageStack({ idQuestion: data.id, imgUrl: data.imgUrl });
+			}
+		}
+	}, [data]);
+
 	if (loading || !data) return <Placeholder />;
 
 	const question =
@@ -187,28 +224,57 @@ const Question = ({ route }: Props) => {
 				accessibilityLabel={'Imagen de la pregunta'}
 				accessibilityHint={`Super hearing: ${data.imgAlt}`}
 			>
-				<Image
-					style={styles.image}
-					source={{ uri: `${data.imgUrl}?t=${data.id}` }}
-					resizeMode="contain"
-				/>
+				{mechanics?.includes(Mechanics.FORM_IMAGE) ? (
+					<View style={styles.stackImages}>
+						{imageStack.map((image, index) => (
+							<View style={styles.stackImagesElem} key={index}>
+								<Image
+									style={styles.image}
+									source={{
+										uri: `https://picsum.photos/400/200?t=${index}`
+										// uri: `${image.imgUrl}?t=${index}`
+									}}
+									resizeMode="contain"
+								/>
+							</View>
+						))}
+					</View>
+				) : (
+					<Image
+						style={styles.image}
+						source={{ uri: `${data.imgUrl}?t=${data.id}` }}
+						resizeMode="contain"
+					/>
+				)}
 			</View>
 
 			{data.audioUrl && <AudioPlayer source={{ uri: data.audioUrl }} />}
 
-			<View style={styles.optionsContainer}>
-				{data.options.map((option, index) => (
-					<Option
-						key={index}
-						text={option.content}
-						onPress={() => {
-							onPressOption(index, option.correct, option.id);
-						}}
-						containerStyle={containerStyleOptions[index]}
-						textStyle={textStyleOptions[index]}
-					/>
-				))}
-				{/* <Option
+			{imageFormed ? (
+				<Pressable
+					onPress={() => {
+						clearImageStack();
+						navigateFinalScore();
+					}}
+					accessible={true}
+					accessibilityHint="Ver posición"
+				>
+					<Text>Ver posición</Text>
+				</Pressable>
+			) : (
+				<View style={styles.optionsContainer}>
+					{data.options.map((option, index) => (
+						<Option
+							key={index}
+							text={option.content}
+							onPress={() => {
+								onPressOption(index, option.correct, option.id);
+							}}
+							containerStyle={containerStyleOptions[index]}
+							textStyle={textStyleOptions[index]}
+						/>
+					))}
+					{/* <Option
 					text={data.options[0].content}
 					onPress={() => {
 						onPressOption(
@@ -232,7 +298,9 @@ const Question = ({ route }: Props) => {
 					containerStyle={containerStyleOptions[1]}
 					textStyle={textStyleOptions[1]}
 				/> */}
-			</View>
+				</View>
+			)}
+
 			<View style={{ height: 80 }} />
 		</ScrollView>
 	);
@@ -283,6 +351,20 @@ const getStyles = (theme: Theme) =>
 		},
 		animation: {
 			height: 72
+		},
+		stackImages: {
+			position: 'relative',
+			width: '100%',
+			height: '100%'
+		},
+		stackImagesElem: {
+			position: 'absolute',
+			width: '100%',
+			height: '100%',
+			top: 0,
+			left: 0,
+			right: 0,
+			bottom: 0
 		}
 	});
 
