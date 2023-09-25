@@ -1,5 +1,6 @@
-import { Character } from "../enums/Character.enum";
-import { PosTaskQuestionType } from "../enums/PosTaskQuestion.enum";
+import { Character } from '../enums/Character.enum';
+import { PosTaskQuestionType } from '../enums/PosTaskQuestion.enum';
+import { QuestionLang } from '../enums/QuestionLang.enum';
 
 export interface PosTaskQuestion {
 	id: number;
@@ -12,6 +13,7 @@ export interface PosTaskQuestion {
 	videoUrl: string;
 	type: PosTaskQuestionType;
 	character: Character;
+	lang: QuestionLang;
 	options: {
 		id: number;
 		content: string;

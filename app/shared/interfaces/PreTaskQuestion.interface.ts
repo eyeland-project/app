@@ -1,4 +1,5 @@
 import { PreTaskTypeQuestion } from '../enums/PreTaskTypeQuestion.enum';
+import { QuestionLang } from '../enums/QuestionLang.enum';
 
 export interface PreTaskQuestion {
 	id: number;
@@ -6,6 +7,7 @@ export interface PreTaskQuestion {
 	type: PreTaskTypeQuestion;
 	imgAlt: string;
 	imgUrl: string;
+	lang: QuestionLang;
 	options: {
 		id: number;
 		content: string;

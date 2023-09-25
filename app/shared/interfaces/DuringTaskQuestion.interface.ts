@@ -1,4 +1,5 @@
-import { Character } from "../enums/Character.enum";
+import { Character } from '../enums/Character.enum';
+import { QuestionLang } from '../enums/QuestionLang.enum';
 export interface DuringTaskQuestion {
 	id: number;
 	content: string;
@@ -11,6 +12,7 @@ export interface DuringTaskQuestion {
 	videoUrl: string;
 	memoryPro: string[];
 	superRadar: string[];
+	lang: QuestionLang;
 	options: {
 		id: number;
 		content: string;

@@ -1,9 +1,4 @@
-import {
-	View,
-	StyleSheet,
-	AccessibilityInfo,
-	Platform
-} from 'react-native';
+import { View, StyleSheet, AccessibilityInfo, Platform } from 'react-native';
 import Instructions from '../components/Instructions';
 import Option from '@screens/Task/components/Option';
 import AntDesign from '@expo/vector-icons/AntDesign';
@@ -36,7 +31,8 @@ const AudioMultipleChoice = ({ route }: Props) => {
 	const playSoundSuccess = usePlaySound(require('@sounds/success.wav'));
 	const playSoundWrong = usePlaySound(require('@sounds/wrong.wav'));
 	const { nextQuestion } = usePreTask();
-	const { speak: speakQuestion, playing: playingQuestion } = useTextToSpeech();
+	const { speak: speakQuestion, playing: playingQuestion } =
+		useTextToSpeech();
 	const { speak: speakOption, playing: playingOption } = useTextToSpeech();
 	const animationRef = useRef<LottieView>(null);
 	const styles = getStyles(theme);
@@ -90,7 +86,7 @@ const AudioMultipleChoice = ({ route }: Props) => {
 	};
 
 	const onPressPlayAudio = () => {
-		speakQuestion(question.content, 'en');
+		speakQuestion(question.content, question.lang);
 	};
 
 	const resetContainerStyleOptions = () => {
@@ -101,7 +97,7 @@ const AudioMultipleChoice = ({ route }: Props) => {
 
 	useEffect(() => {
 		AccessibilityInfo.announceForAccessibility(question.content);
-		speakQuestion(question.content, 'en');
+		speakQuestion(question.content, question.lang);
 	}, []);
 
 	useEffect(() => {
@@ -117,23 +113,21 @@ const AudioMultipleChoice = ({ route }: Props) => {
 					accessible={true}
 					accessibilityHint="Reproduce el audio de la pregunta"
 				>
-					{
-						currentPlatform !== 'web' ? (
-							<LottieView
-								source={require('@animations/audioButton.json')}
-								loop
-								style={styles.animation}
-								ref={animationRef}
-							/>
-						) : (
-							<AntDesign
-								name="sound"
-								size={100}
-								color={theme.colors.black}
-								style={[styles.animation, { alignSelf: 'center' }]}
-							/>
-						)
-					}
+					{currentPlatform !== 'web' ? (
+						<LottieView
+							source={require('@animations/audioButton.json')}
+							loop
+							style={styles.animation}
+							ref={animationRef}
+						/>
+					) : (
+						<AntDesign
+							name="sound"
+							size={100}
+							color={theme.colors.black}
+							style={[styles.animation, { alignSelf: 'center' }]}
+						/>
+					)}
 				</Pressable>
 				<View style={styles.optionsContainer}>
 					{question.options.map((option, index) => (
