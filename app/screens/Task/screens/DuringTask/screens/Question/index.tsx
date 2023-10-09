@@ -3,8 +3,7 @@ import {
 	ScrollView,
 	StyleSheet,
 	ToastAndroid,
-	View,
-	Text
+	View
 } from 'react-native';
 import { useEffect, useState } from 'react';
 
@@ -13,7 +12,6 @@ import History from '../../../../components/History';
 import Option from '@screens/Task/components/Option';
 import Placeholder from './components/Placeholder';
 import PositionBar from './components/PositionBar';
-import Pressable from '@components/Pressable';
 import Query from './components/Query';
 import { SocketEvents } from '@enums/SocketEvents.enum';
 import { Theme } from '@theme';
@@ -25,6 +23,8 @@ import usePlaySound from '@hooks/usePlaySound';
 import useTheme from '@hooks/useTheme';
 import useTime from '@hooks/useTime';
 import { Mechanics } from '@app/shared/enums/Mechanics.enum';
+import ImageStack from '../../components/ImageStack';
+import OptionImage from '@app/screens/Task/components/OptionImage';
 
 interface Props {
 	route: any;
@@ -37,7 +37,6 @@ const Question = ({ route }: Props) => {
 	const [containerStyleOptions, setContainerStyleOptions] = useState([{}]);
 	const [textStyleOptions, setTextStyleOptions] = useState([{}]);
 	const [answered, setAnswered] = useState(false);
-	const [imageFormed, setImageFormed] = useState(false);
 	const { time, startTimer, stopTimer } = useTime();
 	const {
 		data,
@@ -55,12 +54,14 @@ const Question = ({ route }: Props) => {
 	// const { isPhone, isTablet, isDesktop } = useMediaQuery();
 	const playSoundSuccess = usePlaySound(require('@sounds/success.wav'));
 	const playSoundWrong = usePlaySound(require('@sounds/wrong.wav'));
+	const [isQuestionFirst] = useState(imageStack.length === 0);
 	const styles = getStyles(theme);
 
 	const onPressOption = async (
 		index: number,
 		correct: boolean,
-		id: number
+		id: number,
+		imgUrl: string | null
 	) => {
 		if (answered) return;
 
@@ -75,6 +76,14 @@ const Question = ({ route }: Props) => {
 				backgroundColor: theme.colors.green
 			};
 			newTextStyleOptions[index] = { color: theme.colors.white };
+			if (
+				data &&
+				mechanics?.includes(Mechanics.FORM_IMAGE) &&
+				!imageStack.find((elem) => elem.idOption === id) &&
+				imgUrl
+			) {
+				pushImageStack({ idOption: id, imgUrl: imgUrl });
+			}
 		} else {
 			playSoundWrong();
 			newContainerStyleOptions[index] = {
@@ -86,13 +95,14 @@ const Question = ({ route }: Props) => {
 		setContainerStyleOptions(newContainerStyleOptions);
 		setTextStyleOptions(newTextStyleOptions);
 
-		if (data)
+		if (data) {
 			await sendDuringTaskAnswer({
 				taskOrder,
 				questionOrder: data.questionOrder,
 				body: { idOption: id, answerSeconds: time }
-			}),
-				navigateNextQuestion();
+			});
+			navigateNextQuestion();
+		}
 	};
 
 	const navigateNextQuestion = () => {
@@ -115,11 +125,7 @@ const Question = ({ route }: Props) => {
 
 	useEffect(() => {
 		if (error === 'Recurso no encontrado') {
-			if (mechanics?.includes(Mechanics.FORM_IMAGE)) {
-				setImageFormed(true);
-			} else {
-				navigateFinalScore();
-			}
+			navigateFinalScore();
 		}
 	}, [error]);
 
@@ -183,17 +189,6 @@ const Question = ({ route }: Props) => {
 		}
 	}, [navigation]);
 
-	useEffect(() => {
-		if (data) {
-			if (
-				mechanics?.includes(Mechanics.FORM_IMAGE) &&
-				!imageStack.find((elem) => elem.idQuestion === data.id)
-			) {
-				pushImageStack({ idQuestion: data.id, imgUrl: data.imgUrl });
-			}
-		}
-	}, [data]);
-
 	if (loading || !data) return <Placeholder />;
 
 	const question =
@@ -225,20 +220,14 @@ const Question = ({ route }: Props) => {
 				accessibilityHint={`Super hearing: ${data.imgAlt}`}
 			>
 				{mechanics?.includes(Mechanics.FORM_IMAGE) ? (
-					<View style={styles.stackImages}>
-						{imageStack.map((image, index) => (
-							<View style={styles.stackImagesElem} key={index}>
-								<Image
-									style={styles.image}
-									source={{
-										uri: `https://picsum.photos/400/200?t=${index}`
-										// uri: `${image.imgUrl}?t=${index}`
-									}}
-									resizeMode="contain"
-								/>
-							</View>
-						))}
-					</View>
+					isQuestionFirst ? (
+						<Image
+							style={styles.image}
+							source={require('@images/choose_habitat_1.jpg')}
+						/>
+					) : (
+						<ImageStack imageStack={imageStack} />
+					)
 				) : (
 					<Image
 						style={styles.image}
@@ -250,31 +239,52 @@ const Question = ({ route }: Props) => {
 
 			{data.audioUrl && <AudioPlayer source={{ uri: data.audioUrl }} />}
 
-			{imageFormed ? (
-				<Pressable
-					onPress={() => {
-						clearImageStack();
-						navigateFinalScore();
-					}}
-					accessible={true}
-					accessibilityHint="Ver posición"
-				>
-					<Text>Ver posición</Text>
-				</Pressable>
-			) : (
-				<View style={styles.optionsContainer}>
-					{data.options.map((option, index) => (
+			<View style={styles.optionsContainer}>
+				{mechanics?.includes(Mechanics.FORM_IMAGE) ? (
+					<View
+						style={{
+							display: 'flex',
+							flexDirection: 'row',
+							justifyContent: 'space-evenly'
+						}}
+					>
+						{data.options.map((option, index) => (
+							<OptionImage
+								key={index}
+								text={option.content}
+								onPress={() => {
+									onPressOption(
+										index,
+										option.correct,
+										option.id,
+										option.mainImgUrl
+									);
+								}}
+								containerStyle={containerStyleOptions[index]}
+								textStyle={textStyleOptions[index]}
+								imgUrl={option.previewImgUrl}
+							/>
+						))}
+					</View>
+				) : (
+					data.options.map((option, index) => (
 						<Option
 							key={index}
 							text={option.content}
 							onPress={() => {
-								onPressOption(index, option.correct, option.id);
+								onPressOption(
+									index,
+									option.correct,
+									option.id,
+									option.mainImgUrl
+								);
 							}}
 							containerStyle={containerStyleOptions[index]}
 							textStyle={textStyleOptions[index]}
 						/>
-					))}
-					{/* <Option
+					))
+				)}
+				{/* <Option
 					text={data.options[0].content}
 					onPress={() => {
 						onPressOption(
@@ -298,9 +308,7 @@ const Question = ({ route }: Props) => {
 					containerStyle={containerStyleOptions[1]}
 					textStyle={textStyleOptions[1]}
 				/> */}
-				</View>
-			)}
-
+			</View>
 			<View style={{ height: 80 }} />
 		</ScrollView>
 	);
@@ -351,20 +359,6 @@ const getStyles = (theme: Theme) =>
 		},
 		animation: {
 			height: 72
-		},
-		stackImages: {
-			position: 'relative',
-			width: '100%',
-			height: '100%'
-		},
-		stackImagesElem: {
-			position: 'absolute',
-			width: '100%',
-			height: '100%',
-			top: 0,
-			left: 0,
-			right: 0,
-			bottom: 0
 		}
 	});
 

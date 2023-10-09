@@ -2,7 +2,7 @@ import { create } from 'zustand';
 
 export interface ImageStackElement {
 	imgUrl: string;
-	idQuestion: number;
+	idOption: number;
 }
 
 export interface ImageStack {

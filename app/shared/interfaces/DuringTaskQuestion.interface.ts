@@ -1,5 +1,6 @@
 import { Character } from '../enums/Character.enum';
 import { QuestionLang } from '../enums/QuestionLang.enum';
+
 export interface DuringTaskQuestion {
 	id: number;
 	content: string;
@@ -18,5 +19,9 @@ export interface DuringTaskQuestion {
 		content: string;
 		correct: boolean;
 		feedback: string;
+		mainImgUrl: string | null;
+		mainImgAlt: string | null;
+		previewImgUrl: string | null;
+		previewImgAlt: string | null;
 	}[];
 }

@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Platform } from 'react-native';
+import { View, Text, StyleSheet, Platform, Image } from 'react-native';
 import Option from '@screens/Task/components/Option';
 import LottieView from 'lottie-react-native';
 
@@ -10,15 +10,20 @@ import { useNavigation } from '@react-navigation/native';
 import usePlaySound from '@app/core/hooks/usePlaySound';
 
 import { Theme } from '@theme';
+import useImageStackStore from '@app/core/hooks/Task/DurinTask/useImageStackStore';
+import { Mechanics } from '@app/shared/enums/Mechanics.enum';
+import ImageStack from '../components/ImageStack';
 
 const FinalScore = () => {
 	const theme = useTheme();
-	const { position, team } = useDuringTaskContext();
+	const { position, team, mechanics } = useDuringTaskContext();
 	const { taskOrder } = useTaskContext();
 	const navigation = useNavigation<any>();
 	const playSoundSuccess = usePlaySound(require('@sounds/complete.wav'));
 	const styles = getStyles(theme);
 	const currentPlatform = Platform.OS;
+	const { imageStack, pushImageStack, clearImageStack } =
+		useImageStackStore();
 
 	const onButtonPress = () => {
 		navigation.reset({
@@ -37,19 +42,28 @@ const FinalScore = () => {
 			<View>
 				<Text style={styles.position}>{position || 0}°</Text>
 				<Text style={styles.groupName}>{team?.name || 'Ocelots'}</Text>
-				{currentPlatform !== 'web' && (
-					<LottieView
-						source={require('@animations/celebration.json')}
-						autoPlay
-						loop
-						style={{
-							width: 500,
-							position: 'absolute',
-							top: -80,
-							alignItems: 'center',
-							alignSelf: 'center'
-						}}
-					/>
+				{mechanics?.includes(Mechanics.FORM_IMAGE) &&
+				imageStack.length !== 0 ? (
+					<View style={{ marginTop: 12, marginBottom: 24 }}>
+						<ImageStack imageStack={imageStack} />
+					</View>
+				) : (
+					currentPlatform !== 'web' && (
+						<View style={{ position: 'relative' }}>
+							<LottieView
+								source={require('@animations/celebration.json')}
+								autoPlay
+								loop
+								style={{
+									width: 500,
+									position: 'absolute',
+									top: -80,
+									alignItems: 'center',
+									alignSelf: 'center'
+								}}
+							/>
+						</View>
+					)
 				)}
 			</View>
 			<View>
