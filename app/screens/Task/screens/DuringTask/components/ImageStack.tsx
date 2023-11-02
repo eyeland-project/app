@@ -7,7 +7,7 @@ const ImageStack = ({ imageStack }: { imageStack: ImageStackElement[] }) => {
 	return (
 		<View style={styles.stackImages}>
 			{imageStack.map((image, index) => {
-				console.log(index, image.imgUrl);
+				// console.log(index, image.imgUrl);
 
 				return (
 					<View style={styles.stackImagesElem} key={index}>

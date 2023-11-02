@@ -39,7 +39,7 @@ const Introduction = ({ route }: Props) => {
 		data: dataProgress,
 		getProgress
 	} = useProgress();
-	const { resetContext, setIcon } = useTaskContext();
+	const { resetContext, setIcon, numTasks } = useTaskContext();
 	const styles = getStyles(theme);
 
 	useFocusEffect(

@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Platform } from 'react-native';
+import { View, Text, Image, Platform, StyleSheet } from 'react-native';
 import LottieView from 'lottie-react-native';
 import Option from '@screens/Task/components/Option';
 
@@ -13,12 +13,13 @@ import { Theme } from '@theme';
 
 const Complete = () => {
 	const theme = useTheme();
-	const { taskOrder } = useTaskContext();
+	const { taskOrder, numTasks } = useTaskContext();
 	const { setPosTaskComplete } = usePosTask();
 	const navigation = useNavigation<any>();
 	const playSoundSuccess = usePlaySound(require('@sounds/complete.wav'));
 	const styles = getStyles(theme);
 	const currentPlatform = Platform.OS;
+	// console.log(numTasks, taskOrder);
 
 	const onButtonPress = () => {
 		navigation.reset({
@@ -30,6 +31,11 @@ const Complete = () => {
 	useEffect(() => {
 		setPosTaskComplete({ taskOrder });
 		playSoundSuccess();
+		try {
+			require('@animations/goldenMangrove.json');
+		} catch (err) {
+			console.log(err);
+		}
 	}, []);
 
 	return (
@@ -53,19 +59,25 @@ const Complete = () => {
 					¡Felicidades, has terminado este módulo!
 				</Text>
 			</View>
-			{currentPlatform !== 'web' && (
-				<LottieView
-					source={require('@animations/winningCup.json')}
-					autoPlay
-					loop={false}
-				/>
-			)}
+			{currentPlatform !== 'web' &&
+				(taskOrder === numTasks ? (
+					<View style={styles.goldenMangroveContainer}>
+						<Image
+							source={require('@animations/goldenMangrove.gif')}
+							style={styles.goldenMangrove}
+						></Image>
+					</View>
+				) : (
+					<LottieView
+						source={require('@animations/winningCup.json')}
+						autoPlay
+						loop={false}
+					/>
+				))}
 			<View>
 				<Option
 					text="Volver al menú"
-					onPress={() => {
-						onButtonPress();
-					}}
+					onPress={onButtonPress}
 					containerStyle={{}}
 					textStyle={{
 						fontFamily: theme.fontWeight.regular,
@@ -100,6 +112,15 @@ const getStyles = (theme: Theme) =>
 		animationsContainer: {
 			alignItems: 'center',
 			position: 'relative'
+		},
+		goldenMangroveContainer: {
+			display: 'flex',
+			alignItems: 'center',
+			justifyContent: 'center'
+		},
+		goldenMangrove: {
+			width: 350,
+			height: 300
 		}
 	});
 
