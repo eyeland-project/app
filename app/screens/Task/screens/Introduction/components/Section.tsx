@@ -46,7 +46,8 @@ const Section = ({ title, completed, blocked, onPress }: Props) => {
 			onPress={onPress}
 			disabled={blocked}
 			accessible={true}
-			accessibilityLabel={title}
+			accessibilityRole="button"
+			accessibilityLabel={`Etapa de ${title}`}
 			accessibilityHint={
 				blocked
 					? 'Esta sección está bloqueada'

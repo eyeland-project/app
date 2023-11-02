@@ -70,6 +70,7 @@ const Power = ({ power, blockReRoll, onReRoll, loading }: Props) => {
 				<Pressable
 					onPress={onReRoll}
 					accessibilityLabel="Recargar superpoder"
+					accessibilityRole="button"
 				>
 					<View style={styles.iconContainer}>
 						{loading ? (

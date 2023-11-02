@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import Record from '@screens/Task/components/Record';
 import AudioPlayer from '@screens/Task/components/AudioPlayer';
-import Option from '@app/screens/Task/components/Option';
+import ButtonPrimary from '@components/ButtonPrimary';
 
 import React, { useEffect, useState } from 'react';
 import useTheme from '@hooks/useTheme';
@@ -46,9 +46,7 @@ const AudioSpeaking = ({ route }: Props) => {
 	const [recorded, setRecorded] = useState(false);
 	const [hasConfirm, setHasConfirm] = useState(false);
 	const [confirmContainerStyle, setConfirmContainerStyle] = useState({});
-	const [confirmTextStyle, setConfirmTextStyle] = useState(
-		CONFIRM_TEXT_STYLE_DEFAULT(theme)
-	);
+	const [confirmTextStyle] = useState(CONFIRM_TEXT_STYLE_DEFAULT(theme));
 	const playSoundSuccess = usePlaySound(require('@sounds/success.wav'));
 
 	const handlePressConfirm = () => {
@@ -73,8 +71,14 @@ const AudioSpeaking = ({ route }: Props) => {
 		<ScrollView style={styles.scroll}>
 			<View style={styles.container}>
 				<View>
-					<Instructions text="Grábate diciendo la frase" />
-					<Text style={styles.question}>
+					<Instructions
+						text="Grábate diciendo la frase"
+						accessibilityLabel="Escucha la frase y grábate diciéndola"
+					/>
+					<Text
+						style={styles.question}
+						accessibilityLabel={`Frase: ${question.content}`}
+					>
 						{words.map((word, index) => {
 							return <Text key={index}>{word} </Text>;
 						})}
@@ -98,11 +102,9 @@ const AudioSpeaking = ({ route }: Props) => {
 				</View>
 				{recorded && (
 					<View>
-						<Option
+						<ButtonPrimary
 							text="Confirmar"
-							onPress={() => {
-								handlePressConfirm();
-							}}
+							onPress={handlePressConfirm}
 							containerStyle={confirmContainerStyle}
 							textStyle={confirmTextStyle}
 						/>

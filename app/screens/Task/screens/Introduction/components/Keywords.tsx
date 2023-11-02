@@ -16,7 +16,7 @@ const Keywords = ({ keywords }: Props) => {
 		<View
 			style={styles.container}
 			accessible={true}
-			accessibilityLabel={'Palabras clave: ' + keywords.join(' ')}
+			accessibilityLabel={'Palabras clave: ' + keywords.join(', ')}
 		>
 			<Text style={styles.text}>
 				{keywords.map((keyword, index) => {

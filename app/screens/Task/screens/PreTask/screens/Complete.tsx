@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, Platform } from 'react-native';
 import LottieView from 'lottie-react-native';
-import Option from '@screens/Task/components/Option';
+import ButtonPrimary from '@components/ButtonPrimary';
 
 import { useEffect } from 'react';
 import useTaskContext from '@app/core/hooks/Task/useTaskContext';
@@ -60,11 +60,10 @@ const Complete = () => {
 				/>
 			)}
 			<View>
-				<Option
+				<ButtonPrimary
 					text="Volver al menú"
-					onPress={() => {
-						onButtonPress();
-					}}
+					accessibilityHint="Volver al menú"
+					onPress={onButtonPress}
 					containerStyle={{}}
 					textStyle={{
 						fontFamily: theme.fontWeight.regular,

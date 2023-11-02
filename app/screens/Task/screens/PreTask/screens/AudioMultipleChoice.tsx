@@ -107,7 +107,10 @@ const AudioMultipleChoice = ({ route }: Props) => {
 	return (
 		<>
 			<View style={styles.container}>
-				<Instructions text="Selecciona la opción correcta" />
+				<Instructions
+					text="Selecciona la opción correcta"
+					accessibilityLabel="Reproduzca el audio y seleccione la opción que le corresponda"
+				/>
 				<Pressable
 					onPress={onPressPlayAudio}
 					accessible={true}

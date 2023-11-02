@@ -187,10 +187,14 @@ const FlashCards = ({ route }: Props) => {
 		<ScrollView style={styles.scroll}>
 			<View
 				style={styles.container}
-				accessible={true}
-				accessibilityLabel="Pantalla de tarjetas"
+				// accessible={true}
+				// accessibilityLabel="Su abuela"
+				accessible={false}
 			>
-				<Instructions text="Voltea la tarjeta, ¿La descripción corresponde a la imagen?" />
+				<Instructions
+					text="Voltea la tarjeta. ¿La descripción corresponde a la imagen?"
+					accessibilityLabel="Se muestra una tarjeta con una imagen. Toca la tarjeta para voltearla, examina la descripción y marca verdadero o falso"
+				/>
 				<FlipCard
 					setIsFlipped={setIsFlipped}
 					containerStyle={{

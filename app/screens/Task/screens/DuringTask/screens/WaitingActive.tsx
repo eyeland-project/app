@@ -55,7 +55,7 @@ const WaitingActive = ({ route }: { route: any }) => {
 				style={styles.link}
 				accessible
 				accessibilityLabel="Volver a la lista de tareas"
-				accessibilityHint="Presiona dos veces para volver a la lista de tareas."
+				// accessibilityHint="Presiona dos veces para volver a la lista de tareas"
 			>
 				<Text style={styles.linkText}>Volver a la lista de tareas</Text>
 			</Link>

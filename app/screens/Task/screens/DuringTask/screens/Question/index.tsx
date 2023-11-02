@@ -217,7 +217,9 @@ const Question = ({ route }: Props) => {
 				style={styles.imageContainer}
 				accessible={true}
 				accessibilityLabel={'Imagen de la pregunta'}
-				accessibilityHint={`Super hearing: ${data.imgAlt}`}
+				accessibilityHint={
+					data.imgAlt ? `Super hearing: ${data.imgAlt}` : undefined
+				}
 			>
 				{mechanics?.includes(Mechanics.FORM_IMAGE) ? (
 					isQuestionFirst ? (

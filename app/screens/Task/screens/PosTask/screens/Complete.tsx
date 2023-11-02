@@ -10,6 +10,7 @@ import usePlaySound from '@hooks/usePlaySound';
 import usePosTask from '@hooks/Task/PosTask/usePosTask';
 
 import { Theme } from '@theme';
+import ButtonPrimary from '@app/shared/components/ButtonPrimary';
 
 const Complete = () => {
 	const theme = useTheme();
@@ -75,8 +76,9 @@ const Complete = () => {
 					/>
 				))}
 			<View>
-				<Option
+				<ButtonPrimary
 					text="Volver al menú"
+					accessibilityHint="Volver al menú"
 					onPress={onButtonPress}
 					containerStyle={{}}
 					textStyle={{

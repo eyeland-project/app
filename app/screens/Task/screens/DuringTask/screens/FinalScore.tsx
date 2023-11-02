@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet, Platform, Image } from 'react-native';
-import Option from '@screens/Task/components/Option';
+// import Option from '@screens/Task/components/Option';
+import ButtonPrimary from '@app/shared/components/ButtonPrimary';
 import LottieView from 'lottie-react-native';
 
 import { useEffect } from 'react';
@@ -67,11 +68,10 @@ const FinalScore = () => {
 				)}
 			</View>
 			<View>
-				<Option
+				<ButtonPrimary
 					text="Volver al menú"
-					onPress={() => {
-						onButtonPress();
-					}}
+					accessibilityHint="Volver al menú"
+					onPress={onButtonPress}
 					containerStyle={{}}
 					textStyle={{
 						fontFamily: theme.fontWeight.regular,

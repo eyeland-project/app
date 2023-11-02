@@ -90,15 +90,23 @@ const FillBlank = ({ route }: Props) => {
 	};
 
 	useEffect(() => {
-		AccessibilityInfo.announceForAccessibility(question.content);
-		speak(question.content.split('_'), question.lang);
+		AccessibilityInfo.announceForAccessibility(
+			`${questionList[0]}_ ${questionList[1]}`
+		);
+		speak(questionList, question.lang);
 	}, []);
 
 	return (
 		<>
 			<ScrollView style={styles.container}>
-				<Instructions text="Selecciona la opción correcta para completar la frase" />
-				<Text style={styles.question}>
+				<Instructions
+					text="Selecciona la opción correcta para completar la frase"
+					accessibilityLabel="Se muestra una frase incompleta. Selecciona la palabra faltante para completar la frase"
+				/>
+				<Text
+					style={styles.question}
+					accessibilityLabel={`${questionList[0]}. ${questionList[1]}`}
+				>
 					{questionList[0]}
 					<Text style={styles.underlineText}>{blank}</Text>
 					{questionList[1]}

@@ -51,14 +51,13 @@ const FlipCard = ({
 			onPress={() => {
 				setIsFlipped(!isFlipped);
 			}}
-			accessibilityLabel="Presiona dos veces para girar la tarjeta"
-			accessibilityRole="button"
+			// accessible={false}
 		>
 			<Animated.View
 				style={[styles.imageContainer, containerStyle]}
-				accessible={true}
-				accessibilityLabel="Voltear tarjeta"
-				accessibilityRole="button"
+				// accessible={true}
+				// accessibilityLabel="Voltear tarjeta"
+				// accessibilityRole="button"
 			>
 				<FlipCardNative
 					friction={10}
@@ -73,8 +72,8 @@ const FlipCard = ({
 					{!question.imgUrl ? (
 						<View
 							style={styles.back}
-							accessible={true}
-							accessibilityLabel="Parte trasera de la tarjeta"
+							// accessible={true}
+							// accessibilityLabel="Parte trasera de la tarjeta"
 						>
 							<Text style={styles.backText}>
 								{question.content}
@@ -96,8 +95,8 @@ const FlipCard = ({
 										]
 									}
 								]}
-								accessible={true}
-								accessibilityLabel="Indicador de voltear"
+								// accessible={true}
+								// accessibilityLabel="Indicador de voltear"
 							>
 								<Entypo
 									name="arrow-with-circle-up"
@@ -122,8 +121,7 @@ const FlipCard = ({
 								// }}
 								accessible={true}
 								accessibilityLabel={
-									question.imgAlt +
-									'. Toca dos veces para girar la tarjeta'
+									question.imgAlt + '. Girar la tarjeta'
 								}
 							/>
 							<Animated.View
@@ -143,8 +141,8 @@ const FlipCard = ({
 										]
 									}
 								]}
-								accessible={true}
-								accessibilityLabel="Indicador de voltear"
+								// accessible={true}
+								// accessibilityLabel="Indicador de voltear"
 							>
 								<Entypo
 									name="arrow-with-circle-up"
@@ -159,10 +157,7 @@ const FlipCard = ({
 					<View
 						style={[styles.back, containerCardStyle]}
 						accessible={true}
-						accessibilityLabel={
-							optionsQuestionShuffled[optionIndex].content +
-							'. Toca dos veces para girar la tarjeta'
-						}
+						accessibilityLabel={`Opción: ${optionsQuestionShuffled[optionIndex].content}. Girar la tarjeta`}
 					>
 						<Text style={styles.backText}>
 							{optionsQuestionShuffled[optionIndex].content}

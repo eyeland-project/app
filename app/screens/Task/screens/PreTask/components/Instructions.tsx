@@ -7,9 +7,10 @@ import { Theme } from '@theme';
 
 interface Props {
 	text: string;
+	accessibilityLabel?: string;
 }
 
-const Instructions = ({ text }: Props) => {
+const Instructions = ({ text, accessibilityLabel }: Props) => {
 	const theme = useTheme();
 	const styles = getStyles(theme);
 
@@ -17,7 +18,7 @@ const Instructions = ({ text }: Props) => {
 		<View
 			style={styles.container}
 			accessible={true}
-			accessibilityLabel={`Instrucciones: ${text}`}
+			accessibilityLabel={`Instrucciones: ${accessibilityLabel || text}`}
 		>
 			<Text style={styles.text}>{text}</Text>
 			<View style={styles.line}></View>
