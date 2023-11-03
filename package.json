@@ -2,7 +2,7 @@
 	"name": "salamanca-island-mobile",
 	"version": "1.0.0",
 	"main": "node_modules/expo/AppEntry.js",
-	"homepage": "http://Proyecto-Final-EPICS.github.io/EyelandApp",
+	"homepage": "http://eyeland-project.github.io/app",
 	"scripts": {
 		"start": "expo start",
 		"start:localhost": "expo start --localhost",
@@ -44,7 +44,7 @@
 		"react-native-webview": "11.23.1",
 		"rn-placeholder": "^3.0.3",
 		"socket.io-client": "^4.6.1",
-		"zustand": "4.4.1"
+		"zustand": "^4.4.1"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.12.9",
