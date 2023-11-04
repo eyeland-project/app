@@ -39,7 +39,7 @@ const Introduction = ({ route }: Props) => {
 		data: dataProgress,
 		getProgress
 	} = useProgress();
-	const { resetContext, setIcon } = useTaskContext();
+	const { resetContext, setIcon, numTasks } = useTaskContext();
 	const styles = getStyles(theme);
 
 	useFocusEffect(
@@ -82,7 +82,10 @@ const Introduction = ({ route }: Props) => {
 	return (
 		<View style={styles.container}>
 			<ScrollView style={styles.scrollView}>
-				<Title text={dataIntroduction.name} />
+				<Title
+					text={dataIntroduction.name}
+					accessibilityLabel={`Task ${dataIntroduction.taskOrder}. ${dataIntroduction.name}`}
+				/>
 				<Keywords keywords={dataIntroduction.keywords} />
 				<Image
 					source={{ uri: dataIntroduction.thumbnailUrl }}

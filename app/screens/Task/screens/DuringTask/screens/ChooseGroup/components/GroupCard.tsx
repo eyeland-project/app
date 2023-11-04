@@ -81,8 +81,8 @@ const GroupCard = ({ id, name, members, taskOrder }: Props) => {
 						navigation.navigate('WaitingBegin', { taskOrder });
 					}}
 					accessible
-					accessibilityLabel="Ingresar al grupo"
-					accessibilityHint="Toca dos veces para ingresar a este grupo"
+					accessibilityLabel={`Ingresar al grupo ${name}`}
+					// accessibilityHint="Toca dos veces para ingresar a este grupo"
 				>
 					<Text style={styles.text} accessible={false}>
 						Ingresar

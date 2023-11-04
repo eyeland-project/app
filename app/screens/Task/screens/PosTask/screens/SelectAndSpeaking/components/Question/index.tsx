@@ -27,7 +27,10 @@ const Question = ({
 
 	return (
 		<View>
-			<History character={question.character} history={question.content} />
+			<History
+				character={question.character}
+				history={question.content}
+			/>
 			{/* <Text style={styles.question}>{question.content}</Text> */}
 			<View style={styles.optionsContainer}>
 				{question.options.slice(0, 2).map((option) => (

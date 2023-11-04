@@ -34,25 +34,31 @@ const SuperRadarView = ({ text, prepositionTranslations }: Props) => {
 	const getInterpolatedColor = (index: number) => {
 		return prepositionColors[index].interpolate({
 			inputRange: [0, 1],
-			outputRange: [hexToRgbA(theme.colors.black, 1), hexToRgbA(theme.colors.black, 0.5)],
+			outputRange: [
+				hexToRgbA(theme.colors.black, 1),
+				hexToRgbA(theme.colors.black, 0.5)
+			]
 		});
 	};
 
 	const animateColors = () => {
 		prepositionColors.forEach((prepositionColor, index) => {
-			if (!showPower[index] && prepositions[index] !== prepositionTranslations[index]) {
+			if (
+				!showPower[index] &&
+				prepositions[index] !== prepositionTranslations[index]
+			) {
 				Animated.loop(
 					Animated.sequence([
 						Animated.timing(prepositionColor, {
 							toValue: 1,
 							duration: 1000,
-							useNativeDriver: false,
+							useNativeDriver: false
 						}),
 						Animated.timing(prepositionColor, {
 							toValue: 0,
 							duration: 1000,
-							useNativeDriver: false,
-						}),
+							useNativeDriver: false
+						})
 					])
 				).start();
 			}
@@ -101,7 +107,7 @@ const SuperRadarView = ({ text, prepositionTranslations }: Props) => {
 			if (
 				matchResults &&
 				prepositions[index] ===
-				matchResults[index].replace(/[\[\]]/g, '')
+					matchResults[index].replace(/[\[\]]/g, '')
 			) {
 				setPrepositions((prevPrepositions) =>
 					prevPrepositions.map((prevPreposition, i) =>
@@ -114,8 +120,8 @@ const SuperRadarView = ({ text, prepositionTranslations }: Props) => {
 				setPrepositions(
 					matchResults
 						? matchResults.map((match) =>
-							match.replace(/[\[\]]/g, '')
-						)
+								match.replace(/[\[\]]/g, '')
+						  )
 						: []
 				);
 			}
@@ -145,10 +151,12 @@ const SuperRadarView = ({ text, prepositionTranslations }: Props) => {
 									styles.prepostion,
 									{
 										color:
-											!showPower[index] && prepositions[index] !== prepositionTranslations[index]
+											!showPower[index] &&
+											prepositions[index] !==
+												prepositionTranslations[index]
 												? getInterpolatedColor(index)
-												: theme.colors.black,
-									},
+												: theme.colors.black
+									}
 								]}
 								onPress={() => handlePress(index)}
 							>

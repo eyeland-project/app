@@ -6,14 +6,19 @@ import { Theme } from '@theme';
 
 interface Props {
 	text: string;
+	accessibilityLabel?: string;
 }
 
-const Title = ({ text }: Props) => {
+const Title = ({ text, accessibilityLabel }: Props) => {
 	const theme = useTheme();
 	const styles = getStyles(theme);
 
 	return (
-		<View style={styles.container}>
+		<View
+			style={styles.container}
+			accessible={true}
+			accessibilityLabel={accessibilityLabel}
+		>
 			<Text style={styles.text}>{text}</Text>
 		</View>
 	);

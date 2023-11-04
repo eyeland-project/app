@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, Platform } from 'react-native';
 import LottieView from 'lottie-react-native';
-import Option from '@screens/Task/components/Option';
+import ButtonPrimary from '@components/ButtonPrimary';
 
 import { useEffect } from 'react';
 import useTaskContext from '@app/core/hooks/Task/useTaskContext';
@@ -35,40 +35,35 @@ const Complete = () => {
 	return (
 		<View style={styles.container}>
 			<View>
-				{
-					currentPlatform !== 'web' && (
-						<LottieView
-							source={require('@animations/celebration.json')}
-							autoPlay
-							loop
-							style={{
-								width: 500,
-								position: 'absolute',
-								top: -80,
-								alignItems: 'center',
-								alignSelf: 'center'
-							}}
-						/>
-					)
-				}
+				{currentPlatform !== 'web' && (
+					<LottieView
+						source={require('@animations/celebration.json')}
+						autoPlay
+						loop
+						style={{
+							width: 500,
+							position: 'absolute',
+							top: -80,
+							alignItems: 'center',
+							alignSelf: 'center'
+						}}
+					/>
+				)}
 				<Text style={styles.text}>¡Felicidades, lo lograste!</Text>
 			</View>
-			{
-				currentPlatform !== 'web' && (
-					<LottieView
-						source={require('@animations/star.json')}
-						autoPlay
-						loop={false}
-						duration={2000}
-					/>
-				)
-			}
+			{currentPlatform !== 'web' && (
+				<LottieView
+					source={require('@animations/star.json')}
+					autoPlay
+					loop={false}
+					duration={2000}
+				/>
+			)}
 			<View>
-				<Option
+				<ButtonPrimary
 					text="Volver al menú"
-					onPress={() => {
-						onButtonPress();
-					}}
+					accessibilityHint="Volver al menú"
+					onPress={onButtonPress}
 					containerStyle={{}}
 					textStyle={{
 						fontFamily: theme.fontWeight.regular,

@@ -41,7 +41,9 @@ const TextInput = ({
 					<TextInputNative
 						style={styles.input}
 						onBlur={onBlur}
-						onChangeText={trim ? (text) => onChange(text.trim()) : onChange}
+						onChangeText={
+							trim ? (text) => onChange(text.trim()) : onChange
+						}
 						value={value}
 						placeholder={props.placeholder}
 						{...props}

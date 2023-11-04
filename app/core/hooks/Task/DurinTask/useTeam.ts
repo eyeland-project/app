@@ -9,6 +9,7 @@ import { environment } from '@environments/environment';
 
 import { Team } from '@interfaces/Team.interface';
 import { Power } from '@enums/Power.enum';
+import { DuringTask } from '@interfaces/DuringTask.interface';
 
 const errors: Map<number, string> = new Map([
 	[400, 'Petición inválida'],
@@ -26,10 +27,13 @@ const useTeam = () => {
 	const [error, setError] = useState<string | null>(null);
 	const [data, setData] = useState<(Team & { myPower: Power }) | null>(null);
 	const authStorage = useAuthStorage();
-	const { setTeam, setPower } = useDuringTaskContext();
+	const { setTeam, setPower, setMechanics } = useDuringTaskContext();
 
 	const joinTeam = useCallback(
-		async (data: { code: string; taskOrder: number }) => {
+		async (data: {
+			code: string;
+			taskOrder: number;
+		}): Promise<DuringTask | null> => {
 			setError(null);
 			setLoading(true);
 			try {
@@ -48,6 +52,7 @@ const useTeam = () => {
 				if (response.status === 200) {
 					setLoading(false);
 					setData(response.data);
+					setMechanics(response.data.mechanics);
 					// TODO - Remove this from here
 					return response.data;
 				} else {
@@ -56,6 +61,7 @@ const useTeam = () => {
 			} catch (err: any) {
 				setLoading(false);
 				setError(errorHandler(err, errors));
+				return null;
 			}
 		},
 		[]

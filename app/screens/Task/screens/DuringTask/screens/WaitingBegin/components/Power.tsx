@@ -70,6 +70,7 @@ const Power = ({ power, blockReRoll, onReRoll, loading }: Props) => {
 				<Pressable
 					onPress={onReRoll}
 					accessibilityLabel="Recargar superpoder"
+					accessibilityRole="button"
 				>
 					<View style={styles.iconContainer}>
 						{loading ? (
@@ -94,7 +95,7 @@ const getStyles = (theme: Theme, isPhone: boolean) =>
 			flexDirection: 'row',
 			marginHorizontal: 20,
 			alignItems: 'center',
-			alignSelf: 'flex-start',
+			alignSelf: 'flex-start'
 			// justifyContent: 'space-between',
 		},
 		iconContainer: {

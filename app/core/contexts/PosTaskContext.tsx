@@ -1,9 +1,4 @@
-import {
-	Dispatch,
-	SetStateAction,
-	createContext,
-	useState
-} from 'react';
+import { Dispatch, SetStateAction, createContext, useState } from 'react';
 import { PosTask } from '@interfaces/PosTask.interface';
 
 interface PosTaskValues {
@@ -14,7 +9,6 @@ interface PosTaskValues {
 }
 
 export const PosTaskContext = createContext<PosTaskValues | null>(null);
-
 
 const PosTaskProvider = ({ children }: { children: React.ReactNode }) => {
 	const [data, setData] = useState<PosTask | null>(null);

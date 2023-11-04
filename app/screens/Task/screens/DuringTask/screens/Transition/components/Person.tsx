@@ -1,4 +1,11 @@
-import { View, Text, StyleSheet, Animated, Easing, Platform } from 'react-native';
+import {
+	View,
+	Text,
+	StyleSheet,
+	Animated,
+	Easing,
+	Platform
+} from 'react-native';
 import LottieView from 'lottie-react-native';
 
 import { useState, useEffect } from 'react';
@@ -70,16 +77,14 @@ const Person = ({ dialog }: Props) => {
 
 	return (
 		<View style={styles.container}>
-			{
-				currentPlatform !== 'web' && (
-					<LottieView
-						source={require('@animations/person.json')}
-						autoPlay
-						loop
-						style={styles.animation}
-					/>
-				)
-			}
+			{currentPlatform !== 'web' && (
+				<LottieView
+					source={require('@animations/person.json')}
+					autoPlay
+					loop
+					style={styles.animation}
+				/>
+			)}
 			<Animated.View style={{ ...styles.dialog, ...dialogStyle }}>
 				<Text style={styles.text}>{dialog}</Text>
 				<View style={styles.triangle}></View>

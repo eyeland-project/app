@@ -46,20 +46,18 @@ const FlipCard = ({
 	const [loadingImage, setLoadingImage] = useState(true);
 	const [errorImage, setErrorImage] = useState(false);
 
-
 	return (
 		<Pressable
 			onPress={() => {
 				setIsFlipped(!isFlipped);
 			}}
-			accessibilityLabel="Presiona dos veces para girar la tarjeta"
-			accessibilityRole="button"
+			// accessible={false}
 		>
 			<Animated.View
 				style={[styles.imageContainer, containerStyle]}
-				accessible={true}
-				accessibilityLabel="Voltear tarjeta"
-				accessibilityRole="button"
+				// accessible={true}
+				// accessibilityLabel="Voltear tarjeta"
+				// accessibilityRole="button"
 			>
 				<FlipCardNative
 					friction={10}
@@ -74,28 +72,37 @@ const FlipCard = ({
 					{!question.imgUrl ? (
 						<View
 							style={styles.back}
-							accessible={true}
-							accessibilityLabel="Parte trasera de la tarjeta"
+							// accessible={true}
+							// accessibilityLabel="Parte trasera de la tarjeta"
 						>
-							<Text style={styles.backText}>{question.content}</Text>
+							<Text style={styles.backText}>
+								{question.content}
+							</Text>
 							<Animated.View
 								style={[
 									styles.flipIndicator,
 									{
 										transform: [
 											{
-												translateY: flipIndicatorAnimation.interpolate({
-													inputRange: [0, 1],
-													outputRange: [0, -5],
-												}),
-											},
-										],
-									},
+												translateY:
+													flipIndicatorAnimation.interpolate(
+														{
+															inputRange: [0, 1],
+															outputRange: [0, -5]
+														}
+													)
+											}
+										]
+									}
 								]}
-								accessible={true}
-								accessibilityLabel="Indicador de voltear"
+								// accessible={true}
+								// accessibilityLabel="Indicador de voltear"
 							>
-								<Entypo name="arrow-with-circle-up" size={24} color="black" />
+								<Entypo
+									name="arrow-with-circle-up"
+									size={24}
+									color="black"
+								/>
 							</Animated.View>
 						</View>
 					) : (
@@ -114,8 +121,7 @@ const FlipCard = ({
 								// }}
 								accessible={true}
 								accessibilityLabel={
-									question.imgAlt +
-									'. Toca dos veces para girar la tarjeta'
+									question.imgAlt + '. Girar la tarjeta'
 								}
 							/>
 							<Animated.View
@@ -124,18 +130,25 @@ const FlipCard = ({
 									{
 										transform: [
 											{
-												translateY: flipIndicatorAnimation.interpolate({
-													inputRange: [0, 1],
-													outputRange: [0, -5],
-												}),
-											},
-										],
-									},
+												translateY:
+													flipIndicatorAnimation.interpolate(
+														{
+															inputRange: [0, 1],
+															outputRange: [0, -5]
+														}
+													)
+											}
+										]
+									}
 								]}
-								accessible={true}
-								accessibilityLabel="Indicador de voltear"
+								// accessible={true}
+								// accessibilityLabel="Indicador de voltear"
 							>
-								<Entypo name="arrow-with-circle-up" size={24} color="white" />
+								<Entypo
+									name="arrow-with-circle-up"
+									size={24}
+									color="white"
+								/>
 							</Animated.View>
 						</View>
 					)}
@@ -144,10 +157,7 @@ const FlipCard = ({
 					<View
 						style={[styles.back, containerCardStyle]}
 						accessible={true}
-						accessibilityLabel={
-							optionsQuestionShuffled[optionIndex].content +
-							'. Toca dos veces para girar la tarjeta'
-						}
+						accessibilityLabel={`Opción: ${optionsQuestionShuffled[optionIndex].content}. Girar la tarjeta`}
 					>
 						<Text style={styles.backText}>
 							{optionsQuestionShuffled[optionIndex].content}
@@ -168,7 +178,7 @@ const getStyles = (theme: Theme) =>
 			width: '90%',
 			alignSelf: 'center',
 			borderRadius: theme.borderRadius.medium,
-			overflow: 'hidden',
+			overflow: 'hidden'
 		},
 		flipCard: {
 			width: '100%',
@@ -176,7 +186,7 @@ const getStyles = (theme: Theme) =>
 			overflow: 'hidden',
 			borderColor: theme.colors.black,
 			height: '100%',
-			borderRadius: theme.borderRadius.medium,
+			borderRadius: theme.borderRadius.medium
 		},
 		image: {
 			width: '100%',
@@ -208,7 +218,7 @@ const getStyles = (theme: Theme) =>
 			letterSpacing: theme.spacing.medium,
 			textAlign: 'center',
 			marginTop: 20
-		},
+		}
 	});
 
 export default FlipCard;

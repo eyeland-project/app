@@ -1,6 +1,6 @@
 import * as Haptics from 'expo-haptics';
 
-import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { ScrollView, StyleSheet, TextInput, View } from 'react-native';
 import { useEffect, useState } from 'react';
 
 import { Entypo } from '@expo/vector-icons';
@@ -8,13 +8,12 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import History from '@app/screens/Task/components/History';
 import LoadingModal from '@app/screens/Task/components/LoadingModal';
 import Modal from '@app/screens/Task/components/Modal';
-import Option from '@app/screens/Task/components/Option';
+import ButtonPrimary from '@components/ButtonPrimary';
 import { PosTaskQuestion } from '@app/shared/interfaces/PosTaskQuestion.interface';
 import Pressable from '@app/shared/components/Pressable';
 import Record from '@app/screens/Task/components/Record';
 import { Theme } from '@app/theme';
 import Title from './components/Title';
-import { set } from 'react-hook-form';
 import usePlaySound from '@app/core/hooks/usePlaySound';
 import usePosTask from '@app/core/hooks/Task/PosTask/usePosTask';
 import useRecord from '@app/core/hooks/Task/PosTask/useRecord';
@@ -42,9 +41,7 @@ const Open = ({ route }: Props) => {
 	const { startTimer, stopTimer, time } = useTime();
 	const theme = useTheme();
 	const [confirmContainerStyle, setConfirmContainerStyle] = useState({});
-	const [confirmTextStyle, setConfirmTextStyle] = useState(
-		CONFIRM_TEXT_STYLE_DEFAULT(theme)
-	);
+	const [confirmTextStyle] = useState(CONFIRM_TEXT_STYLE_DEFAULT(theme));
 	const [recording, setRecording] = useState<string>();
 	const [recorded, setRecorded] = useState(false);
 	const { taskOrder } = useTaskContext();
@@ -89,6 +86,14 @@ const Open = ({ route }: Props) => {
 			}
 		});
 		nextQuestion();
+	};
+
+	const onChangeAnswerType = () => {
+		setAnswerType(undefined);
+		setRecorded(false);
+		setTextArea('');
+		setHasConfirm(false);
+		setRecording(undefined);
 	};
 
 	useEffect(() => {
@@ -137,41 +142,96 @@ const Open = ({ route }: Props) => {
 				<View style={{ flexDirection: 'column-reverse' }}>
 					{answerType ? (
 						<>
-							{recorded && (
-								<View>
-									<Option
-										text="Confirmar"
-										onPress={() => {
-											onPressConfirm();
-										}}
-										containerStyle={confirmContainerStyle}
-										textStyle={confirmTextStyle}
-									/>
-									<View style={styles.safeSpace} />
-								</View>
-							)}
 							{answerType === AnswerType.TEXT ? (
-								<View style={styles.writeContainer}>
-									<TextInput
-										multiline={true}
-										numberOfLines={4}
-										onChangeText={(text) =>
-											setTextArea(text)
-										}
-										value={textArea}
-										style={styles.textArea}
-									/>
-								</View>
+								<>
+									<View>
+										<View
+											style={{
+												display: 'flex',
+												flexDirection: 'row',
+												justifyContent: 'center'
+											}}
+										>
+											<Pressable
+												// style={styles.chooseButton}
+												accessible={true}
+												accessibilityLabel="Cambiar modo de respuesta"
+												accessibilityRole="button"
+												onPress={onChangeAnswerType}
+												style={{ marginLeft: 20 }}
+											>
+												<FontAwesome5
+													name="exchange-alt"
+													size={50}
+													color="black"
+													accessible={false}
+												/>
+											</Pressable>
+											<View style={{ flexGrow: 1 }}>
+												<ButtonPrimary
+													text="Confirmar"
+													accessibilityHint="Confirmar"
+													onPress={onPressConfirm}
+													containerStyle={
+														confirmContainerStyle
+													}
+													textStyle={confirmTextStyle}
+												/>
+											</View>
+										</View>
+										<View style={styles.safeSpace} />
+									</View>
+									<View style={styles.writeContainer}>
+										<TextInput
+											multiline={true}
+											numberOfLines={8}
+											onChangeText={(text) =>
+												setTextArea(text)
+											}
+											value={textArea}
+											style={styles.textArea}
+										/>
+									</View>
+								</>
 							) : (
-								<View style={styles.recordContainer}>
-									<Record
-										blocked={false}
-										minimumTime={5000}
-										setRecorded={setRecorded}
-										setRecording={setRecording}
-										maximumTime={60000}
-									/>
-								</View>
+								<>
+									{recorded && (
+										<ButtonPrimary
+											text="Confirmar"
+											accessibilityHint="Confirmar"
+											onPress={onPressConfirm}
+											containerStyle={
+												confirmContainerStyle
+											}
+											textStyle={confirmTextStyle}
+										/>
+									)}
+									<View style={styles.recordContainer}>
+										<Pressable
+											// style={styles.chooseButton}
+											accessible={true}
+											accessibilityLabel="Cambiar modo de respuesta"
+											accessibilityRole="button"
+											onPress={onChangeAnswerType}
+											style={{ marginLeft: 0 }}
+										>
+											<FontAwesome5
+												name="exchange-alt"
+												size={50}
+												color="black"
+												accessible={false}
+											/>
+										</Pressable>
+										<Record
+											blocked={false}
+											minimumTime={5000}
+											setRecorded={setRecorded}
+											setRecording={setRecording}
+											maximumTime={60000}
+										/>
+										<View style={{ width: 40 }}></View>
+									</View>
+								</>
 							)}
 						</>
 					) : (
@@ -180,14 +240,14 @@ const Open = ({ route }: Props) => {
 								style={styles.chooseButton}
 								accessible={true}
 								accessibilityLabel="Responder con voz"
-								accessibilityHint="Presiona para responder con voz"
+								// accessibilityHint="Presiona para responder con voz"
 								accessibilityRole="button"
 								onPress={() => putAnswerType(AnswerType.VOICE)}
 							>
 								<FontAwesome5
 									name="microphone"
 									size={60}
-									color={'white'}
+									color="white"
 									accessible={false}
 								/>
 							</Pressable>
@@ -195,7 +255,7 @@ const Open = ({ route }: Props) => {
 								style={styles.chooseButton}
 								accessible={true}
 								accessibilityLabel="Responder con texto"
-								accessibilityHint="Presiona para responder con texto"
+								// accessibilityHint="Presiona para responder con texto"
 								accessibilityRole="button"
 								onPress={() => putAnswerType(AnswerType.TEXT)}
 							>
@@ -252,7 +312,9 @@ const getStyles = (theme: Theme) =>
 		recordContainer: {
 			backgroundColor: theme.colors.white,
 			justifyContent: 'center',
-			alignItems: 'center'
+			alignItems: 'center',
+			display: 'flex',
+			flexDirection: 'row'
 		},
 		textArea: {
 			backgroundColor: theme.colors.white,

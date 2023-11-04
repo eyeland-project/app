@@ -46,7 +46,8 @@ const AudioOrder = ({ route }: Props) => {
 	const playSoundSuccess = usePlaySound(require('@sounds/success.wav'));
 	const playSoundWrong = usePlaySound(require('@sounds/wrong.wav'));
 	const { speak: speakOption, playing: playingOption } = useTextToSpeech();
-	const { speak: speakQuestion, playing: playingQuestion } = useTextToSpeech();
+	const { speak: speakQuestion, playing: playingQuestion } =
+		useTextToSpeech();
 	const { nextQuestion } = usePreTask();
 	const styles = getStyles(theme);
 	const correctOrder = question.options
@@ -55,7 +56,8 @@ const AudioOrder = ({ route }: Props) => {
 
 	const onPressConfirm = () => {
 		const isCorrect = answerList.every(
-			(answer, index) => answer.toLowerCase() === correctOrder[index].toLowerCase()
+			(answer, index) =>
+				answer.toLowerCase() === correctOrder[index].toLowerCase()
 		);
 
 		if (isCorrect) {
@@ -104,7 +106,7 @@ const AudioOrder = ({ route }: Props) => {
 		setOptionsList(shuffleList(correctOrder));
 		setAnswerList([]);
 		AccessibilityInfo.announceForAccessibility(question.content);
-		speakQuestion(question.content, 'en');
+		speakQuestion(question.content, question.lang);
 	}, []);
 
 	return (
@@ -114,6 +116,7 @@ const AudioOrder = ({ route }: Props) => {
 					<Instructions text="Escucha y selecciona las palabras en el orden correcto" />
 					<AudioPlayer
 						textToSpeech={question.content}
+						lang={question.lang}
 					/>
 					<AnswerBox
 						answerList={answerList}

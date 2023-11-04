@@ -55,7 +55,11 @@ const Login = () => {
 			accessibilityLabel="Formulario de ingreso"
 		>
 			<View style={[styles.innerContainer, !isPhone && styles.card]}>
-				<Image source={require('@icons/appIcon.png')} style={styles.image} resizeMode='center' />
+				<Image
+					source={require('@icons/appIcon.png')}
+					style={styles.image}
+					resizeMode="center"
+				/>
 				<TextInput
 					name="username"
 					label="Usuario"
@@ -66,7 +70,7 @@ const Login = () => {
 					accessible={true}
 					accessibilityLabel="Entrada de nombre de usuario"
 					accessibilityHint="Ingrese su nombre de usuario"
-					autoComplete='username'
+					autoComplete="username"
 				/>
 				<TextInput
 					name="password"
@@ -78,7 +82,7 @@ const Login = () => {
 					accessible={true}
 					accessibilityLabel="Entrada de contraseña"
 					accessibilityHint="Ingresa tu contraseña"
-					autoComplete='password'
+					autoComplete="password"
 				/>
 				<Button
 					title={loading ? 'Cargando...' : 'Iniciar sesión'}
@@ -86,7 +90,9 @@ const Login = () => {
 						!loading && handleSubmit(onSubmit)();
 					}}
 					accessible={true}
-					accessibilityLabel={loading ? 'Cargando...' : 'Iniciar sesión'}
+					accessibilityLabel={
+						loading ? 'Cargando...' : 'Iniciar sesión'
+					}
 					accessibilityHint="Presiona para iniciar sesión"
 				/>
 				{error && <Text style={styles.error}>{error}</Text>}
@@ -95,7 +101,12 @@ const Login = () => {
 	);
 };
 
-const getStyles = (theme: Theme, isPhone: boolean, isTablet: boolean, isDesktop: boolean) =>
+const getStyles = (
+	theme: Theme,
+	isPhone: boolean,
+	isTablet: boolean,
+	isDesktop: boolean
+) =>
 	StyleSheet.create({
 		container: {
 			flex: 1,
@@ -106,8 +117,8 @@ const getStyles = (theme: Theme, isPhone: boolean, isTablet: boolean, isDesktop:
 		},
 		innerContainer: {
 			maxWidth: 420,
-			width: "100%",
-			paddingHorizontal: 20,
+			width: '100%',
+			paddingHorizontal: 20
 		},
 		error: {
 			color: theme.colors.red,
@@ -129,7 +140,7 @@ const getStyles = (theme: Theme, isPhone: boolean, isTablet: boolean, isDesktop:
 			borderRadius: theme.borderRadius.large,
 			padding: 24,
 			...theme.shadow
-		},
+		}
 	});
 
 export default Login;

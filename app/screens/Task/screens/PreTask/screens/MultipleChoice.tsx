@@ -84,13 +84,16 @@ const MultipleChoice = ({ route }: Props) => {
 
 	useEffect(() => {
 		AccessibilityInfo.announceForAccessibility(question.content);
-		speak(question.content, 'es');
+		speak(question.content, question.lang);
 	}, []);
 
 	return (
 		<>
 			<ScrollView style={styles.container}>
-				<Instructions text="Selecciona la opción correcta" />
+				<Instructions
+					text="Selecciona la opción correcta"
+					accessibilityLabel="Se muestra una imagen. Seleccione la traducción que corresponda"
+				/>
 				<Text style={styles.question}>{question.content}</Text>
 				<View style={styles.imageContainer}>
 					<Image
@@ -158,7 +161,7 @@ const getStyles = (theme: Theme) =>
 			letterSpacing: theme.spacing.medium,
 			textAlign: 'center',
 			marginTop: 20
-		},
+		}
 	});
 
 export default MultipleChoice;

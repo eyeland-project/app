@@ -54,7 +54,7 @@ const FlashCards = ({ route }: Props) => {
 		const isCorrect = optionsQuestionShuffled[optionIndex].correct;
 		const color =
 			(option === 'true' && isCorrect) ||
-				(option === 'false' && !isCorrect)
+			(option === 'false' && !isCorrect)
 				? theme.colors.green
 				: theme.colors.red;
 		const updatedContainerStyleOptions = {
@@ -187,10 +187,14 @@ const FlashCards = ({ route }: Props) => {
 		<ScrollView style={styles.scroll}>
 			<View
 				style={styles.container}
-				accessible={true}
-				accessibilityLabel="Pantalla de tarjetas"
+				// accessible={true}
+				// accessibilityLabel="Su abuela"
+				accessible={false}
 			>
-				<Instructions text="Voltea la tarjeta, ¿La descripción corresponde a la imagen?" />
+				<Instructions
+					text="Voltea la tarjeta. ¿La descripción corresponde a la imagen?"
+					accessibilityLabel="Se muestra una tarjeta con una imagen. Toca la tarjeta para voltearla, examina la descripción y marca verdadero o falso"
+				/>
 				<FlipCard
 					setIsFlipped={setIsFlipped}
 					containerStyle={{
@@ -239,7 +243,7 @@ const FlashCards = ({ route }: Props) => {
 const getStyles = (theme: Theme) =>
 	StyleSheet.create({
 		scroll: {
-			backgroundColor: theme.colors.white,
+			backgroundColor: theme.colors.white
 		},
 		container: {
 			backgroundColor: theme.colors.white,

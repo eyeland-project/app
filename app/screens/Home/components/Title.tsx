@@ -25,7 +25,11 @@ const Title = ({ text }: TitleProps) => {
 			accessibilityLabel={`Titulo y boton para cerrar sesión`}
 			accessibilityRole="header"
 		>
-			<Image source={require('@icons/appIcon.png')} style={styles.logo} resizeMode='center' />
+			<Image
+				source={require('@icons/appIcon.png')}
+				style={styles.logo}
+				resizeMode="center"
+			/>
 			<Pressable
 				onPress={() => {
 					authStorage.removeAccessToken();

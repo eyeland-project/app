@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Platform } from 'react-native';
+import { View, Text, Image, Platform, StyleSheet } from 'react-native';
 import LottieView from 'lottie-react-native';
 import Option from '@screens/Task/components/Option';
 
@@ -10,15 +10,17 @@ import usePlaySound from '@hooks/usePlaySound';
 import usePosTask from '@hooks/Task/PosTask/usePosTask';
 
 import { Theme } from '@theme';
+import ButtonPrimary from '@app/shared/components/ButtonPrimary';
 
 const Complete = () => {
 	const theme = useTheme();
-	const { taskOrder } = useTaskContext();
+	const { taskOrder, numTasks } = useTaskContext();
 	const { setPosTaskComplete } = usePosTask();
 	const navigation = useNavigation<any>();
 	const playSoundSuccess = usePlaySound(require('@sounds/complete.wav'));
 	const styles = getStyles(theme);
 	const currentPlatform = Platform.OS;
+	// console.log(numTasks, taskOrder);
 
 	const onButtonPress = () => {
 		navigation.reset({
@@ -30,46 +32,54 @@ const Complete = () => {
 	useEffect(() => {
 		setPosTaskComplete({ taskOrder });
 		playSoundSuccess();
+		try {
+			require('@animations/goldenMangrove.json');
+		} catch (err) {
+			console.log(err);
+		}
 	}, []);
 
 	return (
 		<View style={styles.container}>
 			<View>
-				{
-					currentPlatform !== 'web' && (
-						<LottieView
-							source={require('@animations/celebration.json')}
-							autoPlay
-							loop
-							style={{
-								width: 500,
-								position: 'absolute',
-								top: -80,
-								alignItems: 'center',
-								alignSelf: 'center'
-							}}
-						/>
-					)
-				}
+				{currentPlatform !== 'web' && (
+					<LottieView
+						source={require('@animations/celebration.json')}
+						autoPlay
+						loop
+						style={{
+							width: 500,
+							position: 'absolute',
+							top: -80,
+							alignItems: 'center',
+							alignSelf: 'center'
+						}}
+					/>
+				)}
 				<Text style={styles.text}>
 					¡Felicidades, has terminado este módulo!
 				</Text>
 			</View>
-			{
-				currentPlatform !== 'web' && (
+			{currentPlatform !== 'web' &&
+				(taskOrder === numTasks ? (
+					<View style={styles.goldenMangroveContainer}>
+						<Image
+							source={require('@animations/goldenMangrove.gif')}
+							style={styles.goldenMangrove}
+						></Image>
+					</View>
+				) : (
 					<LottieView
 						source={require('@animations/winningCup.json')}
 						autoPlay
 						loop={false}
 					/>
-				)
-			}
+				))}
 			<View>
-				<Option
+				<ButtonPrimary
 					text="Volver al menú"
-					onPress={() => {
-						onButtonPress();
-					}}
+					accessibilityHint="Volver al menú"
+					onPress={onButtonPress}
 					containerStyle={{}}
 					textStyle={{
 						fontFamily: theme.fontWeight.regular,
@@ -104,6 +114,15 @@ const getStyles = (theme: Theme) =>
 		animationsContainer: {
 			alignItems: 'center',
 			position: 'relative'
+		},
+		goldenMangroveContainer: {
+			display: 'flex',
+			alignItems: 'center',
+			justifyContent: 'center'
+		},
+		goldenMangrove: {
+			width: 350,
+			height: 300
 		}
 	});
 

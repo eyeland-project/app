@@ -22,7 +22,6 @@ interface TaskProps {
 }
 
 const Task = ({
-	id,
 	order,
 	name,
 	description,
@@ -38,12 +37,14 @@ const Task = ({
 		<View
 			style={[styles.card, completed && styles.cardCompleted]}
 			accessible={true}
-			accessibilityLabel={`${order}. ${name}. ${description}. ${blocked ? 'Bloqueado' : 'Disponible'
-				}`}
-			accessibilityHint={`${blocked
-				? 'Esta tarea está bloqueada.'
-				: 'Presione el boton de comenzar para iniciar la tarea.'
-				}`}
+			accessibilityLabel={`Task ${order}. ${name}. ${description}. ${
+				blocked ? 'Bloqueado' : 'Disponible'
+			}`}
+			accessibilityHint={`${
+				blocked
+					? 'Esta tarea está bloqueada.'
+					: 'Presione el boton de comenzar para iniciar la tarea.'
+			}`}
 		>
 			<ImageBackground
 				source={image}
@@ -73,7 +74,10 @@ const Task = ({
 							navigation.navigate('Task', { taskOrder: order })
 						}
 						disabled={blocked}
-						accessible={false}
+						accessible={true}
+						accessibilityRole="button"
+						accessibilityLabel={`Comenzar tarea ${order}`}
+						// accessibilityHint="Presione para comenzar la tarea"
 					/>
 				</View>
 			</ImageBackground>

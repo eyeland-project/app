@@ -1,29 +1,30 @@
 import {
 	Image,
-	Platform,
 	ScrollView,
 	StyleSheet,
 	ToastAndroid,
 	View
 } from 'react-native';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import AudioPlayer from '@app/screens/Task/components/AudioPlayer';
 import History from '../../../../components/History';
 import Option from '@screens/Task/components/Option';
 import Placeholder from './components/Placeholder';
 import PositionBar from './components/PositionBar';
-import Pressable from '@app/shared/components/Pressable';
 import Query from './components/Query';
 import { SocketEvents } from '@enums/SocketEvents.enum';
 import { Theme } from '@theme';
 import { useDuringTaskContext } from '@app/core/hooks/Task/DurinTask/useDuringTaskContext';
 import useDuringTaskQuestion from '@app/core/hooks/Task/DurinTask/useDuringTaskQuestion';
-import useMediaQuery from '@app/core/hooks/useMediaQuery';
+import useImageStackStore from '@app/core/hooks/Task/DurinTask/useImageStackStore';
 import { useNavigation } from '@react-navigation/native';
 import usePlaySound from '@hooks/usePlaySound';
 import useTheme from '@hooks/useTheme';
 import useTime from '@hooks/useTime';
+import { Mechanics } from '@app/shared/enums/Mechanics.enum';
+import ImageStack from '../../components/ImageStack';
+import OptionImage from '@app/screens/Task/components/OptionImage';
 
 interface Props {
 	route: any;
@@ -44,19 +45,23 @@ const Question = ({ route }: Props) => {
 		getDuringTaskQuestion,
 		sendDuringTaskAnswer
 	} = useDuringTaskQuestion();
-	const playSoundAnimal = usePlaySound({ uri: data?.audioUrl });
-	const { power, socket, team, position, setPosition } =
+	// const playSoundAnimal = usePlaySound({ uri: data?.audioUrl });
+	const { power, socket, team, position, setPosition, mechanics } =
 		useDuringTaskContext();
-	const currentPlatform = Platform.OS;
-	const { isPhone, isTablet, isDesktop } = useMediaQuery();
+	const { imageStack, pushImageStack, clearImageStack } =
+		useImageStackStore();
+	// const currentPlatform = Platform.OS;
+	// const { isPhone, isTablet, isDesktop } = useMediaQuery();
 	const playSoundSuccess = usePlaySound(require('@sounds/success.wav'));
 	const playSoundWrong = usePlaySound(require('@sounds/wrong.wav'));
+	const [isQuestionFirst] = useState(imageStack.length === 0);
 	const styles = getStyles(theme);
 
 	const onPressOption = async (
 		index: number,
 		correct: boolean,
-		id: number
+		id: number,
+		imgUrl: string | null
 	) => {
 		if (answered) return;
 
@@ -71,6 +76,14 @@ const Question = ({ route }: Props) => {
 				backgroundColor: theme.colors.green
 			};
 			newTextStyleOptions[index] = { color: theme.colors.white };
+			if (
+				data &&
+				mechanics?.includes(Mechanics.FORM_IMAGE) &&
+				!imageStack.find((elem) => elem.idOption === id) &&
+				imgUrl
+			) {
+				pushImageStack({ idOption: id, imgUrl: imgUrl });
+			}
 		} else {
 			playSoundWrong();
 			newContainerStyleOptions[index] = {
@@ -82,13 +95,14 @@ const Question = ({ route }: Props) => {
 		setContainerStyleOptions(newContainerStyleOptions);
 		setTextStyleOptions(newTextStyleOptions);
 
-		if (data)
+		if (data) {
 			await sendDuringTaskAnswer({
 				taskOrder,
 				questionOrder: data.questionOrder,
 				body: { idOption: id, answerSeconds: time }
-			}),
-				navigateNextQuestion();
+			});
+			navigateNextQuestion();
+		}
 	};
 
 	const navigateNextQuestion = () => {
@@ -98,16 +112,20 @@ const Question = ({ route }: Props) => {
 		});
 	};
 
-	const onPressPlayAudio = () => {
-		if (data?.audioUrl) playSoundAnimal();
+	// const onPressPlayAudio = () => {
+	// 	if (data?.audioUrl) playSoundAnimal();
+	// };
+
+	const navigateFinalScore = () => {
+		navigation.reset({
+			index: 1,
+			routes: [{ name: 'FinalScore' }]
+		});
 	};
 
 	useEffect(() => {
 		if (error === 'Recurso no encontrado') {
-			navigation.reset({
-				index: 1,
-				routes: [{ name: 'FinalScore' }]
-			});
+			navigateFinalScore();
 		}
 	}, [error]);
 
@@ -157,6 +175,20 @@ const Question = ({ route }: Props) => {
 		};
 	}, []);
 
+	useEffect(() => {
+		if (mechanics?.includes(Mechanics.FORM_IMAGE)) {
+			const unsubscribe = navigation.addListener(
+				'beforeRemove',
+				(e: any) => {
+					if (e.data.action.type === 'GO_BACK') {
+						clearImageStack();
+					}
+				}
+			);
+			return unsubscribe;
+		}
+	}, [navigation]);
+
 	if (loading || !data) return <Placeholder />;
 
 	const question =
@@ -185,29 +217,75 @@ const Question = ({ route }: Props) => {
 				style={styles.imageContainer}
 				accessible={true}
 				accessibilityLabel={'Imagen de la pregunta'}
-				accessibilityHint={`Super hearing: ${data.imgAlt}`}
+				accessibilityHint={
+					data.imgAlt ? `Super hearing: ${data.imgAlt}` : undefined
+				}
 			>
-				<Image
-					style={styles.image}
-					source={{ uri: `${data.imgUrl}?t=${data.id}` }}
-					resizeMode="contain"
-				/>
+				{mechanics?.includes(Mechanics.FORM_IMAGE) ? (
+					isQuestionFirst ? (
+						<Image
+							style={styles.image}
+							source={require('@images/choose_habitat_1.jpg')}
+						/>
+					) : (
+						<ImageStack imageStack={imageStack} />
+					)
+				) : (
+					<Image
+						style={styles.image}
+						source={{ uri: `${data.imgUrl}?t=${data.id}` }}
+						resizeMode="contain"
+					/>
+				)}
 			</View>
 
 			{data.audioUrl && <AudioPlayer source={{ uri: data.audioUrl }} />}
 
 			<View style={styles.optionsContainer}>
-				{data.options.map((option, index) => (
-					<Option
-						key={index}
-						text={option.content}
-						onPress={() => {
-							onPressOption(index, option.correct, option.id);
+				{mechanics?.includes(Mechanics.FORM_IMAGE) ? (
+					<View
+						style={{
+							display: 'flex',
+							flexDirection: 'row',
+							justifyContent: 'space-evenly'
 						}}
-						containerStyle={containerStyleOptions[index]}
-						textStyle={textStyleOptions[index]}
-					/>
-				))}
+					>
+						{data.options.map((option, index) => (
+							<OptionImage
+								key={index}
+								text={option.content}
+								onPress={() => {
+									onPressOption(
+										index,
+										option.correct,
+										option.id,
+										option.mainImgUrl
+									);
+								}}
+								containerStyle={containerStyleOptions[index]}
+								textStyle={textStyleOptions[index]}
+								imgUrl={option.previewImgUrl}
+							/>
+						))}
+					</View>
+				) : (
+					data.options.map((option, index) => (
+						<Option
+							key={index}
+							text={option.content}
+							onPress={() => {
+								onPressOption(
+									index,
+									option.correct,
+									option.id,
+									option.mainImgUrl
+								);
+							}}
+							containerStyle={containerStyleOptions[index]}
+							textStyle={textStyleOptions[index]}
+						/>
+					))
+				)}
 				{/* <Option
 					text={data.options[0].content}
 					onPress={() => {

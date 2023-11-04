@@ -54,7 +54,8 @@ const Order = ({ route }: Props) => {
 
 	const onPressConfirm = () => {
 		const isCorrect = answerList.every(
-			(answer, index) => answer.toLowerCase() === correctOrder[index].toLowerCase()
+			(answer, index) =>
+				answer.toLowerCase() === correctOrder[index].toLowerCase()
 		);
 
 		if (isCorrect) {
@@ -103,7 +104,7 @@ const Order = ({ route }: Props) => {
 		setOptionsList(shuffleList(correctOrder));
 		setAnswerList([]);
 		AccessibilityInfo.announceForAccessibility(question.content);
-		speak(question.content, 'es');
+		speak(question.content, question.lang);
 	}, []);
 
 	return (

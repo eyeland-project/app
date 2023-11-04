@@ -19,209 +19,211 @@ import { PreTaskQuestion } from '@interfaces/PreTaskQuestion.interface';
 import { shuffleList } from '@utils/shuffleList';
 
 interface Props {
-    route: any;
+	route: any;
 }
 
 const CONFIRM_TEXT_STYLE_DEFAULT = (theme: Theme) => {
-    return {
-        fontFamily: theme.fontWeight.regular,
-        fontSize: theme.fontSize.xl
-    };
+	return {
+		fontFamily: theme.fontWeight.regular,
+		fontSize: theme.fontSize.xl
+	};
 };
 
 const AudioOrderAWord = ({ route }: Props) => {
-    const { question } = route.params as {
-        question: PreTaskQuestion;
-        taskOrder: number;
-    };
-    const theme = useTheme();
-    const [allOptionsInBox, setAllOptionsInBox] = useState(false);
-    const [confirmContainerStyle, setConfirmContainerStyle] = useState({});
-    const [confirmTextStyle, setConfirmTextStyle] = useState(
-        CONFIRM_TEXT_STYLE_DEFAULT(theme)
-    );
-    const [optionsList, setOptionsList] = useState([] as string[]);
-    const [answerList, setAnswerList] = useState([] as string[]);
-    const [showModal, setShowModal] = useState(false);
-    const playSoundSuccess = usePlaySound(require('@sounds/success.wav'));
-    const playSoundWrong = usePlaySound(require('@sounds/wrong.wav'));
-    const { speak } = useTextToSpeech();
-    const { nextQuestion } = usePreTask();
-    const styles = getStyles(theme);
+	const { question } = route.params as {
+		question: PreTaskQuestion;
+		taskOrder: number;
+	};
+	const theme = useTheme();
+	const [allOptionsInBox, setAllOptionsInBox] = useState(false);
+	const [confirmContainerStyle, setConfirmContainerStyle] = useState({});
+	const [confirmTextStyle, setConfirmTextStyle] = useState(
+		CONFIRM_TEXT_STYLE_DEFAULT(theme)
+	);
+	const [optionsList, setOptionsList] = useState([] as string[]);
+	const [answerList, setAnswerList] = useState([] as string[]);
+	const [showModal, setShowModal] = useState(false);
+	const playSoundSuccess = usePlaySound(require('@sounds/success.wav'));
+	const playSoundWrong = usePlaySound(require('@sounds/wrong.wav'));
+	const { speak } = useTextToSpeech();
+	const { nextQuestion } = usePreTask();
+	const styles = getStyles(theme);
 
-    const correctOrder = question.options
-        .filter((option) => option.correct)[0]
-        .content.split('');
+	const correctOrder = question.options
+		.filter((option) => option.correct)[0]
+		.content.split('');
 
-    const onPressConfirm = () => {
-        const isCorrect = answerList.every(
-            (answer, index) => answer.toLowerCase() === correctOrder[index].toLowerCase()
-        );
+	const onPressConfirm = () => {
+		const isCorrect = answerList.every(
+			(answer, index) =>
+				answer.toLowerCase() === correctOrder[index].toLowerCase()
+		);
 
-        if (isCorrect) {
-            playSoundSuccess();
-            setConfirmContainerStyle({ backgroundColor: theme.colors.green });
-            nextQuestion();
-        } else {
-            playSoundWrong();
-            setConfirmContainerStyle({ backgroundColor: theme.colors.red });
-            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-            setShowModal(true);
-            resetStates();
-        }
-    };
+		if (isCorrect) {
+			playSoundSuccess();
+			setConfirmContainerStyle({ backgroundColor: theme.colors.green });
+			nextQuestion();
+		} else {
+			playSoundWrong();
+			setConfirmContainerStyle({ backgroundColor: theme.colors.red });
+			Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+			setShowModal(true);
+			resetStates();
+		}
+	};
 
-    const resetStates = () => {
-        setTimeout(() => {
-            setOptionsList(shuffleList(correctOrder));
-            setAnswerList([]);
-            setConfirmContainerStyle({});
-            setAllOptionsInBox(false);
-        }, 1000);
-    };
+	const resetStates = () => {
+		setTimeout(() => {
+			setOptionsList(shuffleList(correctOrder));
+			setAnswerList([]);
+			setConfirmContainerStyle({});
+			setAllOptionsInBox(false);
+		}, 1000);
+	};
 
-    const closeModal = () => {
-        setShowModal(false);
-    };
+	const closeModal = () => {
+		setShowModal(false);
+	};
 
-    const onAnswerPress = (index: number) => {
-        setOptionsList([...optionsList, answerList[index]]);
-        setAnswerList(answerList.filter((_, i) => i !== index));
-        setAllOptionsInBox(false);
-    };
+	const onAnswerPress = (index: number) => {
+		setOptionsList([...optionsList, answerList[index]]);
+		setAnswerList(answerList.filter((_, i) => i !== index));
+		setAllOptionsInBox(false);
+	};
 
-    const onPressOption = (index: number) => {
-        speak(optionsList[index]);
-        setAnswerList([...answerList, optionsList[index]]);
-        setOptionsList(optionsList.filter((_, i) => i !== index));
+	const onPressOption = (index: number) => {
+		speak(optionsList[index]);
+		setAnswerList([...answerList, optionsList[index]]);
+		setOptionsList(optionsList.filter((_, i) => i !== index));
 
-        if (answerList.length + 1 === correctOrder.length) {
-            setAllOptionsInBox(true);
-        }
-    };
+		if (answerList.length + 1 === correctOrder.length) {
+			setAllOptionsInBox(true);
+		}
+	};
 
-    useEffect(() => {
-        setOptionsList(shuffleList(correctOrder));
-        setAnswerList([]);
-        AccessibilityInfo.announceForAccessibility(question.content);
-        speak(question.content, 'en');
-    }, []);
+	useEffect(() => {
+		setOptionsList(shuffleList(correctOrder));
+		setAnswerList([]);
+		AccessibilityInfo.announceForAccessibility(question.content);
+		speak(question.content, question.lang);
+	}, []);
 
-    return (
-        <>
-            <View style={styles.container}>
-                <View>
-                    <Instructions text="Describe la imagen ordenando las letras." />
-                    <View style={styles.imageContainer}>
-                        <Image
-                            style={styles.image}
-                            source={{ uri: question.imgUrl }}
-                            resizeMode="contain"
-                            accessible
-                            accessibilityLabel={question.imgAlt}
-                        />
-                    </View>
-                    <AudioPlayer
-                        textToSpeech={question.content}
-                    />
-                    <AnswerBox
-                        answerList={answerList}
-                        onAnswerPress={onAnswerPress}
-                    />
-                    <View style={styles.optionsContainer}>
-                        {optionsList.map((option, index) => {
-                            return (
-                                <Option
-                                    key={index}
-                                    text={option}
-                                    onPress={() => {
-                                        onPressOption(index);
-                                    }}
-                                />
-                            );
-                        })}
-                    </View>
-                </View>
-                {allOptionsInBox && (
-                    <View>
-                        <OptionTask
-                            text="Confirmar"
-                            onPress={() => {
-                                onPressConfirm();
-                            }}
-                            containerStyle={confirmContainerStyle}
-                            textStyle={confirmTextStyle}
-                        />
-                        <View style={styles.safeSpace} />
-                    </View>
-                )}
-            </View>
-            <Modal
-                showModal={showModal}
-                closeModal={() => {
-                    closeModal();
-                }}
-                help={correctOrder.join(' ')}
-            />
-        </>
-    )
-}
+	return (
+		<>
+			<View style={styles.container}>
+				<View>
+					<Instructions text="Describe la imagen ordenando las letras." />
+					<View style={styles.imageContainer}>
+						<Image
+							style={styles.image}
+							source={{ uri: question.imgUrl }}
+							resizeMode="contain"
+							accessible
+							accessibilityLabel={question.imgAlt}
+						/>
+					</View>
+					<AudioPlayer
+						textToSpeech={question.content}
+						lang={question.lang}
+					/>
+					<AnswerBox
+						answerList={answerList}
+						onAnswerPress={onAnswerPress}
+					/>
+					<View style={styles.optionsContainer}>
+						{optionsList.map((option, index) => {
+							return (
+								<Option
+									key={index}
+									text={option}
+									onPress={() => {
+										onPressOption(index);
+									}}
+								/>
+							);
+						})}
+					</View>
+				</View>
+				{allOptionsInBox && (
+					<View>
+						<OptionTask
+							text="Confirmar"
+							onPress={() => {
+								onPressConfirm();
+							}}
+							containerStyle={confirmContainerStyle}
+							textStyle={confirmTextStyle}
+						/>
+						<View style={styles.safeSpace} />
+					</View>
+				)}
+			</View>
+			<Modal
+				showModal={showModal}
+				closeModal={() => {
+					closeModal();
+				}}
+				help={correctOrder.join(' ')}
+			/>
+		</>
+	);
+};
 
 const getStyles = (theme: Theme) =>
-    StyleSheet.create({
-        container: {
-            backgroundColor: theme.colors.white,
-            height: '100%',
-            justifyContent: 'space-between'
-        },
-        imageContainer: {
-            marginHorizontal: 20,
-            height: 200,
-            borderRadius: theme.borderRadius.medium,
-            overflow: 'hidden',
-            marginBottom: 10
-        },
-        image: {
-            width: '100%',
-            height: '100%'
-        },
-        optionsContainer: {
-            marginTop: 30,
-            flexDirection: 'row',
-            marginHorizontal: 20,
-            flexWrap: 'wrap'
-        },
-        question: {
-            fontSize: theme.fontSize.xxl,
-            color: theme.colors.black,
-            fontFamily: theme.fontWeight.regular,
-            letterSpacing: theme.spacing.medium,
-            marginHorizontal: 20
-        },
-        separator: {
-            width: 10
-        },
-        safeSpace: {
-            height: 80
-        },
-        playerContainer: {
-            height: 55,
-            backgroundColor: theme.colors.white,
-            borderRadius: theme.borderRadius.medium,
-            marginBottom: 20,
-            marginHorizontal: 20,
-            paddingHorizontal: 10,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            ...theme.shadow
-        },
-        animationContainer: {
-            flexDirection: 'row'
-        },
-        animation: {
-            height: 72
-        }
-    });
+	StyleSheet.create({
+		container: {
+			backgroundColor: theme.colors.white,
+			height: '100%',
+			justifyContent: 'space-between'
+		},
+		imageContainer: {
+			marginHorizontal: 20,
+			height: 200,
+			borderRadius: theme.borderRadius.medium,
+			overflow: 'hidden',
+			marginBottom: 10
+		},
+		image: {
+			width: '100%',
+			height: '100%'
+		},
+		optionsContainer: {
+			marginTop: 30,
+			flexDirection: 'row',
+			marginHorizontal: 20,
+			flexWrap: 'wrap'
+		},
+		question: {
+			fontSize: theme.fontSize.xxl,
+			color: theme.colors.black,
+			fontFamily: theme.fontWeight.regular,
+			letterSpacing: theme.spacing.medium,
+			marginHorizontal: 20
+		},
+		separator: {
+			width: 10
+		},
+		safeSpace: {
+			height: 80
+		},
+		playerContainer: {
+			height: 55,
+			backgroundColor: theme.colors.white,
+			borderRadius: theme.borderRadius.medium,
+			marginBottom: 20,
+			marginHorizontal: 20,
+			paddingHorizontal: 10,
+			flexDirection: 'row',
+			justifyContent: 'space-between',
+			alignItems: 'center',
+			...theme.shadow
+		},
+		animationContainer: {
+			flexDirection: 'row'
+		},
+		animation: {
+			height: 72
+		}
+	});
 
-export default AudioOrderAWord
+export default AudioOrderAWord;

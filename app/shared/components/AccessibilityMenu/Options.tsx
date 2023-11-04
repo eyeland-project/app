@@ -32,8 +32,9 @@ const Options = ({ unShowOptions }: OptionsProps) => {
 	const invertColors = (theme: Theme) => {
 		const newColors = Object.keys(theme.colors).map((key) => {
 			const colorKey = key as keyof Theme['colors'];
-			if (colorKey !== 'green' && colorKey !== 'red') theme.colors[colorKey] = invertColor(theme.colors[colorKey])
-		})
+			if (colorKey !== 'green' && colorKey !== 'red')
+				theme.colors[colorKey] = invertColor(theme.colors[colorKey]);
+		});
 
 		return {
 			...theme,
@@ -45,16 +46,16 @@ const Options = ({ unShowOptions }: OptionsProps) => {
 				...theme.shadow,
 				shadowColor: invertColor(theme.shadow.shadowColor)
 			}
-		}
-	}
+		};
+	};
 
 	useEffect(() => {
 		if (initialRender.current) {
-			initialRender.current = false
+			initialRender.current = false;
 		} else {
-			modifyTheme(invertColors(theme))
-			setStatusBarBackgroundColor(highContrast ? '#000' : '#fff', false)
-			setStatusBarStyle(highContrast ? 'light' : 'dark')
+			modifyTheme(invertColors(theme));
+			setStatusBarBackgroundColor(highContrast ? '#000' : '#fff', false);
+			setStatusBarStyle(highContrast ? 'light' : 'dark');
 		}
 	}, [highContrast]);
 

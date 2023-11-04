@@ -23,6 +23,7 @@ import { DuringTaskContext } from '@contexts/DuringTaskContext';
 import { Power } from '@enums/Power.enum';
 import { SocketEvents } from '@enums/SocketEvents.enum';
 import { Team } from '@interfaces/Team.interface';
+import { Mechanics } from '@app/shared/enums/Mechanics.enum';
 
 interface Props {
 	route: any;
@@ -35,6 +36,7 @@ const DuringTask = ({ route }: Props) => {
 	const [isSessionStarted, setIsSessionStarted] = useState(false);
 	const [team, setTeam] = useState<Team | null>(null);
 	const [power, setPower] = useState<Power | null>(null);
+	const [mechanics, setMechanics] = useState<Mechanics[] | null>(null);
 	const [position, setPosition] = useState<number | null>(1);
 	const [numQuestions, setNumQuestions] = useState<number | null>(null);
 	const { getDuringTask } = useDuringTask();
@@ -50,11 +52,17 @@ const DuringTask = ({ route }: Props) => {
 		socket.emit(
 			'join',
 			await authStorage.getAccessToken(),
-			(response: { session?: boolean, error?: { message: string } }) => {
+			(response: { session?: boolean; error?: { message: string } }) => {
 				if (response.session) setIsSessionStarted(response.session);
-				if (response.error && response.error.message === "error:already_connected") {
+				if (
+					response.error &&
+					response.error.message === 'error:already_connected'
+				) {
 					authStorage.removeAccessToken();
-					ToastAndroid.show("Ya hay una sesión activa, lo siento, debemos desloguearte", ToastAndroid.LONG);
+					ToastAndroid.show(
+						'Ya hay una sesión activa, lo siento, debemos desloguearte',
+						ToastAndroid.LONG
+					);
 					navigation.reset({
 						index: 0,
 						routes: [{ name: 'Login' }]
@@ -93,7 +101,9 @@ const DuringTask = ({ route }: Props) => {
 				setTeam,
 				position,
 				setPosition,
-				numQuestions
+				numQuestions,
+				mechanics,
+				setMechanics
 			}}
 		>
 			<Stack.Navigator>

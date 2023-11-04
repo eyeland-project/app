@@ -6,6 +6,8 @@ import useTheme from '@hooks/useTheme';
 
 import { Theme } from '@theme';
 
+import ButtonPrimary from '@components/ButtonPrimary';
+
 interface Props {
 	showModal: boolean;
 	closeModal: () => void;
@@ -31,16 +33,23 @@ const Modal = ({ showModal, correct, closeModal, help }: Props) => {
 					<Text
 						style={styles.modalTitleText}
 						accessible={true}
-						accessibilityLabel={correct ? 'Respuesta correcta' : 'Respuesta incorrecta'}
+						accessibilityLabel={
+							correct
+								? 'Respuesta correcta'
+								: 'Respuesta incorrecta'
+						}
 					>
-						{correct ? '¡Respuesta correcta! ' : '¡Respuesta incorrecta!'}
+						{correct
+							? '¡Respuesta correcta! '
+							: '¡Respuesta incorrecta!'}
 					</Text>
 					<View style={styles.helpContainer}>
 						<View style={styles.iconContainer}>
 							<Text
 								style={styles.iconText}
-								accessible={true}
-								accessibilityLabel="Ayuda"
+								// accessible={false}
+								// accessibilityElementsHidden={true}
+								// accessibilityLabel="Ayuda"
 							>
 								Ayuda:
 							</Text>
@@ -53,7 +62,7 @@ const Modal = ({ showModal, correct, closeModal, help }: Props) => {
 							{help}
 						</Text>
 					</View>
-					<Option
+					<ButtonPrimary
 						text="Reintentar"
 						onPress={closeModal}
 						containerStyle={{ marginBottom: 10 }}
@@ -61,6 +70,7 @@ const Modal = ({ showModal, correct, closeModal, help }: Props) => {
 							fontFamily: theme.fontWeight.regular,
 							fontSize: theme.fontSize.large
 						}}
+						accessibilityHint="Reintentar"
 					/>
 				</View>
 			</View>

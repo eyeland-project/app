@@ -21,8 +21,12 @@ const Option = ({ text, onPress, inAnswerBox }: Props) => {
 			onPress={onPress}
 			accessible={true}
 			accessibilityLabel={text}
-			accessibilityHint={inAnswerBox ? 'Presiona para remover esta opción del campo de texto' : 'Presiona para llevar esta opción al campo de texto'}
-			accessibilityRole='button'
+			accessibilityHint={
+				inAnswerBox
+					? 'Presiona para remover esta opción del campo de texto'
+					: 'Presiona para llevar esta opción al campo de texto'
+			}
+			accessibilityRole="button"
 		>
 			<Text style={styles.text}>{text}</Text>
 		</Pressable>

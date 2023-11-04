@@ -1,10 +1,4 @@
-import {
-	View,
-	Text,
-	StyleSheet,
-	Image,
-	Animated,
-} from 'react-native';
+import { View, Text, StyleSheet, Image, Animated } from 'react-native';
 import Pressable from '@components/Pressable';
 
 import { useState, useEffect, useRef } from 'react';
@@ -37,13 +31,13 @@ const SuperHearing = ({ text, imgAlt }: Props) => {
 				Animated.timing(scale, {
 					toValue: 1.1,
 					duration: 500,
-					useNativeDriver: true,
+					useNativeDriver: true
 				}),
 				Animated.timing(scale, {
 					toValue: 1,
 					duration: 500,
-					useNativeDriver: true,
-				}),
+					useNativeDriver: true
+				})
 			])
 		);
 
@@ -56,10 +50,7 @@ const SuperHearing = ({ text, imgAlt }: Props) => {
 			<Text style={styles.text}>{textFiltered}</Text>
 			<Animated.Image
 				source={require('@images/superHearing.png')}
-				style={[
-					styles.image,
-					{ transform: [{ scale }] },
-				]}
+				style={[styles.image, { transform: [{ scale }] }]}
 			></Animated.Image>
 		</Pressable>
 	);
@@ -72,19 +63,19 @@ const getStyles = (theme: Theme) =>
 			flexDirection: 'row',
 			// marginTop: 10,
 			flexWrap: 'wrap',
-			alignItems: 'center',
+			alignItems: 'center'
 		},
 		text: {
 			fontSize: theme.fontSize.xxl,
 			color: theme.colors.black,
 			fontFamily: theme.fontWeight.regular,
-			letterSpacing: theme.spacing.medium,
+			letterSpacing: theme.spacing.medium
 		},
 		image: {
 			width: 30,
 			height: 30,
-			marginLeft: 10,
-		},
+			marginLeft: 10
+		}
 	});
 
 export default SuperHearing;

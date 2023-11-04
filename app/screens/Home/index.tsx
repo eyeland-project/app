@@ -8,7 +8,7 @@ import { useCallback } from 'react';
 import useTheme from '@hooks/useTheme';
 import useTasks from '@hooks/Task/useTasks';
 import { useFocusEffect } from '@react-navigation/native';
-import useMediaQuery from '@hooks/useMediaQuery';
+import useTaskContext from '@app/core/hooks/Task/useTaskContext';
 
 import { Theme } from '@theme';
 
@@ -16,9 +16,11 @@ const Home = () => {
 	const theme = useTheme();
 	const { loading, error, data, getTasks } = useTasks();
 	const styles = getStyles(theme);
+	const { setNumTasks } = useTaskContext();
 
 	const initTasks = async () => {
-		await getTasks();
+		const data = await getTasks();
+		if (data?.length !== undefined) setNumTasks(data.length);
 	};
 
 	useFocusEffect(

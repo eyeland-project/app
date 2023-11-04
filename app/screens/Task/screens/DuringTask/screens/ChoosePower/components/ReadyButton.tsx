@@ -31,9 +31,7 @@ const ReadyButton = () => {
 const getStyles = (theme: Theme, ready: boolean) =>
 	StyleSheet.create({
 		container: {
-			backgroundColor: ready
-				? theme.colors.green
-				: theme.colors.black,
+			backgroundColor: ready ? theme.colors.green : theme.colors.black,
 			marginHorizontal: 20,
 			borderRadius: theme.borderRadius.medium,
 			paddingHorizontal: 20,
