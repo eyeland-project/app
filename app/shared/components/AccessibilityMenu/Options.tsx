@@ -1,14 +1,12 @@
 import { View, StyleSheet } from 'react-native';
 import { useContext, useState, useEffect, useRef } from 'react';
+import { StatusBar } from 'expo-status-bar';
 
 import { ThemeContext } from '@contexts/ThemeContext';
 
 import AccessibilityOption from './AccessibilityOption';
 
 import { Theme } from '@theme';
-import setStatusBarBackgroundColor from 'expo-status-bar/build/setStatusBarBackgroundColor';
-import setStatusBarStyle from 'expo-status-bar/build/setStatusBarStyle';
-
 import { invertColor } from '@utils/invertColor';
 
 interface OptionsProps {
@@ -22,6 +20,8 @@ const Options = ({ unShowOptions }: OptionsProps) => {
 	const [fontFamily, setFontFamily] = useState(0);
 	const [spacing, setSpacing] = useState(0);
 	const [theme, modifyTheme] = useContext(ThemeContext);
+	const [statusBarStyle, setStatusBarStyle] = useState<'light' | 'dark'>('dark');
+	const [statusBarBg, setStatusBarBg] = useState('#fff');
 	const initialRender = useRef(true);
 	const styles = getStyles(theme);
 
@@ -54,7 +54,7 @@ const Options = ({ unShowOptions }: OptionsProps) => {
 			initialRender.current = false;
 		} else {
 			modifyTheme(invertColors(theme));
-			setStatusBarBackgroundColor(highContrast ? '#000' : '#fff', false);
+			setStatusBarBg(highContrast ? '#000' : '#fff');
 			setStatusBarStyle(highContrast ? 'light' : 'dark');
 		}
 	}, [highContrast]);
@@ -186,6 +186,7 @@ const Options = ({ unShowOptions }: OptionsProps) => {
 				/>
 			</View>
 			<View style={styles.triangle} />
+			<StatusBar style={statusBarStyle} backgroundColor={statusBarBg} />
 		</View>
 	);
 };

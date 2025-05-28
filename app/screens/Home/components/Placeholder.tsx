@@ -1,8 +1,3 @@
-import {
-	Placeholder as PlaceholderRN,
-	PlaceholderLine,
-	ShineOverlay
-} from 'rn-placeholder';
 import { View, StyleSheet } from 'react-native';
 
 import Title from './Title';
@@ -19,18 +14,12 @@ const Placeholder = () => {
 		<View style={styles.container}>
 			<Title text="MENÚ" />
 			<View style={styles.card}>
-				<PlaceholderRN Animation={ShineOverlay}>
-					<PlaceholderLine width={40} height={30} />
-					<PlaceholderLine />
-					<PlaceholderLine width={60} />
-					<PlaceholderLine width={70} />
-					<PlaceholderLine
-						style={styles.button}
-						width={40}
-						height={40}
-						noMargin={true}
-					/>
-				</PlaceholderRN>
+				{/* Simple placeholder box */}
+				<View style={styles.placeholderBox} />
+				<View style={styles.placeholderLine} />
+				<View style={styles.placeholderLineWide} />
+				<View style={styles.placeholderLineWider} />
+				<View style={styles.button} />
 			</View>
 		</View>
 	);
@@ -49,8 +38,39 @@ const getStyles = (theme: Theme) =>
 			marginHorizontal: 20,
 			...theme.shadow
 		},
+		placeholderBox: {
+			width: 40,
+			height: 30,
+			backgroundColor: '#eee',
+			borderRadius: 4,
+			marginBottom: 10
+		},
+		placeholderLine: {
+			width: '100%',
+			height: 12,
+			backgroundColor: '#eee',
+			borderRadius: 4,
+			marginBottom: 10
+		},
+		placeholderLineWide: {
+			width: '60%',
+			height: 12,
+			backgroundColor: '#eee',
+			borderRadius: 4,
+			marginBottom: 10
+		},
+		placeholderLineWider: {
+			width: '70%',
+			height: 12,
+			backgroundColor: '#eee',
+			borderRadius: 4,
+			marginBottom: 10
+		},
 		button: {
+			width: 40,
+			height: 40,
 			borderRadius: theme.borderRadius.full,
+			backgroundColor: '#eee',
 			marginLeft: 'auto',
 			marginTop: 20,
 			...theme.shadow

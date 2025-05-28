@@ -1,9 +1,3 @@
-import {
-	Placeholder as PlaceholderRN,
-	PlaceholderMedia,
-	PlaceholderLine,
-	ShineOverlay
-} from 'rn-placeholder';
 import { View, StyleSheet } from 'react-native';
 
 import useTheme from '@hooks/useTheme';
@@ -16,32 +10,13 @@ const Placeholder = () => {
 
 	return (
 		<View style={styles.container}>
-			<PlaceholderRN Animation={ShineOverlay}>
-				<PlaceholderMedia
-					style={{
-						width: '100%',
-						marginBottom: 20,
-						height: 60,
-						borderRadius: 999
-					}}
-				/>
-				<PlaceholderLine
-					width={70}
-					height={40}
-					noMargin={true}
-					style={{ marginBottom: 20 }}
-				/>
-				<PlaceholderMedia style={{ width: '100%', height: 200 }} />
-				<PlaceholderMedia
-					style={{
-						width: '100%',
-						height: 70,
-						marginBottom: 20,
-						marginTop: 60
-					}}
-				/>
-				<PlaceholderMedia style={{ width: '100%', height: 70 }} />
-			</PlaceholderRN>
+			<View style={styles.card}>
+				<View style={styles.placeholderBox} />
+				<View style={styles.placeholderLine} />
+				<View style={styles.placeholderLineWide} />
+				<View style={styles.placeholderLineWider} />
+				<View style={styles.button} />
+			</View>
 		</View>
 	);
 };
@@ -50,8 +25,51 @@ const getStyles = (theme: Theme) =>
 	StyleSheet.create({
 		container: {
 			backgroundColor: theme.colors.white,
-			height: '100%',
-			paddingHorizontal: 20
+			height: '100%'
+		},
+		card: {
+			backgroundColor: theme.colors.white,
+			padding: 20,
+			borderRadius: theme.borderRadius.medium,
+			marginHorizontal: 20,
+			...theme.shadow
+		},
+		placeholderBox: {
+			width: 40,
+			height: 30,
+			backgroundColor: '#eee',
+			borderRadius: 4,
+			marginBottom: 10
+		},
+		placeholderLine: {
+			width: '100%',
+			height: 12,
+			backgroundColor: '#eee',
+			borderRadius: 4,
+			marginBottom: 10
+		},
+		placeholderLineWide: {
+			width: '60%',
+			height: 12,
+			backgroundColor: '#eee',
+			borderRadius: 4,
+			marginBottom: 10
+		},
+		placeholderLineWider: {
+			width: '70%',
+			height: 12,
+			backgroundColor: '#eee',
+			borderRadius: 4,
+			marginBottom: 10
+		},
+		button: {
+			width: 40,
+			height: 40,
+			borderRadius: theme.borderRadius.full,
+			backgroundColor: '#eee',
+			marginLeft: 'auto',
+			marginTop: 20,
+			...theme.shadow
 		}
 	});
 

@@ -29,7 +29,7 @@ const useLogin = () => {
 		setLoading(true);
 		try {
 			const response = await axios.post(
-				`${environment.apiUrl}/login`,
+				`${environment.apiUrl}/login`, 
 				{
 					username: inputs.username,
 					password: inputs.password
